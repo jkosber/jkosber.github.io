@@ -1,0 +1,65 @@
+site_name: Jadon Kosberg | IT Infrastructure & Cybersecurity
+site_url: https://jkosber.github.io/
+site_author: Jadon Kosberg
+site_description: Professional portfolio of Jadon Kosberg — IT Infrastructure, Networking, and Cybersecurity.
+repo_url: https://github.com/jkosber/jkosber.github.io
+repo_name: jkosber/jkosber.github.io
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - Home: index.md
+  - Professional Experience:
+      - Experience Overview: experience/index.md
+      - Healthcare IT Support (Ladd Dental): experience/ladd-dental.md
+      - Retail Technology Conversions (Verizon / Vaco): experience/verizon-conversions.md
+  - Credentials & Education: credentials/index.md
+  - Technical Labs:
+      - Lab Overview: technical-labs/index.md
+      - Proxmox Virtualization & SDN: technical-labs/proxmox-virtualization.md
+      - Cisco Networking & Packet Analysis: technical-labs/cisco-networking-analysis.md
+      - AWS Linux Infrastructure: technical-labs/aws-linux-infrastructure.md
+      - SOC Threat Detection & Snort IDS: technical-labs/soc-threat-detection.md
+  - Career Pathways: career-paths/index.md
