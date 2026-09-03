@@ -12,24 +12,7 @@
 
 Ladd Dental Group operates 12 dental practices across North-Central Indiana. Each clinic relies on high-availability workstation endpoints for clinical imaging, digital charting, scheduling, and billing. The objective of this role was to provide rapid-response Tier 1/Tier 2 support, execute workstation refresh cycles, and maintain hardware asset integrity.
 
-```mermaid
-flowchart LR
-    subgraph HQ ["Central IT Operations (Kokomo, IN)"]
-        RMM["Level RMM Console"]
-        Tickets["ClickUp Ticket Queue"]
-        AD["Active Directory DS"]
-    end
-
-    subgraph Clinics ["12 Regional Dental Practices (100+ Endpoints)"]
-        C1["Clinic 1: Operatory & Front Desk PCs"]
-        C2["Clinic 2: Digital Imaging & Practice PCs"]
-        C3["Clinics 3-12: Networked Workstations & Printers"]
-    end
-
-    RMM <-->|Remote Diagnostics & Monitoring| Clinics
-    Tickets <-->|Incident Triage & Tracking| Clinics
-    HQ -->|On-Site Staging & Deployment| Clinics
-```
+Central IT in Kokomo managed the 12 clinics remotely via Level RMM and ClickUp, with on-site staging for deployments and decommissions.
 
 ---
 

@@ -4,17 +4,7 @@ This section documents engineering environments, virtual networks, cloud deploym
 
 ---
 
-## Laboratory Philosophy
-
-Enterprise IT environments require engineers who understand how systems behave beneath the graphical interface. These projects demonstrate:
-
-* **Layer 1–7 Systems Literacy:** How physical compute, hypervisor kernels, virtual switches, network protocols, operating systems, and security policies interact.
-* **Infrastructure as Documentation:** Every lab is tracked in a version-controlled GitHub repository with explicit architecture diagrams, IP allocation schemes, and changelogs.
-* **Methodical Troubleshooting:** Systematic fault isolation when dealing with driver bindings, routing misconfigurations, packet retransmissions, or firewall blocks.
-
----
-
-## Flagship Case Studies
+## Labs
 
 <div class="grid cards" markdown>
 

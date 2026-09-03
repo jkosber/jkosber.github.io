@@ -6,127 +6,14 @@ Kokomo, IN • [jadonkosberg@gmail.com](mailto:jadonkosberg@gmail.com) • [Link
 
 ---
 
-### Professional Overview
+I'm an IT support technician based in Kokomo, IN with hands-on experience in healthcare and retail environments. At Ladd Dental I supported 12 sites and 100+ staff — handling 20+ tickets/week and staging 30+ deployments while decommissioning 50+ systems with chain-of-custody — and at Vaco/Verizon I handled retail conversion windows, static-IP printer setup, and firewall switchport validation. I'm looking for IT support, field/deskside, or junior systems/network roles where troubleshooting and clear hand-offs matter.
 
-I am an entry-level IT professional with hands-on, multi-site support experience across distributed healthcare and enterprise retail environments. I hold active **CompTIA Security+** and **CompTIA A+** certifications, a **B.S. in Informatics**, and a **Technical Certificate in Cyber Security & Information Assurance**. 
+## Experience
 
-My background bridges day-to-day IT operational support—such as endpoint provisioning, Active Directory management, RMM administration, and network validation—with deep technical practice in **Proxmox virtualization**, **software-defined networking (SDN)**, **Cisco switch/router configuration**, **packet analysis**, and **Linux administration**.
+- **IT Support Contractor — Vaco by Highspring / Verizon** (Jul–Aug 2026) — Retail conversion windows, static-IP printer setup, and firewall switchport validation. [Case study](experience/verizon-conversions.md)
+- **IT Intern — Ladd Dental Group** (Nov 2025–May 2026) — Multi-site help desk for 12 sites and 100+ staff, Level RMM and ClickUp, 30+ deployments and 50+ decommissions. [Case study](experience/ladd-dental.md)
 
-```mermaid
-flowchart TD
-    subgraph Profile ["Jadon Kosberg — Core Qualification Framework"]
-        P1["1. Real-World IT Experience
-(Healthcare & Enterprise Retail Support)"]
-        P2["2. Industry Certifications
-(CompTIA A+, CompTIA Security+)"]
-        P3["3. Formal Education
-(B.S. Informatics + Cybersecurity Certificate)"]
-        P4["4. Hands-On Technical Labs
-(Proxmox VE, Cisco IOS, AWS Linux, Snort IDS)"]
-    end
-
-    subgraph Targets ["Supported Career Roles"]
-        T1["IT & Systems Support"]
-        T2["Junior Systems Administrator"]
-        T3["Network Support / Junior Network Admin"]
-        T4["Infrastructure Support"]
-        T5["Junior Cybersecurity / SOC Analyst"]
-    end
-
-    Profile --> Targets
-```
-
----
-
-## The Four Qualification Pillars
-
-<div class="grid cards" markdown>
-
--   :material-briefcase-check:{ .lg .middle } **1. Production IT Experience**
-
-    ---
-
-    Proven field and remote support history across **12 healthcare practices** and **enterprise retail conversions**. Experience with Level RMM, ClickUp, Active Directory, static IP network printer deployment, and hardware lifecycle management.
-
-    [:octicons-arrow-right-24: View Work History](experience/index.md)
-
--   :material-certificate:{ .lg .middle } **2. Industry Certifications**
-
-    ---
-
-    - **CompTIA Security+** *(Earned May 2026)*
-    - **CompTIA A+** *(Earned May 2026)*
-    - **Cisco Networking Academy** *(Networking Basics & Introduction to Networks)*
-
-    [:octicons-arrow-right-24: View Certifications](credentials/index.md)
-
--   :material-school:{ .lg .middle } **3. Formal Education**
-
-    ---
-
-    - **B.S. in Informatics** — Indiana University Kokomo (2022)
-    - **Technical Certificate in Cyber Security** — Ivy Tech Community College (May 2026)
-    - *Dean's List Honors (2020, 2021, 2025)*
-
-    [:octicons-arrow-right-24: View Academic Record](credentials/index.md)
-
--   :material-server-network:{ .lg .middle } **4. Hands-On Technical Labs**
-
-    ---
-
-    Continuous self-hosted and lab-scale infrastructure demonstrating engineering depth: **Proxmox VE 9.1 SDN**, **Cisco IOS CLI & Wireshark forensics**, **AWS multi-tier Linux**, and **Snort IDS rules**.
-
-    [:octicons-arrow-right-24: Explore Technical Labs](technical-labs/index.md)
-
-</div>
-
----
-
-## Professional Experience Spotlight
-
-### **IT Support Contractor** — *Vaco by Highspring / Verizon*
-`Jul 2026 – Aug 2026` • *Fishers, IN / Multi-Site Retail*
-
-* Supported retail technology conversion rollouts across distributed store locations under strict change-window timelines.
-* Configured and deployed enterprise network printers, assigning static IPv4 configurations and testing print queues.
-* Connected endpoint devices to designated firewall switchports and validated network access and egress.
-* Partnered remotely with field engineers during live migrations to resolve connectivity issues and conduct post-conversion user acceptance testing.
-
-[:material-file-document-outline: Read the Verizon Conversions Case Study](experience/verizon-conversions.md){ .md-button }
-
----
-
-### **IT Intern** — *Ladd Dental Group*
-`Nov 2025 – May 2026` • *Kokomo, IN / Distributed Healthcare (12 Locations)*
-
-* Resolved 20+ weekly help desk tickets across 12 dental practices supporting 100+ clinical and administrative staff.
-* Provided remote triage and endpoint management using **Level RMM** and maintained structured ticket documentation in **ClickUp**.
-* Staged, configured, and deployed 30+ new Windows workstations, including base imaging, domain joining (Active Directory), and peripheral setups.
-* Decommissioned 50+ retired systems following organizational security procedures with documented chain of custody.
-
-[:material-file-document-outline: Read the Ladd Dental Group Case Study](experience/ladd-dental.md){ .md-button }
-
----
-
-## Target Role Competency Matrix
-
-This portfolio is structured to demonstrate relevant competencies across five primary career pathways:
-
-| Target Role Family | Key Evidence & Experience | Supporting Labs & Certs |
-| :--- | :--- | :--- |
-| **IT Support / Systems Support** | Multi-site healthcare & retail support, Level RMM, M365, Active Directory, hardware provisioning, ticketing SLA management. | CompTIA A+, CompTIA Security+, Workstation deployment workflows. |
-| **Junior Systems Administrator** | Windows 10/11 fleet management, user provisioning, Linux administration, Bash automation, service management (`systemd`). | Proxmox VE 9.1 hypervisor, Docker container management, AWS EC2 Linux multi-tier stack. |
-| **Network Support / Junior Network Admin** | Static IP allocation, switchport patching, firewall connectivity verification, structured cabling triage. | Cisco Networking Academy coursework, Cisco IOS CLI (VLANs, routing, ACLs), Wireshark packet capture. |
-| **Infrastructure Support** | Hardware lifecycle management, multi-tier storage, remote field engineer coordination, device decommissioning. | Bare-metal Proxmox administration, KVM/QEMU, IOMMU GPU passthrough (`vfio-pci`). |
-| **Junior Cybersecurity / SOC Analyst** | Principle of least privilege, organizational data protection procedures, Security+ concepts. | CompTIA Security+, Snort IDS rule creation, 5-tuple forensic isolation, malware PCAP packet dissection. |
-
-[:octicons-arrow-right-24: View Full Career Role Breakdown](career-paths/index.md){ .md-button .md-button--primary }
-
----
-
-## Selected Technical Lab Highlights
-
-> *Note: Technical labs represent hands-on engineering environments built to explore infrastructure, networking, and security concepts beyond daily operational support duties.*
+## Labs
 
 <div class="grid cards" markdown>
 
@@ -166,7 +53,7 @@ This portfolio is structured to demonstrate relevant competencies across five pr
 
 ---
 
-## Connect & Verify
+## Contact
 
 * **Email:** [jadonkosberg@gmail.com](mailto:jadonkosberg@gmail.com)
 * **LinkedIn:** [linkedin.com/in/jadon-kosberg](https://linkedin.com/in/jadon-kosberg)

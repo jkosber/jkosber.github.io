@@ -7,33 +7,13 @@
 
 ## 1. Objective
 
-To design and deploy an enterprise-pattern multi-tier application environment on **Amazon Web Services (AWS)** using Linux EC2 instances, separating the public-facing Apache Web Server tier from the internal Database tier, while implementing automated system maintenance via Bash scripting.
+To build a two-tier web + database deployment on AWS EC2, with a public Apache web server and a private database, plus Bash automation for maintenance.
 
 ---
 
 ## 2. Cloud Architecture
 
-```mermaid
-flowchart TD
-    subgraph AWS_VPC ["AWS VPC: Multi-Tier Linux Environment (10.0.0.0/16)"]
-        subgraph PublicSubnet ["Public Subnet (10.0.1.0/24)"]
-            IGW["Internet Gateway"]
-            WebServer["EC2: Apache Web Server (Ubuntu Linux)
-• Public IP + Elastic IP
-• Security Group: Allow TCP 80, 443, 22 (Mgmt)"]
-        end
-
-        subgraph PrivateSubnet ["Private Subnet (10.0.2.0/24)"]
-            DBServer["EC2: Database Server (AdventureWorks DB)
-• Private IP Only (10.0.2.50)
-• Security Group: Allow TCP 3306/1433 from Web SG only"]
-        end
-    end
-
-    Internet["Public Users / Web Clients"] -->|HTTP / HTTPS| IGW
-    IGW --> WebServer
-    WebServer -->|Database Queries via Private Subnet| DBServer
-```
+The VPC uses a public subnet for the web server (internet-facing) and a private subnet for the database, with the database security group only allowing traffic from the web security group.
 
 ---
 
@@ -83,9 +63,3 @@ fi
       3. Discovered that the AWS Database Security Group was missing an ingress rule allowing traffic from the Web Server Security Group ID.
     * **Resolution:** Added a security group rule allowing TCP 3306 with the Web Security Group as the source, instantly resolving database connectivity without exposing the database to the public internet.
 
----
-
-## 5. Production & Enterprise Relevance
-
-* **Cloud Tiering & Defense-in-Depth:** Isolating database backends into private subnets ensures that even if a public web tier is compromised, the data layer cannot be accessed directly from the public internet.
-* **Operational Automation:** Demonstrates the ability to write reliable, self-documenting shell scripts with strict error handling (`set -euo pipefail`).

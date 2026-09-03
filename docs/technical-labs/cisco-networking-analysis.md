@@ -101,31 +101,11 @@ Granular packet dissection was performed across multiple protocol capture sessio
 
 ### A. TCP 3-Way Handshake & Teardown Dynamics
 * **SYN Frame:** Verified Initial Sequence Number (ISN) random generation, Maximum Segment Size (MSS) option negotiation, and TCP Window Scale factor.
-* **SYN-ACK Frame:** Validated acknowledgment sequence calculation ($	ext{Ack} = 	ext{ISN}_{	ext{client}} + 1$).
+* **SYN-ACK Frame:** Validated acknowledgment sequence calculation (Ack = client ISN + 1).
 * **Connection Teardown:** Analyzed graceful four-way `FIN`/`ACK` teardowns versus abrupt connection resets (`RST` flag) caused by closed destination ports.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Client as Client (192.168.10.50)
-    participant Server as Web Server (192.168.20.10)
+The handshake is SYN -> SYN-ACK -> ACK; data exchange follows, then a graceful four-way FIN/ACK teardown (or RST on closed ports).
 
-    Note over Client,Server: TCP 3-Way Handshake
-    Client->>Server: [SYN] Seq=0 Win=64240 MSS=1460 WS=256
-    Server->>Client: [SYN, ACK] Seq=0 Ack=1 Win=65535 MSS=1460
-    Client->>Server: [ACK] Seq=1 Ack=1 Win=64240
-
-    Note over Client,Server: Application Data Exchange (HTTP/S)
-    Client->>Server: [PSH, ACK] GET /index.html
-    Server->>Client: [ACK] Data Acknowledged
-    Server->>Client: [PSH, ACK] HTTP/1.1 200 OK (Payload)
-
-    Note over Client,Server: Graceful Connection Teardown
-    Client->>Server: [FIN, ACK] Seq=501 Ack=1200
-    Server->>Client: [ACK] Seq=1200 Ack=502
-    Server->>Client: [FIN, ACK] Seq=1200 Ack=502
-    Client->>Server: [ACK] Seq=502 Ack=1201
-```
 
 ### B. IPv4 vs. IPv6 Address Resolution
 * **IPv4 Address Resolution:** Analyzed broadcast `ARP Request` (`Who has 192.168.10.1? Tell 192.168.10.50`) and unicast `ARP Reply` frames to observe MAC table population.
@@ -141,9 +121,3 @@ sequenceDiagram
     * **Wireshark Analysis:** Captured 802.1Q tagged frames and observed that untagged management frames originating on VLAN 1 were being injected into VLAN 99 on the opposite switch.
     * **Resolution:** Reconfigured trunk ports on both ends with `switchport trunk native vlan 99`, aligning native encapsulation and restoring consistent STP / CDP forwarding.
 
----
-
-## 6. Production & Enterprise Relevance
-
-* **Network Segmentation:** Enforcing strict Layer 2 VLAN boundaries prevents broadcast storms from propagating across departmental boundaries.
-* **Granular Troubleshooting:** When high-level connectivity tools (ping/traceroute) fail to explain intermittent drops, Wireshark packet captures allow immediate identification of window exhaustion, packet loss retransmissions, or MTU black holes.

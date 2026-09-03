@@ -1,52 +1,30 @@
 # Professional IT Experience
 
-This section provides an overview of my professional employment history in IT support, systems administration, and field technology rollouts.
+Overview of my professional employment in IT support, systems administration, and field technology rollouts.
 
----
+## Roles
 
-## Experience Summary
-
-```mermaid
-timeline
-    title Professional IT Work History
-    Nov 2025 - May 2026 : IT Intern : Ladd Dental Group (12 Clinical Locations)
-                        : Multi-Site Help Desk Support (20+ weekly tickets)
-                        : Workstation Deployments (30+ systems)
-                        : Hardware Decommissioning (50+ systems)
-    Jul 2026 - Aug 2026 : IT Support Contractor : Vaco by Highspring / Verizon
-                        : Retail Technology Conversions
-                        : Network Validation & Static IP Printer Rollouts
-                        : Remote Field Technician Coordination
-```
-
----
-
-## Detailed Roles
-
-### 1. **IT Support Contractor** — *Vaco by Highspring / Verizon*
+### IT Support Contractor — Vaco by Highspring / Verizon
 **Location:** Fishers, IN / Multi-Site Retail Locations  
 **Duration:** July 2026 – August 2026  
-**Primary Focus:** Retail Network Conversions, Static IP Configuration, Firewall Port Connectivity Validation
+**Focus:** Retail Network Conversions, Static IP Configuration, Firewall Port Validation
 
-* Supported end-to-end technology conversion windows across distributed Verizon retail store locations, ensuring zero disruption to store opening hours.
-* Configured and deployed network printers, assigning static IPv4 parameters, default gateways, and verifying print queue functionality.
-* Patched endpoint devices to firewall switchports and validated local subnet and cloud egress access.
-* Partnered remotely with field engineers to execute live migration steps and provided post-conversion checkout and troubleshooting support.
+* Supported retail conversion windows across Verizon store locations.
+* Configured network printers with static IPv4 and validated print queues and firewall switchport connectivity.
+* Coordinated remotely with field engineers and handled post-conversion checkout.
 
 [:material-file-document-outline: View Complete Verizon Case Study](verizon-conversions.md){ .md-button }
 
 ---
 
-### 2. **IT Intern** — *Ladd Dental Group*
+### IT Intern — Ladd Dental Group
 **Location:** Kokomo, IN (12 Regional Healthcare Practices)  
 **Duration:** November 2025 – May 2026  
-**Primary Focus:** Distributed Endpoint Support, Level RMM Fleet Management, Workstation Deployments, Hardware Decommissioning
+**Focus:** Distributed Endpoint Support, Level RMM, Workstation Deployments
 
-* Resolved 20+ weekly support requests across 12 distributed dental practices supporting 100+ clinical and administrative staff members.
-* Managed tickets, troubleshooting notes, and resolution documentation within **ClickUp**.
-* Utilized **Level RMM** for remote monitoring, diagnostic execution, and remote desktop support across endpoints.
-* Built, configured, domain-joined (Active Directory), and deployed 30+ new Windows workstations.
-* Decommissioned 50+ end-of-life workstations following organizational security procedures with documented chain of custody.
+* Resolved 20+ tickets/week across 12 practices supporting 100+ staff; remote triage via Level RMM and ClickUp.
+* Staged, domain-joined, and deployed 30+ workstations.
+* Decommissioned 50+ systems following security procedures with documented chain of custody.
 
 [:material-file-document-outline: View Complete Ladd Dental Case Study](ladd-dental.md){ .md-button }
 

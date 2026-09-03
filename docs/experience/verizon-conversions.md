@@ -12,24 +12,7 @@
 
 During nationwide retail technology upgrades, Verizon store locations underwent structured hardware and network conversions to modernize point-of-sale (POS) and back-office infrastructure. As an IT Support Contractor, I was responsible for validating network connectivity, executing static IP printer deployments, patching devices to firewall ports, and coordinating remotely with field technicians during tight conversion maintenance windows.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor FieldTech as On-Site Field Technician
-    actor Contractor as IT Support Contractor (Jadon)
-    participant Switch as Store Switch / Firewall
-    participant Printer as Network Printer
-    participant CoreNet as Core Corporate Network
-
-    FieldTech->>Contractor: Initiate Store Conversion Window
-    Contractor->>Printer: Assign Static IPv4, Subnet Mask & Gateway
-    Contractor->>Switch: Verify Firewall Switchport Configuration & VLAN
-    Contractor->>Printer: Execute Network Ping & Port Connectivity Test
-    Printer-->>Contractor: ICMP Echo Reply & Web GUI Accessible
-    Contractor->>CoreNet: Send Test Print Job & Validate Cloud Queue
-    CoreNet-->>Printer: Test Document Output Verified
-    Contractor->>FieldTech: Confirm Successful Store Hand-Off & Sign-Off
-```
+Conversions followed a repeated runbook: assign static IP and gateway, verify firewall switchport and VLAN, test ping and web GUI, validate cloud print queue, and hand off to the field tech.
 
 ---
 

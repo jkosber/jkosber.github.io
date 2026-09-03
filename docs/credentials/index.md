@@ -6,7 +6,7 @@ This page outlines my industry certifications, vendor academy credentials, acade
 
 ## 1. Earned Industry Certifications
 
-These vendor certifications represent verified competency evaluated through rigorous third-party proctored examinations.
+These are my earned industry certifications.
 
 <div class="grid cards" markdown>
 

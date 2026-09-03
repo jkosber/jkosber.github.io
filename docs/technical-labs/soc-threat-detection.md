@@ -13,41 +13,7 @@ To execute cybersecurity operations workflows aligned with the **Cisco CyberOps 
 
 ## 2. Security Operations Incident Workflow
 
-```mermaid
-flowchart TD
-    subgraph Ingestion ["Telemetry Ingestion & Inspection"]
-        Traffic["Live Network Traffic & PCAP Feeds"]
-        Snort["Snort IDS Engine (Custom & Community Signatures)"]
-        Syslog["Linux / Windows Security Event Logs"]
-    end
-
-    subgraph Detection ["Alert Generation & Triage"]
-        SnortAlert["Snort Alert: Potential Exploit / Port Scan"]
-        FiveTuple["5-Tuple Correlation
-(Src IP, Src Port, Dst IP, Dst Port, Proto)"]
-    end
-
-    subgraph Analysis ["Deep Forensics & Extraction"]
-        Wireshark["Wireshark Packet Dissection"]
-        PayloadExtract["TCP Stream Reassembly & Executable Extraction"]
-        HashCalc["SHA-256 Hash Generation & Threat Intel Check"]
-    end
-
-    subgraph Response ["Containment & Documentation"]
-        FirewallBlock["Firewall Rule Update (Contain Threat Source)"]
-        IncidentReport["Structured Incident Handling Report (NIST/SANS)"]
-    end
-
-    Traffic --> Snort
-    Snort --> SnortAlert
-    Syslog --> FiveTuple
-    SnortAlert --> FiveTuple
-    FiveTuple --> Wireshark
-    Wireshark --> PayloadExtract
-    PayloadExtract --> HashCalc
-    HashCalc --> FirewallBlock
-    FirewallBlock --> IncidentReport
-```
+The workflow follows ingestion (traffic, Snort, syslog), detection and 5-tuple triage, forensics and payload extraction, then containment and reporting.
 
 ---
 
@@ -92,9 +58,3 @@ Followed standardized **NIST SP 800-61 / SANS** incident response phases:
 * **Eradication & Recovery:** Validating that compromised test nodes were sanitized and restored to known-clean baselines.
 * **Post-Incident Review:** Documenting findings in the official **CyberOps Skills Exam Report**.
 
----
-
-## 5. Production & Enterprise Relevance
-
-* **SOC Analyst Readiness:** Direct experience working with the foundational tools of modern security operations centers (Snort, Wireshark, Syslog, Nmap).
-* **Signal vs. Noise Discrimination:** Understanding how to tune IDS alert thresholds prevents analyst alert fatigue in high-throughput enterprise networks.
