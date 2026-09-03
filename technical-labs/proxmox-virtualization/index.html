@@ -1,0 +1,1291 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Professional portfolio of Jadon Kosberg — IT Infrastructure, Networking, and Cybersecurity.">
+      
+      
+        <meta name="author" content="Jadon Kosberg">
+      
+      
+        <link rel="canonical" href="https://jkosber.github.io/technical-labs/proxmox-virtualization/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../cisco-networking-analysis/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Proxmox Virtualization & SDN - Jadon Kosberg | IT Infrastructure & Cybersecurity</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#proxmox-virtualization-software-defined-networking" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Jadon Kosberg | IT Infrastructure &amp; Cybersecurity" class="md-header__button md-logo" aria-label="Jadon Kosberg | IT Infrastructure & Cybersecurity" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jadon Kosberg | IT Infrastructure & Cybersecurity
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Proxmox Virtualization & SDN
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jkosber/jkosber.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jkosber/jkosber.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../experience/" class="md-tabs__link">
+          
+  
+  
+  Professional Experience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../credentials/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Credentials & Education
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Technical Labs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../career-paths/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Career Pathways
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jadon Kosberg | IT Infrastructure &amp; Cybersecurity" class="md-nav__button md-logo" aria-label="Jadon Kosberg | IT Infrastructure & Cybersecurity" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Jadon Kosberg | IT Infrastructure & Cybersecurity
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jkosber/jkosber.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jkosber/jkosber.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Professional Experience
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Professional Experience
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../experience/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Experience Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../experience/ladd-dental/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Healthcare IT Support (Ladd Dental)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../experience/verizon-conversions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retail Technology Conversions (Verizon / Vaco)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credentials & Education
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Labs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Labs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxmox Virtualization & SDN
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxmox Virtualization & SDN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-architecture-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Architecture &amp; Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-technologies-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technologies &amp; Specifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-implementation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Implementation &amp; Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Implementation &amp; Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-software-defined-networking-predictable-addressing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Software-Defined Networking &amp; Predictable Addressing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-datacenter-firewall-rule-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Datacenter Firewall Rule Base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-container-service-stack-on-vm-109" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Container Service Stack on VM 109
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-validation-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Validation &amp; Evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-troubleshooting-engineering-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Troubleshooting &amp; Engineering Challenges
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cisco-networking-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cisco Networking & Packet Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-linux-infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWS Linux Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soc-threat-detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOC Threat Detection & Snort IDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../career-paths/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Career Pathways
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-architecture-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Architecture &amp; Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-technologies-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technologies &amp; Specifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-implementation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Implementation &amp; Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Implementation &amp; Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-software-defined-networking-predictable-addressing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Software-Defined Networking &amp; Predictable Addressing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-datacenter-firewall-rule-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Datacenter Firewall Rule Base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-container-service-stack-on-vm-109" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Container Service Stack on VM 109
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-validation-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Validation &amp; Evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-troubleshooting-engineering-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Troubleshooting &amp; Engineering Challenges
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="proxmox-virtualization-software-defined-networking">Proxmox Virtualization &amp; Software-Defined Networking</h1>
+<p><strong>Primary Focus:</strong> Bare-Metal Hypervisor Administration, SDN Segmentation, Docker Service Stack, VFIO GPU Passthrough<br />
+<strong>Source Repository:</strong> <a href="https://github.com/jkosber/JHomelab">github.com/jkosber/JHomelab</a></p>
+<hr />
+<h2 id="1-objective">1. Objective</h2>
+<p>To build and run a Proxmox homelab on an Alienware 15 R3. The primary architectural goals were:</p>
+<ol>
+<li>Provide complete network isolation between the home LAN and experimental testing virtual machines using <strong>Software-Defined Networking (SDN)</strong>.</li>
+<li>Implement predictable <strong>IP Address Management (IPAM)</strong> and datacenter-level firewall access control lists (ACLs).</li>
+<li>Host always-on core infrastructure services (Docker/Portainer, Homepage dashboard, Uptime Kuma) with minimal resource overhead.</li>
+<li>Configure hardware PCI passthrough (<strong>VFIO / IOMMU</strong>) to dedicate a discrete GPU to specific virtual workloads.</li>
+</ol>
+<hr />
+<h2 id="2-architecture-topology">2. Architecture &amp; Topology</h2>
+<p>The hypervisor runs on an Alienware 15 R3 platform running <strong>Proxmox VE 9.1.0 (Kernel 6.17)</strong>.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph PhysicalPlatform ["Bare-Metal Physical Host (jhome) - Proxmox VE 9.1"]
+        CPU["Intel Core i7-7700HQ (4C / 8T)"]
+        RAM["16 GB DDR4 RAM (Over-provisioned across VM pool)"]
+        StorageSSD["120 GB SSD (local, local-lvm / OS &amp; ISOs)"]
+        StorageHDD["1 TB HDD (vmdata / VM Virtual Disks)"]
+        GPU["NVIDIA GTX 1070 Mobile (Bound to vfio-pci)"]
+    end
+
+    subgraph NetZones ["Proxmox SDN Network Zones"]
+        subgraph HomeZone ["Home LAN Zone (vmbr0) - 192.168.x.x/24"]
+            VM109["VM 109: Ubuntu Server 24.04 (Docker Host)
+IP: 192.168.x.x
+• Portainer (9443)
+• Homepage Dashboard (3000)
+• Uptime Kuma (3001)"]
+        end
+
+        subgraph LabZone ["Lab SDN Zone (testnet VNet) - 10.10.100.0/24"]
+            PVE_IPAM["Proxmox Dynamic IPAM (10.10.100.1 Gateway)"]
+            VM100["VM 100: Ubuntu Desktop (10.10.100.100)"]
+            VM101["VM 101: Kali Linux (10.10.100.101)"]
+            VM102["VM 102: OPNsense Gateway (10.10.100.102)"]
+            VM103_108["VMs 103-108: Multi-Distro Range
+(Fedora, openSUSE, Arch/Manjaro, Pop!_OS, Mint)"]
+        end
+    end
+
+    PhysicalPlatform --&gt; NetZones</code></pre>
+<hr />
+<h2 id="3-technologies-specifications">3. Technologies &amp; Specifications</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Technical Specification</th>
+<th style="text-align: left;">Operational Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Hypervisor</strong></td>
+<td style="text-align: left;">Proxmox VE 9.1.0 (Linux Kernel 6.17)</td>
+<td style="text-align: left;">Bare-metal type-1 hypervisor</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Host CPU &amp; RAM</strong></td>
+<td style="text-align: left;">Intel i7-7700HQ (4C / 8T), 16 GB DDR4</td>
+<td style="text-align: left;">Core compute with dynamic RAM commitment</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Storage Architecture</strong></td>
+<td style="text-align: left;">Tier 1: 120 GB SSD (<code>local</code>, <code>local-lvm</code>)<br>Tier 2: 1 TB HDD (<code>vmdata</code>)</td>
+<td style="text-align: left;">Tier 1 for PVE root OS and ISOs;<br>Tier 2 for VM <code>.qcow2</code> virtual disks</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Discrete GPU</strong></td>
+<td style="text-align: left;">NVIDIA GeForce GTX 1070 Mobile</td>
+<td style="text-align: left;">Bound to <code>vfio-pci</code> driver via IOMMU isolation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SDN Framework</strong></td>
+<td style="text-align: left;">Proxmox SDN (Simple Zone + EVPN capable)</td>
+<td style="text-align: left;">Virtual Network (<code>testnet</code>) with managed IPAM</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Container Engine</strong></td>
+<td style="text-align: left;">Docker Engine + Portainer on VM 109</td>
+<td style="text-align: left;">Microservice container host</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-implementation-configuration">4. Implementation &amp; Configuration</h2>
+<h3 id="a-software-defined-networking-predictable-addressing">A. Software-Defined Networking &amp; Predictable Addressing</h3>
+<p>To isolate experimental operating systems (including penetration testing distros like Kali) from production home network traffic, a dedicated Proxmox SDN zone was created:</p>
+<ul>
+<li><strong>Home Network (<code>vmbr0</code>):</strong> <code>192.168.x.x/24</code> — Management IP on management subnet (<code>192.168.x.x:8006</code>) and always-on infrastructure (<code>192.168.x.x</code>).</li>
+<li><strong>Lab SDN (<code>testnet</code>):</strong> <code>10.10.100.0/24</code> — Fully isolated virtual switch managed by Proxmox IPAM with local DHCP serving the <code>10.10.100.1</code> gateway.</li>
+<li><strong>Predictable Addressing Rule:</strong> IPs follow <code>10.10.100.&lt;VMID&gt;</code> (VM 101 → <code>10.10.100.101</code>, VM 105 → <code>10.10.100.105</code>). This simplifies correlation across firewall logs, packet captures, and hypervisor inventories.</li>
+</ul>
+<h3 id="b-datacenter-firewall-rule-base">B. Datacenter Firewall Rule Base</h3>
+<p>A strict default-drop policy was applied at the Proxmox Datacenter level with the following rules:</p>
+<ol>
+<li><strong>Management ACL:</strong> Allows ICMP Ping, SSH (Port 22), and Proxmox Web UI (Port 8006) exclusively from authorized management subnets.</li>
+<li><strong>SDN Egress:</strong> Permits outbound DNS (UDP/TCP 53) and DHCP (UDP 67/68) within the <code>testnet</code> zone.</li>
+<li><strong>Internet Egress:</strong> Permits outbound HTTP/HTTPS for package repository updates while blocking any unsolicited inter-zone inbound connections to the home LAN.</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>+-----------------------------------------------------------------------------------+
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>| Proxmox Datacenter Firewall Rules                                                 |
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>+-----+--------+---------------+------------------+-------+----------+--------------+
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>| Dir | Action | Source        | Destination      | Proto | DPort    | Comment      |
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>+-----+--------+---------------+------------------+-------+----------+--------------+
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>| IN  | ACCEPT | MgmtSubnet    | 192.168.x.x      | tcp   | 8006, 22 | PVE Web/SSH  |
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>| IN  | ACCEPT | MgmtSubnet    | 192.168.x.x      | icmp  | -        | Mgmt Ping    |
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>| OUT | ACCEPT | 10.10.100.0/24| 10.10.100.1      | udp   | 53, 67   | In-Zone DNS  |
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>| OUT | ACCEPT | 10.10.100.0/24| 0.0.0.0/0        | tcp   | 80, 443  | HTTP/S Egress|
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>+-----+--------+---------------+------------------+-------+----------+--------------+
+</span></code></pre></div>
+<h3 id="c-container-service-stack-on-vm-109">C. Container Service Stack on VM 109</h3>
+<p>VM 109 (<code>Ubuntu-Server</code> @ <code>192.168.x.x</code>) is configured as the sole auto-booting guest, running lightweight Docker containers managed via Portainer:</p>
+<ul>
+<li><strong>Homepage (Port 3000):</strong> Dashboard for internal lab links.</li>
+<li><strong>Uptime Kuma (Port 3001):</strong> Active HTTP/ICMP health checks monitoring hypervisor and VM uptime.</li>
+<li><strong>Portainer (Port 9443):</strong> Web interface for container image lifecycle and volume management.</li>
+</ul>
+<hr />
+<h2 id="5-validation-evidence">5. Validation &amp; Evidence</h2>
+<p>The lab environment was validated through live operational status:</p>
+<p><img alt="Proxmox Datacenter Inventory" src="../../assets/datacenter-inventory.png" />
+<em>Proxmox Datacenter inventory displaying the active node <code>jhome</code>, storage pools, and VMs 100 through 109.</em></p>
+<p><img alt="Proxmox Datacenter Firewall" src="../../assets/datacenter-firewall.png" />
+<em>Active Datacenter-level firewall rulebase enforcing access control and egress permissions.</em></p>
+<p><img alt="Proxmox Node Configuration" src="../../assets/node-jhome-config.png" />
+<em>Node <code>jhome</code> hardware summary (CPU, memory, and storage configuration).</em></p>
+<hr />
+<h2 id="6-troubleshooting-engineering-challenges">6. Troubleshooting &amp; Engineering Challenges</h2>
+<p>??? example "Issue: IOMMU Grouping Conflicts on Mobile GPU" * <strong>Problem:</strong> When attempting to pass through the NVIDIA GTX 1070 Mobile to a guest VM, Proxmox reported that the GPU shared an IOMMU group with the PCIe root port and onboard audio controller, preventing clean PCI attachment. * <strong>Root Cause:</strong> Laptop motherboard PCIe root topologies frequently bundle multi-function PCIe devices into unified IOMMU groups. * <strong>Remediation:</strong> Added <code>pcie_acs_override=downstream,multifunction</code> to <code>/etc/default/grub</code>, reloaded GRUB (<code>update-grub</code>), and verified discrete IOMMU grouping via <code>pvesh get /nodes/jhome/hardware/pci</code>. The GPU was then successfully bound to the <code>vfio-pci</code> stub driver.</p>
+<p>??? example "Issue: Memory Over-Commitment Strategy" * <strong>Problem:</strong> Allocating maximum required RAM to all 10 VMs simultaneously would require ~48 GB, exceeding the physical 16 GB capacity. * <strong>Resolution:</strong> Only VM 109 (2 GB) is set to auto-boot. Desktop-heavy VMs (Fedora, Kali, Zorin) are powered on individually on-demand, keeping active RAM within safe limits (&lt; 80%).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
