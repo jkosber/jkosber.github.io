@@ -1,65 +1,77 @@
 # AWS Multi-Tier Linux Infrastructure
 
-**Primary Focus:** Cloud Virtualization, Multi-Tier Architecture, Linux Administration, Bash Automation, Service Hardening  
-**Source Repository:** [github.com/jkosber/SVAD-111-Linux-Virtualization](https://github.com/jkosber/SVAD-111-Linux-Virtualization)  
+**Primary Focus:** Cloud Virtualization, Multi-Tier Architecture, Linux Administration, MSSQL on Linux, Apache/PHP  
+**Source Repository:** [github.com/jkosber/SVAD-111-Linux-Virtualization](https://github.com/jkosber/SVAD-111-Linux-Virtualization)
 
 ---
 
 ## 1. Objective
 
-To build a two-tier web + database deployment on AWS EC2, with a public Apache web server and a private database, plus Bash automation for maintenance.
+Host AdventureWorks — a 35-year mail-catalog bike shop moving catalog operations online — as a two-tier web → DB stack on AWS with reproducible build notes.
+
+Built as the SVAD-111 capstone: separate web and database tiers so each can be patched and rebuilt independently. Final record is `AdventureWorks Project - Jadon Kosberg.docx` (TOC + Executive Summary + Business Scenario).
 
 ---
 
 ## 2. Cloud Architecture
 
-The VPC uses a public subnet for the web server (internet-facing) and a private subnet for the database, with the database security group only allowing traffic from the web security group.
-
----
-
-## 3. Implementation Highlights
-
-### A. Linux System Administration & User Security
-* **User & Group RBAC:** Established distinct administrative groups (`wheel`/`sudo`) and service accounts with restricted shell privileges (`/sbin/nologin`).
-* **Filesystem Permissions & Umask:** Configured standard directory permissions (`755`) and secure database file permissions (`600` / `640`) to enforce least privilege.
-* **Service Lifecycle Management:** Managed service states, daemon reloads, and autostart configurations using `systemctl` (`systemctl enable --now apache2`).
-
-### B. Automated Shell Scripting (`Bash`)
-Automated routine administrative workflows and file handling using modular Bash scripts:
-
-```bash
-#!/bin/bash
-# ==============================================================================
-# Automated Log Rotation & Archival Script
-# ==============================================================================
-set -euo pipefail
-
-LOG_DIR="/var/log/adventureworks"
-ARCHIVE_DIR="/var/backups/adventureworks"
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-
-mkdir -p "${ARCHIVE_DIR}"
-
-if [ -d "${LOG_DIR}" ]; then
-    echo "[INFO] Archiving logs from ${LOG_DIR} at ${TIMESTAMP}..."
-    tar -czf "${ARCHIVE_DIR}/app_logs_${TIMESTAMP}.tar.gz" -C "${LOG_DIR}" .
-    find "${ARCHIVE_DIR}" -type f -name "app_logs_*.tar.gz" -mtime +30 -delete
-    echo "[SUCCESS] Archive completed and logs older than 30 days purged."
-else
-    echo "[ERROR] Log directory ${LOG_DIR} does not exist." >&2
-    exit 1
-fi
+```mermaid
+flowchart LR
+    Browser["Browser"] --> SG["AWS Security Group<br>80/443 web • 22 PuTTY"]
+    SG --> WebA["Web Server A<br>EC2 Ubuntu<br>Apache 2 + PHP<br>mssql-tools / ODBC"]
+    WebA -->|"sqlcmd • 1433/tcp<br>private IP via ip a"| DBB["Database Server B<br>EC2 Ubuntu<br>MSSQL Server<br>AdventureWorks .bak"]
 ```
 
+- **Web Server A** — EC2 Ubuntu, Apache + PHP + `mssql-tools`/`php-sybase` + ODBC. Reached via public IP; SG opens `80/443` (lab) and `22` for PuTTY.
+- **Database Server B** — EC2 Ubuntu, MSSQL Server, AdventureWorks sample `.bak` restored via `sqlcmd`. Private IP discovered with `ip a` (same pattern as `VM_Share/m05p2b/ex1.sh`) and used in `config.php` as `<DB_B_private_IP>,1433`.
+- **Security group** — updated in Milestone 3A to allow `80/443`. DB `1433/tcp` is internal between tiers. Least-privilege narrowing (Web SG → DB `1433`, `22` from mgmt only) is a planned hardening step.
+
+Source: `M03 Milestone1` (Web A + DB B), `M05 Milestone2A/B` (MSSQL + restore), `M07 Milestone3A/B/C` (web tier + app deploy). Repo holds the milestone `.docx` docs as the record.
+
 ---
 
-## 4. Troubleshooting & Validation
+## 3. Implementation
 
-??? example "Issue: Web Tier Inability to Establish DB Connection"
-    * **Problem:** The web front-end returned `500 Internal Server Error` during database query initialization.
-    * **Troubleshooting:**
-      1. Verified local Apache service status and error logs (`/var/log/apache2/error.log`).
-      2. Tested port reachability from the web instance to the database instance using `nc -zv 10.0.2.50 3306`.
-      3. Discovered that the AWS Database Security Group was missing an ingress rule allowing traffic from the Web Server Security Group ID.
-    * **Resolution:** Added a security group rule allowing TCP 3306 with the Web Security Group as the source, instantly resolving database connectivity without exposing the database to the public internet.
+| Milestone    | What                   | Key steps / evidence                                                                                                                     |
+| ------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **M03 — M1** | Launch Web A + DB B    | EC2 Ubuntu, key pair, SG — `EC2 Instances Screenshot` shows both `running`                                                               |
+| **M05 — 2A** | MSSQL on DB B          | `curl` GPG keys → `add-apt-repository` → `apt install mssql-server` → `systemctl start mssql-server`                                     |
+| **M05 — 2B** | Restore AdventureWorks | `scp` `.bak` → extract → restore → `sqlcmd -S <DB_B_IP>,1433 -U sa -Q "SELECT name FROM sys.databases"` — expect `AdventureWorks` listed |
+| **M07 — 3A** | Prep web tier          | SG update `80/443` → `apt install mssql-tools apache2 php php-sybase`                                                                    |
+| **M07 — 3B** | Patch + ODBC           | `apt update && apt upgrade` → `sqlcmd` path + ODBC driver                                                                                |
+| **M07 — 3C** | Deploy PHP app         | `scp`/`unzip` app → `/var/www/html` → `config.php` DB string `<DB_B_private_IP>,1433` → browser test shows product data from DB          |
+| **M07 — 4**  | Documentation          | Assemble `AdventureWorks Project - Jadon Kosberg.docx` (TOC / Executive Summary / build steps)                                           |
 
+Scripts referenced mirror lab patterns: `ex1.sh` (`hostname`/`date`/`free -h`/`df -h`/`ip a`) for `ip a` discovery, `dl_wallpaper.sh` (`curl -Is` 200 check + `clamscan` before use) for safe fetches.
+
+No `docker-compose.yml` / `cloudformation.yml` in repo — docx are the lab record; containerized port to JHomelab `testnet` is planned.
+
+---
+
+## 4. Validation
+
+- **M03** console screenshot — Web A + DB B `running`.
+- **M05 2B** `sqlcmd -S <DB_B_IP>,1433 -U sa -Q "SELECT name FROM sys.databases"` → `AdventureWorks` present.
+- **M07 3C** `curl -I http://<Web_A_IP>` → `200` + PHP renders AdventureWorks product listings from DB B.
+- `M07 3C` app files show review data queried from DB B.
+
+Out of scope: load testing, TLS probe, cost/perf tuning.
+
+---
+
+## 5. Troubleshooting & Lessons
+
+??? example "Web tier cannot reach DB" * **Symptom:** PHP app `500` on DB query. * **Checks:** `systemctl status apache2` + `/var/log/apache2/error.log`, `ip a` on DB B to confirm private IP, `sqlcmd -S <DB_B_private_IP>,1433 -U sa` from Web A, SG ingress for `1433/tcp` between tiers. * **Fix:** Ensure `config.php` uses DB B private IP (not public) with `,1433`, and SG allows Web A → DB B on `1433/tcp`.
+
+**Lessons:** `GPG → repo → apt → systemctl` chain matches PVE update flow; private IP via `ip a` is the correct DB string; screenshots are the lab's validation artifact until replaced by `curl`/`sqlcmd` probes in a future `check.sh` (see `04-Projects/AdventureWorks-AWS-MultiTier` in vault).
+
+---
+
+## 6. Production & Enterprise Relevance
+
+- **Tier isolation** — separating web and DB lets each be patched/rebuilt independently; maps to an on-prem port on JHomelab `testnet` (e.g., two VMs on `10.10.100.0/24`).
+- **Hardening path** — lab SG is world-open on `80/443`; production would narrow DB `1433` to Web SG only and add TLS via reverse proxy (as planned on JHomelab VM 109 Nginx Proxy Manager `:81`).
+
+---
+
+_Docs: `SVAD-111-Linux-Virtualization` M03/M05/M07 milestone docx + `AdventureWorks Project - Jadon Kosberg.docx` — see repo for per-assignment Word docs and `VM_Share` scripts._
