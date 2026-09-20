@@ -6,9 +6,9 @@ kind: Background
 
 # About Jadon
 
-I've worked in healthcare help desk support, workstation deployments, and retail technology conversions. I also maintain a homelab and work on personal projects in networking, infrastructure, and software.
+My background combines IT support, an informatics degree and further study in cybersecurity. I've worked in healthcare and retail environments, helping users and working on the equipment they rely on.
 
-I earned my informatics degree at Indiana University, then continued studying cybersecurity and IT at Ivy Tech. [My experience](../experience/index.md) and [projects](../technical-labs/index.md) show how I've put that background to use.
+Outside work, I maintain a homelab and build personal projects in networking, infrastructure and software. I learn best by setting things up, finding out what breaks and working through the problem. The [homelab](../technical-labs/proxmox-virtualization.md) gives me a place to keep doing that.
 
 ## Certifications
 

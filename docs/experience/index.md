@@ -6,4 +6,4 @@ layout: experience
 
 # Professional experience
 
-My work in IT support has included helping users, setting up workstations and printers, and troubleshooting network connections in healthcare and retail environments.
+I've supported dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting. These pages cover the work I did in each role.

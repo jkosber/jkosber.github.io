@@ -6,4 +6,4 @@ layout: projects
 
 # Projects
 
-My homelab, a resume tool, and completed coursework in Linux, networking, and security. Each project explains what it involved and links to available documentation.
+My personal projects focus on running a homelab and making job-search tasks easier to manage. The coursework below covers an AWS deployment, network troubleshooting and security investigation. Each page explains my work and its context.
