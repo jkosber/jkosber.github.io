@@ -13,6 +13,8 @@ python -m mkdocs serve --dev-addr 127.0.0.1:8000
 
 Open the loopback URL in your browser. `site/` is generated and ignored by Git. All content and navigation remain available without JavaScript. A small local script adds the mobile menu, project filters, current-section highlighting and back-to-top control; no external fonts or scripts are requested.
 
+The script loads in the head and marks the enhanced layout before the first paint, then initializes controls when the document is ready. This prevents the mobile navigation from flashing open and shifting the page. If the script is unavailable or JavaScript is disabled, mobile navigation remains visible in normal document flow so it cannot cover the content on short screens. An enhanced mobile menu also closes when keyboard focus leaves the header. Section navigation starts collapsed at the 1200px reading-layout breakpoint. Printed pages retain the author's name, email and website.
+
 ## Content and layout
 
 - `docs/`: publishable Markdown and assets. Existing case-study routes are retained.
@@ -38,5 +40,7 @@ Private evidence maps, review notes, credentials and resume artifacts do not bel
 ## Validation and publication
 
 Run a strict build, check generated links and excluded assets, then inspect desktop and mobile layouts and keyboard navigation. Check menu open/close, Escape, viewport changes, project filtering, current-section tracking and back-to-top focus. Verify reduced motion disables hover movement and all content remains available with JavaScript disabled. Review the full diff before publishing.
+
+Include short landscape/zoom viewports, enlarged text, tabbing out of an open mobile menu, a failed script request and printed case-study attribution. Check throttled mobile loading for layout shift and loading performance; lab measurements do not establish real-user Core Web Vitals.
 
 The existing GitHub Actions workflow publishes on a push to `main` or manual dispatch, using `mkdocs gh-deploy --force`. GitHub Pages serves `gh-pages`. A public branch or pull request also exposes its content. Local preview is the review environment; publication requires the owner’s separate approval of the reviewed change.

@@ -1,19 +1,22 @@
 <!doctype html>
 <html lang="en">
-{% set page_title = (page.meta.title or page.title) if page else config.site_name %}
+{% set page_title = (page.meta.title or page.title) if page else 'Page not found' %}
+{% set full_title = page_title ~ ' | ' ~ config.site_name if not page or not page.is_homepage else config.site_name %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>{% if page and not page.is_homepage %}{{ page_title | striptags }} | {% endif %}{{ config.site_name }}</title>
+  <title>{{ full_title | striptags | e }}</title>
   <meta name="description" content="{{ (page.meta.description if page and page.meta.description else config.site_description) | e }}">
   {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
   <link rel="icon" href="{{ 'assets/mark.svg' | url }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ 'stylesheets/portfolio.css' | url }}">
-  <script src="{{ 'javascripts/portfolio.js' | url }}" defer></script>
-  <meta property="og:title" content="{{ page_title | e }}">
+  <script src="{{ 'javascripts/portfolio.js' | url }}"></script>
+  <meta property="og:title" content="{{ full_title | striptags | e }}">
   <meta property="og:description" content="{{ (page.meta.description if page and page.meta.description else config.site_description) | e }}">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name | e }}">
+  {% if page and page.canonical_url %}<meta property="og:url" content="{{ page.canonical_url | e }}">{% endif %}
 </head>
 <body>
   {% from "partials/components.html" import icon, project_card, experience_entries with context %}
@@ -41,6 +44,7 @@
     </div>
   </header>
   <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
     <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}"{% if page and page.meta.visual %} data-visual="{{ page.meta.visual }}"{% endif %}>
       {% block content %}
       {% if page and page.meta.layout == 'home' %}

@@ -10,6 +10,8 @@ My background combines IT support, an informatics degree and further study in cy
 
 Outside work, I maintain a homelab and build personal projects in networking, infrastructure and software. I learn best by setting things up, finding out what breaks and working through the problem. The [homelab](../technical-labs/proxmox-virtualization.md) gives me a place to keep doing that.
 
+See [Skills & focus](../career-paths/index.md) for the experience and projects behind each area of my work.
+
 ## Certifications
 
 <div class="credential-grid" markdown>
@@ -47,5 +49,3 @@ The [networking coursework page](../technical-labs/cisco-networking-analysis.md)
 - Dean's List, Ivy Tech Community College, 2025.
 - Dean's List, Indiana University, 2020–2021.
 - Collegiate golf scholarship, Indiana University, 2018–2021.
-
-[View my areas of work](../career-paths/index.md) for an overview of support, networking, cybersecurity, development, and infrastructure.

@@ -9,7 +9,7 @@ layout: home
 IT support, networking, cybersecurity, and development.
 { .intro-specialties }
 
-I've worked in healthcare IT support and retail technology deployments. Outside work, I maintain a homelab and build projects to learn more about the systems I work with.
+I've supported users across 12 dental offices and helped Verizon stores through technology conversions. Outside work, I maintain a homelab and build projects in infrastructure, networking and software.
 
 [View projects](technical-labs/index.md){ .button }
 [Get in touch](mailto:jadonkosberg@gmail.com){ .button .button--secondary }

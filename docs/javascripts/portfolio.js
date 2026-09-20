@@ -1,7 +1,11 @@
 /* Navigation and filtering enhance an otherwise complete, static site. */
-(() => {
+// Run this small file in the head so enhanced layout is reserved before paint.
+// If it cannot load, the ordinary navigation remains visible and usable.
+document.documentElement.classList.add('js');
+document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('.menu-toggle');
   const menu = document.querySelector('#site-menu');
+  const header = document.querySelector('.site-header');
   const mobile = window.matchMedia('(max-width: 960px)');
 
   if (toggle && menu) {
@@ -23,18 +27,27 @@
     toggle.addEventListener('click', () => {
       setOpen(toggle.getAttribute('aria-expanded') !== 'true');
     });
-    document.querySelector('.site-header').addEventListener('keydown', (event) => {
+    header.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && mobile.matches) {
         setOpen(false);
         toggle.focus();
       }
     });
+    header.addEventListener('focusout', (event) => {
+      if (mobile.matches && event.relatedTarget && !header.contains(event.relatedTarget)) {
+        setOpen(false);
+      }
+    });
     mobile.addEventListener('change', syncViewport);
     syncViewport();
+    menu.dataset.ready = 'true';
   }
 
   const contents = document.querySelector('.contents details');
-  if (contents && mobile.matches) contents.open = false;
+  if (contents) {
+    if (window.matchMedia('(max-width: 1200px)').matches) contents.open = false;
+    contents.dataset.ready = 'true';
+  }
 
   // Follow the reading position without moving focus or changing the URL.
   const sectionLinks = [...document.querySelectorAll('.contents nav a')];
@@ -100,4 +113,4 @@
     toolbar.hidden = false;
     filterProjects('all');
   }
-})();
+});

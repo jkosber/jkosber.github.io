@@ -1,6 +1,6 @@
 ---
 title: Proxmox homelab
-description: A repurposed laptop running Proxmox, Linux virtual machines, Docker services and an experimental network with managed addressing and firewall rules.
+description: A Proxmox homelab built on a repurposed laptop, with documented Linux guests, Docker services and virtual network configuration.
 kind: Personal homelab
 status: Ongoing
 visual: assets/lab.svg
