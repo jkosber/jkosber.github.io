@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+{% set page_title = (page.meta.title or page.title) if page else config.site_name %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>{% if page and not page.is_homepage %}{{ page_title | striptags }} | {% endif %}{{ config.site_name }}</title>
+  <meta name="description" content="{{ (page.meta.description if page and page.meta.description else config.site_description) | e }}">
+  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+  <link rel="icon" href="{{ 'assets/mark.svg' | url }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ 'stylesheets/portfolio.css' | url }}">
+  <script src="{{ 'javascripts/portfolio.js' | url }}" defer></script>
+  <meta property="og:title" content="{{ page_title | e }}">
+  <meta property="og:description" content="{{ (page.meta.description if page and page.meta.description else config.site_description) | e }}">
+  <meta property="og:type" content="website">
+</head>
+<body>
+  {% from "partials/components.html" import icon, project_card, experience_entries with context %}
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="{{ nav.homepage.url | url }}">
+        <img src="{{ 'assets/mark.svg' | url }}" width="40" height="40" alt="">
+        <span>Jadon Kosberg<small>IT portfolio</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden>{{ icon('menu') }}<span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        {% for item in nav %}
+        {% set destination = item.children[0].url if item.children else item.url %}
+        <a href="{{ destination | url }}"{% if item.active %} aria-current="{{ 'page' if page and page.url == destination else 'true' }}"{% endif %}>{{ icon(item.title | lower) }}<span>{{ item.title }}</span></a>
+        {% endfor %}
+      </nav>
+      <div class="rail-contact">
+        <a href="mailto:jadonkosberg@gmail.com">{{ icon('email') }}<span>Email me</span></a>
+        <a href="https://www.linkedin.com/in/jadon-kosberg">{{ icon('external') }}<span>LinkedIn</span></a>
+        <a href="https://github.com/jkosber">{{ icon('external') }}<span>GitHub</span></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}"{% if page and page.meta.visual %} data-visual="{{ page.meta.visual }}"{% endif %}>
+      {% block content %}
+      {% if page and page.meta.layout == 'home' %}
+        {% include "partials/home.html" %}
+      {% elif page and page.meta.layout == 'projects' %}
+        <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('projects') }}</span>{{ page.content }}</div>
+        <section class="project-browser" aria-label="Browse projects">
+          <div class="project-toolbar" hidden>
+            <div class="project-filters" role="group" aria-label="Filter projects">
+              <button type="button" data-filter="all" aria-pressed="true">All projects</button>
+              <button type="button" data-filter="personal" aria-pressed="false">Personal</button>
+              <button type="button" data-filter="coursework" aria-pressed="false">Coursework</button>
+            </div>
+            <p class="project-count" role="status" aria-live="polite" aria-atomic="true"></p>
+          </div>
+          <div class="project-grid">
+            {% for section in nav if section.title == 'Projects' %}
+            {% for project in section.children if project.url != page.url %}
+              {{ project_card(project) }}
+            {% endfor %}
+            {% endfor %}
+          </div>
+        </section>
+        <p class="related-link">For paid roles, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
+      {% elif page and page.meta.layout == 'experience' %}
+        <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('experience') }}</span>{{ page.content }}</div>
+        {{ experience_entries() }}
+        <div class="section-note"><h2>Projects and coursework</h2><p>My homelab, software projects and coursework cover additional Linux, networking and security work.</p><a href="{{ 'technical-labs/' | url }}">View projects</a></div>
+      {% else %}
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="{{ nav.homepage.url | url }}">Home</a>
+          {% if page and page.parent %}
+          {% set parent_url = page.parent.children[0].url %}
+          {% if parent_url != page.url %}<span aria-hidden="true">/</span><a href="{{ parent_url | url }}">{{ page.parent.title }}</a>{% endif %}
+          {% endif %}
+          <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
+        </nav>
+        {% set sections = namespace(items=[]) %}
+        {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
+        <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
+          {% if sections.items and page.meta.layout != 'wide' %}
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                {% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}
+              </nav>
+            </details>
+          </aside>
+          {% endif %}
+          <article class="prose">
+            {% if page.meta.kind and page.meta.kind != 'Background' %}
+            <div class="page-context"><span>{{ page.meta.kind }}</span>{% if page.meta.status %}<span>{{ page.meta.status }}</span>{% endif %}</div>
+            {% endif %}
+            {{ page.content }}
+          </article>
+        </div>
+      {% endif %}
+      {% endblock %}
+    </main>
+    <footer class="site-footer" id="contact">
+      <div><h2>Contact</h2><a class="contact-email" href="mailto:jadonkosberg@gmail.com">jadonkosberg@gmail.com</a></div>
+      <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="{{ 'credentials/' | url }}">About me</a></div>
+      <p>Jadon Kosberg</p>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a>
+</body>
+</html>

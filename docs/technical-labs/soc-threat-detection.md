@@ -1,60 +1,32 @@
-# SOC Threat Detection & Snort IDS Analysis
-
-**Primary Focus:** Cisco CyberOps Associate Track, Snort IDS Signature Authoring, 5-Tuple Incident Triage, PCAP Payload Extraction  
-**Source Repository:** [github.com/jkosber/CyberOps-115](https://github.com/jkosber/CyberOps-115)  
-
+---
+title: CyberOps & traffic investigation
+description: CyberOps coursework in Wireshark, operating-system logs, Snort and traffic investigation.
+kind: Completed coursework
+status: Complete
+visual: assets/project-security.svg
 ---
 
-## 1. Objective
+# CyberOps & traffic investigation
 
-To execute cybersecurity operations workflows aligned with the **Cisco CyberOps Associate** certification track, focusing on intrusion detection system (**Snort IDS**) rule authoring, alert triage, malware payload extraction from network captures, and structured incident response.
+I completed **CSIA 115: Cyber Ops**, with exercises in operating systems, network traffic and security investigation. The repository contains lab submissions, Packet Tracer activities and skills-assessment documents.
 
----
+## Coursework
 
-## 2. Security Operations Incident Workflow
+<figure class="case-visual">
+  <img src="../../assets/project-security.svg" width="600" height="340" alt="Conceptual illustration of inspecting traffic and log records." loading="lazy">
+  <figcaption>Traffic, logs and investigation in CyberOps coursework.</figcaption>
+</figure>
 
-The workflow follows ingestion (traffic, Snort, syslog), detection and 5-tuple triage, forensics and payload extraction, then containment and reporting.
+The labs covered Linux and Windows tools, log files, Wireshark, Nmap and access controls. Later assignments used Snort and firewall rules, examined files extracted from packet captures, and investigated hosts using traffic details such as source and destination addresses and ports.
 
----
+## Assignments
 
-## 3. Technical Implementation & Snort Rule Authoring
+| Topic | Repository artifacts |
+|---|---|
+| Operating systems and logs | [Windows tools, Linux shell, log files and permissions](https://github.com/jkosber/CyberOps-115/tree/main/Module02) |
+| Traffic fundamentals | [Wireshark, TCP handshake and Nmap exercises](https://github.com/jkosber/CyberOps-115/tree/main/Module03) |
+| Protocols and access control | [DNS, HTTP/HTTPS, TCP/UDP and ACL activities](https://github.com/jkosber/CyberOps-115/tree/main/Module04) |
+| Detection and investigation | [Snort and firewall rules, PCAP extraction, five-tuple analysis and incident handling](https://github.com/jkosber/CyberOps-115/tree/main/Module07) |
+| Assessment | [CyberOps skills assessment and report documents](https://github.com/jkosber/CyberOps-115/tree/main/Module08) |
 
-### A. Custom Snort IDS Detection Rules
-Crafted custom Snort detection rules to identify malicious indicators of compromise (IoCs):
-
-```snort
-# Detect unauthorized ICMP sweeps across internal subnets
-alert icmp any any -> 192.168.0.0/24 any (msg:"SECURITY ALERT: ICMP Echo Sweep Detected"; itype:8; threshold:type both, track by_src, count 10, seconds 5; sid:1000001; rev:1;)
-
-# Detect sensitive plaintext credential transmission over HTTP POST
-alert tcp any any -> $HTTP_SERVERS 80 (msg:"SECURITY ALERT: Sensitive Credential Submission via Plaintext HTTP"; flow:to_server,established; content:"POST"; http_method; content:"password="; nocase; sid:1000002; rev:1;)
-
-# Detect suspicious executable download in transit
-alert tcp $EXTERNAL_NET 80 -> $HOME_NET any (msg:"SECURITY ALERT: Windows Executable File Download Detected"; flow:to_client,established; content:"MZ"; offset:0; depth:2; sid:1000003; rev:1;)
-```
-
-### B. 5-Tuple Forensic Isolation & Payload Extraction
-During incident response exercises, identified compromised hosts by correlating the standard **5-tuple**:
-1. **Source IP Address** (`10.0.2.15`)
-2. **Source Port** (`49152`)
-3. **Destination IP Address** (`198.51.100.23`)
-4. **Destination Port** (`80`)
-5. **Transport Protocol** (`TCP`)
-
-**Payload Extraction Workflow:**
-1. Filtered the packet capture in Wireshark on the suspect TCP conversation stream.
-2. Reassembled the raw TCP stream to isolate the HTTP payload.
-3. Extracted the binary artifact (`.exe`) directly from Wireshark's *Export Objects* interface.
-4. Generated cryptographic hashes (`sha256sum artifact.exe`) to confirm payload integrity and compare against threat intelligence repositories.
-
----
-
-## 4. Incident Response & Threat Mitigation
-
-Followed standardized **NIST SP 800-61 / SANS** incident response phases:
-* **Preparation:** Tuning IDS signatures to suppress false positives while maintaining high sensitivity.
-* **Detection & Analysis:** Correlating Snort alert timestamps with web server access logs.
-* **Containment:** Implementing immediate firewall drop rules targeting malicious external IP addresses.
-* **Eradication & Recovery:** Validating that compromised test nodes were sanitized and restored to known-clean baselines.
-* **Post-Incident Review:** Documenting findings in the official **CyberOps Skills Exam Report**.
-
+[Course repository](https://github.com/jkosber/CyberOps-115) · [Networking and packet analysis](cisco-networking-analysis.md) · [Certifications](../credentials/index.md)

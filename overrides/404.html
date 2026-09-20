@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+{% block content %}
+<article class="prose error-page">
+  <p class="page-context">404</p>
+  <h1>Page not found</h1>
+  <p>The address may have changed. View the projects or return home.</p>
+  <p><a class="button" href="{{ nav.homepage.url | url }}">Back to home</a></p>
+</article>
+{% endblock %}

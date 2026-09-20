@@ -1,0 +1,50 @@
+{% macro icon(name) -%}
+<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+{% if name == 'home' %}<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-8H9v8H4a1 1 0 0 1-1-1z"/>
+{% elif name == 'projects' %}<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+{% elif name == 'experience' %}<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12a21 21 0 0 0 18 0M10 13h4"/>
+{% elif name == 'about' %}<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+{% elif name == 'email' %}<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+{% elif name == 'external' %}<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+{% elif name == 'menu' %}<path d="M4 6h16M4 12h16M4 18h16"/>
+{% elif name == 'server' %}<rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M12 6.5h5M12 17.5h5"/>
+{% elif name == 'cloud' %}<path d="M6 19a5 5 0 0 1-.7-9.95A7 7 0 0 1 19 8a5.5 5.5 0 0 1-1 11z"/>
+{% elif name == 'document' %}<path d="M14 2H5v20h14V7zM14 2v5h5M8 12h8M8 16h6"/>
+{% elif name == 'network' %}<rect x="8" y="2" width="8" height="6" rx="1"/><rect x="2" y="16" width="7" height="6" rx="1"/><rect x="15" y="16" width="7" height="6" rx="1"/><path d="M12 8v4M5.5 16v-4h13v4"/>
+{% elif name == 'security' %}<path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6zM8 12l3 3 5-6"/>
+{% elif name == 'pin' %}<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/>
+{% elif name == 'education' %}<path d="m2 9 10-6 10 6-10 6zM6 12v6c4 3 8 3 12 0v-6M22 9v8"/>
+{% elif name == 'up' %}<path d="m5 11 7-7 7 7M12 4v16"/>
+{% elif name == 'support' %}<path d="M4 14v-3a8 8 0 0 1 16 0v3M4 12H2v7h4v-7zM20 12h2v7h-4v-7zM20 19v2h-7"/><path d="M10 21h3"/>
+{% endif %}
+</svg>
+{%- endmacro %}
+
+{% macro project_card(project, featured=false, heading=2) -%}
+{% set academic = project.meta.kind == 'Completed coursework' %}
+{% set project_title = project.meta.title or project.title %}
+{% set symbol = 'server' if 'proxmox' in project.url else ('cloud' if 'aws-linux' in project.url else ('document' if 'job-scan' in project.url else ('network' if 'cisco' in project.url else 'security'))) %}
+<article class="project-card{% if featured %} project-card--featured{% endif %}" data-category="{{ 'coursework' if academic else 'personal' }}" data-visual="{{ project.meta.visual }}">
+  {% if project.meta.visual %}<a class="card-art" href="{{ project.url | url }}" aria-label="Read {{ project_title }}" tabindex="-1"><img src="{{ project.meta.visual | url }}" width="600" height="340" alt="" loading="lazy"></a>{% endif %}
+  <div class="card-content">
+  <div class="card-meta"><span class="project-icon">{{ icon(symbol) }}</span><span>{{ project.meta.kind }}</span></div>
+  <h{{ heading }} class="project-title"><a href="{{ project.url | url }}">{{ project_title }}</a></h{{ heading }}>
+  <p>{{ project.meta.description }}</p>
+  <div class="card-bottom"><span>{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span><a href="{{ project.url | url }}" aria-label="View project: {{ project_title }}">View project</a></div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro experience_entries(compact=false) -%}
+{% set heading = 3 if compact else 2 %}
+<div class="experience-list{% if compact %} experience-list--compact{% endif %}">
+{% for section in nav if section.title == 'Experience' %}
+{% for role in section.children if role.meta.organization %}
+  <article class="experience-entry">
+    <div class="experience-date"><p>{{ role.meta.dates }}</p><span>{{ role.meta.role }}</span></div>
+    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon('network' if 'verizon' in role.url else 'support') }}</div><h{{ heading }} class="experience-title"><a href="{{ role.url | url }}">{{ role.meta.organization }}</a></h{{ heading }}><p>{{ role.meta.description }}</p><a class="detail-link" href="{{ role.url | url }}">{{ role.title }}</a></div>
+  </article>
+{% endfor %}
+{% endfor %}
+</div>
+{%- endmacro %}

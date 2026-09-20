@@ -1,0 +1,22 @@
+<section class="home-intro" aria-labelledby="jadon-kosberg">
+  <div class="intro-copy prose">{{ page.content }}</div>
+  <div class="hero-visual" aria-hidden="true"><img src="{{ 'assets/it-workbench.svg' | url }}" width="720" height="520" alt="" fetchpriority="high"></div>
+  <div class="intro-background">
+    <dl><div><dt>{{ icon('experience') }}Experience</dt><dd>Healthcare and retail IT support</dd></div><div><dt>{{ icon('security') }}Certifications</dt><dd>CompTIA A+ &amp; Security+</dd></div><div><dt>{{ icon('education') }}Education</dt><dd>B.S. in Informatics</dd></div></dl>
+    <a href="{{ 'credentials/' | url }}">More about me</a>
+  </div>
+</section>
+<section class="home-projects" aria-labelledby="projects">
+  <div class="section-heading"><h2 id="projects">Projects</h2><a href="{{ 'technical-labs/' | url }}">View all projects</a></div>
+  <div class="featured-projects">
+    {% for section in nav if section.title == 'Projects' %}
+    {% for project in section.children[1:4] %}
+      {{ project_card(project, loop.first, 3) }}
+    {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+<section class="home-experience" aria-labelledby="experience">
+  <div class="section-heading"><h2 id="experience">Professional experience</h2><a href="{{ 'experience/' | url }}">View experience</a></div>
+  {{ experience_entries(true) }}
+</section>

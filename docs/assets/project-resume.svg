@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" fill="none">
+  <defs>
+    <linearGradient id="paper" x1="182" y1="62" x2="366" y2="275" gradientUnits="userSpaceOnUse"><stop stop-color="#d7e1e8"/><stop offset="1" stop-color="#9aafbd"/></linearGradient>
+    <linearGradient id="review" x1="421" y1="174" x2="523" y2="272" gradientUnits="userSpaceOnUse"><stop stop-color="#7eaa9e"/><stop offset="1" stop-color="#476f70"/></linearGradient>
+    <filter id="shadow" x="-35%" y="-30%" width="175%" height="190%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#091219" flood-opacity=".5"/></filter>
+  </defs>
+  <path d="m31 223 289-104 252 131-277 75L31 223Z" fill="#2d3b48" fill-opacity=".52"/>
+  <path d="m109 270 107 32 48-17m72-104 86 28 52-16" stroke="#88a4b9" stroke-width="3" stroke-linecap="round"/>
+  <g filter="url(#shadow)">
+    <path d="m64 89 121 35v154L64 242V89Z" fill="#344856" stroke="#708d9e" stroke-width="1.5"/>
+    <path d="m78 73 121 35v154L78 226V73Z" fill="#577083" stroke="#a1b8cb" stroke-width="1.5"/>
+    <path d="m96 102 28 8v28l-28-8v-28Z" fill="#abc3e5"/>
+    <path d="m139 117 39 12m-39 0 27 8m-69 14 79 24m-79-8 65 20m-65-4 77 23m-77-7 41 12" stroke="#c0d2e0" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="m212 38 109 32 37 49v167l-146-43V38Z" fill="url(#paper)" stroke="#e5edf2" stroke-width="1.5"/>
+    <path d="m321 70 37 49-37-11V70Z" fill="#7891a3"/>
+    <path d="m230 75 58 17" stroke="#334d60" stroke-width="8" stroke-linecap="round"/>
+    <path d="m230 99 75 22" stroke="#597689" stroke-width="4" stroke-linecap="round"/>
+    <path d="m230 137 94 28m-94-13 82 24m-82-9 65 19m-65 16 94 28m-94-13 76 22m-76-7 52 15" stroke="#607c8b" stroke-width="4" stroke-linecap="round"/>
+    <path d="m230 122 109 32m-109 33 109 32" stroke="#8ba3b0" stroke-width="2"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="m385 101 124 37v155l-124-37V101Z" fill="#40545d" stroke="#8aa9ad" stroke-width="1.5"/>
+    <path d="m401 124 62 18m-62 0 86 26m-86-8 71 21m-71-3 54 16m-54 10 86 26" stroke="#adc3c9" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="457" cy="230" r="53" fill="url(#review)" stroke="#c6e2d6" stroke-width="4"/>
+    <circle cx="457" cy="230" r="42" fill="#36545e" stroke="#8eb6b0" stroke-width="1.5"/>
+    <path d="m494 267 45 40" stroke="#bdd8cd" stroke-width="17" stroke-linecap="round"/>
+    <path d="m500 274 32 27" stroke="#e1eae3" stroke-opacity=".4" stroke-width="4" stroke-linecap="round"/>
+    <path d="M435 217h44m-44 13h35m-35 13h25" stroke="#d9e7e8" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
