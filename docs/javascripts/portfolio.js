@@ -8,10 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.site-header');
   const mobile = window.matchMedia('(max-width: 960px)');
 
+  // Keep anchor targets clear of a wrapped or enlarged sticky header.
+  const updateHeaderOffset = () => {
+    const height = getComputedStyle(header).position === 'sticky' ? header.getBoundingClientRect().height : 0;
+    document.documentElement.style.setProperty('--header-height', `${height}px`);
+  };
+
   if (toggle && menu) {
     const setOpen = (open) => {
       toggle.setAttribute('aria-expanded', String(open));
       menu.hidden = mobile.matches && !open;
+      // Focus can leave the menu before ResizeObserver reports its new height.
+      updateHeaderOffset();
     };
     const syncViewport = () => {
       if (mobile.matches && menu.contains(document.activeElement)) {
@@ -43,11 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.dataset.ready = 'true';
   }
 
-  // Keep anchor targets clear of a wrapped or enlarged sticky header.
-  const updateHeaderOffset = () => {
-    const height = getComputedStyle(header).position === 'sticky' ? header.getBoundingClientRect().height : 0;
-    document.documentElement.style.setProperty('--header-height', `${height}px`);
-  };
   if ('ResizeObserver' in window) new ResizeObserver(updateHeaderOffset).observe(header);
   window.addEventListener('resize', updateHeaderOffset);
   updateHeaderOffset();

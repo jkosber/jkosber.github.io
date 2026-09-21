@@ -161,6 +161,7 @@ p { max-width: 66ch; }
 
 .experience-list { position: relative; }
 .experience-entry { position: relative; display: grid; grid-template-columns: minmax(160px, .45fr) 1fr; gap: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--line); }
+.page-heading + .experience-list > .experience-entry:first-child { padding-top: 0; border-top: 0; }
 .experience-date p { color: var(--warm); font-weight: 700; font-size: .85rem; margin: .2rem 0 .75rem; }
 .experience-date span { display: block; max-width: 23ch; color: var(--muted); font-size: .92rem; }
 .experience-copy { position: relative; padding-left: 4rem; }
@@ -286,8 +287,10 @@ p { max-width: 66ch; }
 @media (max-width: 960px) {
   .site-header { display: block; min-height: 80px; padding: 1rem var(--gutter); }
   .js .site-header { max-height: 100dvh; overflow-y: auto; }
-  .identity { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
-  .menu-toggle { display: inline-flex; }
+  .identity { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: center; }
+  .identity .brand { flex: 1 1 min-content; max-width: max-content; }
+  .identity .brand span { min-width: 0; overflow-wrap: break-word; }
+  .menu-toggle { display: inline-flex; margin-left: auto; }
   .js .site-menu:not([data-ready]) { display: none; }
   .site-menu { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1rem 0 .25rem; }
   .main-nav { flex: 1; justify-content: space-between; }
@@ -345,8 +348,8 @@ p { max-width: 66ch; }
   .brand img { width: 32px; height: 32px; }
   .menu-toggle { font-size: .8rem; }
   .site-menu { align-items: stretch; flex-direction: column; }
-  .main-nav { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem; border-radius: 10px; }
-  .main-nav a { justify-content: flex-start; border-radius: 6px; }
+  .main-nav { display: flex; flex-wrap: wrap; gap: .3rem; border-radius: 10px; }
+  .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .15rem); justify-content: flex-start; border-radius: 6px; }
   .header-contact a { justify-content: flex-start; }
   .home-intro { padding-top: 2.25rem; padding-bottom: 1.5rem; gap: 1.75rem; }
   .prose.intro-copy h1 { font-size: clamp(3rem, 15vw, 4.5rem); max-width: none; }
