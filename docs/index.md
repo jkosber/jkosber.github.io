@@ -4,7 +4,9 @@ description: IT support experience in healthcare and retail, with personal proje
 layout: home
 ---
 
-# Jadon Kosberg
+<h1 id="jadon-kosberg"><span>Jadon</span> <span>Kosberg</span></h1>
+
+<div class="intro-body" markdown>
 
 IT support, networking, cybersecurity, and development.
 { .intro-specialties }
@@ -13,3 +15,5 @@ I've supported users across 12 dental offices and helped Verizon stores through 
 
 [View projects](technical-labs/index.md){ .button }
 [Get in touch](mailto:jadonkosberg@gmail.com){ .button .button--secondary }
+
+</div>

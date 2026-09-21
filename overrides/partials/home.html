@@ -1,22 +1,37 @@
 <section class="home-intro" aria-labelledby="jadon-kosberg">
   <div class="intro-copy prose">{{ page.content }}</div>
-  <div class="hero-visual" aria-hidden="true"><img src="{{ 'assets/it-workbench.svg' | url }}" width="720" height="520" alt="" fetchpriority="high"></div>
+  <div class="hero-visual" data-scene="compute">
+    <div class="scene-stage"><div class="scene-art">{% include "partials/system-scene.html" %}</div></div>
+    <div class="scene-caption">
+      <p class="scene-overview">Infrastructure, networking &amp; software</p>
+      <div class="scene-controls" role="group" aria-label="Explore areas of work" hidden>
+        <button type="button" data-scene-select="compute" aria-pressed="true" aria-controls="scene-compute">Infrastructure</button>
+        <button type="button" data-scene-select="network" aria-pressed="false" aria-controls="scene-network">Networking</button>
+        <button type="button" data-scene-select="software" aria-pressed="false" aria-controls="scene-software">Software</button>
+      </div>
+      <div class="scene-detail" id="scene-compute"><p>Virtual machines. Linux guests. Container services.</p><a href="{{ 'technical-labs/proxmox-virtualization/' | url }}">Explore my homelab {{ icon('arrow') }}</a></div>
+      <div class="scene-detail" id="scene-network" hidden><p>Network configuration and the traffic behind it.</p><a href="{{ 'technical-labs/cisco-networking-analysis/' | url }}">Explore networking coursework {{ icon('arrow') }}</a></div>
+      <div class="scene-detail" id="scene-software" hidden><p>Practical tools for repeatable tasks.</p><a href="{{ 'technical-labs/job-scan-tailor/' | url }}">Explore the resume tool {{ icon('arrow') }}</a></div>
+    </div>
+  </div>
   <div class="intro-background">
-    <dl><div><dt>{{ icon('experience') }}Experience</dt><dd>Healthcare and retail IT support</dd></div><div><dt>{{ icon('security') }}Certifications</dt><dd>CompTIA A+ &amp; Security+</dd></div><div><dt>{{ icon('education') }}Education</dt><dd>B.S. in Informatics</dd></div></dl>
-    <a href="{{ 'credentials/' | url }}">More about me</a>
+    <dl><div><dt>Experience</dt><dd>Healthcare &amp; retail IT</dd></div><div><dt>Certifications</dt><dd>CompTIA A+ &amp; Security+</dd></div><div><dt>Education</dt><dd>B.S. in Informatics</dd></div></dl>
+    <a href="{{ 'credentials/' | url }}">More about me {{ icon('arrow') }}</a>
   </div>
 </section>
-<section class="home-projects" aria-labelledby="projects">
-  <div class="section-heading"><h2 id="projects">Projects</h2><a href="{{ 'technical-labs/' | url }}">View all projects</a></div>
-  <div class="featured-projects">
-    {% for section in nav if section.title == 'Projects' %}
-    {% for project in section.children[1:4] %}
-      {{ project_card(project, loop.first, 3) }}
-    {% endfor %}
-    {% endfor %}
+<section class="home-projects dark-section" aria-labelledby="projects">
+  <div class="section-inner">
+    <div class="section-heading"><div><h2 id="projects">Selected projects</h2><p>Personal builds and completed coursework.</p></div><a href="{{ 'technical-labs/' | url }}">View all projects {{ icon('arrow') }}</a></div>
+    <div class="featured-projects">
+      {% for section in nav if section.title == 'Projects' %}
+      {% for project in section.children[1:4] %}
+        {{ project_card(project, loop.first, 3) }}
+      {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </section>
-<section class="home-experience" aria-labelledby="experience">
-  <div class="section-heading"><h2 id="experience">Professional experience</h2><a href="{{ 'experience/' | url }}">View experience</a></div>
+<section class="home-experience section-inner" aria-labelledby="experience">
+  <div class="section-heading"><div><h2 id="experience">Professional experience</h2><p>Supporting the people who depend on their technology.</p></div><a href="{{ 'experience/' | url }}">View experience {{ icon('arrow') }}</a></div>
   {{ experience_entries(true) }}
 </section>
