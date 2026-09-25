@@ -1,8 +1,8 @@
 # Portfolio change record
 
-## Unreleased — September 24, 2026
+## September 24, 2026 — documentation overhaul and focused revision
 
-The documentation overhaul and focused revision are review candidates on `portfolio-documentation-overhaul-20260924`. They have not been deployed to the live site. Manual review of the wording, visual direction and featured-project emphasis is still pending.
+The documentation overhaul and focused revision were developed on `portfolio-documentation-overhaul-20260924`. Source publication and deployment were approved on September 24. Further manual review of the wording, visual direction and featured-project emphasis remains pending.
 
 ### Documentation overhaul
 

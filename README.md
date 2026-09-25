@@ -62,7 +62,7 @@ Keep ordinary Markdown tables for inventories and numeric comparisons. The readi
 
 ## Validation and publication
 
-[CHANGELOG.md](CHANGELOG.md) records the documentation overhaul, focused revisions and the scope of their validation. The September 24 revision remains pending manual review and has not been deployed to the live site.
+[CHANGELOG.md](CHANGELOG.md) records the documentation overhaul, focused revisions and the scope of their validation. Source publication and deployment were approved on September 24; further manual review of the wording, visual direction and featured-project emphasis remains pending.
 
 Run a strict build, check generated links and excluded assets, then inspect desktop and mobile layouts and keyboard navigation. Check menu open/close, Escape, viewport changes, project filtering, all three illustration controls and destinations, current-section tracking and back-to-top focus. Verify reduced motion disables entrance/hover/illustration movement and all content remains available with JavaScript disabled. Wait for fonts and finite animations before visual captures; load offscreen lazy images before a full-page screenshot. Review the full diff before publishing.
 
