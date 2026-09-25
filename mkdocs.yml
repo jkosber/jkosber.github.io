@@ -1,7 +1,7 @@
 site_name: Jadon Kosberg
 site_url: https://jkosber.github.io/
 site_author: Jadon Kosberg
-site_description: IT support, networking, cybersecurity, and software projects by Jadon Kosberg.
+site_description: IT support experience and evidence-backed projects in infrastructure, networking and cybersecurity by Jadon Kosberg.
 
 theme:
   name: material
@@ -14,11 +14,12 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - tables
+  - def_list
   - fenced_code
   - toc:
       permalink: false
 
-# Original screenshots remain in Git for deliberate review, but are not site assets.
+# Guard against reintroducing raw assets removed from the publishable tree.
 # Removing links alone would still copy these files into the built site.
 exclude_docs: |
   assets/CCNA-Introduction-to-Networks-certificate-JKosberg.pdf
@@ -39,9 +40,11 @@ nav:
       - All projects: technical-labs/index.md
       - Proxmox homelab: technical-labs/proxmox-virtualization.md
       - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
-      - Job scan and resume tailor: technical-labs/job-scan-tailor.md
       - Networking and packet analysis: technical-labs/cisco-networking-analysis.md
+      - Job scan and resume tailor: technical-labs/job-scan-tailor.md
       - Security operations coursework: technical-labs/soc-threat-detection.md
+      - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
+      - Snort and firewall lab: technical-labs/snort-firewall-lab.md
   - Experience:
       - Overview: experience/index.md
       - Retail technology conversions: experience/verizon-conversions.md

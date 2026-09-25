@@ -6,4 +6,4 @@ layout: projects
 
 # Projects
 
-My personal projects focus on running a homelab and making job-search tasks easier to manage. The coursework below covers an AWS deployment, network troubleshooting and security investigation. Each page explains my work and its context.
+My personal projects include a Proxmox homelab and a job-search document workflow. Selected coursework covers an AWS application deployment, network troubleshooting and traffic investigations.

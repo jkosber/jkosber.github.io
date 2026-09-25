@@ -8,7 +8,7 @@ kind: Background
 
 My background combines IT support, an informatics degree and further study in cybersecurity. I've worked in healthcare and retail environments, helping users and working on the equipment they rely on.
 
-Outside work, I maintain a homelab and build personal projects in networking, infrastructure and software. I learn best by setting things up, finding out what breaks and working through the problem. The [homelab](../technical-labs/proxmox-virtualization.md) gives me a place to keep doing that.
+Outside work, the [homelab](../technical-labs/proxmox-virtualization.md) gives me a place to try configurations, investigate failures and maintain Linux services. My selected [project case studies](../technical-labs/index.md) distinguish that personal work from completed coursework.
 
 See [Skills & focus](../career-paths/index.md) for the experience and projects behind each area of my work.
 

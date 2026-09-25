@@ -21,7 +21,7 @@
 </section>
 <section class="home-projects dark-section" aria-labelledby="projects">
   <div class="section-inner">
-    <div class="section-heading"><div><h2 id="projects">Selected projects</h2><p>Personal builds and completed coursework.</p></div><a href="{{ 'technical-labs/' | url }}">View all projects {{ icon('arrow') }}</a></div>
+    <div class="section-heading"><div><h2 id="projects">Selected projects</h2><p>Infrastructure builds and network investigations, with configuration details and recorded results.</p></div><a href="{{ 'technical-labs/' | url }}">View all projects {{ icon('arrow') }}</a></div>
     <div class="featured-projects">
       {% for section in nav if section.title == 'Projects' %}
       {% for project in section.children[1:4] %}

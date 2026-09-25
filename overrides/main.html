@@ -63,8 +63,8 @@
           </div>
           <div class="project-grid">
             {% for section in nav if section.title == 'Projects' %}
-            {% for project in section.children if project.url != page.url %}
-              {{ project_card(project, loop.first) }}
+            {% for project in section.children if project.url != page.url and not project.meta.detail %}
+              {{ project_card(project) }}
             {% endfor %}
             {% endfor %}
           </div>
@@ -100,7 +100,7 @@
             {% if page.meta.kind and page.meta.kind != 'Background' %}
             <div class="page-context"><span>{{ page.meta.kind }}</span>{% if page.meta.status %}<span>{{ page.meta.status }}</span>{% endif %}</div>
             {% endif %}
-            {{ page.content }}
+            {{ page.content | replace('<table>', '<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>') | replace('</table>', '</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>') | replace('<pre>', '<pre tabindex="0" aria-label="Code example">') }}
           </article>
         </div>
       {% endif %}

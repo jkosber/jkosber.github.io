@@ -8,10 +8,10 @@ layout: home
 
 <div class="intro-body" markdown>
 
-IT support, networking, cybersecurity, and development.
+IT infrastructure, networking and cybersecurity.
 { .intro-specialties }
 
-I've supported users across 12 dental offices and helped Verizon stores through technology conversions. Outside work, I maintain a homelab and build projects in infrastructure, networking and software.
+I've supported users across 12 dental offices and helped Verizon stores through technology conversions. I'm pursuing infrastructure, networking and security work, building on that support experience through a Proxmox homelab and completed technical coursework.
 
 [View projects](technical-labs/index.md){ .button }
 [Get in touch](mailto:jadonkosberg@gmail.com){ .button .button--secondary }
