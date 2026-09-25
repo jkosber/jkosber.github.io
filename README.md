@@ -23,6 +23,7 @@ The script loads in the head and marks the enhanced layout before the first pain
 - `overrides/partials/`: shared project previews, experience entries, icons and homepage layout.
 - `docs/stylesheets/portfolio.css`: tokens, responsive layouts and print styling.
 - `docs/javascripts/portfolio.js`: mobile navigation, personal/coursework filters, illustration controls and reading-position controls.
+- `hooks/asset_versions.py`: adds content hashes to the shared CSS and JavaScript URLs during each build, so updated pages request matching assets even when a visitor has an older version cached. No manual version bump is required.
 - `mkdocs.yml`: navigation, Markdown settings and explicit asset exclusions.
 
 Frontmatter accepts `title`, `description`, `kind`, optional `status` and an optional docs-relative `visual` asset path. Project previews read those fields from their case-study pages. The first three projects after the index in the navigation appear on the homepage, with one lead feature above two paired entries. Keep primary projects before supporting labs in the navigation. Supporting case studies use `detail: true`, remain in the MkDocs navigation, and are linked from their parent pages; they are excluded from project previews and filter counts. The project index uses compact rows with small desktop illustrations. The coursework filter uses `kind: Completed coursework`; other projects are personal. Experience entries read `role`, `organization` and `dates` from their pages, in navigation order.
@@ -61,6 +62,8 @@ Use a short `<div class="evidence-note" markdown>` for evidence dates and scope.
 Keep ordinary Markdown tables for inventories and numeric comparisons. The reading template wraps them in keyboard-accessible scroll regions and adds keyboard focus to fenced code blocks. For paragraph-heavy comparisons, use a Markdown definition list inside `<div class="narrative-list" markdown>`: each term has two definitions with explicit bold labels, such as `: **Investigation.** ...` and `: **Result.** ...`. Add `narrative-list--pairs` when each term has only one definition, as on Skills & focus. The built-in `def_list` extension generates semantic `dl`/`dt`/`dd` elements; CSS places the same content in desktop rows or stacked mobile entries, without JavaScript or duplicate versions.
 
 ## Validation and publication
+
+For releases that change shared assets, also reload a browser session that visited the previous release. Confirm that its CSS/script URLs contain the current content hashes and that it renders the updated layout; a fresh browser or a direct asset download alone does not test stale browser caches.
 
 [CHANGELOG.md](CHANGELOG.md) records the documentation overhaul, focused revisions and the scope of their validation. Source publication and deployment were approved on September 24; further manual review of the wording, visual direction and featured-project emphasis remains pending.
 

@@ -10,6 +10,8 @@ theme:
 
 # Small custom layout with ordinary links; no search bundle is needed.
 plugins: []
+hooks:
+  - hooks/asset_versions.py
 markdown_extensions:
   - attr_list
   - md_in_html
