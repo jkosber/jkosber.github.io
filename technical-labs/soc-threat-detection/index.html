@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>CyberOps &amp; traffic investigation | Jadon Kosberg</title>
+  <meta name="description" content="Connected a supplied Pushdo alert timeline to a Windows host, three downloaded objects and historical malware reports; a separate lab recorded Snort alerts and a firewall retest.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/soc-threat-detection/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="CyberOps &amp; traffic investigation | Jadon Kosberg">
+  <meta property="og:description" content="Connected a supplied Pushdo alert timeline to a Windows host, three downloaded objects and historical malware reports; a separate lab recorded Snort alerts and a firewall retest.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/soc-threat-detection/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell" data-visual="assets/project-security.svg">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">CyberOps & traffic investigation</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#investigating-a-pushdo-infection">Investigating a Pushdo infection</a><a href="#testing-an-alert-and-a-firewall-rule">Testing an alert and a firewall rule</a><a href="#recovering-a-file-from-captured-traffic">Recovering a file from captured traffic</a><a href="#course-repository">Course repository</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Completed coursework</span><span>Documented March 2026</span></div>
+            
+            <h1 id="cyberops-traffic-investigation">CyberOps &amp; traffic investigation</h1>
+<p>In <strong>CSIA 115: Cyber Ops</strong>, I investigated a historical Pushdo malware scenario using a Cisco-provided Security Onion VM. I narrowed the alert window in Sguil, identified the affected Windows host, inspected reconstructed files in NetworkMiner and recorded existing VirusTotal findings in an after-action report.</p>
+<p>A separate <a href="../snort-firewall-lab/">Snort and firewall lab</a> covered live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.</p>
+<div class="evidence-note">
+<p><strong>Scope and dates:</strong> academic labs completed in March 2026 using course-provided environments and training data. The Pushdo alerts describe June 27, 2017 activity; the assessment screenshots show my analysis on March 8, 2026. The results are historical and have not been retested for this page.</p>
+</div>
+<h2 id="investigating-a-pushdo-infection">Investigating a Pushdo infection</h2>
+<p>The assessment began with executable-download and Trojan alerts already loaded in Security Onion. The training material credits Malware Traffic Analysis as the scenario's source. I investigated the alerts to identify the affected host and associated files.</p>
+<p>I used Sguil to establish the time window and the common internal host, then examined associated traffic with Wireshark and NetworkMiner. Keeping the time window and host together helped distinguish the related alerts from other training events in the same VM.</p>
+<h3 id="establishing-the-timeline">Establishing the timeline</h3>
+<p>The assessment screenshot records the following alert sequence. Times are <strong>UTC on June 27, 2017</strong>, as recorded in my report; the identifiers are Sguil alert IDs.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Alert IDs</th>
+<th>Recorded signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13:38:34</td>
+<td>5.410, 5.415</td>
+<td>WinHttpRequest executable download and PE executable/DLL download over HTTP.</td>
+</tr>
+<tr>
+<td>13:43:52</td>
+<td>5.420</td>
+<td>Another PE executable/DLL download.</td>
+</tr>
+<tr>
+<td>13:43:54</td>
+<td>5.421, 5.422</td>
+<td>Terse executable downloader and a further PE download.</td>
+</tr>
+<tr>
+<td>13:44:01</td>
+<td>5.428, 5.429</td>
+<td>Public-IP lookup and Pushdo check-in.</td>
+</tr>
+<tr>
+<td>13:44:04</td>
+<td>5.431</td>
+<td>Pushdo command-and-control response.</td>
+</tr>
+<tr>
+<td>13:44:32</td>
+<td>5.438</td>
+<td>Possible Tor SSL traffic.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>Download alerts followed by Pushdo signatures supported the infection assessment. The selected alert window does not reveal the initial entry point or user action; those questions require endpoint evidence.</p>
+<h3 id="connecting-the-host-to-downloaded-files">Connecting the host to downloaded files</h3>
+<p>NetworkMiner identified the internal endpoint as Windows and showed its MAC address and a Dell NIC vendor. Those values let me associate the host with the traffic without relying only on a malware label. Its Files view reconstructed three downloaded objects, and the object properties exposed their SHA-256 hashes.</p>
+<p>I used those hashes to look up existing VirusTotal reports and recorded the results. The sizes below are visible in the NetworkMiner screenshots; the detection counts are from my written assessment.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Reconstructed object</th>
+<th style="text-align: right;">Size in bytes</th>
+<th style="text-align: right;">Vendor detections recorded during coursework</th>
+<th>Recorded threat label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gerv.gun</code></td>
+<td style="text-align: right;">241,664</td>
+<td style="text-align: right;">58 of 70</td>
+<td>Shiotob / Jaik</td>
+</tr>
+<tr>
+<td><code>trow.exe</code></td>
+<td style="text-align: right;">330,752</td>
+<td style="text-align: right;">65 of 72</td>
+<td>Cutwail / Wigon</td>
+</tr>
+<tr>
+<td><code>wp.exe</code></td>
+<td style="text-align: right;">307,712</td>
+<td style="text-align: right;">61 of 72</td>
+<td>Ursnif / Nymaim</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The hashes linked each object to an existing malware report. These counts are the historical lookup results, not current VirusTotal verdicts or a measure of detection accuracy.</p>
+<p>The <a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx">skills-assessment submission</a> includes the Sguil timeline and NetworkMiner screenshots. The <a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx">after-action report</a> brings the host, files, hashes and recommendations together.</p>
+<h3 id="separating-alert-interpretation-from-proof">Separating alert interpretation from proof</h3>
+<p>Two alerts needed particular care when reviewing the original conclusions:</p>
+<ul>
+<li><strong>Public-IP lookup:</strong> alert 5.428 records a DNS lookup for the host's public address. It occurs after the initial downloads. Its presence does not make the public DNS resolver malicious or establish that the lookup started the infection.</li>
+<li><strong>Possible Tor traffic:</strong> alert 5.438 is a signature's classification of traffic. The assessment did not independently establish a working Tor tunnel or the purpose of any encrypted session.</li>
+</ul>
+<p>The report also described downloaded files as having run on the endpoint. The preserved screenshots show downloads and network alerts, but no endpoint process telemetry verifies execution.</p>
+<h3 id="response-recommendations">Response recommendations</h3>
+<p>My after-action report recommended host isolation, updated endpoint protection, blocking identified malicious destinations, network segmentation and user training. These were recommendations, not response actions I performed. The exercise ended with investigation and reporting.</p>
+<p>A repeat investigation would need the original capture and endpoint logs to examine initial access, process execution and persistence. The repository preserves the report and screenshots, but not the full Security Onion evidence set. That limits independent replay of the incident sequence.</p>
+<h2 id="testing-an-alert-and-a-firewall-rule">Testing an alert and a firewall rule</h2>
+<p>In the Mininet lab, H5 requested a file from H10's nginx service through R1, which ran Snort and <code>iptables</code>. My screenshots show an existing Snort signature firing, several HTTP 404 responses caused by an incorrect requested filename, and a successful HTTP 200 download after correcting the name.</p>
+<p>I then inserted a DROP rule into R1's FORWARD chain for TCP traffic to the simulated server's listening port. The screenshot confirms the rule was present; my written retest answer records that the download was blocked.</p>
+<p><a href="../snort-firewall-lab/">Read the Snort, firewall and HTTP recovery lab</a> for the topology, command excerpts, request failure and correction, capture results and retest limits. This used the supplied Snort rule set, not signatures I authored.</p>
+<h2 id="recovering-a-file-from-captured-traffic">Recovering a file from captured traffic</h2>
+<p>The companion exercise used Wireshark's <strong>Follow TCP Stream</strong> and <strong>Export Objects → HTTP</strong> on a course-supplied capture. The recovered object was a renamed substitute executable, not real Nimda malware. I saved it under a different filename because a file with the original name already existed.</p>
+<p>The stream's HTTP <code>Content-Length</code> and the saved file listing both show <strong>345,088 bytes</strong>. That supports recovery of the recorded HTTP object. It is a different artifact from the <strong>475,448-byte</strong> download visible in the earlier Mininet exercise, despite their similar filenames. No hash comparison or executable analysis was recorded for the recovered substitute.</p>
+<p><a href="../snort-firewall-lab/#recovering-the-supplied-http-object">HTTP recovery evidence and limitations</a> explains the source capture and the verification shown in my submission.</p>
+<h2 id="course-repository">Course repository</h2>
+<p>The <a href="https://github.com/jkosber/CyberOps-115">CyberOps coursework repository</a> also holds exercises in Windows administration, Linux logs and permissions, Nmap, protocol analysis, access control lists and incident handling.</p>
+<p><a href="../cisco-networking-analysis/">Networking and packet analysis</a> · <a href="../../credentials/">Certifications</a> · <a href="../">All projects</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

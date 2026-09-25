@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Proxmox homelab | Jadon Kosberg</title>
+  <meta name="description" content="A Proxmox lab on a 16 GB laptop with two service guests, nine experimental VMs, and documented service checks, network configuration and unresolved storage warnings.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/proxmox-virtualization/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="Proxmox homelab | Jadon Kosberg">
+  <meta property="og:description" content="A Proxmox lab on a 16 GB laptop with two service guests, nine experimental VMs, and documented service checks, network configuration and unresolved storage warnings.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/proxmox-virtualization/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell" data-visual="assets/lab.svg">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">Proxmox homelab</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#how-the-lab-fits-together">How the lab fits together</a><a href="#host-and-storage">Host and storage</a><a href="#linux-guests-and-container-services">Linux guests and container services</a><a href="#network-configuration">Network configuration</a><a href="#recorded-validation">Recorded validation</a><a href="#unresolved-operational-findings">Unresolved operational findings</a><a href="#gpu-passthrough-preparation">GPU passthrough preparation</a><a href="#what-i-have-learned">What I have learned</a><a href="#next-changes">Next changes</a><a href="#sources-and-artifacts">Sources and artifacts</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Personal homelab</span><span>Ongoing</span></div>
+            
+            <h1 id="proxmox-homelab">Proxmox homelab</h1>
+<p>I built JHomelab on an old Alienware laptop so I could work with a real hypervisor, run Linux services and experiment with networking outside my everyday computer. The project brought together the Linux, virtualization and networking work I had been doing in class.</p>
+<p>I installed Proxmox VE, created the guest machines, configured the lab network and added a Docker service host. The result is an ongoing personal lab: two service guests start automatically while desktop and security-lab guests are reserved for individual sessions. My work centers on infrastructure setup and administration; the deployed applications are existing software projects.</p>
+<div class="evidence-note">
+<p><strong>Evidence date: September 22, 2026.</strong> Guest states, service checks and screenshots come from the repository's AI-assisted read-only health check. It left stopped guests off and made no infrastructure changes. These observations have not been refreshed for this page.</p>
+</div>
+<h2 id="how-the-lab-fits-together">How the lab fits together</h2>
+<figure class="architecture">
+  <ol class="architecture-flow">
+    <li><strong>Physical connection</strong><span>Home router<br>Wireless bridge<br>Flat access network</span><small>Wired backhaul and VLAN switching planned</small></li>
+    <li><strong>Proxmox host</strong><span>Alienware 15 R3<br>16 GB physical RAM<br>SSD + separate guest-storage HDD</span><small>Virtual machines and one LXC container</small></li>
+    <li><strong>Guest attachments</strong><span>vmbr0: Ubuntu service VM + Debian LXC<br>testnet: nine experimental VMs</span><small>Service migration to SDN planned</small></li>
+  </ol>
+  <figcaption>Documented September 22 arrangement. The diagram shows physical connectivity and guest attachment; it does not represent a tested security boundary. Addresses are omitted.</figcaption>
+</figure>
+
+<p>The home router provides the upstream connection. A range extender acts as the wireless bridge into the lab, with its SSID broadcast disabled. Proxmox runs directly on the laptop and provides storage, guest management and virtual networking. The physical access network remains flat; a managed switch and VLAN work are future additions.</p>
+<h2 id="host-and-storage">Host and storage</h2>
+<p>The September check recorded <strong>Proxmox VE 9.2.20</strong>, kernel <strong>7.0.14-17-pve</strong>, on an <strong>Alienware 15 R3</strong>. The hardware places practical limits on how many guests can run together.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Use in the lab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intel i7-7700HQ, four cores and eight threads</td>
+<td>Compute shared by the virtual machines</td>
+</tr>
+<tr>
+<td>16 GB RAM</td>
+<td>Physical memory available to the host and running guests</td>
+</tr>
+<tr>
+<td>128 GB SSD</td>
+<td>Proxmox installation and the <code>local</code> / <code>local-lvm</code> pools</td>
+</tr>
+<tr>
+<td>1 TB hard drive</td>
+<td><code>vmdata</code> storage for guest disks</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The inventory assigns about <strong>47 GB to the VMs plus 4 GB to the LXC container</strong>, using rounded values. That exceeds physical RAM. VM 109 and CT 110 were the two running guests and both had automatic startup enabled; VMs 100–108 were stopped. I use the experimental guests for individual sessions, within the host's available resources.</p>
+<p>All three storage pools were active in the check. Their recorded usage was 65.33% for <code>local</code>, 0.01% for <code>local-lvm</code> and 23.96% for <code>vmdata</code>. Available capacity did not resolve the separate boot-SSD health and backup concerns described below.</p>
+<h2 id="linux-guests-and-container-services">Linux guests and container services</h2>
+<p>The lab has <strong>ten configured VMs and one LXC container</strong>. The experimental group includes Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus OPNsense. Separate guests let me try different Linux environments without changing my daily computer. OPNsense is a single-NIC gateway project in progress, not the established boundary between the service and lab networks.</p>
+<p>The service tier is split between a full virtual machine and an unprivileged Linux container:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Guest</th>
+<th>Recorded allocation and placement</th>
+<th>Responsibilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM 109 — Ubuntu Server</td>
+<td>2 GB RAM, 32 GB disk; <code>vmbr0</code></td>
+<td>Docker service host. Homepage provides a dashboard, Uptime Kuma monitors service health, and Portainer manages containers.</td>
+</tr>
+<tr>
+<td>CT 110 — Debian 13.1</td>
+<td>Unprivileged LXC; 2 cores, 4 GB RAM, 512 MiB swap, 24 GB disk; <code>vmbr0</code></td>
+<td>GoodMem memory service with PostgreSQL/pgvector. GoodMem runs in Docker inside this separate LXC guest.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>Homepage, Uptime Kuma and Portainer responded at their documented endpoints. CT 110's container state and GoodMem API response were also checked. VM 109's operating-system release and Docker inventory remained unverified because of the guest-access problem described below.</p>
+<figure class="evidence-figure">
+  <img src="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp" width="1050" height="525" alt="September 22 Proxmox inventory showing VM 109 and LXC 110 running, nine experimental VMs stopped, and three storage pools available." loading="lazy">
+  <figcaption>Historical Proxmox inventory, September 22, 2026. Resource and uptime values describe that capture. The screenshot shows guest state; the accompanying health-check report records automatic startup settings.</figcaption>
+</figure>
+
+<h2 id="network-configuration">Network configuration</h2>
+<p>I used Proxmox software-defined networking to create an experimental virtual network alongside the main LAN connection. The recorded configuration has <strong>zone <code>test</code> and VNet <code>testnet</code></strong>. They are different objects: the zone contains the VNet, and the lab guests attach to the VNet.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>What the September evidence shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Experimental guests</td>
+<td>VMs 100–108 attached to <code>testnet</code></td>
+</tr>
+<tr>
+<td>Address management</td>
+<td>Proxmox IPAM mappings for the gateway and those nine VMs; dnsmasq present for DNS/DHCP</td>
+</tr>
+<tr>
+<td>Egress configuration</td>
+<td>A source-NAT rule present on the host</td>
+</tr>
+<tr>
+<td>Service guests</td>
+<td>VM 109 and CT 110 still attached to <code>vmbr0</code>; moving them onto SDN is planned</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>IPAM mappings associate guest identifiers with assigned addresses. All nine lab VMs were stopped during the check, so guest DHCP and outbound connectivity remain untested.</p>
+<h3 id="firewall-policy-and-its-limits">Firewall policy and its limits</h3>
+<p>The datacenter firewall was enabled with seven accept rules covering lab traffic, DNS/DHCP and management access including ICMP, SSH and the Proxmox web interface. <strong>Input defaulted to DROP; output and forwarding defaulted to ACCEPT</strong>, so the policy allowed outbound and forwarded traffic by default.</p>
+<figure class="evidence-figure">
+  <img src="../../assets/evidence/homelab/firewall-options-2026-09-22.png" width="900" height="240" alt="Proxmox firewall options with firewall enabled, input policy DROP, output policy ACCEPT and forward policy ACCEPT." loading="lazy">
+  <figcaption>Configured datacenter defaults captured September 22, 2026. No denied-traffic or isolation test accompanied this screenshot.</figcaption>
+</figure>
+
+<p>The same check found three issues to resolve before expanding the network design:</p>
+<ul>
+<li>One rule's comment described internet access, while its destination was the home LAN.</li>
+<li>The nftables firewall was active, but legacy firewall status reported pending changes.</li>
+<li>Global IPv4 forwarding was <code>0</code>, while forwarding on <code>vmbr0</code> and <code>testnet</code> was <code>1</code>.</li>
+</ul>
+<p>The effect of these settings on live lab traffic remains untested. Checking guest DHCP, permitted egress and denied traffic is the next step before relying on the intended policy. Per-guest and per-network rules, service-guest migration and managed switching remain planned work.</p>
+<h2 id="recorded-validation">Recorded validation</h2>
+<p>The September 22 check covered host health, the Proxmox interface and service responses:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Recorded result</th>
+<th>What remained untested</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hypervisor</td>
+<td>Core services active, no failed systemd units listed, web interface responded</td>
+<td>Recovery or sustained availability</td>
+</tr>
+<tr>
+<td>VM 109 endpoints</td>
+<td>Homepage HTTP 200; Uptime Kuma HTTP 200 after redirect; Portainer HTTPS 200</td>
+<td>Individual application workflows and direct Docker inventory</td>
+</tr>
+<tr>
+<td>GoodMem</td>
+<td>Docker health check healthy; API reported <code>server-v1.0.285</code></td>
+<td>Complete client workflows and service recovery</td>
+</tr>
+<tr>
+<td>PostgreSQL/pgvector</td>
+<td>Container running with image <code>pgvector/pgvector:pg17</code></td>
+<td>Database integrity, backup restoration and separate reachability of every published port</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Three pools active; HDD SMART passed with zero listed reallocated, uncorrectable or CRC-error counters</td>
+<td>Recoverability of guest disks and the boot SSD's unresolved warning</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The HTTPS probes accepted local self-signed certificates, leaving certificate trust unverified. Application workflows and recovery still need the separate tests noted above.</p>
+<h2 id="unresolved-operational-findings">Unresolved operational findings</h2>
+<h3 id="a-passing-smart-summary-with-persistent-errors">A passing SMART summary with persistent errors</h3>
+<p>The boot SSD's overall SMART result was <code>PASSED</code>, but the detailed counters recorded <strong>24 offline-uncorrectable sectors, 3 reported-uncorrectable errors and 3 end-to-end errors</strong>. The September 22 values matched September 10, while recurring SMART alerts continued. Reading the aggregate result alone would have missed the warning.</p>
+<p>No SSD repair or replacement was performed during the check, and the evidence does not establish a specific hardware root cause. The related backup inspection found no scheduled Proxmox backup jobs or local backup files; manual and off-host copies were not checked. The report also records <code>backup=0</code> on VM 106's primary disk, a disk-level backup exclusion. No restore test was recorded.</p>
+<p>The next step is to establish recoverable backups and review the SSD before disk work.</p>
+<h3 id="responding-services-with-incomplete-guest-access">Responding services with incomplete guest access</h3>
+<p>VM 109's web applications responded while its guest agent reported not running. An SSH attempt from the trusted hypervisor reached authentication and was denied. This left the operating-system and Docker inventory inspection incomplete without establishing a service outage.</p>
+<p>The cause is unresolved, and no repair has been verified. Authenticated access is needed to inspect the agent installation and service state, then check guest queries again.</p>
+<h2 id="gpu-passthrough-preparation">GPU passthrough preparation</h2>
+<p>The laptop has a GTX 1070 Mobile alongside its integrated graphics. The September check found the NVIDIA GPU bound to <code>vfio-pci</code> and assigned in the configurations for VMs 100, 105, 107 and 108. Those guests were stopped; VM 109 had no GPU assignment.</p>
+<p>The build journal also records IOMMU preparation and the GRUB setting <code>pcie_acs_override=downstream</code>. Guest GPU operation and hardware-accelerated transcoding remain untested; these host settings are a record of preparation, not a verified passthrough procedure. Jellyfin with GPU transcoding remains a roadmap item.</p>
+<h2 id="what-i-have-learned">What I have learned</h2>
+<p>Services and infrastructure setups have failed on me multiple times. Working through those failures is the part that teaches me the most. Having a lab means I can try a setup, see what breaks and figure out what needs to change.</p>
+<h2 id="next-changes">Next changes</h2>
+<p>The immediate operational follow-ups recorded in the health check are backup coverage, the SSD warning, guest observability and network-policy validation. The broader build roadmap includes replacing the wireless bridge with a wired connection, adding managed switching, extending SDN to the service guests, and working on reverse proxying, internal DNS and shared storage.</p>
+<p>Nginx Proxy Manager, RustDesk Server, a NAS guest, SIEM/IDS tooling and GPU media services are planned additions. The existing OPNsense guest remains a work in progress.</p>
+<h2 id="sources-and-artifacts">Sources and artifacts</h2>
+<ul>
+<li><a href="https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/README.md">Build journal and guest inventory, September 22 revision</a>: host, storage, service placement, SDN configuration and roadmap.</li>
+<li><a href="https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/docs/health-check-2026-09-22.md">Read-only health-check report, September 22</a>: recorded results, access limits, storage warnings and untested behavior.</li>
+<li><a href="https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/screenshots/guest-inventory-2026-09-22.webp">Original guest-inventory capture</a> and <a href="https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/screenshots/firewall-options-2026-09-22.png">firewall-options capture</a>: the historical images reproduced above.</li>
+</ul>
+<p>The repository contains documentation and screenshots. Sanitized configuration exports, Compose definitions and a complete rebuild procedure are still missing.</p>
+<p><a href="../">All projects</a> · <a href="../aws-linux-infrastructure/">AdventureWorks on AWS</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

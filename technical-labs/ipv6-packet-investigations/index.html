@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>IPv6 packet investigations | Jadon Kosberg</title>
+  <meta name="description" content="Correlating DHCPv6 replies, duplicate-address evidence and Router Advertisements with Windows host behavior in a supplied protocol-analysis capstone.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/ipv6-packet-investigations/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="IPv6 packet investigations | Jadon Kosberg">
+  <meta property="og:description" content="Correlating DHCPv6 replies, duplicate-address evidence and Router Advertisements with Windows host behavior in a supplied protocol-analysis capstone.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/ipv6-packet-investigations/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">IPv6 packet investigations</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#environment-and-analysis-method">Environment and analysis method</a><a href="#finding-the-dhcpv6-address-assignment">Finding the DHCPv6 address assignment</a><a href="#separating-a-duplicate-address-from-general-connectivity">Separating a duplicate address from general connectivity</a><a href="#tracking-source-address-changes">Tracking source-address changes</a><a href="#losing-the-gateway-while-retaining-the-address">Losing the gateway while retaining the address</a><a href="#what-remained-visible-in-encrypted-traffic">What remained visible in encrypted traffic</a><a href="#sources-and-scope">Sources and scope</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Completed coursework</span><span>Documented May 2026</span></div>
+            
+            <h1 id="ipv6-packet-investigations">IPv6 packet investigations</h1>
+<p>A Windows host can have an IPv6 address and still fail to reach another network. In my <strong>CSIA 210</strong> final capstone, I used supplied traces and host output to investigate address assignment, duplicate addresses, source-address changes and loss of a default router.</p>
+<p>The work connected fields inside DHCPv6 and ICMPv6 packets to the symptoms shown by the hosts. My contribution was filtering the traffic, identifying relevant frames, comparing them with host configuration and documenting the conclusions. I did not build or repair the supplied network during this analysis.</p>
+<div class="evidence-note">
+<p><strong>Historical evidence:</strong> final-capstone submission with screenshots dated May 12, 2026. Packet numbers belong to the two course traces. The original capstone PCAPs are missing from the repository, so the account below relies on the preserved answers and screenshots; the traffic has not been replayed for this page.</p>
+</div>
+<h2 id="environment-and-analysis-method">Environment and analysis method</h2>
+<p>The screenshots show <code>capstone-labs-3-trace-file.pcapng</code> and <code>capstone-labs-4-trace-file.pcapng</code> in Wireshark. The scenarios include Windows hosts, DHCPv6 exchanges, a layer-3 device sending Router Advertisements, and destinations outside the hosts' local IPv6 network. IPv4 remains available in the dual-stack examples.</p>
+<p>I used display filters to reduce each trace, expanded the relevant protocol fields, and compared those values with the supplied <code>ipconfig</code> output. The IPv6 addresses shown here use the course's <code>2001:db8::/32</code> documentation prefix; they are not addresses from my own network.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Filter used in the submission</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dhcpv6.msgtype == 7</code></td>
+<td>Show DHCPv6 Reply messages when looking for the assigned address.</td>
+</tr>
+<tr>
+<td><code>dhcpv6.iaaddr.ip == 2001:db8:1ab:1001::108</code></td>
+<td>Match the IA Address value being correlated with the Windows host.</td>
+</tr>
+<tr>
+<td><code>icmpv6.type == 134</code></td>
+<td>Isolate Router Advertisements and inspect their flags, prefixes and router lifetime.</td>
+</tr>
+<tr>
+<td><code>ipv6</code></td>
+<td>Follow the broader IPv6 sequence, including address changes and neighbor discovery.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h2 id="finding-the-dhcpv6-address-assignment">Finding the DHCPv6 address assignment</h2>
+<p>The first question was which reply supplied the address visible on the Windows 10 host. I filtered for DHCPv6 replies, inspected their IA Address options and recorded <strong>frame 9306</strong> as the first matching reply for the address ending in <code>::108</code>.</p>
+<p>The original Wireshark screenshot records the fields below. The crop shows the expanded <strong>IA Address</strong> option: notice the address ending in <code>::108</code> and its separate preferred and valid lifetimes.</p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical DHCPv6 address fields; scroll horizontally if needed">
+    <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="465" height="140" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
+  </div>
+  <figcaption>Historical capture from the May 12, 2026 submission, cropped to the IA Address fields of selected frame 9306. The frame number, Reply type and UDP ports are visible in the original screenshot, outside this crop. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+</figure>
+
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Frame 9306 field</th>
+<th>Recorded value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Message type</td>
+<td>Reply, type 7</td>
+<td>The server's response in the DHCPv6 exchange.</td>
+</tr>
+<tr>
+<td>UDP ports</td>
+<td>Source 547, destination 546</td>
+<td>Server-to-client direction for this reply.</td>
+</tr>
+<tr>
+<td>Address option</td>
+<td>IA Address, option 5</td>
+<td>The assigned address is inside an option, distinct from the packet's destination address.</td>
+</tr>
+<tr>
+<td>IPv6 address</td>
+<td><code>2001:db8:1ab:1001::108</code></td>
+<td>Value matched to the host configuration in my written analysis.</td>
+</tr>
+<tr>
+<td>Preferred / valid lifetime</td>
+<td>120 / 180 seconds</td>
+<td>The two lifetimes recorded for this address.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>Earlier replies visible in the original screenshot carry an address ending in <code>::109</code>, so checking only the message type would not establish the match. The IA Address field was the useful link to the host output.</p>
+<p>The host-address match comes from my written <code>ipconfig</code> comparison; that section of the submission does not include the corresponding host-output image.</p>
+<h2 id="separating-a-duplicate-address-from-general-connectivity">Separating a duplicate address from general connectivity</h2>
+<p>In the second trace, my analysis followed two Windows hosts using the same target address, ending in <code>::117</code>. The answers compare their different source MAC addresses with neighbor-discovery information and the Windows output marking the address as duplicate.</p>
+<p>The reported connectivity result was mixed: an ordinary ping used IPv4 and received two replies, while the forced IPv6 attempt failed. The submission also records a name-resolution error on that forced attempt, so that error alone would not establish the cause. The duplicate-address indication and neighbor-discovery comparison provide the additional evidence for the address conflict.</p>
+<p>The record ends with the diagnosis; no address correction or successful IPv6 retest is recorded.</p>
+<h2 id="tracking-source-address-changes">Tracking source-address changes</h2>
+<p>A separate sequence followed the Windows 10 host as it acquired public and temporary SLAAC addresses alongside its DHCPv6 address. My answers record:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Point in the sequence</th>
+<th>Historical observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Router Advertisement analysis</td>
+<td>Managed configuration enabled; on-link and autonomous prefix flags set.</td>
+</tr>
+<tr>
+<td>Frame 6913</td>
+<td>The host used its temporary SLAAC address as the source.</td>
+</tr>
+<tr>
+<td>Frame 7512</td>
+<td>A later advertisement was recorded with the autonomous flag unset.</td>
+</tr>
+<tr>
+<td>Subsequent host output</td>
+<td>Both SLAAC addresses were reported as deprecated; a later packet used the DHCPv6 address ending in <code>::117</code>.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The original explanation attributed deprecation directly to the autonomous flag becoming zero. That is too strong. For SLAAC processing, an unset autonomous flag makes the host ignore that Prefix Information option; an address becomes deprecated when its preferred lifetime expires. The original capture and full lifetime sequence would be needed to establish the precise timing here. <a href="https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3">RFC 4862, Router Advertisement processing and lifetime expiry</a>.</p>
+<p>The later address-state changes and frame references come from my written answers. This section's screenshot shows only the start of the trace.</p>
+<h2 id="losing-the-gateway-while-retaining-the-address">Losing the gateway while retaining the address</h2>
+<p>The final investigation separated address assignment from default-router state. The Windows host initially had a preferred IPv6 address and an IPv6 gateway. A later host-output check retained the address but no longer listed the IPv6 gateway, and traffic to an off-link destination failed.</p>
+<p>I filtered Router Advertisements and compared their router lifetimes with the host's behavior. The written submission records this sequence:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Evidence point</th>
+<th>Recorded state or result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial Router Advertisement</td>
+<td>Router lifetime 270 seconds. The embedded screenshot directly shows this value in frame 1.</td>
+</tr>
+<tr>
+<td>Frame 9660</td>
+<td>First packet in the earlier group of four pings.</td>
+</tr>
+<tr>
+<td>Frame 9725</td>
+<td>Router Advertisement with lifetime 0; the host subsequently lacked its IPv6 default gateway.</td>
+</tr>
+<tr>
+<td>Host configuration check</td>
+<td>IPv6 address remained preferred; only the IPv4 default gateway was listed.</td>
+</tr>
+<tr>
+<td>Frame 9887</td>
+<td>Later Router Advertisement restored a 270-second router lifetime.</td>
+</tr>
+<tr>
+<td>Frame 9991</td>
+<td>First packet in the later ping group; the written summary records restored connectivity.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The diagnosis is consistent with Router Advertisement processing: receiving a lifetime of zero for an existing default-router entry removes that entry. A later advertisement with a nonzero lifetime can restore it. This is separate from the DHCPv6 address lease; the lease itself did not supply the default gateway. <a href="https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4">RFC 4861, processing received Router Advertisements</a>.</p>
+<p>The screenshot shows the initial 270-second lifetime. The zero-lifetime advertisement, recovery frame and ping outcome come from the written answers.</p>
+<h2 id="what-remained-visible-in-encrypted-traffic">What remained visible in encrypted traffic</h2>
+<p>The same capstone examined SSH and HTTPS. My answers reference SSH frames 27218 and 27364, and HTTPS frames 27902 and 29910. The SSH screenshot shows readable protocol banners, key exchange and subsequent packets identified as encrypted.</p>
+<p>Application content was unreadable in the inspected traffic, while connection information and parts of setup remained visible. Neither session was decrypted.</p>
+<h2 id="sources-and-scope">Sources and scope</h2>
+<p>The <a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis/blob/main/Module08/CSIA%20210%20Finals%20Capstone%20submission%20file%20-%20Jadon%20Kosberg.docx">final capstone submission</a> contains the answers and screenshots for Capstone Labs 3 and 4. The original document is preserved, including explanations qualified above.</p>
+<p>The <a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis">protocol-analysis repository</a> contains other coursework and a separate introductory capture. Verifying the later frame references and reconstructing the SLAAC lifetime sequence would require the missing capstone traces and corresponding host output.</p>
+<p><a href="../cisco-networking-analysis/">Networking and packet analysis overview</a> · <a href="../soc-threat-detection/">CyberOps traffic investigation</a> · <a href="../">All projects</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

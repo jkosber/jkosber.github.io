@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Job scan and resume tailor | Jadon Kosberg</title>
+  <meta name="description" content="An agent-guided workflow that ranks postings against a source resume and generates selected DOCX/PDF resumes, a comparison report and a local review page with file warnings.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/job-scan-tailor/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="Job scan and resume tailor | Jadon Kosberg">
+  <meta property="og:description" content="An agent-guided workflow that ranks postings against a source resume and generates selected DOCX/PDF resumes, a comparison report and a local review page with file warnings.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/job-scan-tailor/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell" data-visual="assets/project-resume.svg">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">Job scan and resume tailor</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#from-job-posting-to-application">From job posting to application</a><a href="#keeping-the-source-resume-separate">Keeping the source resume separate</a><a href="#document-generation">Document generation</a><a href="#reviewing-the-output">Reviewing the output</a><a href="#tests-and-maintenance">Tests and maintenance</a><a href="#limits-and-source-material">Limits and source material</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Personal software project</span><span>Complete, maintained as needed</span></div>
+            
+            <h1 id="job-scan-and-resume-tailor">Job scan and resume tailor</h1>
+<p>This personal project turns job postings and my existing resume into a ranked comparison, selected one-page resumes and a local document-review page. It separates the work of interpreting a posting from the repeatable work of formatting files and checking known constraints.</p>
+<p>My original resume is the source of the background claims. The workflow I requested uses an agent to compare that background with postings and prepare tailored content; Python and JavaScript utilities generate and check the documents. Browser tooling, <code>python-docx</code>, LibreOffice and the external wording scanner supply capabilities the project builds on.</p>
+<div class="evidence-note">
+<p><strong>Status and evidence:</strong> complete, maintained as needed. This case study describes the private source version reviewed on September 24, 2026. Targeted checks are reported below; the review did not collect jobs, generate application documents or submit applications.</p>
+</div>
+<h2 id="from-job-posting-to-application">From job posting to application</h2>
+<figure class="architecture">
+  <ol class="architecture-flow">
+    <li><strong>Read and compare</strong><span>Source resume<br>Posting text and metadata<br>Agent applies the fit rubric</span><small>Profile + matches.json</small></li>
+    <li><strong>Build and check</strong><span>Per-role content specification<br>DOCX generation and PDF conversion<br>Document and wording checks</span><small>Resumes + ranking report</small></li>
+    <li><strong>Review locally</strong><span>HTML page with sibling documents<br>Reasons, gaps and file warnings<br>Human review before use</span><small>No automatic application submission</small></li>
+  </ol>
+  <figcaption>Implementation overview. The agent supplies the comparison and wording; the document utilities consume saved records. The ranking report includes all recorded matches, while selected matches receive resumes.</figcaption>
+</figure>
+
+<p>The collection playbook uses a signed-in browser to read postings, save their full descriptions and deduplicate job identifiers. Login and verification challenges stay with the user. Pasted or saved job descriptions are an alternative input, so an unavailable browser does not prevent work on already-collected material.</p>
+<p>Saved records provide the handoff between stages:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Record or component</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline profile</td>
+<td>Holds resume-supported experience, qualifications and search preferences; keeps professional work separate from coursework and labs.</td>
+</tr>
+<tr>
+<td><code>raw/jd-NN.md</code></td>
+<td>Preserves each posting's text, source, collection date and metadata for later comparison.</td>
+</tr>
+<tr>
+<td><code>matches.json</code></td>
+<td>Stores the agent's ranks, scores, sub-scores, reasons, gaps and references to selected resume files.</td>
+</tr>
+<tr>
+<td><code>resume-spec.json</code></td>
+<td>Supplies the selected wording and section content for one tailored document.</td>
+</tr>
+<tr>
+<td><code>build_resume.py</code></td>
+<td>Builds a DOCX, requests PDF conversion and applies the document and wording checks.</td>
+</tr>
+<tr>
+<td><code>build_ranking_pdf.py</code> / <code>build_viewer.py</code></td>
+<td>Produce the full ranking report and the local review page from the match records.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The written scoring rubric weights skills at 35%, certification and education alignment at 15%, seniority at 20%, location at 15% and role alignment at 15%, then applies screening-risk penalties. Scores of 70 or more enter the strongest band; the instructions normally select up to 12 eligible matches for tailoring and retain the rest in the ranking.</p>
+<p>The agent applies the rubric; the reporting scripts display those scores and sort by the supplied rank without recalculating them. Scores compare postings against the profile, rather than estimating interview probability.</p>
+<h2 id="keeping-the-source-resume-separate">Keeping the source resume separate</h2>
+<p>The source resume stays separate from scan output. Each selected role receives its own specification and generated files in a run folder. Section types in the specification include bullets, skills, roles and education. The builder owns their formatting, so a content revision does not need a new document-generation script.</p>
+<p>Before creating an output directory, the builder refuses reserved master-resume basenames and paths containing a <code>Variants</code> directory. It also replaces reserved filename characters in the output basename. Other output paths remain the user's responsibility.</p>
+<p>This synthetic fragment shows how a match points to its documents. It is an interface example, not a real posting, result or complete input file:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-json">{
+  &quot;rank&quot;: 1,
+  &quot;company&quot;: &quot;Example Organization&quot;,
+  &quot;role&quot;: &quot;Support Technician&quot;,
+  &quot;why_it_fits&quot;: &quot;Example explanation tied to source-resume evidence.&quot;,
+  &quot;gaps&quot;: &quot;Example requirement not supported by the profile.&quot;,
+  &quot;resume_folder&quot;: &quot;01 - Example Organization - Support Technician&quot;,
+  &quot;resume_pdf&quot;: &quot;Example Resume.pdf&quot;
+}
+</code></pre>
+<h2 id="document-generation">Document generation</h2>
+<p><code>python-docx</code> creates the Word document. A shared conversion helper starts LibreOffice headlessly with a temporary user profile, waits for the process and checks for the resulting PDF. The resume builder then reopens the DOCX for content and layout checks and uses <code>pypdf</code> to count PDF pages.</p>
+<p>Failure handling depends on which check failed:</p>
+<div class="narrative-list">
+<dl>
+<dt>Required content and prohibited terms</dt>
+<dd><strong>Behavior.</strong> Missing required tokens or listed prohibited terms fail the resume build.</dd>
+<dd><strong>Scope.</strong> Detects known omissions and terms, not every possible false statement.</dd>
+<dt>Resume PDF</dt>
+<dd><strong>Behavior.</strong> Missing conversion output, unavailable page-count dependency or a page count other than one fails the build.</dd>
+<dd><strong>Scope.</strong> Applies to the tailored resume.</dd>
+<dt>Locked layout</dt>
+<dd><strong>Behavior.</strong> Rechecks margins, the normal body font and the name line against independent constants.</dd>
+<dd><strong>Scope.</strong> Does not inspect every text run or establish visual quality.</dd>
+<dt>Page fill</dt>
+<dd><strong>Behavior.</strong> Warns when estimated text coverage is below the target.</dd>
+<dd><strong>Scope.</strong> Advisory estimate from text baselines, not a visual inspection.</dd>
+<dt>Residual wording findings</dt>
+<dd><strong>Behavior.</strong> Stops the resume build for a rewrite after simple substitutions.</dd>
+<dd><strong>Scope.</strong> Screens the summary and role/project bullets.</dd>
+<dt>Unavailable wording scanner</dt>
+<dd><strong>Behavior.</strong> Emits <code>SLOP UNCHECKED</code>; the document build may still exit successfully.</dd>
+<dd><strong>Scope.</strong> Requires attention before presenting the document as reviewed.</dd>
+<dt>Reduced wording rules</dt>
+<dd><strong>Behavior.</strong> Warns when only the resume-specific rules could load.</dd>
+<dd><strong>Scope.</strong> A partial scan has less coverage than the full ruleset.</dd>
+<dt>Ranking-report PDF</dt>
+<dd><strong>Behavior.</strong> Warns if conversion fails and retains the DOCX.</dd>
+<dd><strong>Scope.</strong> This report path does not enforce the resume's fatal PDF requirement.</dd>
+</dl>
+</div>
+<p>Simple wording substitutions update the specification before rendering. More involved rewrites go through <code>apply_slop_fixes.py</code>, which requires each requested text match to exist and applies it to every matching prose field. It then rebuilds through the document checks. Before-and-after records and a redlined DOCX make those edits inspectable; a failed rebuild retains the files for diagnosis.</p>
+<p>Human review still checks factual accuracy and document appearance, beyond the mechanical checks above.</p>
+<h2 id="reviewing-the-output">Reviewing the output</h2>
+<p>The ranking report includes reasons, gaps and tailoring notes alongside every recorded match. The HTML viewer loads that report and selected resumes from relative file paths, placing each resume beside its comparison. Its styles are contained in the HTML file; the PDF and DOCX files remain separate siblings in the scan folder.</p>
+<p>The viewer escapes displayed text and URL-encodes file paths. When a PDF is absent, it renders a placeholder and warning instead of an empty document frame. A missing DOCX is omitted from the download links.</p>
+<p>Both reporting scripts recompute totals from the matches array and warn when declared totals differ. Their “tailored” count includes records with both a resume-folder and a PDF-name field. The viewer checks file existence separately; neither count nor file presence confirms a successful build.</p>
+<p>The workflow ends with a person checking the wording, role fit and documents. The collection instructions prohibit automatic applications and messages.</p>
+<h2 id="tests-and-maintenance">Tests and maintenance</h2>
+<h3 id="a-numeric-token-check-that-needed-tightening">A numeric-token check that needed tightening</h3>
+<p>The July 4, 2026 change history records a weakness in required-number matching: a shorter number could be found inside a longer one. For example, a synthetic requirement of <code>12+</code> would be present as a substring of <code>112+</code>, even though the counts differ.</p>
+<p>The correction added a digit boundary before numeric tokens. This selected implementation fragment rejects a match immediately preceded by another digit:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-python">tok_low = token.lower()
+if tok_low[:1].isdigit():
+    return re.search(r&quot;(?&lt;![0-9])&quot; + re.escape(tok_low), low_text) is not None
+return tok_low in low_text
+</code></pre>
+<p>A targeted check on September 24, 2026 confirmed that the intended token passes and the longer-number example fails. The check tests the match boundary; the number's meaning still needs human review.</p>
+<h3 id="what-was-checked-in-this-review">What was checked in this review</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Check on September 24, 2026</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fit-band regression script</td>
+<td>Passed 14 boundary cases and both threshold constants.</td>
+</tr>
+<tr>
+<td>JavaScript wording scanner and automatic substitutions</td>
+<td>All 10 tests passed, with no skips. The deliberately missing-scanner test reported the expected reduced-coverage state.</td>
+</tr>
+<tr>
+<td>Targeted in-memory checks</td>
+<td>Passed numeric-token matching, filename cleanup, HTML escaping, count correction, missing-file placeholders, omitted links and warning checks.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The September 24 checks ran against the source without generating resumes or changing it. Broader document-builder, rewrite-helper, ranking and viewer suites were not run. LibreOffice conversion, document appearance, live collection and the complete scan-to-document workflow remain untested in that review, as do the skill's separate manual evaluation scenarios.</p>
+<h2 id="limits-and-source-material">Limits and source material</h2>
+<p>The project is tailored to one person's resume and preferences. Its required terms, section layout and selection policies need review when that source material changes. Scoring depends on the agent's reading of the evidence, posting collection depends on browser access and changing page structure, and the input loaders do not enforce a complete schema for every record.</p>
+<p>Maintenance records from July 20 describe long summaries and skills causing initial two-page documents. The recorded response was to shorten the selected content while retaining the locked formatting. They also document changing browser selectors and checking posting-body details against result cards. Those are historical observations, not claims about today's job-site behavior.</p>
+<p>This account draws on the private source's skill instructions, collection and ranking playbooks, document builders, shared conversion and wording modules, regression tests and dated change history. The repository stays private because it contains resumes and job-search records. The public examples above describe the implementation; interview outcomes and time savings have not been measured.</p>
+<p><a href="../../experience/">Professional experience</a> · <a href="../">All projects</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

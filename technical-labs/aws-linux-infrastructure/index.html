@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>AdventureWorks on AWS | Jadon Kosberg</title>
+  <meta name="description" content="Deployed a course-provided catalog and review application across two EC2 instances, with recorded product searches and review submission after adapting the database import for Linux.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/aws-linux-infrastructure/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="AdventureWorks on AWS | Jadon Kosberg">
+  <meta property="og:description" content="Deployed a course-provided catalog and review application across two EC2 instances, with recorded product searches and review submission after adapting the database import for Linux.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/aws-linux-infrastructure/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell" data-visual="assets/project-aws.svg">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">AdventureWorks on AWS</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#architecture-and-connection-paths">Architecture and connection paths</a><a href="#server-setup">Server setup</a><a href="#database-and-application-configuration">Database and application configuration</a><a href="#troubleshooting">Troubleshooting</a><a href="#testing-the-result">Testing the result</a><a href="#scope-and-follow-up-ideas">Scope and follow-up ideas</a><a href="#source-material">Source material</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Completed coursework</span><span>Completed May 2026</span></div>
+            
+            <h1 id="adventureworks-on-aws">AdventureWorks on AWS</h1>
+<p>I deployed a course-provided product-review application on two Ubuntu servers in AWS: Apache and PHP served the website, while Microsoft SQL Server held the AdventureWorks catalog and reviews. The completed demonstration could search products, display a product page and accept a review.</p>
+<p>My contribution in <strong>SVAD 111: Linux &amp; Virtualization Technologies</strong> was provisioning, installation, configuration, troubleshooting and testing. The course supplied the application, dataset, two-tier design and milestone instructions. This was a school deployment, not work for an actual AdventureWorks business.</p>
+<div class="evidence-note">
+<p><strong>Historical result:</strong> final report dated May 8, 2026, with milestone submissions and screenshots. These are the recorded coursework results; the deployment has not been retested for this page.</p>
+</div>
+<h2 id="architecture-and-connection-paths">Architecture and connection paths</h2>
+<figure class="architecture">
+  <ol class="architecture-flow">
+    <li><strong>Browser</strong><span>Search catalog, open product, submit review</span><small>HTTP · TCP 80</small></li>
+    <li><strong>Web instance</strong><span>Ubuntu 22.04<br>Apache + PHP 8.1<br>SQL Server PHP drivers</span><small>SQL connection · TCP 1433</small></li>
+    <li><strong>Database instance</strong><span>Ubuntu 22.04<br>Microsoft SQL Server<br>AdventureWorks database</span><small>Catalog and review storage</small></li>
+  </ol>
+  <figcaption>Historical coursework architecture. PuTTY and WinSCP provided separate administrative connections over SSH to each instance. Role labels replace the original instance addresses.</figcaption>
+</figure>
+
+<p>The browser contacted the web instance. PHP then connected to the database instance using its internal address in <code>config.php</code>; the browser did not query SQL Server directly. Keeping the tiers separate made the network rule, database login and PHP driver configuration part of the application's working path.</p>
+<p>The recorded security-group rules allowed broader access than these application paths required; the security limits are described below.</p>
+<h2 id="server-setup">Server setup</h2>
+<p>The final report shows two EC2 instances and describes Ubuntu 22.04 on both. I used PuTTY for shell access and WinSCP to transfer the supplied archives. The database setup used Microsoft's SQL Server repository, the SQL Server service and the <code>sqlcmd</code> client. The web setup added Apache, PHP and the Microsoft ODBC/PHP components.</p>
+<p>I checked the dependencies in stages: SQL queries confirmed imported data, <code>test.php</code> confirmed PHP execution, and the application pages exercised the connection between the two servers.</p>
+<h2 id="database-and-application-configuration">Database and application configuration</h2>
+<h3 id="adapting-the-data-import-for-linux">Adapting the data import for Linux</h3>
+<p>The supplied <code>adventureworks-db.tar.gz</code> contained a Windows-oriented SQL import script and data files. Milestone 2B prescribed converting the script from UTF-16 to UTF-8, setting its data directory, removing <code>CODEPAGE</code> lines and matching the row terminator to the files' CRLF endings. These were compatibility steps for the provided dataset, not a schema I designed.</p>
+<p>Selected commands from that milestone's workflow:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-bash">iconv -f UTF-16 -t UTF-8 instawdb.sql.orig &gt; instawdb.sql
+sed -i -e /CODEPAGE/d instawdb.sql
+sed -i -e 's/\\n/\\r\\n/' instawdb.sql
+</code></pre>
+<p>The encoding conversion made the script usable by the text-processing commands. The row-terminator change aligned the bulk-import statements with the supplied CSV files. The instructions also set <code>SqlSamplesSourceDataPath</code> to the extracted data directory, including its trailing slash. The submitted screenshot shows the completed import and subsequent queries; the preparation commands above come from the milestone instructions.</p>
+<p>I checked two tables through <code>sqlcmd</code>:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-sql">SELECT COUNT(*) FROM Production.Product;
+GO
+SELECT COUNT(*) FROM Person.Person;
+GO
+</code></pre>
+<p>The queries returned <strong>504 products</strong> and <strong>19,972 people</strong>, confirming that both expected tables contained imported data.</p>
+<h3 id="connecting-php-to-sql-server">Connecting PHP to SQL Server</h3>
+<p>Milestone 3B specified PHP 8.1 with the <code>sqlsrv</code> and <code>pdo_sqlsrv</code> extensions, enabled through <code>phpenmod</code>. It also configured Apache's prefork module and PHP module. The submitted <code>test.php</code> screenshot shows PHP 8.1.2 running through the Apache handler. That established PHP execution before adding the application's database dependency.</p>
+<p>I transferred the supplied application archive, placed the PHP files in <code>/var/www/html</code>, and set the database address and login information in <code>config.php</code>. The milestone removed Apache's default <code>index.html</code> so it would no longer take precedence over the application entry page. Credentials and original host addresses are omitted here.</p>
+<p>The catalog and review pages then exercised more of the system than <code>test.php</code>: Apache served the request, PHP ran the supplied code, and the application reached the database.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>The final report records these problems and responses. Its successful end-state screenshots support overall recovery, but it does not include before-and-after captures or configuration diffs for each fix.</p>
+<div class="narrative-list">
+<dl>
+<dt>Web-to-database connection timed out</dt>
+<dd><strong>Investigation and change.</strong> The report attributes the failure to the EC2 security group and records adding access for SQL Server on TCP 1433.</dd>
+<dd><strong>Verification.</strong> Later catalog and review pages demonstrate application/database communication. The exact failing rule and a dedicated connection retest are not preserved.</dd>
+<dt>Microsoft packages could not be found</dt>
+<dd><strong>Investigation and change.</strong> Added the Microsoft signing key and repository source, then continued installation.</dd>
+<dd><strong>Verification.</strong> The submissions show SQL queries and PHP working later. No full failed package-manager log is preserved.</dd>
+<dt>Initial PuTTY connection could not reach EC2</dt>
+<dd><strong>Investigation and change.</strong> The report identifies blocked outbound SSH on the access network and records switching to a hotspot.</dd>
+<dd><strong>Verification.</strong> Subsequent shell screenshots show access. This documents the reported workaround, not a packet-level diagnosis of the original network.</dd>
+</dl>
+</div>
+<p>The report also records a SQL login failure and an authentication-setup change. The error code and exact change are missing, leaving the cause and fix unresolved in the record.</p>
+<h2 id="testing-the-result">Testing the result</h2>
+<p>The final report's screenshots show the following results, from data import through use of the supplied interface.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Recorded result</th>
+<th>What it establishes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Count database rows</td>
+<td><code>Production.Product</code>: 504; <code>Person.Person</code>: 19,972</td>
+<td>The import populated two expected tables.</td>
+</tr>
+<tr>
+<td>Open <code>test.php</code></td>
+<td>PHP version and Apache handler information appeared</td>
+<td>PHP executed on the web server.</td>
+</tr>
+<tr>
+<td>Search with no term</td>
+<td>504 catalog results</td>
+<td>The application retrieved the catalog.</td>
+</tr>
+<tr>
+<td>Search for <code>Mountain-300</code></td>
+<td>Four matching products</td>
+<td>A named search returned the expected product family.</td>
+</tr>
+<tr>
+<td>Open product 787</td>
+<td>Mountain-300 Black, 44 with a bicycle image</td>
+<td>The product-detail route retrieved that product.</td>
+</tr>
+<tr>
+<td>Submit a review</td>
+<td>A review row with my name, rating and comment appeared</td>
+<td>The submitted review was displayed in the application.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The catalog result below shows four Mountain-300 Black variants, including product 787. This is the application's returned result list; the search text itself is not visible in the preserved image.</p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical AdventureWorks search results; scroll horizontally if needed">
+    <img src="../../assets/evidence/aws/mountain-300-results-2026-05-08.png" width="670" height="390" alt="AdventureWorks application displaying 4 Results: Mountain-300 Black products 785, 786, 787 and 788 in sizes 38, 40, 44 and 48." loading="lazy">
+  </div>
+  <figcaption>Historical application output, May 8, 2026, from the final report. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+</figure>
+
+<h2 id="scope-and-follow-up-ideas">Scope and follow-up ideas</h2>
+<p>The assignment reached a working demonstration. Validation covered the imported row counts and application actions above; database-wide integrity, review retention after restart, load, abuse resistance and recovery were not tested in the submitted records.</p>
+<p>The historical deployment also had security limits:</p>
+<ul>
+<li>The browser used <strong>HTTP</strong>. HTTPS was a recommendation in the final report, not an implemented feature.</li>
+<li>The milestone instructed broad inbound access for SSH and HTTP and additional rules for ports 1433 and 3306. The final screenshot shows those four ports. The application used SQL Server; a MySQL service is not evidenced simply because a 3306 rule existed.</li>
+<li>The database milestones used the administrative <code>SA</code> login and certificate-trust options for lab setup. A least-privilege application account and validated database TLS are not demonstrated.</li>
+<li><code>test.php</code> exposed PHP configuration during validation. Its later removal is not documented.</li>
+<li>Reviews did not require user accounts. The report proposed accounts and photo uploads as future features.</li>
+</ul>
+<p>For a new deployment, I would first restrict administration and database access, use a dedicated application login, remove diagnostic pages, add HTTPS and test recovery. These are retrospective recommendations, not changes made to the coursework deployment. The historical commands above explain that assignment and are not a current deployment guide.</p>
+<h2 id="source-material">Source material</h2>
+<ul>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/AdventureWorks%20Project%20-%20Jadon%20Kosberg.docx">Final report, May 8, 2026</a>: implementation screenshots, reported problems, application tests and original recommendations.</li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module03">Module 03 infrastructure submission</a>: initial EC2 environment.</li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module05">Module 05 database milestones</a>: installation instructions, Linux import preparation and submitted query output.</li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module07">Module 07 web milestones</a>: security-group setup, Apache/PHP integration and application validation.</li>
+</ul>
+<p>The same course included a <a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/m05p2b/ex1.sh">system-information Bash script</a> and a <a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/m05p2b/ex4.sh">number-guessing exercise</a>. They are separate scripting exercises, not components of this deployment.</p>
+<p><a href="../">All projects</a> · <a href="../proxmox-virtualization/">Proxmox homelab</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

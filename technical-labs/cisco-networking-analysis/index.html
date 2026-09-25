@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Networking &amp; packet analysis | Jadon Kosberg</title>
+  <meta name="description" content="Planned IPv4 subnets, diagnosed client, gateway and DNS faults in Packet Tracer, and traced an IPv6 gateway loss to Router Advertisements in supplied traffic.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/cisco-networking-analysis/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="Networking &amp; packet analysis | Jadon Kosberg">
+  <meta property="og:description" content="Planned IPv4 subnets, diagnosed client, gateway and DNS faults in Packet Tracer, and traced an IPv6 gateway loss to Router Advertisements in supplied traffic.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/cisco-networking-analysis/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell" data-visual="assets/project-network.svg">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">Networking & packet analysis</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#addressing-a-small-network">Addressing a small network</a><a href="#troubleshooting-access-to-a-web-server">Troubleshooting access to a web server</a><a href="#reading-the-traffic-behind-the-configuration">Reading the traffic behind the configuration</a><a href="#investigating-ipv6-failures">Investigating IPv6 failures</a><a href="#related-experience">Related experience</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Completed coursework</span><span>Coursework 2025–2026</span></div>
+            
+            <h1 id="networking-packet-analysis">Networking &amp; packet analysis</h1>
+<p>My networking coursework covered the configuration behind a working connection and the evidence needed when it fails. In <strong>NETI 109</strong>, I planned IPv4 subnets and diagnosed several different faults in a supplied Cisco Packet Tracer network. In <strong>CSIA 210: Network Protocol Analysis</strong>, I used Wireshark to connect host configuration with DHCPv6 and neighbor-discovery traffic.</p>
+<p>The selected work includes a VLSM address plan, client-by-client connectivity tests and a <a href="../ipv6-packet-investigations/">deeper IPv6 investigation</a> connecting packet fields to host behavior.</p>
+<div class="evidence-note">
+<p><strong>Historical coursework:</strong> addressing and connectivity submissions from November–December 2025; protocol-analysis screenshots from May 12, 2026. The course supplied the scenarios and traces. My work was completing the tables, configuration exercises, packet analysis and written findings. The results below have not been retested for this page.</p>
+</div>
+<h2 id="addressing-a-small-network">Addressing a small network</h2>
+<p>The VLSM exercise supplied two routers, four LANs and a point-to-point connection between the routers. The LANs needed 32, 21, 19 and 8 host addresses. The assignment required contiguous allocation, largest first, with an efficient subnet for the two-address WAN link.</p>
+<p>I assigned a /26 to the largest LAN, two /27s to the next LANs, a /28 to the smallest and a /30 to the WAN link. A /27 has only 30 usable host addresses, so it could not satisfy the 32-host requirement. Using a /26 everywhere would have allocated more addresses than the smaller LANs needed.</p>
+<p>The following table rebases the submitted design onto the documentation-only range <code>192.0.2.0/24</code>. It preserves the original sizes and allocation order; these are example addresses, not the original lab network.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Segment</th>
+<th style="text-align: right;">Hosts required</th>
+<th>Example subnet</th>
+<th>Usable host range</th>
+<th>Broadcast</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Largest LAN</td>
+<td style="text-align: right;">32</td>
+<td><code>192.0.2.0/26</code></td>
+<td><code>.1</code>–<code>.62</code></td>
+<td><code>.63</code></td>
+</tr>
+<tr>
+<td>Second LAN</td>
+<td style="text-align: right;">21</td>
+<td><code>192.0.2.64/27</code></td>
+<td><code>.65</code>–<code>.94</code></td>
+<td><code>.95</code></td>
+</tr>
+<tr>
+<td>Third LAN</td>
+<td style="text-align: right;">19</td>
+<td><code>192.0.2.96/27</code></td>
+<td><code>.97</code>–<code>.126</code></td>
+<td><code>.127</code></td>
+</tr>
+<tr>
+<td>Smallest LAN</td>
+<td style="text-align: right;">8</td>
+<td><code>192.0.2.128/28</code></td>
+<td><code>.129</code>–<code>.142</code></td>
+<td><code>.143</code></td>
+</tr>
+<tr>
+<td>Router link</td>
+<td style="text-align: right;">2</td>
+<td><code>192.0.2.144/30</code></td>
+<td><code>.145</code>–<code>.146</code></td>
+<td><code>.147</code></td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The endpoint convention put the router at the first usable LAN address, the switch's VLAN 1 management interface at the second, and the client at the last usable address. For the router link, the two interfaces occupied its two usable addresses. This made the subnet plan directly usable as a device-addressing table.</p>
+<h3 id="reviewing-the-plan-against-the-device-table">Reviewing the plan against the device table</h3>
+<p>The subnet boundaries in the submitted plan are consistent, but the largest-LAN client entry contains an error: it uses the address ending in <code>.63</code>, which the same submission correctly identifies as that /26's broadcast address. The last usable host address ends in <code>.62</code>.</p>
+<p>A Packet Tracer activity file is retained, but the document contains no final ping matrix or completion screenshot resolving that client-address error. The original coursework remains unchanged.</p>
+<p>The <a href="https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.docx">VLSM submission and device table</a> and <a href="https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.pka">associated Packet Tracer activity</a> retain both parts of that record.</p>
+<h2 id="troubleshooting-access-to-a-web-server">Troubleshooting access to a web server</h2>
+<p>A separate scenario started with four clients unable to access a web server after a network upgrade that added a second DNS server. Two client LANs connected through R1 and an upstream router to the web and DNS services. I could change the client and local router configuration, but the cloud and server devices were outside the permitted troubleshooting scope.</p>
+<p>I checked the clients with <code>ipconfig</code>, compared their settings with the supplied addressing table, then used ping to separate local, gateway and remote reachability. Browser tests by hostname and by IP address added a name-resolution check to the path tests.</p>
+<div class="narrative-list">
+<dl>
+<dt>PC-01</dt>
+<dd><strong>Recorded evidence.</strong> Incorrect address; after correction, gateway, web server and PC-02 responded. The other LAN's clients did not.</dd>
+<dd><strong>Change and result.</strong> Corrected its address against the supplied table. Browser access by name and IP worked, while the second LAN still needed investigation.</dd>
+<dt>PC-02</dt>
+<dd><strong>Recorded evidence.</strong> Its default gateway was incorrect. The later tests reached the gateway, web server and local peer.</dd>
+<dd><strong>Change and result.</strong> Corrected the gateway; the written answer records restored web access. Tests to the second LAN still failed at this stage.</dd>
+<dt>PC-A</dt>
+<dd><strong>Recorded evidence.</strong> Could ping local peer PC-B, but not its gateway, the web server or clients on the other LAN.</dd>
+<dd><strong>Change and result.</strong> Corrected R1's G0/1 address. The answer records the interface fault; the later PC-B tests show cross-network reachability. A separate complete PC-A retest is not preserved.</dd>
+<dt>PC-B</dt>
+<dd><strong>Recorded evidence.</strong> Could ping every listed destination and browse to the server by IP, but browsing by name failed.</dd>
+<dd><strong>Change and result.</strong> Corrected its DNS setting. The submission identifies DNS2 as an unresolved issue requiring the server owner's attention.</dd>
+</dl>
+</div>
+<p>The PC-A tests narrowed the fault to the path out of its LAN: communicating with a local peer did not require the router interface that was misaddressed. PC-B's successful IP-based web access then separated the remaining DNS failure from a failure to reach the application server.</p>
+<p>The written tests record the client and router changes above. A final all-client retest and completion score are missing; the worksheet's 100% target was an instruction. The exact DNS2 fault and its server-side resolution remain unknown.</p>
+<p><a href="https://github.com/jkosber/Networking-109/blob/main/Module-17-BuildASmallNetwork/17.7.6%20Packet%20Tracer%20-%20Troubleshoot%20Connectivity%20Issues.Jadon.Kosberg.docx">Connectivity troubleshooting submission</a> contains the original per-client test sequence.</p>
+<h2 id="reading-the-traffic-behind-the-configuration">Reading the traffic behind the configuration</h2>
+<p>The protocol-analysis final capstone moved from device settings to supplied traffic captures. I created display filters for DHCP, DHCPv6, DNS, HTTP, SNMP, Telnet and TFTP, then recorded a matching exchange's transport protocol, IP version and destination port.</p>
+<p>One investigation matched a Windows host's IPv6 address to the DHCPv6 Reply in <strong>frame 9306</strong>. Its screenshot shows the assigned address option, UDP ports 547 → 546 and the address's preferred and valid lifetimes. Matching the address option connected the host setting to the packet that supplied it.</p>
+<p>I also inspected SSH and HTTPS traffic. SSH banners and key-exchange information remained readable; the encrypted application content was unreadable in the inspected traffic.</p>
+<h2 id="investigating-ipv6-failures">Investigating IPv6 failures</h2>
+<p>The final capstone followed three related problems: a duplicate address on two Windows hosts, changing source-address selection, and loss of an IPv6 default gateway while an address remained assigned.</p>
+<p>The gateway case provides the clearest diagnostic sequence. My written packet references identify a Router Advertisement with a lifetime of zero, the disappearance of the IPv6 gateway, and a later advertisement restoring a 270-second lifetime. The supplied sequence then showed successful pings again. The address and the route needed separate checks.</p>
+<p><a href="../ipv6-packet-investigations/">Read the IPv6 packet investigations</a> for the filters, frame references, historical results and corrections to the original explanations of DHCPv6 and SLAAC behavior.</p>
+<h2 id="related-experience">Related experience</h2>
+<p>These exercises are academic work. My separate professional networking experience includes static-IP printer setup and Meraki client and port checks during <a href="../../experience/verizon-conversions/">retail conversions</a>, plus cabling work at <a href="../../experience/ladd-dental/">Ladd Dental Group</a>.</p>
+<p><a href="https://github.com/jkosber/Networking-109">Networking coursework repository</a> · <a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis">Protocol-analysis repository</a> · <a href="../">All projects</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>

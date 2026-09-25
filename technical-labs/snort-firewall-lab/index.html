@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Snort, firewall rules &amp; HTTP recovery | Jadon Kosberg</title>
+  <meta name="description" content="Following a simulated HTTP download through Snort alerts, correcting a filename failure, applying a routed firewall rule and recovering an object from a separate supplied capture.">
+  <link rel="canonical" href="https://jkosber.github.io/technical-labs/snort-firewall-lab/">
+  <link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=580e0ac4eb66">
+  <script src="../../javascripts/portfolio.js?v=03d8bbe9147e"></script>
+  <meta property="og:title" content="Snort, firewall rules &amp; HTTP recovery | Jadon Kosberg">
+  <meta property="og:description" content="Following a simulated HTTP download through Snort alerts, correcting a filename failure, applying a routed firewall rule and recovering an object from a separate supplied capture.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jkosber.github.io/technical-labs/snort-firewall-lab/">
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/mark.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../.."><span>Home</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+      <div class="header-contact">
+        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · jadonkosberg@gmail.com</span><span>jkosber.github.io</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Projects</a>
+          
+          <span aria-hidden="true">/</span><span aria-current="page">Snort, firewall rules & HTTP recovery</span>
+        </nav>
+        
+        
+        <div class="article-layout">
+          
+          <aside class="contents">
+            <details open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                <a href="#the-simulated-traffic-path">The simulated traffic path</a><a href="#distinguishing-a-bad-request-from-a-blocked-connection">Distinguishing a bad request from a blocked connection</a><a href="#capturing-the-transaction">Capturing the transaction</a><a href="#applying-the-routed-firewall-rule">Applying the routed firewall rule</a><a href="#recovering-the-supplied-http-object">Recovering the supplied HTTP object</a><a href="#limits-and-source-material">Limits and source material</a>
+              </nav>
+            </details>
+          </aside>
+          
+          <article class="prose">
+            
+            <div class="page-context"><span>Completed coursework</span><span>Documented March 2026</span></div>
+            
+            <h1 id="snort-firewall-rules-http-recovery">Snort, firewall rules &amp; HTTP recovery</h1>
+<p>This CyberOps lab connected a network alert to a specific control: block a simulated server after observing its traffic. I ran the supplied Mininet environment, monitored Snort on its router, downloaded a lab file, captured traffic and added an <code>iptables</code> rule. A later exercise used a separate supplied capture to reconstruct an HTTP object.</p>
+<p>The lab provided the topology, scripts and Snort signatures. My work was running and checking the environment, interpreting the alert, correcting request errors, applying the prescribed firewall rule and documenting results.</p>
+<div class="evidence-note">
+<p><strong>Historical lab:</strong> screenshots dated March 1, 2026, in submissions saved March 1–2. The HTTP extraction exercise used supplied traffic from 2017. The results come from my screenshots and answers and have not been retested for this page.</p>
+</div>
+<h2 id="the-simulated-traffic-path">The simulated traffic path</h2>
+<p>The CyberOps Workstation VM hosted the Mininet devices. H5 reached H10 through switch s5, R1 and the upstream R4 router. R1 combined routing, Snort inspection and <code>iptables</code>; H10 ran nginx on TCP port 6666. H10 represented an external server inside the supplied simulation.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role in this test</th>
+<th>Evidence in the submission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H5</td>
+<td>HTTP client and packet-capture point</td>
+<td><code>wget</code> requests and capture on <code>H5-eth0</code>.</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>Router, IDS and firewall</td>
+<td>Snort startup, alert log and FORWARD-chain rule listing.</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Upstream router toward the server segment</td>
+<td>Supplied topology diagram.</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>Simulated file server</td>
+<td><code>netstat -tunpa</code> shows nginx listening on TCP/6666.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The scripts came with the course VM. A screenshot records an initial Mininet launch failing because it required root, followed by a successful launch with <code>sudo</code>. Snort then initialized on R1; its startup screenshot identifies version 2.9.15.1 and acquisition from <code>R1-eth0</code>.</p>
+<p>The command examples below replace the original simulated server address with <code>198.51.100.133</code>, a documentation address. The port, flags and filenames retain their roles from the lab. They describe the historical exercise, not a current deployment procedure.</p>
+<h2 id="distinguishing-a-bad-request-from-a-blocked-connection">Distinguishing a bad request from a blocked connection</h2>
+<p>I monitored R1's alert log while H5 requested the file:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-bash">tail -f /var/log/snort/alert
+</code></pre>
+<p>Requests with incorrect spelling or capitalization received <strong>HTTP 404 Not Found</strong>. Those responses showed that the server was reachable and responding, even though the requested resource was wrong. After correcting the filename to <code>W32.Nimda.Amm.exe</code>, the same service returned <strong>HTTP 200 OK</strong> and <code>wget</code> recorded <strong>475,448 of 475,448 bytes</strong> saved.</p>
+<p>The corrected request, with the example address substituted, was:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-bash">wget http://198.51.100.133:6666/W32.Nimda.Amm.exe
+</code></pre>
+<p>Snort recorded <strong>Malicious Server Hit!</strong>, signature identifier <code>1:1000003:0</code>, with TCP endpoints and an event time. The screenshot shows alerts for attempts before the successful transfer as well as the successful request. An alert alone therefore did not establish that the file had downloaded; the HTTP response and completed-transfer line supplied that additional evidence.</p>
+<p>This used an existing lab signature. I did not author the rule or measure its detection rate or false positives.</p>
+<h2 id="capturing-the-transaction">Capturing the transaction</h2>
+<p>On H5, I captured the traffic to a PCAP for later inspection. The submission's terminal screenshot shows the capture command when it was brought back to the foreground:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-bash">tcpdump -i H5-eth0 -w nimda.download.pcap
+</code></pre>
+<p>After stopping it, the recorded summary shows <strong>93 packets captured, 93 received by the filter and 0 dropped by the kernel</strong>. The directory listing includes the capture file. These are results from that run, not the different packet counts printed in the worksheet's example output.</p>
+<p>The capture covered traffic visible at H5's interface.</p>
+<h2 id="applying-the-routed-firewall-rule">Applying the routed firewall rule</h2>
+<p>The connection crossed R1 on its way to H10, so the rule belonged in <strong>FORWARD</strong>. INPUT would apply to traffic addressed to R1 itself, and OUTPUT to traffic originating on R1.</p>
+<p>I inserted the destination-specific TCP rule and checked the listing:</p>
+<pre tabindex="0" aria-label="Code example"><code class="language-bash">iptables -I FORWARD -p tcp -d 198.51.100.133 --dport 6666 -j DROP
+iptables -L -v
+</code></pre>
+<p><code>-I FORWARD</code> inserts the rule at the start of the chain. The protocol, destination and destination-port options restrict its match to the simulated service; <code>DROP</code> discards matching packets. It does not block every protocol or every service on the destination.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Recorded evidence</th>
+<th>What it supports</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service works before rule</td>
+<td>Screenshot of HTTP 200 and completed 475,448-byte download</td>
+<td>The requested object was available before filtering.</td>
+</tr>
+<tr>
+<td>Rule added</td>
+<td>Screenshot of the command and FORWARD listing</td>
+<td>The specified DROP rule was installed. Its counters were still zero in that screenshot.</td>
+</tr>
+<tr>
+<td>Request repeated</td>
+<td>Written answer says the second download was unsuccessful because the firewall blocked it</td>
+<td>A historical reported retest; no student timeout screenshot or later rule counter is preserved.</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The worksheet's sample timeout output comes from the instructions. My blocking-test result is preserved only in the written answer above.</p>
+<p>The written answer proposed blocking all traffic to the server as a more aggressive alternative. That would have a wider effect than the selected port rule; it was an alternative described in the assignment, not another change shown in the record.</p>
+<h2 id="recovering-the-supplied-http-object">Recovering the supplied HTTP object</h2>
+<p>The next exercise used the course-provided <code>nimda.download.pcap</code> from the VM's support files, separately from my earlier capture. Its HTTP object has the same filename but a different size.</p>
+<p>I opened the supplied PCAP in Wireshark and followed TCP stream 0. My screenshot shows the HTTP GET, an HTTP 200 response and binary content. Readable strings were embedded in the binary data; the stream also exposed the <code>MZ</code> and <code>PE</code> markers associated with a Windows executable.</p>
+<p>The course explicitly identified this as a substitute executable renamed <code>W32.Nimda.Amm.exe</code> for the exercise. I did not execute it or demonstrate malware behavior. My tentative identification of it as a Windows command-related file was not a confirmed reverse-engineering result.</p>
+<p>I used <strong>File → Export Objects → HTTP</strong> to save the reconstructed object. Because the original filename already existed, I saved the export as <code>Wireshark.W32.Nimda.Amm.exe</code> and checked the directory listing.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Data table; scroll horizontally if needed"><table>
+<thead>
+<tr>
+<th>Evidence from the extraction submission</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP response in the followed stream</td>
+<td><code>200 OK</code></td>
+</tr>
+<tr>
+<td>Response <code>Content-Length</code></td>
+<td>345,088 bytes</td>
+</tr>
+<tr>
+<td>Saved <code>Wireshark.W32.Nimda.Amm.exe</code></td>
+<td>345,088 bytes</td>
+</tr>
+<tr>
+<td>Pre-existing <code>W32.Nimda.Amm.exe</code></td>
+<td>475,448 bytes</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The recovered file's <strong>345,088-byte</strong> size matches the HTTP response length. No hash comparison was recorded, leaving byte-for-byte integrity unverified.</p>
+<h2 id="limits-and-source-material">Limits and source material</h2>
+<p>The lab covered one HTTP request path, an existing signature and a narrow firewall rule in a supplied simulation. Detection quality, encrypted inspection and rule persistence after restart were not tested. The extraction covered stream reconstruction and object export; sandbox analysis remained a possible next step.</p>
+<ul>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx">Snort and firewall submission</a>: topology, historical screenshots, recorded answers and supplied command context.</li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.10%20Lab%20-%20Extract%20an%20Executable%20from%20a%20PCAP%20-%20Jadon%20Kosberg.docx">HTTP object-extraction submission</a>: supplied-capture scope, followed stream and saved-object listing.</li>
+</ul>
+<p>The reviewed repository does not include these PCAPs. Independent replay would require the original capture files; stronger firewall retest evidence would also need the post-rule request output or counters.</p>
+<p><a href="../soc-threat-detection/">CyberOps and Pushdo investigation</a> · <a href="../ipv6-packet-investigations/">IPv6 packet investigations</a> · <a href="../">All projects</a></p>
+          </article>
+        </div>
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
+        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+
+</svg></a>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="../../credentials/">About me</a></div></div>
+      </div>
+    </footer>
+  </div>
+  <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+</body>
+</html>
