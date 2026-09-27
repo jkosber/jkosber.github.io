@@ -1,5 +1,25 @@
 # Portfolio change record
 
+## September 26, 2026 — hierarchy and artwork release
+
+This release refines the homepage and project previews after the quality release. Publication of the reviewed changes was approved on September 26.
+
+- Removed the shared and introductory “Get in touch” buttons. The compact Contact footer retains email, LinkedIn, GitHub, About and back-to-top navigation.
+- Added a dedicated JK favicon with SVG, 16px/32px PNG, multi-size ICO and touch-icon variants, while preserving the header mark.
+- Gave the Experience / Certifications / Education strip a distinct blue surface and direct links. Professional experience receives the first emphasis; the homepage section order remains unchanged.
+- Kept Proxmox as the illustrated homepage feature and made AdventureWorks on AWS and Networking compact, aligned text entries. Their case-study artwork and project destinations remain intact.
+- Added five simplified, consistently sized Projects-index thumbnails and moved each project action closer to its summary. Mobile project rows remain compact without image panels.
+- Tightened mobile hero and section spacing while retaining the illustration, all three controls and existing body-text sizes.
+- Added a clear underline to the current navigation item alongside its blue background.
+- Fixed print heading specificity for homepage and index project titles, and prevented ordinary table labels from splitting mid-word. Code retains its wrapping behavior.
+- Updated maintenance guidance for project-card presentations, thumbnail mappings and favicon variants.
+
+Verification: all 15 routes received fresh desktop/mobile visual and print review. The final candidate passed 540 responsive browser cases across Chromium, Firefox and WebKit, 60 automated accessibility scans with no violations, contrast followup, 474 local reference checks, five hook tests, JavaScript syntax and strict builds. All 89 generated files matched a separate build using the pinned dependencies. Throttled mobile Lighthouse performance was 99–100, with zero measured layout shift on every route. A browser that first loaded the published version received the final candidate after an ordinary reload.
+
+These are local lab checks. Physical devices, screen readers and production performance were not assessed. The Windows WebKit test port skips ordinary links during Tab traversal even in an isolated HTML fixture; Chromium and Firefox keyboard checks passed. LinkedIn blocked automated access.
+
+The case-study and experience facts, historical limitations, course-provided attribution and original artwork are unchanged. Private source material and audit reports remain outside the public repository. The synthetic automation demonstration remains deferred.
+
 ## September 26, 2026 — quality audit release
 
 This release applies the September 25 review of all 15 pages. Publication of the reviewed changes was approved on September 26.

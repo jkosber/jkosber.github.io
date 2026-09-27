@@ -15,8 +15,11 @@
     </div>
   </div>
   <div class="intro-background">
-    <dl><div><dt>Experience</dt><dd>Healthcare &amp; retail IT</dd></div><div><dt>Certifications</dt><dd>CompTIA A+ &amp; Security+</dd></div><div><dt>Education</dt><dd>B.S. in Informatics</dd></div></dl>
-    <a href="{{ 'credentials/' | url }}">More about me {{ icon('arrow') }}</a>
+    <dl>
+      <div><dt>Experience</dt><dd><a href="{{ 'experience/' | url }}">Healthcare &amp; retail IT {{ icon('arrow') }}</a></dd></div>
+      <div><dt>Certifications</dt><dd><a href="{{ 'credentials/' | url }}#certifications">CompTIA A+ &amp; Security+ {{ icon('arrow') }}</a></dd></div>
+      <div><dt>Education</dt><dd><a href="{{ 'credentials/' | url }}#education">B.S. in Informatics {{ icon('arrow') }}</a></dd></div>
+    </dl>
   </div>
 </section>
 <section class="home-projects dark-section" aria-labelledby="projects">
@@ -25,7 +28,7 @@
     <div class="featured-projects">
       {% for section in nav if section.title == 'Projects' %}
       {% for project in section.children[1:4] %}
-        {{ project_card(project, loop.first, 3) }}
+        {{ project_card(project, loop.first, 3, 'default' if loop.first else 'summary') }}
       {% endfor %}
       {% endfor %}
     </div>

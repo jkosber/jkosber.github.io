@@ -13,7 +13,11 @@
   <meta name="description" content="{{ page_description | e }}">
   {% if not page %}<meta name="robots" content="noindex">{% endif %}
   {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
-  <link rel="icon" href="{{ 'assets/mark.svg' | url }}" type="image/svg+xml">
+  <link rel="icon" href="{{ 'assets/favicon.ico' | url }}" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="{{ 'assets/favicon-16.png' | url }}" type="image/png" sizes="16x16">
+  <link rel="icon" href="{{ 'assets/favicon-32.png' | url }}" type="image/png" sizes="32x32">
+  <link rel="icon" href="{{ 'assets/favicon.svg' | url }}" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="{{ 'assets/apple-touch-icon.png' | url }}" sizes="180x180">
   <link rel="preload" href="{{ 'assets/fonts/sora-latin.woff2' | url }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ 'assets/fonts/manrope-latin.woff2' | url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ 'stylesheets/portfolio.css' | url }}?v={{ portfolio_asset_versions.css }}">
@@ -51,9 +55,6 @@
         <a href="{{ destination | url }}"{% if item.active %} aria-current="{{ 'page' if page and page.url == destination else 'true' }}"{% endif %}><span>{{ item.title }}</span></a>
         {% endfor %}
       </nav>
-      <div class="header-contact">
-        <a href="mailto:jadonkosberg@gmail.com"><span>Get in touch</span>{{ icon('email') }}</a>
-      </div>
     </div>
   </header>
   <div class="site-body">
@@ -81,7 +82,7 @@
           </div>
           <div class="project-grid">
             {% for project in project_list.items %}
-              {{ project_card(project) }}
+              {{ project_card(project, presentation='thumbnail') }}
             {% endfor %}
           </div>
         </section>
@@ -124,8 +125,7 @@
     </main>
     <footer class="site-footer" id="contact">
       <div class="footer-inner">
-        <div class="footer-heading"><h2>Get in touch</h2><p>For opportunities in IT or a conversation about my work.</p></div>
-        <a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span>{{ icon('external') }}</a>
+        <div class="footer-heading"><h2>Contact</h2><a class="contact-email" href="mailto:jadonkosberg@gmail.com"><span>jadonkosberg@gmail.com</span>{{ icon('email') }}</a></div>
         <div class="footer-bottom"><a class="footer-brand" href="{{ nav.homepage.url | url }}">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="{{ 'credentials/' | url }}">About me</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a></div>
       </div>
     </footer>

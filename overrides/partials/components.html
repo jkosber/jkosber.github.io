@@ -21,12 +21,16 @@
 </svg>
 {%- endmacro %}
 
-{% macro project_card(project, featured=false, heading=2) -%}
+{% macro project_card(project, featured=false, heading=2, presentation='default') -%}
 {% set academic = project.meta.kind == 'Completed coursework' %}
 {% set project_title = project.meta.title or project.title %}
 {% set symbol = 'server' if 'proxmox' in project.url else ('cloud' if 'aws-linux' in project.url else ('document' if 'job-scan' in project.url else ('network' if 'cisco' in project.url else 'security'))) %}
-<article class="project-card{% if featured %} project-card--featured{% endif %}" data-category="{{ 'coursework' if academic else 'personal' }}" data-visual="{{ project.meta.visual }}">
-  {% if project.meta.visual %}<a class="card-art" href="{{ project.url | url }}" aria-label="Read {{ project_title }}" tabindex="-1"><img src="{{ project.meta.visual | url }}" width="600" height="340" alt="" loading="lazy"></a>{% endif %}
+{% set thumbnails = {'server': 'proxmox', 'cloud': 'aws', 'document': 'resume', 'network': 'network', 'security': 'security'} %}
+<article class="project-card{% if featured %} project-card--featured{% endif %}{% if presentation == 'summary' %} project-card--summary{% endif %}" data-category="{{ 'coursework' if academic else 'personal' }}" data-visual="{{ project.meta.visual }}">
+  {% if project.meta.visual and presentation != 'summary' %}
+  {% set artwork = 'assets/thumbnails/' ~ thumbnails[symbol] ~ '.svg' if presentation == 'thumbnail' else project.meta.visual %}
+  <a class="card-art" href="{{ project.url | url }}" aria-label="Read {{ project_title }}" tabindex="-1"><img src="{{ artwork | url }}" width="{{ 240 if presentation == 'thumbnail' else 600 }}" height="{{ 160 if presentation == 'thumbnail' else 340 }}" alt="" loading="lazy"></a>
+  {% endif %}
   <div class="card-content">
   <div class="card-meta"><span class="project-icon">{{ icon(symbol) }}</span><span>{{ project.meta.kind }}</span></div>
   <h{{ heading }} class="project-title"><a href="{{ project.url | url }}">{{ project_title }}</a></h{{ heading }}>
