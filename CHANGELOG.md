@@ -1,5 +1,9 @@
 # Portfolio change record
 
+## September 27, 2026 — maintenance workflow
+
+- Made validation depend on the affected content and behavior, while retaining release build, regression, privacy and cache checks. Full audit reports and build archives are optional. This changes maintenance guidance only; site content and runtime behavior are unchanged.
+
 ## September 27, 2026 — reading and navigation refinement
 
 Publication of this revision was approved on September 27 after a fresh whole-site visual audit and local review.
