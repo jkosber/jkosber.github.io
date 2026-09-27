@@ -29,5 +29,8 @@ jobs:
         run: python -m unittest discover -s tests
 
       - name: Deploy to GitHub Pages
+        env:
+          GIT_COMMITTER_NAME: Jadon Kosberg
+          GIT_COMMITTER_EMAIL: jkosber@users.noreply.github.com
         run: |
           python -m mkdocs gh-deploy --strict --force

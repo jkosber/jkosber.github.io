@@ -1,5 +1,22 @@
 # Portfolio change record
 
+## September 27, 2026 — reading and navigation refinement
+
+Publication of this revision was approved on September 27 after a fresh whole-site visual audit and local review.
+
+- Corrected compounded code sizing so fenced examples use their intended block size on screen and in print.
+- Preserved natural wrapping in table headings and code, keeping labels and subnet prefixes readable on screen and in print. Existing named horizontal-scroll regions retain access to wide tables on screen.
+- Added keyboard-scrollable, full-size views and nearby image links to the two historical Proxmox figures. Original image bytes, dates and evidence limitations are preserved.
+- Bounded the desktop width of Skills & focus descriptions while retaining the compact mobile presentation.
+- Made narrative comparisons respond to their available width and text size, so enlarged text uses the existing stacked reading layout instead of cramped columns.
+- Corrected final-section highlighting when the back-to-top link changes the footer height during an anchor scroll.
+- Updated maintenance guidance for these reading layouts. The navy, blue and amber identity, homepage hierarchy, hero controls, project order, thumbnails and substantive case-study copy are unchanged.
+- Set the deployment commit identity explicitly so generated Pages commits use Jadon Kosberg's name and email.
+
+Verification covered all 15 routes, desktop and mobile reading, 41 print pages, Chromium/Firefox/Windows WebKit behavior, accessibility and contrast, native Chromium zoom, metadata and assets, loading and ordinary browser reload. The strict build reproduced all 89 audited output files. Private records retain the detailed evidence and release verification.
+
+Windows WebKit ordinary-link Tab behavior and automated LinkedIn access remain limited. Physical devices, screen readers, native Safari/macOS, PDF accessibility and production field performance were not assessed.
+
 ## September 26, 2026 — hierarchy and artwork release
 
 This release refines the homepage and project previews after the quality release. Publication of the reviewed changes was approved on September 26.

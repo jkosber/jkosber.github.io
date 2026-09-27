@@ -222,7 +222,8 @@ p { max-width: 66ch; }
 .prose blockquote { border-left: 3px solid var(--accent); margin: 2rem 0; padding: .1rem 1.3rem; color: var(--muted); }
 .prose pre { overflow: auto; background: var(--ink); color: #e4edfb; padding: 1.2rem; border-radius: 10px; font-size: .85rem; }
 .prose code { overflow-wrap: anywhere; background: #17334c; font-size: .87em; border-radius: 3px; padding: .1em .3em; }
-.prose pre code { padding: 0; background: none; }
+.prose table code { overflow-wrap: normal; }
+.prose pre code { padding: 0; background: none; font-size: inherit; }
 .evidence-note { max-width: 66ch; margin: 1.75rem 0 2.5rem; padding: .2rem 1.25rem; border-left: 3px solid var(--accent); background: var(--ink); font-size: .94rem; }
 .architecture { margin: 2rem 0; }
 .architecture-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; list-style: none; }
@@ -264,8 +265,17 @@ p { max-width: 66ch; }
   .narrative-list dt { margin-top: 1.5rem; padding: 1rem 0 .25rem; }
   .narrative-list dd { border: 0; padding: .65rem 0; }
 }
+@media screen {
+  .narrative-list { container-type: inline-size; }
+  .narrative-list--pairs dl { grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr); max-width: 58rem; }
+  @container (max-width: 41em) {
+    .narrative-list dl { display: block; }
+    .narrative-list dt { margin-top: 1.5rem; padding: 1rem 0 .25rem; }
+    .narrative-list dd { border: 0; padding: .65rem 0; }
+  }
+}
 .prose th, .prose td { text-align: left; vertical-align: top; padding: 1rem .8rem; border-bottom: 1px solid var(--line); }
-.prose th { font-weight: 750; color: var(--heading); background: #193c5b; }
+.prose th { font-weight: 750; color: var(--heading); background: #193c5b; overflow-wrap: normal; }
 .prose tbody tr:nth-child(even) { background: #10263b; }
 .page-context { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; font-size: .78rem; }
 .page-context span { padding: .25rem .75rem; border-radius: 4px; color: #b5e0ff; background: #164065; border: 1px solid #559dd2; }

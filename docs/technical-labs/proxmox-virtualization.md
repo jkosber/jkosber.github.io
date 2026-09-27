@@ -58,8 +58,10 @@ The service tier is split between a full virtual machine and an unprivileged Lin
 Homepage, Uptime Kuma and Portainer responded at their documented endpoints. CT 110's container state and GoodMem API response were also checked. VM 109's operating-system release and Docker inventory remained unverified because of the guest-access problem described below.
 
 <figure class="evidence-figure">
-  <img src="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp" width="1050" height="525" alt="September 22 Proxmox inventory showing VM 109 and LXC 110 running, nine experimental VMs stopped, and three storage pools available." loading="lazy">
-  <figcaption>Historical Proxmox inventory, September 22, 2026. Resource and uptime values describe that capture. The screenshot shows guest state; the accompanying health-check report records automatic startup settings.</figcaption>
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical Proxmox guest inventory; scroll horizontally if needed">
+    <img src="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp" width="1050" height="525" alt="September 22 Proxmox inventory showing VM 109 and LXC 110 running, nine experimental VMs stopped, and three storage pools available." loading="lazy">
+  </div>
+  <figcaption>Historical Proxmox inventory, September 22, 2026. Resource and uptime values describe that capture. The screenshot shows guest state; the accompanying health-check report records automatic startup settings. <a href="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp">Open the full-size inventory</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
 </figure>
 
 ## Network configuration
@@ -80,8 +82,10 @@ IPAM mappings associate guest identifiers with assigned addresses. All nine lab 
 The datacenter firewall was enabled with seven accept rules covering lab traffic, DNS/DHCP and management access including ICMP, SSH and the Proxmox web interface. **Input defaulted to DROP; output and forwarding defaulted to ACCEPT**, so the policy allowed outbound and forwarded traffic by default.
 
 <figure class="evidence-figure">
-  <img src="../../assets/evidence/homelab/firewall-options-2026-09-22.png" width="900" height="240" alt="Proxmox firewall options with firewall enabled, input policy DROP, output policy ACCEPT and forward policy ACCEPT." loading="lazy">
-  <figcaption>Configured datacenter defaults captured September 22, 2026. No denied-traffic or isolation test accompanied this screenshot.</figcaption>
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical Proxmox firewall defaults; scroll horizontally if needed">
+    <img src="../../assets/evidence/homelab/firewall-options-2026-09-22.png" width="900" height="240" alt="Proxmox firewall options with firewall enabled, input policy DROP, output policy ACCEPT and forward policy ACCEPT." loading="lazy">
+  </div>
+  <figcaption>Configured datacenter defaults captured September 22, 2026. No denied-traffic or isolation test accompanied this screenshot. <a href="../../assets/evidence/homelab/firewall-options-2026-09-22.png">Open the full-size firewall options</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
 </figure>
 
 The same check found three issues to resolve before expanding the network design:
