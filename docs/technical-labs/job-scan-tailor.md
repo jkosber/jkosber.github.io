@@ -1,6 +1,6 @@
 ---
 title: Job scan and resume tailor
-description: An agent-guided workflow that ranks postings against a source resume and generates selected DOCX/PDF resumes, a comparison report and a local review page with file warnings.
+description: An agent-guided workflow that compares job postings with a source resume and builds selected DOCX/PDF resumes, a ranking report and a local review page.
 kind: Personal software project
 status: Complete, maintained as needed
 visual: assets/project-resume.svg
@@ -16,7 +16,7 @@ My original resume is the source of the background claims. The workflow I reques
 **Status and evidence:** complete, maintained as needed. This case study describes the private source version reviewed on September 24, 2026. Targeted checks are reported below; the review did not collect jobs, generate application documents or submit applications.
 </div>
 
-## From job posting to application
+## From job posting to application documents {#from-job-posting-to-application}
 
 <figure class="architecture">
   <ol class="architecture-flow">

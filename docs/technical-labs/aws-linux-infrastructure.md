@@ -1,8 +1,8 @@
 ---
 title: AdventureWorks on AWS
-description: Deployed a course-provided catalog and review application across two EC2 instances, with recorded product searches and review submission after adapting the database import for Linux.
+description: Deployed a course-provided PHP application and SQL Server database on two EC2 instances, with recorded catalog searches and review submission.
 kind: Completed coursework
-status: Completed May 2026
+status: "Report: May 2026"
 visual: assets/project-aws.svg
 ---
 
@@ -10,7 +10,7 @@ visual: assets/project-aws.svg
 
 I deployed a course-provided product-review application on two Ubuntu servers in AWS: Apache and PHP served the website, while Microsoft SQL Server held the AdventureWorks catalog and reviews. The completed demonstration could search products, display a product page and accept a review.
 
-My contribution in **SVAD 111: Linux & Virtualization Technologies** was provisioning, installation, configuration, troubleshooting and testing. The course supplied the application, dataset, two-tier design and milestone instructions. This was a school deployment, not work for an actual AdventureWorks business.
+My contribution in **SVAD 111: Linux & Virtualization Technologies** was provisioning, installation, configuration, troubleshooting and testing. The course supplied the application, dataset, two-tier design and milestone instructions.
 
 <div class="evidence-note" markdown>
 **Historical result:** final report dated May 8, 2026, with milestone submissions and screenshots. These are the recorded coursework results; the deployment has not been retested for this page.
@@ -41,7 +41,7 @@ I checked the dependencies in stages: SQL queries confirmed imported data, `test
 
 ### Adapting the data import for Linux
 
-The supplied `adventureworks-db.tar.gz` contained a Windows-oriented SQL import script and data files. Milestone 2B prescribed converting the script from UTF-16 to UTF-8, setting its data directory, removing `CODEPAGE` lines and matching the row terminator to the files' CRLF endings. These were compatibility steps for the provided dataset, not a schema I designed.
+The supplied `adventureworks-db.tar.gz` contained a Windows-oriented SQL import script and data files. Milestone 2B prescribed converting the script from UTF-16 to UTF-8, setting its data directory, removing `CODEPAGE` lines and matching the row terminator to the files' CRLF endings.
 
 Selected commands from that milestone's workflow:
 
@@ -113,7 +113,7 @@ The catalog result below shows four Mountain-300 Black variants, including produ
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical AdventureWorks search results; scroll horizontally if needed">
     <img src="../../assets/evidence/aws/mountain-300-results-2026-05-08.png" width="670" height="390" alt="AdventureWorks application displaying 4 Results: Mountain-300 Black products 785, 786, 787 and 788 in sizes 38, 40, 44 and 48." loading="lazy">
   </div>
-  <figcaption>Historical application output, May 8, 2026, from the final report. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+  <figcaption>Application output preserved in the final report dated May 8, 2026. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
 </figure>
 
 ## Scope and follow-up ideas

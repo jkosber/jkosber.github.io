@@ -1,6 +1,6 @@
 ---
 title: Healthcare IT support
-description: I provided remote and onsite IT support for 12 dental offices, helping staff with workstations, clinical software and network connections. I also deployed and retired computers, installed network equipment and carried out cabling upgrades.
+description: I supported 12 dental offices and 100+ staff, deployed 30+ workstations, and handled clinical software, network equipment and cabling.
 kind: Professional experience
 role: IT Intern
 organization: Ladd Dental Group

@@ -2,7 +2,7 @@
 title: Networking & packet analysis
 description: Planned IPv4 subnets, diagnosed client, gateway and DNS faults in Packet Tracer, and traced an IPv6 gateway loss to Router Advertisements in supplied traffic.
 kind: Completed coursework
-status: Coursework 2025–2026
+status: "Reports: 2025–2026"
 visual: assets/project-network.svg
 ---
 
@@ -10,7 +10,7 @@ visual: assets/project-network.svg
 
 My networking coursework covered the configuration behind a working connection and the evidence needed when it fails. In **NETI 109**, I planned IPv4 subnets and diagnosed several different faults in a supplied Cisco Packet Tracer network. In **CSIA 210: Network Protocol Analysis**, I used Wireshark to connect host configuration with DHCPv6 and neighbor-discovery traffic.
 
-The selected work includes a VLSM address plan, client-by-client connectivity tests and a [deeper IPv6 investigation](ipv6-packet-investigations.md) connecting packet fields to host behavior.
+The selected work includes a VLSM address plan, client-by-client connectivity tests and [IPv6 packet investigations](ipv6-packet-investigations.md) connecting packet fields to host behavior.
 
 <div class="evidence-note" markdown>
 **Historical coursework:** addressing and connectivity submissions from November–December 2025; protocol-analysis screenshots from May 12, 2026. The course supplied the scenarios and traces. My work was completing the tables, configuration exercises, packet analysis and written findings. The results below have not been retested for this page.

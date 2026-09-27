@@ -23,7 +23,7 @@ Development & automation
 : Python programming coursework in [SDEV-120](https://github.com/jkosber/SDEV-120), Bash exercises in [Linux coursework](../technical-labs/aws-linux-infrastructure.md), and a personal [job-scan and resume-tailoring tool](../technical-labs/job-scan-tailor.md).
 
 Systems & infrastructure
-: An ongoing [Proxmox homelab](../technical-labs/proxmox-virtualization.md) and [AWS coursework](../technical-labs/aws-linux-infrastructure.md) deploying Apache, PHP and SQL Server on separate EC2 instances.
+: An ongoing [Proxmox homelab](../technical-labs/proxmox-virtualization.md) and [AWS coursework](../technical-labs/aws-linux-infrastructure.md) running Apache and PHP on one EC2 instance and SQL Server on another.
 
 </div>
 

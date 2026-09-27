@@ -2,7 +2,7 @@
 title: IPv6 packet investigations
 description: Correlating DHCPv6 replies, duplicate-address evidence and Router Advertisements with Windows host behavior in a supplied protocol-analysis capstone.
 kind: Completed coursework
-status: Documented May 2026
+status: "Report: May 2026"
 detail: true
 ---
 
@@ -108,4 +108,4 @@ The [final capstone submission](https://github.com/jkosber/CSIA-210-Network-Prot
 
 The [protocol-analysis repository](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis) contains other coursework and a separate introductory capture. Verifying the later frame references and reconstructing the SLAAC lifetime sequence would require the missing capstone traces and corresponding host output.
 
-[Networking and packet analysis overview](cisco-networking-analysis.md) · [CyberOps traffic investigation](soc-threat-detection.md) · [All projects](index.md)
+[Networking & packet analysis](cisco-networking-analysis.md) · [CyberOps & traffic investigation](soc-threat-detection.md) · [All projects](index.md)

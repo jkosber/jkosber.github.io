@@ -19,12 +19,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.14'
 
-      - name: Install MkDocs Material & Extensions
+      - name: Install verified build dependencies
         run: |
-          pip install mkdocs-material==9.*
+          python -m pip install -r requirements.txt
+
+      - name: Check content accessibility hooks
+        run: python -m unittest discover -s tests
 
       - name: Deploy to GitHub Pages
         run: |
-          mkdocs gh-deploy --force
+          python -m mkdocs gh-deploy --strict --force

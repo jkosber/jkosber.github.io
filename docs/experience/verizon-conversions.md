@@ -1,17 +1,17 @@
 ---
 title: Retail technology conversions
-description: I supported Verizon store technology conversions from installation through reopening. I worked with field technicians to get devices connected, configured printers, checked connections in Cisco Meraki and followed up on issues after conversion.
+description: I've supported Verizon store conversions through onsite setup, remote technician coordination, printer configuration and Cisco Meraki connection checks.
 kind: Professional experience
 role: IT Support Contractor
 organization: Vaco by Highspring / Verizon
-dates: July–August 2026
+dates: July 2026–Present
 ---
 
 # Retail technology conversions
 
-**Vaco by Highspring / Verizon · IT Support Contractor · July–August 2026**
+**Vaco by Highspring / Verizon · IT Support Contractor · July 2026–Present**
 
-I supported technology conversions at Verizon retail locations, helping get devices connected for go-live and working through issues after stores reopened. The role included onsite work and remote coordination with field technicians.
+I've supported technology conversions at Verizon retail locations, helping get devices connected for go-live and working through issues after stores reopened. The role has included onsite work and remote coordination with field technicians.
 
 ## Printers and network connections
 

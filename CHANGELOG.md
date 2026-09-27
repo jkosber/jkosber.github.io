@@ -1,5 +1,22 @@
 # Portfolio change record
 
+## September 26, 2026 — quality audit release
+
+This release applies the September 25 review of all 15 pages. Publication of the reviewed changes was approved on September 26.
+
+- Improved narrow-screen heading wrapping, illustration-control legibility and project-filter sizing. Preserved the navy, blue and amber design, artwork, featured-project order and detailed case studies.
+- Replaced generic table-region labels with unique names drawn from section headings, and gave keyboard-focusable code blocks an explicit group role. The new build hook preserves authored markup and code.
+- Moved the back-to-top link into the footer layout when the footer appears, keeping contact and profile links unobscured. Reserved space for enhanced menu and filter controls to prevent loading shifts.
+- Tightened summaries and repeated qualifications, clarified the two-server AWS arrangement and distinguished report dates from screenshot dates. Retained historical evidence limits and course-provided attribution.
+- Updated the Verizon role to July 2026–Present and Ivy Tech Dean's List to 2025–2026, matching Jadon's confirmed current resume corrections.
+- Added a 1200×630 social preview using the existing artwork, descriptive image metadata and a specific, non-indexed not-found page.
+- Refined print typography, spacing, code wrapping and figure/table pagination. Printed pages retain contact attribution.
+- Pinned the verified Python build dependencies and added accessibility-hook regression tests and strict validation to deployment.
+
+Verification: 540 responsive browser cases passed across Chromium, Firefox and WebKit, with zero violations in 60 automated accessibility scans. Separate checks covered enlarged text, keyboard use, reduced motion, delayed loading and script failure. All 15 routes were rendered to PDF and visually inspected. The strict build, five hook tests, JavaScript syntax and 416 local references passed; an isolated build matched all 79 generated files. All 14 content pages scored 100 in the four Lighthouse categories, with zero layout shift in the fresh homepage and Projects runs. These are local lab results, not production or full assistive-technology certification. LinkedIn continued to block automated link checking.
+
+The synthetic automation demonstration and new operational testing of historical projects remain separate work. Private audit reports and source evidence are excluded from the public repository.
+
 ## September 25, 2026 — returning-browser asset refresh
 
 A returning-browser issue was found after deployment: the new HTML could reuse the previous unversioned stylesheet, restoring old project cards and omitting the new narrative layouts. Shared CSS and JavaScript URLs now receive automatic content hashes at build time, so a changed asset gets a new cache key. Release verification includes the browser session that reproduced the stale layout.

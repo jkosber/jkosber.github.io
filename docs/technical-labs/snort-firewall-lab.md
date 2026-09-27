@@ -2,7 +2,7 @@
 title: Snort, firewall rules & HTTP recovery
 description: Following a simulated HTTP download through Snort alerts, correcting a filename failure, applying a routed firewall rule and recovering an object from a separate supplied capture.
 kind: Completed coursework
-status: Documented March 2026
+status: "Reports: March 2026"
 detail: true
 ---
 
@@ -114,4 +114,4 @@ The lab covered one HTTP request path, an existing signature and a narrow firewa
 
 The reviewed repository does not include these PCAPs. Independent replay would require the original capture files; stronger firewall retest evidence would also need the post-rule request output or counters.
 
-[CyberOps and Pushdo investigation](soc-threat-detection.md) · [IPv6 packet investigations](ipv6-packet-investigations.md) · [All projects](index.md)
+[CyberOps & traffic investigation](soc-threat-detection.md) · [IPv6 packet investigations](ipv6-packet-investigations.md) · [All projects](index.md)

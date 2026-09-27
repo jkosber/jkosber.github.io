@@ -46,6 +46,6 @@ The [networking coursework page](../technical-labs/cisco-networking-analysis.md)
 
 ## Academic recognition
 
-- Dean's List, Ivy Tech Community College, 2025.
+- Dean's List, Ivy Tech Community College, 2025–2026.
 - Dean's List, Indiana University, 2020–2021.
 - Collegiate golf scholarship, Indiana University, 2018–2021.

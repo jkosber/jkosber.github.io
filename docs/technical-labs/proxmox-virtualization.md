@@ -1,6 +1,6 @@
 ---
 title: Proxmox homelab
-description: A Proxmox lab on a 16 GB laptop with two service guests, nine experimental VMs, and documented service checks, network configuration and unresolved storage warnings.
+description: I built and maintain a Proxmox homelab with Linux guests, Docker services and an experimental virtual network.
 kind: Personal homelab
 status: Ongoing
 visual: assets/lab.svg
@@ -104,7 +104,7 @@ The September 22 check covered host health, the Proxmox interface and service re
 | PostgreSQL/pgvector | Container running with image `pgvector/pgvector:pg17` | Database integrity, backup restoration and separate reachability of every published port |
 | Storage | Three pools active; HDD SMART passed with zero listed reallocated, uncorrectable or CRC-error counters | Recoverability of guest disks and the boot SSD's unresolved warning |
 
-The HTTPS probes accepted local self-signed certificates, leaving certificate trust unverified. Application workflows and recovery still need the separate tests noted above.
+The HTTPS probes accepted local self-signed certificates, leaving certificate trust unverified.
 
 ## Unresolved operational findings
 

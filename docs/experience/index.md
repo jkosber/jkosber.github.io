@@ -6,4 +6,4 @@ layout: experience
 
 # Professional experience
 
-I've supported dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting. These pages cover the work I did in each role.
+I've supported dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting.

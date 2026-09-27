@@ -2,7 +2,7 @@
 title: CyberOps & traffic investigation
 description: Connected a supplied Pushdo alert timeline to a Windows host, three downloaded objects and historical malware reports; a separate lab recorded Snort alerts and a firewall retest.
 kind: Completed coursework
-status: Documented March 2026
+status: "Reports: March 2026"
 visual: assets/project-security.svg
 ---
 
@@ -10,13 +10,13 @@ visual: assets/project-security.svg
 
 In **CSIA 115: Cyber Ops**, I investigated a historical Pushdo malware scenario using a Cisco-provided Security Onion VM. I narrowed the alert window in Sguil, identified the affected Windows host, inspected reconstructed files in NetworkMiner and recorded existing VirusTotal findings in an after-action report.
 
-A separate [Snort and firewall lab](snort-firewall-lab.md) covered live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.
+The [Snort, firewall rules & HTTP recovery](snort-firewall-lab.md) case study covers a separate lab using live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.
 
 <div class="evidence-note" markdown>
 **Scope and dates:** academic labs completed in March 2026 using course-provided environments and training data. The Pushdo alerts describe June 27, 2017 activity; the assessment screenshots show my analysis on March 8, 2026. The results are historical and have not been retested for this page.
 </div>
 
-## Investigating a Pushdo infection
+## Investigating Pushdo alerts {#investigating-a-pushdo-infection}
 
 The assessment began with executable-download and Trojan alerts already loaded in Security Onion. The training material credits Malware Traffic Analysis as the scenario's source. I investigated the alerts to identify the affected host and associated files.
 
@@ -74,7 +74,7 @@ In the Mininet lab, H5 requested a file from H10's nginx service through R1, whi
 
 I then inserted a DROP rule into R1's FORWARD chain for TCP traffic to the simulated server's listening port. The screenshot confirms the rule was present; my written retest answer records that the download was blocked.
 
-[Read the Snort, firewall and HTTP recovery lab](snort-firewall-lab.md) for the topology, command excerpts, request failure and correction, capture results and retest limits. This used the supplied Snort rule set, not signatures I authored.
+[Read the Snort, firewall rules & HTTP recovery case study](snort-firewall-lab.md) for the topology, command excerpts, request failure and correction, capture results and retest limits. This used the supplied Snort rule set, not signatures I authored.
 
 ## Recovering a file from captured traffic
 
@@ -88,4 +88,4 @@ The stream's HTTP `Content-Length` and the saved file listing both show **345,08
 
 The [CyberOps coursework repository](https://github.com/jkosber/CyberOps-115) also holds exercises in Windows administration, Linux logs and permissions, Nmap, protocol analysis, access control lists and incident handling.
 
-[Networking and packet analysis](cisco-networking-analysis.md) · [Certifications](../credentials/index.md) · [All projects](index.md)
+[Networking & packet analysis](cisco-networking-analysis.md) · [Certifications](../credentials/index.md) · [All projects](index.md)

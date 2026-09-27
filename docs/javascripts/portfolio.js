@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heading: document.getElementById(decodeURIComponent(link.hash.slice(1)))
   })).filter(({ heading }) => heading);
   const backToTop = document.querySelector('.back-to-top');
+  const footer = document.querySelector('.site-footer');
   let scrollQueued = false;
   const updateReadingPosition = () => {
     scrollQueued = false;
@@ -86,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       else section.link.removeAttribute('aria-current');
     }
     if (backToTop) {
+      backToTop.classList.toggle('back-to-top--in-footer', footer.getBoundingClientRect().top < window.innerHeight);
       backToTop.hidden = window.scrollY < 600 && document.activeElement !== backToTop;
     }
   };
