@@ -142,7 +142,7 @@ The immediate operational follow-ups recorded in the health check are backup cov
 
 Nginx Proxy Manager, RustDesk Server, a NAS guest, SIEM/IDS tooling and GPU media services are planned additions. The existing OPNsense guest remains a work in progress.
 
-## Sources and artifacts
+## Sources {#sources-and-artifacts}
 
 - [Build journal and guest inventory, September 22 revision](https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/README.md): host, storage, service placement, SDN configuration and roadmap.
 - [Read-only health-check report, September 22](https://github.com/jkosber/JHomelab/blob/3dfd2fe64136f8fcb908986594ff32bd63215baf/docs/health-check-2026-09-22.md): recorded results, access limits, storage warnings and untested behavior.

@@ -80,7 +80,7 @@ I then inserted a DROP rule into R1's FORWARD chain for TCP traffic to the simul
 
 The companion exercise used Wireshark's **Follow TCP Stream** and **Export Objects → HTTP** on a course-supplied capture. The recovered object was a renamed substitute executable, not real Nimda malware. I saved it under a different filename because a file with the original name already existed.
 
-The stream's HTTP `Content-Length` and the saved file listing both show **345,088 bytes**. That supports recovery of the recorded HTTP object. It is a different artifact from the **475,448-byte** download visible in the earlier Mininet exercise, despite their similar filenames. No hash comparison or executable analysis was recorded for the recovered substitute.
+The stream's HTTP `Content-Length` and the saved file listing both show **345,088 bytes**. That supports recovery of the recorded HTTP object. It is a different file from the **475,448-byte** download visible in the earlier Mininet exercise, despite their similar filenames. No hash comparison or executable analysis was recorded for the recovered substitute.
 
 [HTTP recovery evidence and limitations](snort-firewall-lab.md#recovering-the-supplied-http-object) explains the source capture and the verification shown in my submission.
 

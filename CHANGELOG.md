@@ -1,5 +1,12 @@
 # Portfolio change record
 
+## September 27, 2026 — wording corrections
+
+- Capitalized “Retail” in the homepage experience strip to match “Healthcare.”
+- Shortened the homelab's final heading to “Sources” and used “file” for the recovered download in the security case study. The existing homelab section link is preserved.
+
+Validation: five hook tests, strict build, 460 generated local references, excluded assets and affected desktop/mobile reading passed. Only the three intended HTML pages changed; all 15 pages were checked for the removed wording.
+
 ## September 27, 2026 — maintenance workflow
 
 - Made validation depend on the affected content and behavior, while retaining release build, regression, privacy and cache checks. Full audit reports and build archives are optional. This changes maintenance guidance only; site content and runtime behavior are unchanged.
