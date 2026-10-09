@@ -2,6 +2,8 @@
 
 A static portfolio of professional experience, selected personal projects, and completed coursework. Built with MkDocs and a custom Material theme layout.
 
+Published at [jnkos.com](https://jnkos.com/), hosted by GitHub Pages with DNS managed in Cloudflare.
+
 ## Local development
 
 Use Python 3.14 with the pinned build dependencies (MkDocs 1.6.1 and Material 9.7.7). From the repository root:
@@ -94,3 +96,9 @@ Before an authorized site release, run the hook tests and strict build, check ge
 [CHANGELOG.md](CHANGELOG.md) records meaningful changes and their validation scope. Publication requires authorization for the reviewed revision; an earlier release approval does not cover future work.
 
 The existing GitHub Actions workflow publishes on a push to `main` or manual dispatch, after the hook regression checks, using `python -m mkdocs gh-deploy --strict --force`. It uses Python 3.14 and the same pinned requirements as local development. The deployment step sets `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` to Jadon's identity; ghp-import uses that identity for the generated commit's author and committer. GitHub Pages serves `gh-pages`. A public branch or pull request also exposes its content. Local preview is the review environment; publication requires the owner’s separate approval of the reviewed change.
+
+### Custom domain
+
+`mkdocs.yml` sets `https://jnkos.com/` as the canonical URL for pages, the sitemap and social previews. `docs/CNAME` is copied into the generated site so deployments preserve the GitHub Pages custom domain. Keep it synchronized with the repository's Pages settings.
+
+Cloudflare DNS points the apex to GitHub Pages using four DNS-only A records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and `www` to `jkosber.github.io` using a DNS-only CNAME. GitHub Pages supplies the HTTPS certificate and redirects the default Pages address and `www` to the apex. Keep HTTPS enforcement enabled once the certificate is issued. See [GitHub's custom-domain guidance](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site).

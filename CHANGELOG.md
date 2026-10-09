@@ -1,5 +1,13 @@
 # Portfolio change record
 
+## October 8, 2026 — custom domain
+
+- Set `https://jnkos.com/` as the canonical site address and updated the printed website label.
+- Added the generated site's `CNAME` file so future deployments retain the custom domain. GitHub Pages remains the host; Cloudflare manages DNS.
+- Documented the apex and `www` DNS records, HTTPS and redirects.
+
+Validation: five hook tests, dependency consistency, strict build, all 15 pages' domain metadata, 474 generated local references, the sitemap, CNAME and five excluded assets passed.
+
 ## September 27, 2026 — wording corrections
 
 - Capitalized “Retail” in the homepage experience strip to match “Healthcare.”
