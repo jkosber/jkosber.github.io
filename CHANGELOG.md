@@ -1,5 +1,9 @@
 # Portfolio change record
 
+## October 9, 2026 — work email
+
+- Changed the shared contact link and print attribution to `Jadon@jnkos.com`.
+
 ## October 8, 2026 — custom domain
 
 - Set `https://jnkos.com/` as the canonical site address and updated the printed website label.
