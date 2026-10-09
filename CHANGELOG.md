@@ -1,5 +1,11 @@
 # Portfolio change record
 
+## October 9, 2026 — header initials
+
+- Reused the favicon SVG for the shared header so its initials match the browser-tab icon.
+
+Validation: five hook tests, strict build, matching image paths on all 15 generated pages, desktop/mobile header rendering and nested-route image loading passed.
+
 ## October 9, 2026 — work email
 
 - Changed the shared contact link and print attribution to `Jadon@jnkos.com`.

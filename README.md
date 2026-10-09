@@ -45,7 +45,7 @@ The visual system uses deep navy surfaces, blue structure and warm amber emphasi
 
 Shared link previews use the local 1200×630 `docs/assets/social-preview.png`, with absolute Open Graph image URLs and a large-image Twitter card. Keep its alternative description in the shared template accurate when replacing the image. The not-found page is marked `noindex` and omits ordinary page-sharing metadata.
 
-The dedicated JK favicon uses `docs/assets/favicon.svg`, 16px and 32px PNGs, a 16/32/48px ICO and a 180px Apple touch icon. Keep these variants consistent and check their legibility at native size, their appearance in a browser tab and loading on nested routes. The header continues to use the separate `mark.svg` brand artwork.
+The dedicated JK favicon uses `docs/assets/favicon.svg`, 16px and 32px PNGs, a 16/32/48px ICO and a 180px Apple touch icon. Keep these variants consistent and check their legibility at native size, their appearance in a browser tab and loading on nested routes. The header reuses `favicon.svg` so its initials match the browser-tab icon.
 
 Print styles use an 11pt body, a consistent heading scale and compact paragraph spacing. Code wraps, table rows and evidence figures stay together where possible, and decorative art and interactive controls are omitted. Review actual printed output after substantial content changes; pagination depends on the selected paper and margins.
 
