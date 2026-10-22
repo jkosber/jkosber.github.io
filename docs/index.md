@@ -8,10 +8,10 @@ layout: home
 
 <div class="intro-body" markdown>
 
-IT infrastructure, networking and cybersecurity.
+IT support technician focused on infrastructure, networking and security.
 { .intro-specialties }
 
-I've supported users across 12 dental offices and helped Verizon stores through technology conversions. I'm pursuing infrastructure, networking and security work, building on that support experience through a Proxmox homelab and completed technical coursework.
+I've supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Outside work, I run a Proxmox homelab and created SSH Workbench, a terminal app for connecting to and checking my machines. I'm pursuing infrastructure, networking and security roles.
 
 [View projects](technical-labs/index.md){ .button }
 

@@ -4,16 +4,30 @@ description: I built and maintain a Proxmox homelab with Linux guests, Docker se
 kind: Personal homelab
 status: Ongoing
 visual: assets/lab.svg
+tools: [Proxmox VE, Linux, Docker, SDN]
 ---
 
 # Proxmox homelab
 
 I built JHomelab on an old Alienware laptop so I could work with a real hypervisor, run Linux services and experiment with networking outside my everyday computer. The project brought together the Linux, virtualization and networking work I had been doing in class.
 
-I installed Proxmox VE, created the guest machines, configured the lab network and added a Docker service host. The result is an ongoing personal lab: two service guests start automatically while desktop and security-lab guests are reserved for individual sessions. My work centers on infrastructure setup and administration; the deployed applications are existing software projects.
+Desktop and security-lab guests run only for individual sessions. The applications on the service host are existing software projects; my work is the infrastructure underneath them.
+
+<div class="glance" markdown>
+
+My role
+: I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules and the Docker service host.
+
+Built with
+: Proxmox VE 9, Ubuntu Server, a Debian LXC container, Docker (Homepage, Uptime Kuma, Portainer), Proxmox SDN with dnsmasq, and OPNsense in progress.
+
+Result
+: Ten VMs and one container on a 16 GB laptop, with two service guests that start on boot. A health check confirmed the services were up and listed what to fix next: backups, an SSD warning and firewall cleanup.
+
+</div>
 
 <div class="evidence-note" markdown>
-**Evidence date: September 22, 2026.** Guest states, service checks and screenshots come from the repository's AI-assisted read-only health check. It left stopped guests off and made no infrastructure changes. These observations have not been refreshed for this page.
+**Snapshot date: September 22, 2026.** Guest states, service checks and screenshots below come from a read-only health check of the lab on that date.
 </div>
 
 ## How the lab fits together
@@ -42,7 +56,7 @@ The September check recorded **Proxmox VE 9.2.20**, kernel **7.0.14-17-pve**, on
 
 The inventory assigns about **47 GB to the VMs plus 4 GB to the LXC container**, using rounded values. That exceeds physical RAM. VM 109 and CT 110 were the two running guests and both had automatic startup enabled; VMs 100–108 were stopped. I use the experimental guests for individual sessions, within the host's available resources.
 
-All three storage pools were active in the check. Their recorded usage was 65.33% for `local`, 0.01% for `local-lvm` and 23.96% for `vmdata`. Available capacity did not resolve the separate boot-SSD health and backup concerns described below.
+All three storage pools were active in the check. Their recorded usage was 65.33% for `local`, 0.01% for `local-lvm` and 23.96% for `vmdata`.
 
 ## Linux guests and container services
 
@@ -96,7 +110,7 @@ The same check found three issues to resolve before expanding the network design
 
 The effect of these settings on live lab traffic remains untested. Checking guest DHCP, permitted egress and denied traffic is the next step before relying on the intended policy. Per-guest and per-network rules, service-guest migration and managed switching remain planned work.
 
-## Recorded validation
+## Health check results {#recorded-validation}
 
 The September 22 check covered host health, the Proxmox interface and service responses:
 
@@ -110,7 +124,7 @@ The September 22 check covered host health, the Proxmox interface and service re
 
 The HTTPS probes accepted local self-signed certificates, leaving certificate trust unverified.
 
-## Unresolved operational findings
+## Open issues {#unresolved-operational-findings}
 
 ### A passing SMART summary with persistent errors
 
@@ -150,4 +164,4 @@ Nginx Proxy Manager, RustDesk Server, a NAS guest, SIEM/IDS tooling and GPU medi
 
 The repository contains documentation and screenshots. Sanitized configuration exports, Compose definitions and a complete rebuild procedure are still missing.
 
-[All projects](index.md) · [AdventureWorks on AWS](aws-linux-infrastructure.md)
+[All projects](index.md) · [SSH Workbench](ssh-workbench.md) · [AdventureWorks on AWS](aws-linux-infrastructure.md)

@@ -4,6 +4,7 @@ description: Connected a supplied Pushdo alert timeline to a Windows host, three
 kind: Completed coursework
 status: "Reports: March 2026"
 visual: assets/project-security.svg
+tools: [Security Onion, Wireshark, NetworkMiner, Snort]
 ---
 
 # CyberOps & traffic investigation
@@ -12,8 +13,21 @@ In **CSIA 115: Cyber Ops**, I investigated a historical Pushdo malware scenario 
 
 The [Snort, firewall rules & HTTP recovery](snort-firewall-lab.md) case study covers a separate lab using live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.
 
+<div class="glance" markdown>
+
+My role
+: I worked the supplied alerts from timeline to host to files, looked up the file hashes and wrote the after-action report.
+
+Built with
+: Security Onion, Sguil, Wireshark, NetworkMiner and VirusTotal; Snort and `iptables` in a separate Mininet lab.
+
+Result
+: Identified the affected Windows host and three downloaded malware files by hash, with containment recommendations. In the lab, an existing Snort rule fired, and after I added a firewall rule my written retest recorded the download as blocked.
+
+</div>
+
 <div class="evidence-note" markdown>
-**Scope and dates:** academic labs completed in March 2026 using course-provided environments and training data. The Pushdo alerts describe June 27, 2017 activity; the assessment screenshots show my analysis on March 8, 2026. The results are historical and have not been retested for this page.
+**Coursework, March 2026.** Course-provided environments and training data. The Pushdo alerts describe activity from June 27, 2017.
 </div>
 
 ## Investigating Pushdo alerts {#investigating-a-pushdo-infection}
@@ -53,7 +67,7 @@ The hashes linked each object to an existing malware report. These counts are th
 
 The [skills-assessment submission](https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx) includes the Sguil timeline and NetworkMiner screenshots. The [after-action report](https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx) brings the host, files, hashes and recommendations together.
 
-### Separating alert interpretation from proof
+### What the alerts don't prove {#separating-alert-interpretation-from-proof}
 
 Two alerts needed particular care when reviewing the original conclusions:
 

@@ -13,7 +13,7 @@ This CyberOps lab connected a network alert to a specific control: block a simul
 The lab provided the topology, scripts and Snort signatures. My work was running and checking the environment, interpreting the alert, correcting request errors, applying the prescribed firewall rule and documenting results.
 
 <div class="evidence-note" markdown>
-**Historical lab:** screenshots dated March 1, 2026, in submissions saved March 1–2. The HTTP extraction exercise used supplied traffic from 2017. The results come from my screenshots and answers and have not been retested for this page.
+**Coursework, March 2026.** From my lab screenshots and answers dated March 1–2, 2026. The HTTP extraction exercise used supplied traffic from 2017.
 </div>
 
 ## The simulated traffic path

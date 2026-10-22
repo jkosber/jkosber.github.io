@@ -4,16 +4,28 @@ description: Deployed a course-provided PHP application and SQL Server database 
 kind: Completed coursework
 status: "Report: May 2026"
 visual: assets/project-aws.svg
+tools: [AWS EC2, Ubuntu, Apache, SQL Server]
 ---
 
 # AdventureWorks on AWS
 
 I deployed a course-provided product-review application on two Ubuntu servers in AWS: Apache and PHP served the website, while Microsoft SQL Server held the AdventureWorks catalog and reviews. The completed demonstration could search products, display a product page and accept a review.
 
-My contribution in **SVAD 111: Linux & Virtualization Technologies** was provisioning, installation, configuration, troubleshooting and testing. The course supplied the application, dataset, two-tier design and milestone instructions.
+<div class="glance" markdown>
+
+My role
+: Coursework for **SVAD 111: Linux & Virtualization Technologies**. I provisioned both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course supplied the application, data and two-tier design.
+
+Built with
+: AWS EC2, Ubuntu 22.04, Apache, PHP 8.1, Microsoft SQL Server and `sqlcmd`, with PuTTY and WinSCP for administration.
+
+Result
+: A working two-server deployment: a blank search returned all 504 products, a product page loaded and a submitted review appeared in the app.
+
+</div>
 
 <div class="evidence-note" markdown>
-**Historical result:** final report dated May 8, 2026, with milestone submissions and screenshots. These are the recorded coursework results; the deployment has not been retested for this page.
+**Coursework, May 2026.** Results come from my final report and milestone submissions.
 </div>
 
 ## Architecture and connection paths
@@ -74,25 +86,25 @@ The catalog and review pages then exercised more of the system than `test.php`: 
 
 ## Troubleshooting
 
-The final report records these problems and responses. Its successful end-state screenshots support overall recovery, but it does not include before-and-after captures or configuration diffs for each fix.
+These are the problems my final report records and how I worked through them.
 
 <div class="narrative-list" markdown>
 
 Web-to-database connection timed out
 : **Investigation and change.** The report attributes the failure to the EC2 security group and records adding access for SQL Server on TCP 1433.
-: **Verification.** Later catalog and review pages demonstrate application/database communication. The exact failing rule and a dedicated connection retest are not preserved.
+: **Verification.** Later catalog and review pages show the web server reaching the database.
 
 Microsoft packages could not be found
 : **Investigation and change.** Added the Microsoft signing key and repository source, then continued installation.
-: **Verification.** The submissions show SQL queries and PHP working later. No full failed package-manager log is preserved.
+: **Verification.** Later submissions show SQL queries and PHP working.
 
 Initial PuTTY connection could not reach EC2
 : **Investigation and change.** The report identifies blocked outbound SSH on the access network and records switching to a hotspot.
-: **Verification.** Subsequent shell screenshots show access. This documents the reported workaround, not a packet-level diagnosis of the original network.
+: **Verification.** Later shell screenshots show working access.
 
 </div>
 
-The report also records a SQL login failure and an authentication-setup change. The error code and exact change are missing, leaving the cause and fix unresolved in the record.
+The report also records a SQL login failure and an authentication change that followed it, without the error code or the exact setting.
 
 ## Testing the result
 
@@ -116,7 +128,7 @@ The catalog result below shows four Mountain-300 Black variants, including produ
   <figcaption>Application output preserved in the final report dated May 8, 2026. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
 </figure>
 
-## Scope and follow-up ideas
+## Limits and what I'd change {#scope-and-follow-up-ideas}
 
 The assignment reached a working demonstration. Validation covered the imported row counts and application actions above; database-wide integrity, review retention after restart, load, abuse resistance and recovery were not tested in the submitted records.
 

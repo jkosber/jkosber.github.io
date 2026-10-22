@@ -11,7 +11,7 @@
       </div>
       <div class="scene-detail" id="scene-compute"><p>Virtual machines. Linux guests. Container services.</p><a href="{{ 'technical-labs/proxmox-virtualization/' | url }}">Explore my homelab {{ icon('arrow') }}</a></div>
       <div class="scene-detail" id="scene-network" hidden><p>Network configuration and the traffic behind it.</p><a href="{{ 'technical-labs/cisco-networking-analysis/' | url }}">Explore networking coursework {{ icon('arrow') }}</a></div>
-      <div class="scene-detail" id="scene-software" hidden><p>Practical tools for repeatable tasks.</p><a href="{{ 'technical-labs/job-scan-tailor/' | url }}">Explore the resume tool {{ icon('arrow') }}</a></div>
+      <div class="scene-detail" id="scene-software" hidden><p>A terminal tool for the machines I work on.</p><a href="{{ 'technical-labs/ssh-workbench/' | url }}">Explore SSH Workbench {{ icon('arrow') }}</a></div>
     </div>
   </div>
   <div class="intro-background">
@@ -24,7 +24,7 @@
 </section>
 <section class="home-projects dark-section" aria-labelledby="projects">
   <div class="section-inner">
-    <div class="section-heading"><div><h2 id="projects">Selected projects</h2><p>Infrastructure builds and network investigations, with configuration details and recorded results.</p></div><a href="{{ 'technical-labs/' | url }}">View all projects {{ icon('arrow') }}</a></div>
+    <div class="section-heading"><div><h2 id="projects">Selected projects</h2><p>A homelab I run, a tool I created and cloud coursework, each with configuration details and results.</p></div><a href="{{ 'technical-labs/' | url }}">View all projects {{ icon('arrow') }}</a></div>
     <div class="featured-projects">
       {% for section in nav if section.title == 'Projects' %}
       {% for project in section.children[1:4] %}

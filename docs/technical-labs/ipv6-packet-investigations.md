@@ -13,7 +13,7 @@ A Windows host can have an IPv6 address and still fail to reach another network.
 The work connected fields inside DHCPv6 and ICMPv6 packets to the symptoms shown by the hosts. My contribution was filtering the traffic, identifying relevant frames, comparing them with host configuration and documenting the conclusions. I did not build or repair the supplied network during this analysis.
 
 <div class="evidence-note" markdown>
-**Historical evidence:** final-capstone submission with screenshots dated May 12, 2026. Packet numbers belong to the two course traces. The original capstone PCAPs are missing from the repository, so the account below relies on the preserved answers and screenshots; the traffic has not been replayed for this page.
+**Coursework, May 2026.** From my final-capstone submission and screenshots dated May 12, 2026. Packet numbers refer to the two course traces, which are not in the repository.
 </div>
 
 ## Environment and analysis method

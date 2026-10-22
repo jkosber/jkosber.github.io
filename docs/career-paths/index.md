@@ -20,11 +20,21 @@ Cybersecurity
 : CompTIA Security+ and a [CyberOps training investigation](../technical-labs/soc-threat-detection.md) using Security Onion alerts, packet captures and file-hash checks.
 
 Development & automation
-: Python programming coursework in [SDEV-120](https://github.com/jkosber/SDEV-120), Bash exercises in [Linux coursework](../technical-labs/aws-linux-infrastructure.md), and a personal [job-scan and resume-tailoring tool](../technical-labs/job-scan-tailor.md).
+: [SSH Workbench](../technical-labs/ssh-workbench.md), a Python terminal app with 1,046 automated tests running in CI on Windows and Linux; a personal [job-scan and resume-tailoring tool](../technical-labs/job-scan-tailor.md); Python programming coursework in [SDEV-120](https://github.com/jkosber/SDEV-120) and Bash exercises in [Linux coursework](../technical-labs/aws-linux-infrastructure.md).
 
 Systems & infrastructure
 : An ongoing [Proxmox homelab](../technical-labs/proxmox-virtualization.md) and [AWS coursework](../technical-labs/aws-linux-infrastructure.md) running Apache and PHP on one EC2 instance and SQL Server on another.
 
 </div>
+
+## Tools I've used
+
+| Area | Tools | Where |
+|---|---|---|
+| IT support | Level RMM, ClickUp, workstation deployment and domain join, cable toner and punchdown tool | [Healthcare IT support](../experience/ladd-dental.md) |
+| Networking | Cisco Meraki Dashboard, Cisco Packet Tracer, Wireshark | [Retail conversions](../experience/verizon-conversions.md), [networking coursework](../technical-labs/cisco-networking-analysis.md) |
+| Systems | Proxmox VE, Ubuntu Server, Debian, Docker, AWS EC2, Apache, SQL Server | [Homelab](../technical-labs/proxmox-virtualization.md), [AWS coursework](../technical-labs/aws-linux-infrastructure.md) |
+| Security | Security Onion, Sguil, NetworkMiner, Snort, `iptables` | [CyberOps coursework](../technical-labs/soc-threat-detection.md) |
+| Development | Python, Bash, Git, GitHub Actions | [SSH Workbench](../technical-labs/ssh-workbench.md), [SDEV-120 coursework](https://github.com/jkosber/SDEV-120), [Linux coursework](../technical-labs/aws-linux-infrastructure.md) |
 
 [Explore the projects](../technical-labs/index.md) · [Professional experience](../experience/index.md) · [Credentials and education](../credentials/index.md)

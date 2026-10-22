@@ -12,6 +12,7 @@
 {% elif name == 'cloud' %}<path d="M6 19a5 5 0 0 1-.7-9.95A7 7 0 0 1 19 8a5.5 5.5 0 0 1-1 11z"/>
 {% elif name == 'document' %}<path d="M14 2H5v20h14V7zM14 2v5h5M8 12h8M8 16h6"/>
 {% elif name == 'network' %}<rect x="8" y="2" width="8" height="6" rx="1"/><rect x="2" y="16" width="7" height="6" rx="1"/><rect x="15" y="16" width="7" height="6" rx="1"/><path d="M12 8v4M5.5 16v-4h13v4"/>
+{% elif name == 'terminal' %}<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/>
 {% elif name == 'security' %}<path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6zM8 12l3 3 5-6"/>
 {% elif name == 'pin' %}<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/>
 {% elif name == 'education' %}<path d="m2 9 10-6 10 6-10 6zM6 12v6c4 3 8 3 12 0v-6M22 9v8"/>
@@ -24,8 +25,8 @@
 {% macro project_card(project, featured=false, heading=2, presentation='default') -%}
 {% set academic = project.meta.kind == 'Completed coursework' %}
 {% set project_title = project.meta.title or project.title %}
-{% set symbol = 'server' if 'proxmox' in project.url else ('cloud' if 'aws-linux' in project.url else ('document' if 'job-scan' in project.url else ('network' if 'cisco' in project.url else 'security'))) %}
-{% set thumbnails = {'server': 'proxmox', 'cloud': 'aws', 'document': 'resume', 'network': 'network', 'security': 'security'} %}
+{% set symbol = 'server' if 'proxmox' in project.url else ('terminal' if 'ssh-workbench' in project.url else ('cloud' if 'aws-linux' in project.url else ('document' if 'job-scan' in project.url else ('network' if 'cisco' in project.url else 'security')))) %}
+{% set thumbnails = {'server': 'proxmox', 'terminal': 'terminal', 'cloud': 'aws', 'document': 'resume', 'network': 'network', 'security': 'security'} %}
 <article class="project-card{% if featured %} project-card--featured{% endif %}{% if presentation == 'summary' %} project-card--summary{% endif %}" data-category="{{ 'coursework' if academic else 'personal' }}" data-visual="{{ project.meta.visual }}">
   {% if project.meta.visual and presentation != 'summary' %}
   {% set artwork = 'assets/thumbnails/' ~ thumbnails[symbol] ~ '.svg' if presentation == 'thumbnail' else project.meta.visual %}
@@ -35,6 +36,7 @@
   <div class="card-meta"><span class="project-icon">{{ icon(symbol) }}</span><span>{{ project.meta.kind }}</span></div>
   <h{{ heading }} class="project-title"><a href="{{ project.url | url }}">{{ project_title }}</a></h{{ heading }}>
   <p>{{ project.meta.description }}</p>
+  {% if project.meta.tools %}<ul class="tool-tags" aria-label="Tools">{% for tool in project.meta.tools[:4] %}<li>{{ tool }}</li>{% endfor %}</ul>{% endif %}
   <div class="card-bottom"><span>{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span><a href="{{ project.url | url }}" aria-label="View project: {{ project_title }}">View project {{ icon('arrow') }}</a></div>
   </div>
 </article>

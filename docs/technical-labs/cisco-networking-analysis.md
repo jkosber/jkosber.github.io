@@ -4,16 +4,28 @@ description: Planned IPv4 subnets, diagnosed client, gateway and DNS faults in P
 kind: Completed coursework
 status: "Reports: 2025–2026"
 visual: assets/project-network.svg
+tools: [Packet Tracer, Wireshark, IPv4, IPv6]
 ---
 
 # Networking & packet analysis
 
 My networking coursework covered the configuration behind a working connection and the evidence needed when it fails. In **NETI 109**, I planned IPv4 subnets and diagnosed several different faults in a supplied Cisco Packet Tracer network. In **CSIA 210: Network Protocol Analysis**, I used Wireshark to connect host configuration with DHCPv6 and neighbor-discovery traffic.
 
-The selected work includes a VLSM address plan, client-by-client connectivity tests and [IPv6 packet investigations](ipv6-packet-investigations.md) connecting packet fields to host behavior.
+<div class="glance" markdown>
+
+My role
+: I planned the subnets, diagnosed the client and router faults, and analyzed the supplied traffic captures. The course supplied the scenarios and captures.
+
+Built with
+: Cisco Packet Tracer, Cisco IOS, Windows `ipconfig` and `ping`, and Wireshark display filters.
+
+Result
+: A VLSM plan for four LANs and a router link; four client faults traced to address, gateway, router-interface and DNS settings; and an IPv6 gateway loss traced to a Router Advertisement.
+
+</div>
 
 <div class="evidence-note" markdown>
-**Historical coursework:** addressing and connectivity submissions from November–December 2025; protocol-analysis screenshots from May 12, 2026. The course supplied the scenarios and traces. My work was completing the tables, configuration exercises, packet analysis and written findings. The results below have not been retested for this page.
+**Coursework, November 2025 to May 2026.** Addressing and troubleshooting submissions from NETI 109; packet analysis from CSIA 210. See also the [IPv6 packet investigations](ipv6-packet-investigations.md).
 </div>
 
 ## Addressing a small network
@@ -34,11 +46,9 @@ The following table rebases the submitted design onto the documentation-only ran
 
 The endpoint convention put the router at the first usable LAN address, the switch's VLAN 1 management interface at the second, and the client at the last usable address. For the router link, the two interfaces occupied its two usable addresses. This made the subnet plan directly usable as a device-addressing table.
 
-### Reviewing the plan against the device table
+### A mistake I'd fix {#reviewing-the-plan-against-the-device-table}
 
-The subnet boundaries in the submitted plan are consistent, but the largest-LAN client entry contains an error: it uses the address ending in `.63`, which the same submission correctly identifies as that /26's broadcast address. The last usable host address ends in `.62`.
-
-A Packet Tracer activity file is retained, but the document contains no final ping matrix or completion screenshot resolving that client-address error. The original coursework remains unchanged.
+The subnet boundaries are consistent, but looking back, my largest-LAN client entry uses the address ending in `.63`. That is the /26's broadcast address, which the same submission lists correctly. The last usable host address ends in `.62`. The original submission is unchanged.
 
 The [VLSM submission and device table](https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.docx) and [associated Packet Tracer activity](https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.pka) retain both parts of that record.
 
@@ -60,7 +70,7 @@ PC-02
 
 PC-A
 : **Recorded evidence.** Could ping local peer PC-B, but not its gateway, the web server or clients on the other LAN.
-: **Change and result.** Corrected R1's G0/1 address. The answer records the interface fault; the later PC-B tests show cross-network reachability. A separate complete PC-A retest is not preserved.
+: **Change and result.** Corrected R1's G0/1 address. Later PC-B tests showed traffic crossing between the two LANs.
 
 PC-B
 : **Recorded evidence.** Could ping every listed destination and browse to the server by IP, but browsing by name failed.
@@ -70,7 +80,7 @@ PC-B
 
 The PC-A tests narrowed the fault to the path out of its LAN: communicating with a local peer did not require the router interface that was misaddressed. PC-B's successful IP-based web access then separated the remaining DNS failure from a failure to reach the application server.
 
-The written tests record the client and router changes above. A final all-client retest and completion score are missing; the worksheet's 100% target was an instruction. The exact DNS2 fault and its server-side resolution remain unknown.
+The servers were outside the devices I was allowed to change, so my submission flags DNS2 for the server owner.
 
 [Connectivity troubleshooting submission](https://github.com/jkosber/Networking-109/blob/main/Module-17-BuildASmallNetwork/17.7.6%20Packet%20Tracer%20-%20Troubleshoot%20Connectivity%20Issues.Jadon.Kosberg.docx) contains the original per-client test sequence.
 
@@ -89,6 +99,12 @@ The final capstone followed three related problems: a duplicate address on two W
 The gateway case provides the clearest diagnostic sequence. My written packet references identify a Router Advertisement with a lifetime of zero, the disappearance of the IPv6 gateway, and a later advertisement restoring a 270-second lifetime. The supplied sequence then showed successful pings again. The address and the route needed separate checks.
 
 [Read the IPv6 packet investigations](ipv6-packet-investigations.md) for the filters, frame references, historical results and corrections to the original explanations of DHCPv6 and SLAAC behavior.
+
+## Limits
+
+- The record has no final retest of every client and no completion score.
+- The exact DNS2 fault and how it was fixed on the server are unknown.
+- The broadcast-address mistake in the VLSM device table was not corrected in the original submission.
 
 ## Related experience
 

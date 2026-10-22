@@ -42,6 +42,7 @@ nav:
   - Projects:
       - All projects: technical-labs/index.md
       - Proxmox homelab: technical-labs/proxmox-virtualization.md
+      - SSH Workbench: technical-labs/ssh-workbench.md
       - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
       - Networking and packet analysis: technical-labs/cisco-networking-analysis.md
       - Job scan and resume tailor: technical-labs/job-scan-tailor.md
