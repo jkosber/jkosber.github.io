@@ -1,5 +1,17 @@
 # Portfolio change record
 
+## October 22, 2026 — design review fixes
+
+- Homepage: a smaller name, a wider introduction and a capped illustration bring the credentials strip into the first screen at 1440×900. On phones the strip comes before the illustration.
+- Experience entries show the job title in the heading color, larger than the dates, and "/ Verizon" no longer starts a line.
+- Projects page: two projects per row from 1101px, with a smaller page heading, so two projects fit the first screen at 1440×900 instead of one. Index-page headings match the case-study size.
+- SSH Workbench: the screenshot follows the evidence note instead of sitting below the first section.
+- Phones: the floating back-to-top control no longer covers text (the footer copy remains); two-column tables fit without scrolling sideways; screenshots scale to the column, with the full-size link in each caption.
+- Narrative lists in columns show their labels (Decision, Why and the like) once, in the first row; later rows keep them for screen readers.
+- Coursework cards and chips show the date alone; personal projects keep their state.
+
+Validation: five hook tests and the strict build passed. Sixteen rendered assertions written for the ten findings failed before the changes and pass after. An independent review found that filenames in two-column tables broke mid-word on phones and that narrow print pages picked up the phone table rules; both are fixed, each with a check that failed first. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images or page errors, plus the mobile menu, filter counts (3/3/6), scene buttons, every page with JavaScript disabled and 14 print panels. Five pages at 390px with 200% text had no overflow. The private-term scan found no matches. Changed pages were reviewed at 390 and 1440px. Physical devices, screen readers and Safari were not assessed.
+
 ## October 22, 2026 — SSH Workbench 0.2.2
 
 - Updated the SSH Workbench case study to version 0.2.2: four tagged releases, the 1,046 tests that passed in its Windows and Ubuntu CI, and what 0.2.2 fixed.
