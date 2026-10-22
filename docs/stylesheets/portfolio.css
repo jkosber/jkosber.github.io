@@ -156,6 +156,11 @@ p { max-width: 66ch; }
 .collection .project-title { margin: .5rem 0 .8rem; font-size: clamp(1.5rem, 2.5vw, 2rem); }
 .collection .card-content > p { margin-bottom: .6rem; max-width: 68ch; }
 .collection .card-bottom { justify-content: flex-start; gap: .5rem 1.5rem; border: 0; padding: 0; }
+/* Wide screens list two projects per row, so the first screen shows more than one. */
+@media (min-width: 1101px) {
+  .collection .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  .collection .project-card { grid-template-columns: 130px minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+}
 /* Tool tags name the main technologies so a reader can scan a project's stack. */
 .tool-tags { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
 .tool-tags li { margin: 0; padding: .1rem .6rem; border: 1px solid #4d7192; border-radius: 4px; color: #c7d8e8; font-size: .76rem; line-height: 1.7; }
@@ -190,7 +195,7 @@ p { max-width: 66ch; }
 
 .page-heading { position: relative; padding: 1rem 0 2.75rem; margin: 0 0 2.5rem; border-bottom: 1px solid #ffffff20; }
 .page-emblem { display: none; }
-.page-heading.prose h1 { font-size: clamp(2rem, 7vw, 6rem); margin-bottom: 1.3rem; }
+.page-heading.prose h1 { font-size: clamp(2rem, 4.4vw, 3.75rem); margin-bottom: 1.3rem; }
 .page-heading.prose > p { max-width: 52ch; margin: 0; }
 .project-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2.25rem; }
 .js .project-toolbar[hidden] { display: flex !important; visibility: hidden; } /* anti-slop-allow: reserves filter space before the script runs to avoid layout shift */
