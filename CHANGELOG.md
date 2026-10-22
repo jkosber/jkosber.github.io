@@ -1,5 +1,16 @@
 # Portfolio change record
 
+## October 21, 2026 — recruiter readiness and Claude Code workflow
+
+- Added SSH Workbench as a personal software project: a case study, isometric card art and thumbnail, and a screenshot of the real app captured with fictional machines and simulated status results. It is the second project, so it joins Proxmox and AWS on the homepage; Networking stays on the Projects page.
+- Added a summary block (My role, Built with, Result) to the five other primary case studies and shortened their opening evidence notes. Renamed five defensive headings, keeping their anchors, and cut repeated commentary about the historical record while keeping real limits.
+- Added tool tags to project cards from a new `tools` frontmatter field.
+- Homepage: the introduction names the role and SSH Workbench, the Software scene links to SSH Workbench, and the page carries Person structured data (JSON-LD).
+- Skills & focus: added SSH Workbench and a table of tools, each row linked to its evidence.
+- Added maintainer documentation in `CLAUDE.md`, project settings and a verification skill with a reusable browser check. The README is now a short overview. Deliberate `!important` rules carry a stated reason.
+
+Validation: five hook tests and the strict build passed. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images or page errors, plus the mobile menu, filter counts (six projects: three personal, three coursework), scene buttons, every page with JavaScript disabled, and print colors. Local Lighthouse runs on the homepage and the SSH Workbench page scored 99 for performance and 100 for accessibility, best practices and SEO. Physical devices, screen readers and Safari were not assessed.
+
 ## October 9, 2026 — header initials
 
 - Reused the favicon SVG for the shared header so its initials match the browser-tab icon.
