@@ -100,7 +100,7 @@ I used **File → Export Objects → HTTP** to save the reconstructed object. Be
 |---|---|
 | HTTP response in the followed stream | `200 OK` |
 | Response `Content-Length` | 345,088 bytes |
-| Saved `Wireshark.W32.Nimda.Amm.exe` | 345,088 bytes |
+| Saved <code>Wireshark.<wbr>W32.Nimda.Amm.exe</code> | 345,088 bytes |
 | Pre-existing `W32.Nimda.Amm.exe` | 475,448 bytes |
 
 The recovered file's **345,088-byte** size matches the HTTP response length. No hash comparison was recorded, leaving byte-for-byte integrity unverified.

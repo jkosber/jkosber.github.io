@@ -264,8 +264,10 @@ p { max-width: 66ch; }
   .evidence-hint { display: inline; }
 }
 @media (max-width: 650px) {
-  .table-scroll table { min-width: 38rem; }
-  .prose .table-hint { display: block; margin: -1rem 0 1.75rem; color: var(--muted); font-size: .8rem; }
+  /* Only tables with three or more columns need a minimum width and the scroll hint. */
+  .table-scroll table:has(tr > :nth-child(3)) { min-width: 38rem; }
+  .prose .table-scroll:has(tr > :nth-child(3)) + .table-hint { display: block; margin: -1rem 0 1.75rem; color: var(--muted); font-size: .8rem; }
+  .prose .table-scroll table:not(:has(tr > :nth-child(3))) code { overflow-wrap: anywhere; }
   .architecture-flow { grid-template-columns: 1fr; gap: 1.5rem; }
   .architecture-flow li + li::before { content: '↓'; left: 1rem; top: -1.65rem; }
 }
@@ -427,6 +429,8 @@ p { max-width: 66ch; }
   .home-projects > .section-inner, .home-experience { padding-top: 2.5rem; padding-bottom: 3rem; }
   .footer-inner { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .contact-email { justify-self: start; }
+  /* A floating control would cover text on a phone; the footer copy remains. */
+  .back-to-top:not(.back-to-top--in-footer):not(:focus) { display: none; }
 }
 @media (max-width: 480px) {
   .brand { font-size: .84rem; gap: .6rem; }
