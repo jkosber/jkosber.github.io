@@ -78,10 +78,11 @@ Key setup never sees a secret
 
 ## How I worked
 
-I planned SSH Workbench as a series of small tasks, each with written acceptance criteria in the project's roadmap, and shipped each one as a pull request:
+I developed SSH Workbench with AI coding agents in a test-first workflow. I set each task's goal and acceptance criteria, approved every pull request and release, and tested it on my own machines:
 
+- One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
-- Every push runs Ruff, the full test suite, a package build and a check of the installed package, on Windows and Ubuntu.
+- Every push runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.
 - Real-machine checks use my own machines, and test keys are removed afterwards.
 
 I tested the terminal handoff in Windows Terminal, and the released version is installed as my own tool.
