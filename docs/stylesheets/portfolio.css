@@ -262,11 +262,16 @@ p { max-width: 66ch; }
 @media (min-width: 761px) {
   .evidence-scroll img { max-width: none; }
 }
-@media (max-width: 650px) {
+@media screen and (max-width: 650px) {
   /* Only tables with three or more columns need a minimum width and the scroll hint. */
   .table-scroll table:has(tr > :nth-child(3)) { min-width: 38rem; }
   .prose .table-scroll:has(tr > :nth-child(3)) + .table-hint { display: block; margin: -1rem 0 1.75rem; color: var(--muted); font-size: .8rem; }
+}
+@media screen and (max-width: 359px) {
+  /* On the narrowest phones code may wrap so two-column tables still fit. */
   .prose .table-scroll table:not(:has(tr > :nth-child(3))) code { overflow-wrap: anywhere; }
+}
+@media (max-width: 650px) {
   .architecture-flow { grid-template-columns: 1fr; gap: 1.5rem; }
   .architecture-flow li + li::before { content: '↓'; left: 1rem; top: -1.65rem; }
 }
