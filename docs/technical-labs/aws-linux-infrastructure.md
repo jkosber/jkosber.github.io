@@ -125,7 +125,7 @@ The catalog result below shows four Mountain-300 Black variants, including produ
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical AdventureWorks search results; scroll horizontally if needed">
     <img src="../../assets/evidence/aws/mountain-300-results-2026-05-08.png" width="670" height="390" alt="AdventureWorks application displaying 4 Results: Mountain-300 Black products 785, 786, 787 and 788 in sizes 38, 40, 44 and 48." loading="lazy">
   </div>
-  <figcaption>Application output preserved in the final report dated May 8, 2026. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+  <figcaption>Application output preserved in the final report dated May 8, 2026. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.</figcaption>
 </figure>
 
 ## Limits and what I'd change {#scope-and-follow-up-ideas}

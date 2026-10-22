@@ -258,10 +258,9 @@ p { max-width: 66ch; }
 .evidence-figure { margin: 2rem 0; }
 .evidence-figure img { display: block; height: auto; border: 1px solid var(--line); border-radius: 5px; }
 .evidence-scroll { max-width: 100%; overflow-x: auto; scrollbar-color: var(--accent) var(--surface); }
-.evidence-scroll img { max-width: none; }
-.evidence-hint { display: none; }
-@media screen and (max-width: 760px) {
-  .evidence-hint { display: inline; }
+/* Phones show the whole screenshot at column width; the caption links the full-size file. */
+@media (min-width: 761px) {
+  .evidence-scroll img { max-width: none; }
 }
 @media (max-width: 650px) {
   /* Only tables with three or more columns need a minimum width and the scroll hint. */
@@ -505,7 +504,6 @@ p { max-width: 66ch; }
   .evidence-figure, .architecture { break-inside: avoid; }
   .evidence-scroll { overflow: visible; }
   .evidence-scroll img { max-width: 100%; }
-  .evidence-hint { display: none; }
   .table-scroll { overflow: visible; margin: 1rem 0; }
   .table-scroll table { min-width: 0; }
   .prose .table-hint { display: none; }

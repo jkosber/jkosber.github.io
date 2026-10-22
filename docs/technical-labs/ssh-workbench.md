@@ -34,7 +34,7 @@ Result
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="SSH Workbench machine list and details; scroll horizontally if needed">
     <img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp" width="800" height="449" alt="SSH Workbench in a terminal. A Machines list shows Garden demo and Studio box online, Print server offline and Jump demo as can't check. The details pane for Studio box shows its ID, name, status Online at 192.0.2.40, a direct connection and two addresses. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="lazy">
   </div>
-  <figcaption>The machine list and details pane, captured October 21, 2026 from the current code. The machines and addresses are fictional and the status results are simulated. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp">Open the full-size screenshot</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+  <figcaption>The machine list and details pane, captured October 21, 2026 from the current code. The machines and addresses are fictional and the status results are simulated. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp">Open the full-size screenshot</a>.</figcaption>
 </figure>
 
 ## Why I wanted it

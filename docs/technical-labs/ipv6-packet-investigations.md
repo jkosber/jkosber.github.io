@@ -39,7 +39,7 @@ The original Wireshark screenshot records the fields below. The crop shows the e
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical DHCPv6 address fields; scroll horizontally if needed">
     <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="465" height="140" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
   </div>
-  <figcaption>Historical capture from the May 12, 2026 submission, cropped to the IA Address fields of selected frame 9306. The frame number, Reply type and UDP ports are visible in the original screenshot, outside this crop. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open the full-size crop</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
+  <figcaption>Historical capture from the May 12, 2026 submission, cropped to the IA Address fields of selected frame 9306. The frame number, Reply type and UDP ports are visible in the original screenshot, outside this crop. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open the full-size crop</a>.</figcaption>
 </figure>
 
 | Frame 9306 field | Recorded value | Interpretation |
