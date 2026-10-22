@@ -2,7 +2,7 @@
 title: Snort, firewall rules & HTTP recovery
 description: Following a simulated HTTP download through Snort alerts, correcting a filename failure, applying a routed firewall rule and recovering an object from a separate supplied capture.
 kind: Completed coursework
-status: "Reports: March 2026"
+status: "March 2026"
 detail: true
 ---
 

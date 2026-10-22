@@ -2,7 +2,7 @@
 title: IPv6 packet investigations
 description: Correlating DHCPv6 replies, duplicate-address evidence and Router Advertisements with Windows host behavior in a supplied protocol-analysis capstone.
 kind: Completed coursework
-status: "Report: May 2026"
+status: "May 2026"
 detail: true
 ---
 

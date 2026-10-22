@@ -2,7 +2,7 @@
 title: CyberOps & traffic investigation
 description: Connected a supplied Pushdo alert timeline to a Windows host, three downloaded objects and historical malware reports; a separate lab recorded Snort alerts and a firewall retest.
 kind: Completed coursework
-status: "Reports: March 2026"
+status: "March 2026"
 visual: assets/project-security.svg
 tools: [Security Onion, Wireshark, NetworkMiner, Snort]
 ---

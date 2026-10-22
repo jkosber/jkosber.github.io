@@ -2,7 +2,7 @@
 title: Networking & packet analysis
 description: Planned IPv4 subnets, diagnosed client, gateway and DNS faults in Packet Tracer, and traced an IPv6 gateway loss to Router Advertisements in supplied traffic.
 kind: Completed coursework
-status: "Reports: 2025–2026"
+status: "2025–2026"
 visual: assets/project-network.svg
 tools: [Packet Tracer, Wireshark, IPv4, IPv6]
 ---
