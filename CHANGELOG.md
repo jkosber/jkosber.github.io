@@ -1,5 +1,11 @@
 # Portfolio change record
 
+## October 22, 2026 — SSH Workbench 0.2.2
+
+- Updated the SSH Workbench case study to version 0.2.2: four tagged releases, the 1,046 tests that passed in its Windows and Ubuntu CI, and what 0.2.2 fixed.
+
+Validation: five hook tests and the strict build passed. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images or page errors, plus the mobile menu, filter counts, scene buttons, every page with JavaScript disabled and 14 print panels. The changed page was reviewed at 390 and 1440px. Physical devices, screen readers and Safari were not assessed.
+
 ## October 21, 2026 — recruiter readiness and Claude Code workflow
 
 - Added SSH Workbench as a personal software project: a case study, isometric card art and thumbnail, and a screenshot of the real app captured with fictional machines and simulated status results. It is the second project, so it joins Proxmox and AWS on the homepage; Networking stays on the Projects page.

@@ -2,7 +2,7 @@
 title: SSH Workbench
 description: A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
-status: Version 0.2.1
+status: Version 0.2.2
 visual: assets/project-terminal.svg
 tools: [Python, Textual, OpenSSH, GitHub Actions]
 ---
@@ -11,7 +11,7 @@ tools: [Python, Textual, OpenSSH, GitHub Actions]
 
 SSH Workbench is a terminal app that keeps the machines I work on in one list, each with its way to connect and its web dashboards. I pick a machine and press C, and my own OpenSSH client takes over the terminal. When the session ends, I'm back in the list with the same machine selected.
 
-It also shows whether each machine's SSH port is answering and walks through setting up key-based login. Version 0.2.1 runs on Windows 11 and Linux, and I've tested it against my Proxmox host, a Linux Mint laptop and two Windows PCs.
+It also shows whether each machine's SSH port is answering and walks through setting up key-based login. It runs on Windows 11 and Linux, and I've tested it against my Proxmox host, a Linux Mint laptop and two Windows PCs.
 
 <div class="glance" markdown>
 
@@ -22,12 +22,12 @@ Built with
 : Python 3.14, Textual, OpenSSH, uv, pytest, Ruff and GitHub Actions.
 
 Result
-: Three tagged releases on October 20 and 21, 2026, after work began October 9. The current code passes 1,046 automated tests on Windows and Ubuntu.
+: Four tagged releases on October 20 and 21, 2026, after work began October 9. Version 0.2.2 passes 1,046 automated tests on Windows and Ubuntu.
 
 </div>
 
 <div class="evidence-note" markdown>
-**Version 0.2.1, October 2026.** From the project's README, changelog and CI results. The repository is private.
+**Version 0.2.2, October 2026.** From the project's README, changelog and CI results. The repository is private.
 </div>
 
 ## Why I wanted it
@@ -98,6 +98,14 @@ Around the 0.2.0 release, checks on my own machines covered the parts tests can'
 - A first connection that asked to trust a new host key. The fingerprint was compared before accepting.
 
 Real use then turned up five key-setup problems, fixed in 0.2.1. For example, a commented-out copy of a key counted as installed, and PowerShell progress output leaked into the result on Windows.
+
+Version 0.2.2 fixed three problems that reviews of earlier versions had set aside:
+
+- Pressing Ctrl+C during key setup could still report "Key login works." and save the key. Now no later step runs after Ctrl+C.
+- An RSA key too large for the Windows install command failed only after the password prompt. It is now refused before Workbench connects.
+- A machine whose status check took over 30 seconds never left Checking, because each timer round replaced the check still running.
+
+Each fix started as a failing test, and the Ctrl+C handling was also checked in Windows Terminal. The same release moved development and CI to Python 3.14.8 and uv 0.13.4 for their security fixes.
 
 ## Limits
 
