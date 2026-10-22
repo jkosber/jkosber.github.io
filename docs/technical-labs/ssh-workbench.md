@@ -30,18 +30,18 @@ Result
 **Version 0.2.2, October 2026.** From the project's README, changelog and CI results. The repository is private.
 </div>
 
-## Why I wanted it
-
-I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. I did not want a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client I already use.
-
-## What it does
-
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="SSH Workbench machine list and details; scroll horizontally if needed">
     <img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp" width="800" height="449" alt="SSH Workbench in a terminal. A Machines list shows Garden demo and Studio box online, Print server offline and Jump demo as can't check. The details pane for Studio box shows its ID, name, status Online at 192.0.2.40, a direct connection and two addresses. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="lazy">
   </div>
   <figcaption>The machine list and details pane, captured October 21, 2026 from the current code. The machines and addresses are fictional and the status results are simulated. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp">Open the full-size screenshot</a>.<span class="evidence-hint"> Scroll horizontally to inspect the image.</span></figcaption>
 </figure>
+
+## Why I wanted it
+
+I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. I did not want a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client I already use.
+
+## What it does
 
 | Key | What happens |
 |---|---|
@@ -63,8 +63,8 @@ OpenSSH does the connecting
 : **Why.** No value from the machine file can turn into an SSH option or a shell command. Passwords, keys, the SSH agent and host-key prompts stay with OpenSSH.
 
 Status checks never log in
-: **Decision.** A check opens a TCP connection to the SSH port and closes it without sending anything. For status, aliases are resolved with `ssh -G` only at startup and on R.
-: **Why.** A check every 30 seconds should not add login attempts to a server's auth log. `ssh -G` can run commands from the SSH config, so it never runs on a timer.
+: **Decision.** A check opens a TCP connection to the SSH port and closes it without sending anything. For status, aliases are resolved with <code>ssh&nbsp;-G</code> only at startup and on R.
+: **Why.** A check every 30 seconds should not add login attempts to a server's auth log. <code>ssh&nbsp;-G</code> can run commands from the SSH config, so it never runs on a timer.
 
 Saves never leave a half-written file
 : **Decision.** Each save keeps a `.bak` copy and replaces the file in one step. If another program changed the file since it was loaded, Workbench reloads instead of overwriting.
