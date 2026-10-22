@@ -179,7 +179,7 @@ p { max-width: 66ch; }
 .experience-entry { position: relative; display: grid; grid-template-columns: minmax(160px, .45fr) 1fr; gap: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--line); }
 .page-heading + .experience-list > .experience-entry:first-child { padding-top: 0; border-top: 0; }
 .experience-date p { color: var(--warm); font-weight: 700; font-size: .85rem; margin: .2rem 0 .75rem; }
-.experience-date span { display: block; max-width: 23ch; color: var(--muted); font-size: .92rem; }
+.experience-date span { display: block; max-width: 23ch; color: var(--heading); font-size: 1.05rem; font-weight: 650; line-height: 1.5; }
 .experience-copy { position: relative; padding-left: 4rem; }
 .role-symbol { display: grid; place-items: center; position: absolute; left: 0; top: .2rem; width: 44px; height: 44px; border-radius: 12px; color: var(--accent); background: var(--active); border: 1px solid #4c84b0; }
 .experience-title { margin: 0 0 1rem; font-size: 1.65rem; }

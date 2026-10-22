@@ -49,7 +49,7 @@
 {% for role in section.children if role.meta.organization %}
   <article class="experience-entry">
     <div class="experience-date"><p>{{ role.meta.dates }}</p><span>{{ role.meta.role }}</span></div>
-    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon('network' if 'verizon' in role.url else 'support') }}</div><h{{ heading }} class="experience-title"><a href="{{ role.url | url }}">{{ role.meta.organization }}</a></h{{ heading }}><p>{{ role.meta.description }}</p><a class="detail-link" href="{{ role.url | url }}">{{ role.title }}</a></div>
+    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon('network' if 'verizon' in role.url else 'support') }}</div><h{{ heading }} class="experience-title"><a href="{{ role.url | url }}">{{ role.meta.organization | replace(' / ', ' / ') }}</a></h{{ heading }}><p>{{ role.meta.description }}</p><a class="detail-link" href="{{ role.url | url }}">{{ role.title }}</a></div>
   </article>
 {% endfor %}
 {% endfor %}
