@@ -22,7 +22,7 @@ Built with
 : Proxmox VE 9, Ubuntu Server, Debian LXC containers, Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server), Proxmox SDN with dnsmasq, a Caddy reverse-proxy pilot, and OPNsense in progress.
 
 Result
-: Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord. Scheduled backups and the boot SSD's warning are next.
+: Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord. Next is moving the guest disks to the unused NVMe and starting scheduled backups.
 
 </div>
 
@@ -186,28 +186,6 @@ Each panel uses its own credential instead of my admin logins. The Proxmox panel
 </figure>
 
 I didn't test Portainer actions or the Uptime Kuma interface beyond the monitors themselves.
-
-## Open issues {#unresolved-operational-findings}
-
-### A passing SMART summary with persistent errors
-
-The boot SSD's overall SMART result was `PASSED`, but the detailed counters recorded **24 offline-uncorrectable sectors, 3 reported-uncorrectable errors and 3 end-to-end errors**. The September 22 values matched September 10, and the counters still hadn't moved by October 23. Reading the aggregate result alone would have missed the warning. Beszel now alerts me if any drive's SMART state gets worse.
-
-The same SSD is still the boot drive, and the evidence does not establish a specific hardware root cause.
-
-### No scheduled backups yet
-
-There are still no scheduled Proxmox backup jobs. The September check also found no local backup files and recorded `backup=0` on VM 106's primary disk, a disk-level backup exclusion. Manual and off-host copies were not checked, and no restore test has been run.
-
-While working out where backups should go, I found a third drive: an NVMe SSD left over from when the laptop ran Windows. Proxmox had never seen it because the SATA controller is in Intel RST RAID mode. The plan is to switch the BIOS to AHCI, move the guest disks onto the NVMe and make the 1 TB hard drive the target for scheduled backups.
-
-### Monitoring that runs on the host it watches
-
-Beszel and Uptime Kuma both run on VM 109, on the same Proxmox host they monitor. If the whole host goes down, nothing is left to send the alert. Something off the host that alerts me in that case is on the roadmap.
-
-### A vendor fix still pending
-
-GoodMem's image still trusts the compromised emSign root inside its own Java trust store. That fix has to come from the vendor.
 
 ## GPU passthrough preparation
 

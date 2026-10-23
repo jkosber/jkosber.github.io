@@ -4,7 +4,8 @@
 
 - Updated the Proxmox homelab page from its September 22 snapshot to October 23: Proxmox VE 9.2.21, ten VMs and two containers (the new CT 111 Caddy pilot), the hidden NVMe drive and storage plan, and current service versions on VM 109 and CT 110.
 - Added an October maintenance section: the certificate authority compromise response, updates on every host, the Watchtower replacement, Beszel and Uptime Kuma alerting, and the Homepage dashboard with per-panel credentials. Added the October 23 dashboard capture.
-- Open issues now cover the SSD warning, missing scheduled backups, monitoring that runs on the host it watches, and a pending vendor fix. The September guest-access gap moved to the health-check section as fixed.
+- Removed the Open issues section; the storage move, scheduled backups and an off-host alert stay under Next changes. The September guest-access gap moved to the health-check section as fixed.
+- Skills & focus: the homelab line mentions patching and monitoring, and the tools table adds Portainer and a Monitoring row (Beszel, Uptime Kuma, Homepage).
 - Re-pinned every JHomelab source link from `3dfd2fe` to `b5a5608` and added the October maintenance notes.
 - Content rule: anything the public JHomelab repository publishes may appear on the site as published there (`CLAUDE.md`, verification skill).
 
