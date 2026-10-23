@@ -1,5 +1,15 @@
 # Portfolio change record
 
+## October 23, 2026 — Proxmox homelab October update
+
+- Updated the Proxmox homelab page from its September 22 snapshot to October 23: Proxmox VE 9.2.21, ten VMs and two containers (the new CT 111 Caddy pilot), the hidden NVMe drive and storage plan, and current service versions on VM 109 and CT 110.
+- Added an October maintenance section: the certificate authority compromise response, updates on every host, the Watchtower replacement, Beszel and Uptime Kuma alerting, and the Homepage dashboard with per-panel credentials. Added the October 23 dashboard capture.
+- Open issues now cover the SSD warning, missing scheduled backups, monitoring that runs on the host it watches, and a pending vendor fix. The September guest-access gap moved to the health-check section as fixed.
+- Re-pinned every JHomelab source link from `3dfd2fe` to `b5a5608` and added the October maintenance notes.
+- Content rule: anything the public JHomelab repository publishes may appear on the site as published there (`CLAUDE.md`, verification skill).
+
+Validation: five hook tests and the strict build passed. All five JHomelab source links returned HTTP 200. The anti-slop scanner found nothing on the page, and the private-term scan found no matches beyond the known `{#sources-and-artifacts}` anchor. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images or page errors, plus the mobile menu, filter counts (3/3/6), scene buttons, every page with JavaScript disabled and 14 print panels. The changed page was reviewed at 390 and 1440px. Physical devices, screen readers and Safari were not assessed.
+
 ## October 22, 2026 — design review fixes
 
 - Homepage: a smaller name, a wider introduction and a capped illustration bring the credentials strip into the first screen at 1440×900. On phones the strip comes before the illustration.
