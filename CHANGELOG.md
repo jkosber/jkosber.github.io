@@ -1,5 +1,12 @@
 # Portfolio change record
 
+## October 23, 2026 — table word breaks
+
+- Table cells now wrap only between words. They had inherited `overflow-wrap: anywhere` from the page, which let the browser shrink a column below its longest word: "Networking", "Monitoring" and "Development" broke mid-word in the Skills & focus tools table, as did "PostgreSQL" and "pgvector" on the Proxmox page and alert timestamps on the CyberOps page.
+- `check-site.js` now fails on a table word broken mid-word, outside code, and on a two-column table that scrolls sideways.
+
+Validation: the new check found six failures across three pages before the fix and none after. Five hook tests and the strict build passed. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images or page errors, plus the mobile menu, filter counts (3/3/6), scene buttons, every page with JavaScript disabled and 14 print panels. At 390px with 200% text no page overflows, but more two-column tables scroll sideways inside their regions instead of breaking words (four on the Proxmox page). Physical devices, screen readers and Safari were not assessed.
+
 ## October 23, 2026 — Proxmox homelab October update
 
 - Updated the Proxmox homelab page from its September 22 snapshot to October 23: Proxmox VE 9.2.21, ten VMs and two containers (the new CT 111 Caddy pilot), the hidden NVMe drive and storage plan, and current service versions on VM 109 and CT 110.

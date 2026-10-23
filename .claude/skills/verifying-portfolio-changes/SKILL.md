@@ -22,7 +22,7 @@ A strict build proves links and anchors resolve. It does not prove a page render
 
 1. Check port 8765 is free, then start the preview in the background: `python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict`.
 2. Run `check-site.js` (next to this file) with the Playwright MCP tool `browser_run_code_unsafe`, passing its absolute path as `filename`. It reads the routes from `/sitemap.xml` and returns JSON covering:
-   - every route plus a missing page at 320, 390, 768 and 1440 px: HTTP status, horizontal overflow, broken images, page errors;
+   - every route plus a missing page at 320, 390, 768 and 1440 px: HTTP status, horizontal overflow, broken images, page errors, table words broken mid-word (outside code) and two-column tables that scroll sideways;
    - mobile menu open and Escape;
    - project filter counts against visible cards;
    - the three hero scene buttons;
