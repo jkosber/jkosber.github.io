@@ -20,7 +20,7 @@ Cybersecurity
 : CompTIA Security+ and a [CyberOps training investigation](../technical-labs/soc-threat-detection.md) using Security Onion alerts, packet captures and file-hash checks.
 
 Development & automation
-: [SSH Workbench](../technical-labs/ssh-workbench.md), a Python terminal app with 1,046 automated tests running in CI on Windows and Linux; a personal [job-scan and resume-tailoring tool](../technical-labs/job-scan-tailor.md); Python programming coursework in [SDEV-120](https://github.com/jkosber/SDEV-120) and Bash exercises in [Linux coursework](../technical-labs/aws-linux-infrastructure.md).
+: [SSH Workbench](../technical-labs/ssh-workbench.md), a Python terminal app with 1,077 automated tests running in CI on Windows and Linux; a personal [job-scan and resume-tailoring tool](../technical-labs/job-scan-tailor.md); Python programming coursework in [SDEV-120](https://github.com/jkosber/SDEV-120) and Bash exercises in [Linux coursework](../technical-labs/aws-linux-infrastructure.md).
 
 Systems & infrastructure
 : An ongoing [Proxmox homelab](../technical-labs/proxmox-virtualization.md) where I keep Linux services patched and monitored, and [AWS coursework](../technical-labs/aws-linux-infrastructure.md) running Apache and PHP on one EC2 instance and SQL Server on another.

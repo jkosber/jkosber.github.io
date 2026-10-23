@@ -2,7 +2,7 @@
 title: SSH Workbench
 description: A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
-status: Version 0.2.2
+status: Version 0.3.0
 visual: assets/project-terminal.svg
 tools: [Python, Textual, OpenSSH, GitHub Actions]
 ---
@@ -22,19 +22,19 @@ Built with
 : Python 3.14, Textual, OpenSSH, uv, pytest, Ruff and GitHub Actions.
 
 Result
-: Four tagged releases on October 20 and 21, 2026, after work began October 9. Version 0.2.2 passes 1,046 automated tests on Windows and Ubuntu.
+: Five tagged releases from October 20 to 23, 2026, after work began October 9. Version 0.3.0 passes 1,077 automated tests on Windows and Ubuntu.
 
 </div>
 
 <div class="evidence-note" markdown>
-**Version 0.2.2, October 2026.** From the project's README, changelog and CI results. The repository is private.
+**Version 0.3.0, October 23, 2026.** From the project's README, changelog, validation log and CI results. The repository is private.
 </div>
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="SSH Workbench machine list and details; scroll horizontally if needed">
-    <img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp" width="800" height="449" alt="SSH Workbench in a terminal. A Machines list shows Garden demo and Studio box online, Print server offline and Jump demo as can't check. The details pane for Studio box shows its ID, name, status Online at 192.0.2.40, a direct connection and two addresses. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="lazy">
+    <img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp" width="900" height="413" alt="SSH Workbench in Windows Terminal. The header counts 5 machines: 3 online, 1 offline and 1 can't check. The Machines list shows Web server, Lab box, Storage NAS, Build runner and Garage Pi, each with its alias or address on the right. The details pane for Lab box shows one row per field: ID, name, status Online at 192.0.2.20, a direct connection, two addresses, user, port 2222, key file and two links. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="lazy">
   </div>
-  <figcaption>The machine list and details pane, captured October 21, 2026 from the current code. The machines and addresses are fictional and the status results are simulated. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-21.webp">Open the full-size screenshot</a>.</figcaption>
+  <figcaption>The look that shipped in 0.3.0, in Windows Terminal at 110×22, captured October 22, 2026. The machines and addresses are fictional and the statuses come from a stand-in checker. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp">Open the full-size screenshot</a>.</figcaption>
 </figure>
 
 ## Why I wanted it
@@ -51,6 +51,8 @@ I wanted one place to see each machine, how to reach it and its web dashboards, 
 | A, E | Adds or edits a machine in a form that checks each field before saving. |
 | X | Deletes the selected machine after asking. |
 | K | Sets up key login: pick or create a key, install it on the machine, then test a key-only login. |
+
+Since 0.3.0 the header counts machines by status, and every status keeps its symbol and word, so nothing depends on color. The layout follows the terminal's size: under 60 columns the list sits above the details and the footer wraps onto two rows, and from 110 columns each row shows where the machine connects.
 
 A machine is either an alias from my SSH config or a direct entry with addresses, user, port and key. A direct machine can also be exported as an SSH alias, so `ssh <id>` works in any terminal and in scripts.
 
@@ -89,7 +91,7 @@ I tested the terminal handoff in Windows Terminal, and the released version is i
 
 ## Testing
 
-The 1,046 tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
+The 1,077 tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
 
 Around the 0.2.0 release, checks on my own machines covered the parts tests can't:
 
@@ -107,14 +109,17 @@ Version 0.2.2 fixed three problems that reviews of earlier versions had set asid
 
 Each fix started as a failing test, and the Ctrl+C handling was also checked in Windows Terminal. The same release moved development and CI to Python 3.14.8 and uv 0.13.4 for their security fixes.
 
+The 0.3.0 layout was checked in Windows Terminal at sizes from 47×16, the narrowest it allows, up to 199×46, including a resize with the edit form open. Before it replaced my installed copy, the release build was installed separately and checked at 80×24, 50×24, 120×30 and 80×18, and it quit cleanly.
+
 ## Limits
 
 - macOS is untested, and so is opening links from a Linux desktop session.
+- The 0.3.0 layout has been checked in Windows Terminal only, not in Linux or macOS terminals.
 - Saving rewrites the machine file in Workbench's own format, so comments and hand formatting are dropped. It asks before the first such save.
 - The repository is private, so the source is not linked here.
 
 ## Sources
 
-This page draws on the private repository's README, architecture notes, changelog and CI results as of October 21, 2026, and on my project notes.
+This page draws on the private repository's README, user guide, architecture notes, changelog, validation log and CI results as of October 23, 2026, and on my project notes.
 
 [All projects](index.md) · [Proxmox homelab](proxmox-virtualization.md)
