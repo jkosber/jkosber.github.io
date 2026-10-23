@@ -21,9 +21,27 @@ async (page) => {
       img.loading = 'eager';
       if (!img.complete) await new Promise((done) => { img.onload = img.onerror = done; });
     }
+    // A table word split across lines, outside code (code wrapping has its own rules).
+    const splitWords = [];
+    for (const cell of document.querySelectorAll('.prose th, .prose td')) {
+      const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (node.parentElement.closest('code')) continue;
+        for (const match of node.data.matchAll(/[^\s/\-–—]+/g)) {
+          const range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          if (new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size > 1) splitWords.push(match[0]);
+        }
+      }
+    }
     return {
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       broken: [...document.images].filter((img) => !img.naturalWidth).map((img) => img.getAttribute('src')),
+      splitWords,
+      // Two-column tables fit the column; wider tables may scroll.
+      scrollingPairs: [...document.querySelectorAll('.table-scroll')]
+        .filter((region) => !region.querySelector('tr > :nth-child(3)') && region.scrollWidth > region.clientWidth).length,
     };
   });
 
@@ -36,6 +54,8 @@ async (page) => {
       const state = await settle();
       if (state.overflow > 0) result.problems.push(`${route} @${width}: ${state.overflow}px horizontal overflow`);
       if (state.broken.length) result.problems.push(`${route} @${width}: broken images ${state.broken.join(', ')}`);
+      if (state.splitWords.length) result.problems.push(`${route} @${width}: table words broken mid-word: ${state.splitWords.join(', ')}`);
+      if (state.scrollingPairs) result.problems.push(`${route} @${width}: ${state.scrollingPairs} two-column table(s) scroll sideways`);
     }
   }
 
