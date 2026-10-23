@@ -16,7 +16,7 @@ A strict build proves links and anchors resolve. It does not prove a page render
 | Hook tests | `python -m unittest discover -s tests` | `OK` |
 | Strict build | `python -m mkdocs build --strict` (add `-d <temp folder>` when the check must not touch `site/`) | No `WARNING` or `ERROR` lines |
 | Diff review | `git status --short` and `git diff` | Only intended files; no debug leftovers, no `.env`, nothing from the parent workspace |
-| Private data | Grep `docs/` and `overrides/` for `artifact`, `192\.168\.`, `\b10\.\d+\.\d+\.\d+`, and for the private terms listed in the workspace `CLAUDE.md` (search without printing them) | No hits in visible copy. `192.0.2.x` and `example.com` are allowed |
+| Private data | Grep `docs/` and `overrides/` for `artifact`, `192\.168\.\d+\.\d+`, `\b10\.\d+\.\d+\.\d+`, and for the private terms listed in the workspace `CLAUDE.md` (search without printing them) | No hits in visible copy. `192.0.2.x`, `example.com` and what the public JHomelab repo publishes (its host name, addresses ending in `.X`) are allowed |
 
 ## Rendered checks
 

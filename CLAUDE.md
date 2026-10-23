@@ -54,6 +54,7 @@ The site is public and recruiters read it. These hold for every edit:
 - Dates are local time, not UTC, in copy, filenames and the changelog.
 - Describe Jadon's role with verbs that are true for the work: defined, planned, configured, tested, shipped.
 - Never publish personal location, phone numbers, private host names, IP addresses, paths, credentials or resumes. Use documentation ranges (`192.0.2.0/24`) and `example.com` in examples. `mkdocs.yml` excludes five raw assets as a guard; keep them out.
+- Exception: anything the public [JHomelab](https://github.com/jkosber/JHomelab) repository publishes may appear as it appears there, including its host name, local addresses with the last octet shown as `X` and its screenshots. Full addresses stay out.
 - Don't use the word "artifacts" in visible copy.
 - Renaming a heading keeps its anchor: `## New heading {#old-id}`.
 
