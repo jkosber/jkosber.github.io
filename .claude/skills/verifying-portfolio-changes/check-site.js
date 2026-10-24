@@ -97,9 +97,7 @@ async (page) => {
 
   // Main nav: no Home item (the name links home); sections keep their order.
   result.checks.nav = navTexts;
-  if (navTexts.includes('Home')) fail(`nav: still lists Home (${navTexts.join(', ')})`);
-  const order = ['Projects', 'Experience', 'About'].map((title) => navTexts.indexOf(title));
-  if (order.includes(-1) || order.some((position, index) => index && position < order[index - 1])) fail(`nav: expected Projects, Experience, About in order, got ${navTexts.join(', ')}`);
+  if (navTexts.join('|') !== 'Projects|Coursework|Experience|About') fail(`nav: expected Projects, Coursework, Experience, About, got ${navTexts.join(', ')}`);
 
   // Footer: email, both profiles, the site's source; no duplicate About link.
   const footer = await page.$$eval('.site-footer a', (links) => links.map((link) => ({ text: link.textContent.trim(), href: link.getAttribute('href') })));
@@ -118,9 +116,13 @@ async (page) => {
     const index = await page.evaluate(() => ({
       rows: [...document.querySelectorAll('main .project-row-title')].map((title) => title.textContent.trim()),
       leftovers: document.querySelectorAll('main .project-toolbar, main [data-filter], main .card-art, main .project-card').length,
+      courseworkLink: [...document.querySelectorAll('main .page-heading a')].some((link) => new URL(link.href).pathname === '/coursework/'),
+      height: document.documentElement.scrollHeight,
     }));
     result.checks.projectsIndex[width] = index.rows;
-    if (index.rows[0] !== 'Proxmox homelab' || index.rows[1] !== 'SSH Workbench' || !index.rows.includes('Job scan and resume tailor')) fail(`projectsIndex @${width}: rows ${index.rows.join(', ')}`);
+    if (index.rows.join('|') !== 'Proxmox homelab|SSH Workbench|Job scan and resume tailor') fail(`projectsIndex @${width}: rows ${index.rows.join(', ')}`);
+    if (!index.courseworkLink) fail(`projectsIndex @${width}: the intro does not link to /coursework/`);
+    if (width === 1440 && index.height > 1400) fail(`projectsIndex @1440: page is ${index.height}px tall`);
     if (index.leftovers) fail(`projectsIndex @${width}: ${index.leftovers} filter, toolbar or card element(s) remain`);
   }
 
@@ -159,6 +161,47 @@ async (page) => {
     if (home.roles !== 2) fail(`${where}: ${home.roles} roles, expected 2`);
     if (home.scene) fail(`${where}: the hero scene is still on the page`);
     if (home.reveals < 2) fail(`${where}: ${home.reveals} .reveal targets, expected at least 2`);
+  }
+
+  // Coursework index: one table row per class in nav order, each linking to a live class page,
+  // with the in-depth case studies listed beside their class.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/coursework/');
+  const classes = await page.evaluate(() => [...document.querySelectorAll('main table tbody tr')].map((row) => ({
+    name: row.cells[0].textContent.replace(/\s+/g, ' ').trim(),
+    href: row.cells[0].querySelector('a') ? new URL(row.cells[0].querySelector('a').href).pathname : null,
+    depth: [...row.cells[row.cells.length - 1].querySelectorAll('a')].map((link) => link.textContent.trim()),
+  })));
+  result.checks.courseworkIndex = classes.map((row) => row.name);
+  const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
+  if (classes.map((row) => row.name.slice(0, 8)).join('|') !== expectedClasses.join('|')) fail(`courseworkIndex: rows ${classes.map((row) => row.name).join(', ')}`);
+  const expectedDepth = { 'SVAD 111': ['AdventureWorks on AWS'], 'CSIA 115': ['CyberOps & traffic investigation', 'Snort and firewall lab'], 'CSIA 210': ['IPv6 packet investigations'] };
+  for (const row of classes) {
+    if (!row.href) { fail(`courseworkIndex: ${row.name} has no link`); continue; }
+    const status = (await page.request.get(BASE + row.href)).status();
+    if (status !== 200) fail(`courseworkIndex: ${row.href} returns ${status}`);
+    const want = expectedDepth[row.name.slice(0, 8)];
+    if (want && want.some((title) => !row.depth.includes(title))) fail(`courseworkIndex: ${row.name} in depth ${row.depth.join(', ')}`);
+  }
+
+  // Class pages: the same sections everywhere, a link to the course repo; case studies link back to their class.
+  result.checks.classPages = 0;
+  for (const row of classes.filter((item) => item.href)) {
+    await page.goto(BASE + row.href);
+    const shape = await page.evaluate(() => ({
+      anchors: [...document.querySelectorAll('main h2[id]')].map((heading) => heading.id),
+      repo: [...document.querySelectorAll('main a')].some((link) => /^https:\/\/github\.com\/jkosber\/[^/]+\/?$/.test(link.href)),
+    }));
+    result.checks.classPages += 1;
+    for (const id of ['what-the-course-provided', 'labs', 'strongest-work', 'skills', 'limits', 'sources']) {
+      if (!shape.anchors.includes(id)) fail(`classPages ${row.href}: missing #${id}`);
+    }
+    if (!shape.repo) fail(`classPages ${row.href}: no link to the course repository`);
+  }
+  for (const [study, classHref] of [['/technical-labs/aws-linux-infrastructure/', '/coursework/svad-111/'], ['/technical-labs/soc-threat-detection/', '/coursework/csia-115/'], ['/technical-labs/snort-firewall-lab/', '/coursework/csia-115/'], ['/technical-labs/ipv6-packet-investigations/', '/coursework/csia-210/']]) {
+    await page.goto(BASE + study);
+    const back = await page.evaluate((target) => [...document.querySelectorAll('.breadcrumbs a')].some((link) => new URL(link.href).pathname === target), classHref);
+    if (!back) fail(`classPages ${study}: no breadcrumb link back to ${classHref}`);
   }
 
   // Keyboard order on a phone follows what you see, top to bottom (deferred minor a).
