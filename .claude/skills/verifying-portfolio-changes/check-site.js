@@ -5,12 +5,15 @@ async (page) => {
   const BASE = 'http://127.0.0.1:8765';
   const WIDTHS = [320, 390, 768, 1440];
   const MISSING = '/a-missing-page/';
-  const result = { routes: [], problems: [], filters: {}, menu: {}, scene: {}, print: null };
+  const result = { routes: [], problems: [], checks: {}, filters: {}, menu: {}, scene: {}, print: null };
+  // Each named check block below records how much it covered in result.checks.
+  const fail = (message) => result.problems.push(message);
 
   const sitemap = await (await page.request.get(BASE + '/sitemap.xml')).text();
   const routes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
   routes.push(MISSING);
   result.routes = routes;
+  result.checks.routes = routes.length;
 
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(`${page.url()}: ${error.message}`));

@@ -28,7 +28,7 @@ A strict build proves links and anchors resolve. It does not prove a page render
    - the three hero scene buttons;
    - every route with JavaScript disabled at 320 px;
    - print colors of every summary and evidence panel on the case studies.
-3. `problems: []` is a pass. Treat anything else as a defect.
+3. `problems: []` is a pass. Treat anything else as a defect. Run the same checks in WebKit with `node .claude/skills/verifying-portfolio-changes/run-check.js webkit` (`chromium` also works); it exits 1 when `problems` is not empty. WebKit on Windows only approximates Safari on iOS, so a pass here does not replace a check on an iPhone.
 4. Look at the pages you changed. A file `docs/<path>.md` is served at `/<path>/`, and `index.md` at its folder. Take screenshots at 390 and 1440 px and read them: hierarchy, spacing, wrapping, image crops. Automated checks miss visual regressions.
 5. New or changed images: open each one and confirm it shows no real host names, addresses, usernames or paths. The `width`/`height` attributes must match the intended display size.
 6. Close the browser with `browser_close` and stop the preview server you started.
