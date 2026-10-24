@@ -44,6 +44,30 @@
 </article>
 {%- endmacro %}
 
+{% macro project_showcase(project) -%}
+{% set shot = project.meta.screenshot %}
+{% set tools = (project.meta.summary.built_with if project.meta.summary else project.meta.tools or [])[:3] %}
+<article class="showcase">
+  <div class="showcase-copy">
+    <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
+    <p>{{ project.meta.description }}</p>
+    <p class="showcase-meta">{{ project.meta.status }}. {{ tools | join(', ') }}.</p>
+  </div>
+  <figure class="shot reveal">
+    <img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy">
+    <figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption>
+  </figure>
+</article>
+{%- endmacro %}
+
+{% macro project_row(project) -%}
+<li class="project-row lift reveal">
+  <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
+  <p>{{ project.meta.description }}</p>
+  <span class="project-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span>
+</li>
+{%- endmacro %}
+
 {% macro experience_entries(compact=false) -%}
 {% set heading = 3 if compact else 2 %}
 <div class="experience-list{% if compact %} experience-list--compact{% endif %}">

@@ -120,69 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateReadingPosition();
 
-  // A visitor can explore the illustration without a timer or automatic cycling.
-  const scene = document.querySelector('.hero-visual');
-  if (scene) {
-    const controls = scene.querySelector('.scene-controls');
-    const choices = [...controls.querySelectorAll('[data-scene-select]')];
-    const details = [...scene.querySelectorAll('.scene-detail')];
-    const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const stage = scene.querySelector('.scene-stage');
-    const art = scene.querySelector('.scene-art');
-    let pointerFrame = 0;
-    let pointerPosition = null;
-    let traceAnimations = [];
-    const resetDepth = () => {
-      cancelAnimationFrame(pointerFrame);
-      pointerFrame = 0;
-      pointerPosition = null;
-      art.style.removeProperty('--scene-x');
-      art.style.removeProperty('--scene-y');
-    };
-    const syncMotion = () => {
-      resetDepth();
-      traceAnimations.forEach((animation) => animation.cancel());
-      traceAnimations = [];
-    };
-    // One frame per pointer update; nothing runs continuously or on touch screens.
-    stage.addEventListener('pointermove', (event) => {
-      if (!motion.matches || !finePointer.matches || event.pointerType === 'touch') return;
-      pointerPosition = { x: event.clientX, y: event.clientY };
-      if (pointerFrame) return;
-      pointerFrame = requestAnimationFrame(() => {
-        pointerFrame = 0;
-        const bounds = stage.getBoundingClientRect();
-        const x = Math.max(0, Math.min(1, (pointerPosition.x - bounds.left) / bounds.width));
-        const y = Math.max(0, Math.min(1, (pointerPosition.y - bounds.top) / bounds.height));
-        art.style.setProperty('--scene-x', `${(0.5 - y) * 7}deg`);
-        art.style.setProperty('--scene-y', `${(x - 0.5) * 10}deg`);
-      });
-    });
-    stage.addEventListener('pointerleave', resetDepth);
-    window.addEventListener('blur', resetDepth);
-    motion.addEventListener('change', syncMotion);
-    finePointer.addEventListener('change', syncMotion);
-    choices.forEach((choice) => choice.addEventListener('click', () => {
-      const selected = choice.dataset.sceneSelect;
-      scene.dataset.scene = selected;
-      choices.forEach((button) => button.setAttribute('aria-pressed', String(button === choice)));
-      details.forEach((detail) => { detail.hidden = detail.id !== `scene-${selected}`; });
-      traceAnimations.forEach((animation) => animation.cancel());
-      traceAnimations = [];
-      if (motion.matches) {
-        const layer = scene.querySelector(`.scene-layer--${selected}`);
-        traceAnimations = [...layer.querySelectorAll('.scene-trace')].map((trace, index) =>
-          trace.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], {
-            duration: 950, delay: index * 35, easing: 'ease-out', fill: 'backwards'
-          })
-        );
-      }
-    }));
-    scene.querySelector('.scene-overview').hidden = true;
-    controls.hidden = false;
-  }
-
   const browser = document.querySelector('.project-browser');
   if (browser) {
     const toolbar = browser.querySelector('.project-toolbar');
