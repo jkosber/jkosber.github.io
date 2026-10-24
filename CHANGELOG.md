@@ -1,5 +1,19 @@
 # Portfolio change record
 
+## October 23, 2026 — site redesign
+
+- Homepage: the name, today's intro and a facts column (latest role, certifications, education); Proxmox and SSH Workbench lead with real screenshots, the job-scan tool follows as a row, then a list of the six classes and both roles. The hero scene, project cards and filters are gone.
+- Coursework section: an index table and six class pages (NETI 109, SVAD 111, CSIA 115, CSIA 210, CSIA 105, SDEV 120), written from the course repositories. Each says what the course provided and what Jadon did, lists every lab with work of his, and covers the strongest work, skills, limits and sources. Three new screenshots: the SDEV 120 quiz flowchart, the CSIA 210 Packet Too Big details and the CSIA 105 OpenPuff result. The four coursework case studies moved from Projects to Coursework.
+- Case studies and class pages show a summary column (role, built with, result or term, source, contents) and a Result panel, from `summary` frontmatter.
+- Experience is one page with both roles; the Vaco by Highspring contract at Verizon ran July to October 2026. About replaces About Jadon and Skills & focus, with one skills table and Credly links for Security+, A+ and Networking Basics.
+- Retired addresses forward to their new pages: `/experience/ladd-dental/`, `/experience/verizon-conversions/`, `/career-paths/` and `/technical-labs/cisco-networking-analysis/`.
+- Rewrote the Proxmox, job-scan and four coursework case studies in first person, each with one Limits section.
+- Two-column tables stack into label and value on phones and keep their table roles. Motion: an entrance on the homepage intro, a fade-up tied to scroll on screenshots and rows, a 2px hover lift on rows; nothing over 0.5s, all of it off with reduced motion.
+- A new link-preview card for jnkos.com replaces the one that still showed jkosber.github.io.
+- Checks: `run-check.js` runs `check-site.js` in WebKit as well as Chromium. New checks cover the header, nav and footer, the homepage, both indexes, the class pages, the summary column, Experience, About and its Credly links, the forwarding addresses, motion limits, the type scale, words broken mid-word at 200% text, scroll fade-ups and the hover lift. The three scene-button and three filter-count checks were removed with those features. `tests/test_copy_voice.py` caps report vocabulary per page.
+
+Validation: 10 tests and the strict build passed. Rendered checks in Chromium and WebKit covered all 19 pages and the 404 page at 320, 390, 768 and 1440px with no overflow, broken images, page errors or mid-word breaks, plus 200% text at 390px, every page with JavaScript disabled, reduced motion, print and the four forwarding addresses. Lighthouse scored 100 for performance, accessibility, best practices and SEO on the homepage, the Proxmox page and the Coursework index (local results). The anti-slop scanner and the private-term scan found nothing beyond the known Proxmox anchor. A fresh review of the whole branch found no critical issues; its important findings were fixed. Screen readers, physical devices and Safari on iOS were not assessed.
+
 ## October 23, 2026 — AdventureWorks search count
 
 - AdventureWorks on AWS: a blank catalog search returned 304 products, not 504. Milestone 3C's blank-search screenshot and the final report both show "304 Results"; 504 is the `Production.Product` row count from Milestone 2B, which the page keeps.
