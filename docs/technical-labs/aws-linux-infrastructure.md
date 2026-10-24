@@ -20,7 +20,7 @@ Built with
 : AWS EC2, Ubuntu 22.04, Apache, PHP 8.1, Microsoft SQL Server and `sqlcmd`, with PuTTY and WinSCP for administration.
 
 Result
-: A working two-server deployment: a blank search returned all 504 products, a product page loaded and a submitted review appeared in the app.
+: A working two-server deployment: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app.
 
 </div>
 
@@ -114,7 +114,7 @@ The final report's screenshots show the following results, from data import thro
 |---|---|---|
 | Count database rows | `Production.Product`: 504; `Person.Person`: 19,972 | The import populated two expected tables. |
 | Open `test.php` | PHP version and Apache handler information appeared | PHP executed on the web server. |
-| Search with no term | 504 catalog results | The application retrieved the catalog. |
+| Search with no term | 304 catalog results | The application retrieved the catalog. |
 | Search for `Mountain-300` | Four matching products | A named search returned the expected product family. |
 | Open product 787 | Mountain-300 Black, 44 with a bicycle image | The product-detail route retrieved that product. |
 | Submit a review | A review row with my name, rating and comment appeared | The submitted review was displayed in the application. |

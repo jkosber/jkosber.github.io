@@ -1,5 +1,11 @@
 # Portfolio change record
 
+## October 23, 2026 — AdventureWorks search count
+
+- AdventureWorks on AWS: a blank catalog search returned 304 products, not 504. Milestone 3C's blank-search screenshot and the final report both show "304 Results"; 504 is the `Production.Product` row count from Milestone 2B, which the page keeps.
+
+Validation: five hook tests and the strict build passed; the private-term scan found no matches beyond the known Proxmox anchor. Rendered checks covered all 15 pages and the 404 page at 320, 390, 768 and 1440px with no problems, plus the mobile menu, filter counts (3/3/6), scene buttons, every page with JavaScript disabled and 14 print panels. The changed summary and table were reviewed at 390 and 1440px. Physical devices, screen readers and Safari were not assessed.
+
 ## October 23, 2026 — SSH Workbench 0.3.0
 
 - Updated the SSH Workbench case study to version 0.3.0: five tagged releases, the 1,077 tests that passed in its Windows and Ubuntu CI, the status header and the layout that follows the terminal's size, and the 0.3.0 checks in Windows Terminal. A new limit notes that the layout was not checked in Linux or macOS terminals.
