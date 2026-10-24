@@ -116,7 +116,7 @@ async (page) => {
     await page.setViewportSize({ width, height });
     await page.goto(BASE + '/technical-labs/');
     const index = await page.evaluate(() => ({
-      rows: [...document.querySelectorAll('main .project-row h3')].map((title) => title.textContent.trim()),
+      rows: [...document.querySelectorAll('main .project-row-title')].map((title) => title.textContent.trim()),
       leftovers: document.querySelectorAll('main .project-toolbar, main [data-filter], main .card-art, main .project-card').length,
     }));
     result.checks.projectsIndex[width] = index.rows;
