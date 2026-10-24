@@ -25,6 +25,7 @@ async (page) => {
       if (!img.complete) await new Promise((done) => { img.onload = img.onerror = done; });
     }
     // A table word split across lines, outside code (code wrapping has its own rules).
+    // WebKit adds a zero-width box at the end of the previous line before a wrapped word; ignore it.
     const splitWords = [];
     for (const cell of document.querySelectorAll('.prose th, .prose td')) {
       const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT);
@@ -34,7 +35,7 @@ async (page) => {
           const range = document.createRange();
           range.setStart(node, match.index);
           range.setEnd(node, match.index + match[0].length);
-          if (new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size > 1) splitWords.push(match[0]);
+          if (new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top))).size > 1) splitWords.push(match[0]);
         }
       }
     }
@@ -202,7 +203,7 @@ async (page) => {
             const range = document.createRange();
             range.setStart(node, match.index);
             range.setEnd(node, match.index + match[0].length);
-            if (new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size > 1) split.push(match[0]);
+            if (new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top))).size > 1) split.push(match[0]);
           }
         }
       }
