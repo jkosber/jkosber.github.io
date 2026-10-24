@@ -207,9 +207,20 @@ async (page) => {
           }
         }
       }
-      return { overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, split };
+      // Two-column tables stack instead of scrolling, and the hook marks them for that.
+      const pairs = [...document.querySelectorAll('.table-scroll')].filter((region) => !region.querySelector('tr > :nth-child(3)'));
+      return {
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        split,
+        pairs: pairs.length,
+        scrollingPairs: pairs.filter((region) => region.scrollWidth > region.clientWidth).length,
+        unmarkedPairs: pairs.filter((region) => region.dataset.columns !== '2').length,
+      };
     });
     result.checks.text200 += 1;
+    result.checks.stackedPairs = (result.checks.stackedPairs || 0) + state.pairs;
+    if (state.scrollingPairs) fail(`stackedPairs ${route}: ${state.scrollingPairs} two-column table(s) scroll sideways at 200% text`);
+    if (state.unmarkedPairs) fail(`stackedPairs ${route}: ${state.unmarkedPairs} two-column table(s) lack data-columns="2"`);
     if (state.overflow > 0) fail(`text200 ${route}: ${state.overflow}px horizontal overflow`);
     if (state.split.length) fail(`text200 ${route}: name broken mid-word: ${state.split.join(', ')}`);
   }

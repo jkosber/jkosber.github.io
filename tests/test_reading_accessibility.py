@@ -59,5 +59,37 @@ class ReadingAccessibilityTests(unittest.TestCase):
         self.assertIn('<pre role="group" tabindex="0" aria-label="Code example 1: Example"><code>ok</code></pre>', result)
 
 
+    def test_two_column_tables_get_explicit_roles_and_no_hint(self):
+        # Narrow screens show two-column tables as stacked blocks, which drops native table
+        # semantics in some browsers; explicit roles keep them for screen readers.
+        source = ('<h2>Host</h2><table><thead><tr><th>A</th><th>B</th></tr></thead>'
+                  '<tbody><tr><td>1</td><td>2</td></tr></tbody></table>')
+        result = ReadingRegions(source, "Project").render()
+        elements = Elements(result).elements
+        wrapper = next(attrs for tag, attrs in elements if attrs.get("class") == "table-scroll")
+        self.assertEqual(wrapper["data-columns"], "2")
+        self.assertEqual([attrs.get("role") for tag, attrs in elements if tag == "table"], ["table"])
+        self.assertEqual([attrs.get("role") for tag, attrs in elements if tag in {"thead", "tbody"}], ["rowgroup", "rowgroup"])
+        self.assertEqual([attrs.get("role") for tag, attrs in elements if tag == "tr"], ["row", "row"])
+        self.assertEqual([attrs.get("role") for tag, attrs in elements if tag == "th"], ["columnheader", "columnheader"])
+        self.assertEqual([attrs.get("role") for tag, attrs in elements if tag == "td"], ["cell", "cell"])
+        self.assertNotIn("table-hint", result)
+
+    def test_row_header_cells_in_the_body_become_rowheaders(self):
+        source = '<table><tbody><tr><th>CPU</th><td>i7</td></tr><tr><th>RAM</th><td>16 GB</td></tr></tbody></table>'
+        result = ReadingRegions(source, "Project").render()
+        roles = [attrs.get("role") for tag, attrs in Elements(result).elements if tag in {"th", "td"}]
+        self.assertEqual(roles, ["rowheader", "cell", "rowheader", "cell"])
+
+    def test_three_column_tables_keep_hint_and_no_roles(self):
+        source = '<h2>Checks</h2><table><tr><th>A</th><th>B</th><th>C</th></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>'
+        result = ReadingRegions(source, "Project").render()
+        elements = Elements(result).elements
+        wrapper = next(attrs for tag, attrs in elements if attrs.get("class") == "table-scroll")
+        self.assertNotIn("data-columns", wrapper)
+        self.assertFalse(any("role" in attrs for tag, attrs in elements if tag in {"table", "tr", "th", "td"}))
+        self.assertIn('class="table-hint"', result)
+
+
 if __name__ == "__main__":
     unittest.main()
