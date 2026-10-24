@@ -27,7 +27,7 @@ Python 3.14. MkDocs 1.6.1 and Material 9.7.7 are pinned in `requirements.txt`; r
 | `docs/<old path>/index.html` | Redirect files for retired addresses: a meta refresh to the new page and section |
 | `overrides/main.html` | Shared shell: head metadata, JSON-LD, header, layouts (projects, coursework, experience, and the reading layout with the summary column), footer |
 | `overrides/partials/components.html` | `icon`, `project_showcase`, `project_row` and `experience_entries` macros |
-| `overrides/partials/home.html` | Homepage: intro and facts, projects with a `screenshot` as showcases and the rest as rows, the class list, experience |
+| `overrides/partials/home.html` | Homepage: intro and facts, projects with a `screenshot` shown large beside it and the rest as rows, the class list, experience |
 | `docs/stylesheets/portfolio.css` | All styles: tokens, components, breakpoints, motion, reduced motion, print |
 | `docs/javascripts/portfolio.js` | Mobile menu, the "On this page" contents and section tracking, back-to-top |
 | `hooks/asset_versions.py` | Content-hash query strings on the CSS/JS URLs, so returning browsers never mix old CSS with new HTML |
@@ -41,7 +41,7 @@ Python 3.14. MkDocs 1.6.1 and Material 9.7.7 are pinned in `requirements.txt`; r
 |---|---|
 | `title`, `description` | Page title, meta description, the line under a case study's title, row text |
 | `summary` | `role`, `built_with`, `result`, optional `source: {label, url}`. Renders the summary column and the Result panel |
-| `screenshot` | `src`, `width`, `height`, `alt`, `caption` (with its date). The lead capture on a case study and its homepage showcase |
+| `screenshot` | `src`, `width`, `height`, `alt`, `caption` (with its date). The lead capture on a case study and beside the project on the homepage |
 | `status`, `updated` | Status and Updated rows in the summary column; status also shows on project rows |
 | `detail: true` | Coursework case study: listed under its class on the Coursework index, not on Projects |
 | `class_page`, `class_name` | A case study's class, for the breadcrumb and the index |
@@ -85,7 +85,7 @@ The site is public and recruiters read it. These hold for every edit:
 |---|---|
 | Sources | Read the project's repo (README, changelog, CI results) and Jadon's project note. For coursework, separate what Jadon did from what the course provided |
 | Page | `docs/technical-labs/<slug>.md`, modeled on `ssh-workbench.md`: `summary` frontmatter, intro, sections, `## Limits`, `## Sources`, footer links. A coursework case study also sets `detail: true`, `class_page` and `class_name`, and its class page links to it |
-| Nav | Personal projects go in the `mkdocs.yml` Projects list, in display order. A project with a `screenshot` becomes a homepage showcase; the rest are rows. Coursework case studies go under Coursework after the class pages |
+| Nav | Personal projects go in the `mkdocs.yml` Projects list, in display order. A project with a `screenshot` appears large on the homepage with it; the rest are rows. Coursework case studies go under Coursework after the class pages |
 | Screenshots | Real captures with fictional or cropped data, WebP, no metadata. Set `width`/`height` to the display size (half the pixels for a 2x capture), or it overflows the column on desktop |
 | Links | The About skills table, related case-study footers, and the class page for coursework |
 | Check | `verifying-portfolio-changes` skill, then a CHANGELOG entry |
