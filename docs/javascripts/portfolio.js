@@ -56,14 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateHeaderOffset);
   updateHeaderOffset();
 
-  const contents = document.querySelector('.contents details');
+  const contents = document.querySelector('details.toc, .contents details');
   if (contents) {
-    if (window.matchMedia('(max-width: 1200px)').matches) contents.open = false;
+    // The contents list starts closed where it sits above the article instead of beside it.
+    const stacked = contents.classList.contains('toc') ? '(max-width: 960px)' : '(max-width: 1200px)';
+    if (window.matchMedia(stacked).matches) contents.open = false;
     contents.dataset.ready = 'true';
   }
 
   // Follow the reading position without moving focus or changing the URL.
-  const sectionLinks = [...document.querySelectorAll('.contents nav a')];
+  const sectionLinks = [...document.querySelectorAll('.toc nav a, .contents nav a')];
   const sections = sectionLinks.map((link) => ({
     link,
     heading: document.getElementById(decodeURIComponent(link.hash.slice(1)))

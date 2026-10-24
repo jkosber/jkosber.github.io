@@ -90,7 +90,7 @@
                 <tr role="row">
                   <td role="cell"><a href="{{ class.url | url }}"><span class="class-code">{{ class.meta.code }}</span> {{ class.meta.course }}</a></td>
                   <td role="cell">{{ class.meta.term }}</td>
-                  <td role="cell">{{ class.meta['items'] }}</td>
+                  <td role="cell">{{ class.meta.get('items') }}</td>
                   <td role="cell">{% for study in section.children if study.meta.class_page == class.url %}<a href="{{ study.url | url }}">{{ study.title }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
                 </tr>
                 {% endfor %}
@@ -115,6 +115,42 @@
         </nav>
         {% set sections = namespace(items=[]) %}
         {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
+        {% set summary = page.meta.summary or {} %}
+        {% set parts = page.content.split('</h1>', 1) %}
+        {% if (summary or page.meta.code) and parts | length == 2 %}
+        {# Case studies and class pages: title and description, then a summary column beside the text. #}
+        {% set body = parts[1].split('<h2', 1) %}
+        <header class="article-head prose">{{ parts[0] }}</h1>{% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}</header>
+        <div class="article-grid">
+          <aside class="spec" aria-label="Summary">
+            <dl>
+              {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
+              {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
+              {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
+              {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
+              {% if summary.role %}<div class="wide"><dt>My role</dt><dd>{{ summary.role }}</dd></div>{% endif %}
+              {% if summary.built_with %}<div class="wide"><dt>Built with</dt><dd>{{ summary.built_with | join(', ') }}</dd></div>{% endif %}
+              {% if page.meta.class_page %}<div class="wide"><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
+              {% if summary.source %}<div class="wide"><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
+              {% elif page.meta.repo %}<div class="wide"><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
+            </dl>
+            {% if sections.items %}
+            <details class="toc" open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
+            </details>
+            {% endif %}
+          </aside>
+          <article class="prose">
+            {{ body[0] }}
+            {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+            {% if page.meta.screenshot %}{% set shot = page.meta.screenshot %}
+            <figure class="shot reveal"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy"><figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption></figure>
+            {% endif %}
+            {% if body | length == 2 %}<h2{{ body[1] }}{% endif %}
+          </article>
+        </div>
+        {% else %}
         <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
           {% if sections.items and page.meta.layout != 'wide' %}
           <aside class="contents">
@@ -133,6 +169,7 @@
             {{ page.content }}
           </article>
         </div>
+        {% endif %}
       {% endif %}
       {% endblock %}
     </main>

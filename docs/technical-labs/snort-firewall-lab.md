@@ -6,6 +6,11 @@ status: "March 2026"
 detail: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops
+summary:
+  role: "I ran the supplied Mininet environment, monitored Snort on its router, corrected request errors, applied the prescribed firewall rule and documented the results. The lab provided the topology, scripts and Snort signatures."
+  built_with: ["Mininet", "Snort", "iptables", "Wireshark"]
+  result: "An existing Snort signature fired on the download, a corrected filename returned HTTP 200, and after the DROP rule my retest recorded the download as blocked."
+  source: {label: "CSIA 115 repository", url: "https://github.com/jkosber/CyberOps-115"}
 ---
 
 # Snort, firewall rules & HTTP recovery
@@ -13,10 +18,6 @@ class_name: CSIA 115 Cyber Ops
 This CyberOps lab connected a network alert to a specific control: block a simulated server after observing its traffic. I ran the supplied Mininet environment, monitored Snort on its router, downloaded a lab file, captured traffic and added an `iptables` rule. A later exercise used a separate supplied capture to reconstruct an HTTP object.
 
 The lab provided the topology, scripts and Snort signatures. My work was running and checking the environment, interpreting the alert, correcting request errors, applying the prescribed firewall rule and documenting results.
-
-<div class="evidence-note" markdown>
-**Coursework, March 2026.** From my lab screenshots and answers dated March 1–2, 2026. The HTTP extraction exercise used supplied traffic from 2017.
-</div>
 
 ## The simulated traffic path
 

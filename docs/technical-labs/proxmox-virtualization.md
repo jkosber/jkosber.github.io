@@ -6,7 +6,7 @@ status: Ongoing
 tools: [Proxmox VE, Linux, Docker, SDN]
 summary:
   role: "I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
-  built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "A Caddy reverse-proxy pilot", "OPNsense in progress"]
+  built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
   result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
@@ -23,23 +23,6 @@ screenshot:
 I built JHomelab on an old Alienware laptop so I could work with a real hypervisor, run Linux services and experiment with networking outside my everyday computer. The project brought together the Linux, virtualization and networking work I had been doing in class.
 
 Desktop and security-lab guests run only for individual sessions. The applications on the service host are existing software projects; my work is the infrastructure underneath them.
-
-<div class="glance" markdown>
-
-My role
-: I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current.
-
-Built with
-: Proxmox VE 9, Ubuntu Server, Debian LXC containers, Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server), Proxmox SDN with dnsmasq, a Caddy reverse-proxy pilot, and OPNsense in progress.
-
-Result
-: Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord. Next is moving the guest disks to the unused NVMe and starting scheduled backups.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Updated October 23, 2026.** Versions, services and monitoring come from my October maintenance notes. Guest states, service checks and the Proxmox screenshots come from a read-only health check on September 22.
-</div>
 
 ## How the lab fits together
 
@@ -188,13 +171,6 @@ Beszel also lists pending package updates for each machine and flags the securit
 Homepage was already on VM 109, but I had never configured it, so it was a page of links I didn't open. Before setting it up again I compared it with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific tools. Homepage won because it can pull live data from all four tools I run, a lot of people use it, it releases often, and its current image is on a patched Node version. Homarr came close, but it can't show Portainer.
 
 Each panel uses its own credential instead of my admin logins. The Proxmox panel uses an API token on a separate user that has only the `PVEAuditor` role, with privilege separation on; it can read everything, and a write attempt got a 403. Portainer has an access token made just for the dashboard, and Beszel has a separate superuser account, because Homepage's Beszel panel won't work with less. Homepage reads them from root-only files mounted read-only into the container, so none of them are in the dashboard config.
-
-<figure class="evidence-figure">
-  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Homepage dashboard, October 23; scroll horizontally if needed">
-    <img src="../../assets/evidence/homelab/homepage-dashboard-2026-10-23.webp" width="1232" height="944" alt="Homepage dashboard on October 23. Proxmox shows 1 of 10 VMs and 1 of 2 containers running; Portainer shows 7 containers running and none stopped; the host, VM 109 and CT 110 are up; Beszel reports 3 of 3 systems up; Uptime Kuma shows 7 sites up, 0 down and 100% uptime. Link lists for documentation and repositories sit below the panels." loading="lazy">
-  </div>
-  <figcaption>Homepage dashboard, October 23, 2026, showing live Proxmox, Portainer, Beszel and Uptime Kuma data. <a href="../../assets/evidence/homelab/homepage-dashboard-2026-10-23.webp">Open the full-size dashboard</a>.</figcaption>
-</figure>
 
 I didn't test Portainer actions or the Uptime Kuma interface beyond the monitors themselves.
 

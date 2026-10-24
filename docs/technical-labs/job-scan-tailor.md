@@ -6,7 +6,7 @@ status: Complete, maintained as needed
 tools: [Python, python-docx, LibreOffice, Playwright]
 summary:
   role: "A personal project for my own job search. I specified the workflow; an AI agent compares postings with my resume, and Python scripts build and check the documents."
-  built_with: ["Python", "python-docx", "Headless LibreOffice for PDF conversion", "pypdf", "An AI agent", "Browser automation"]
+  built_with: ["Python", "python-docx", "headless LibreOffice for PDF conversion", "pypdf", "an AI agent", "browser automation"]
   result: "A ranked report of every posting, tailored one-page resumes for the strongest matches and a local review page. A build fails on missing required details, listed banned terms or a second page."
 updated: "September 24, 2026"
 ---
@@ -16,23 +16,6 @@ updated: "September 24, 2026"
 This personal project turns job postings and my existing resume into a ranked comparison, selected one-page resumes and a local document-review page. It separates the work of interpreting a posting from the repeatable work of formatting files and checking known constraints.
 
 My original resume is the source of the background claims. The workflow I requested uses an agent to compare that background with postings and prepare tailored content; Python and JavaScript utilities generate and check the documents. Browser tooling, `python-docx`, LibreOffice and the external wording scanner supply capabilities the project builds on.
-
-<div class="glance" markdown>
-
-My role
-: A personal project for my own job search. I specified the workflow; an AI agent compares postings with my resume, and Python scripts build and check the documents.
-
-Built with
-: Python, `python-docx`, headless LibreOffice for PDF conversion, `pypdf`, an AI agent and browser automation.
-
-Result
-: A ranked report of every posting, tailored one-page resumes for the strongest matches and a local review page. A build fails on missing required details, listed banned terms or a second page.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Private repository.** The source holds my resume and job-search records, so it stays private. This page describes the version reviewed on September 24, 2026.
-</div>
 
 ## From job posting to application documents {#from-job-posting-to-application}
 

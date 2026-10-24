@@ -8,28 +8,16 @@ tools: [Packet Tracer, Wireshark, IPv4, IPv6]
 detail: true
 class_page: coursework/neti-109/
 class_name: NETI 109 Networking I
+summary:
+  role: "I planned the subnets, diagnosed the client and router faults, and analyzed the supplied traffic captures. The course supplied the scenarios and captures."
+  built_with: ["Cisco Packet Tracer", "Cisco IOS", "Windows ipconfig and ping", "Wireshark display filters"]
+  result: "A VLSM plan for four LANs and a router link; four client faults traced to address, gateway, router-interface and DNS settings; and an IPv6 gateway loss traced to a Router Advertisement."
+  source: {label: "NETI 109 repository", url: "https://github.com/jkosber/Networking-109"}
 ---
 
 # Networking & packet analysis
 
 My networking coursework covered the configuration behind a working connection and the evidence needed when it fails. In **NETI 109**, I planned IPv4 subnets and diagnosed several different faults in a supplied Cisco Packet Tracer network. In **CSIA 210: Network Protocol Analysis**, I used Wireshark to connect host configuration with DHCPv6 and neighbor-discovery traffic.
-
-<div class="glance" markdown>
-
-My role
-: I planned the subnets, diagnosed the client and router faults, and analyzed the supplied traffic captures. The course supplied the scenarios and captures.
-
-Built with
-: Cisco Packet Tracer, Cisco IOS, Windows `ipconfig` and `ping`, and Wireshark display filters.
-
-Result
-: A VLSM plan for four LANs and a router link; four client faults traced to address, gateway, router-interface and DNS settings; and an IPv6 gateway loss traced to a Router Advertisement.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Coursework, November 2025 to May 2026.** Addressing and troubleshooting submissions from NETI 109; packet analysis from CSIA 210. See also the [IPv6 packet investigations](ipv6-packet-investigations.md).
-</div>
 
 ## Addressing a small network
 

@@ -8,28 +8,16 @@ tools: [AWS EC2, Ubuntu, Apache, SQL Server]
 detail: true
 class_page: coursework/svad-111/
 class_name: SVAD 111 Linux and Virtualization Technologies
+summary:
+  role: "I provisioned both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course supplied the application, data and two-tier design."
+  built_with: ["AWS EC2", "Ubuntu 22.04", "Apache", "PHP 8.1", "Microsoft SQL Server and sqlcmd", "PuTTY and WinSCP"]
+  result: "A working two-server deployment: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app."
+  source: {label: "SVAD 111 repository", url: "https://github.com/jkosber/SVAD-111-Linux-Virtualization"}
 ---
 
 # AdventureWorks on AWS
 
 I deployed a course-provided product-review application on two Ubuntu servers in AWS: Apache and PHP served the website, while Microsoft SQL Server held the AdventureWorks catalog and reviews. The completed demonstration could search products, display a product page and accept a review.
-
-<div class="glance" markdown>
-
-My role
-: Coursework for **SVAD 111: Linux & Virtualization Technologies**. I provisioned both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course supplied the application, data and two-tier design.
-
-Built with
-: AWS EC2, Ubuntu 22.04, Apache, PHP 8.1, Microsoft SQL Server and `sqlcmd`, with PuTTY and WinSCP for administration.
-
-Result
-: A working two-server deployment: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Coursework, May 2026.** Results come from my final report and milestone submissions.
-</div>
 
 ## Architecture and connection paths
 

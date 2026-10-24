@@ -180,6 +180,33 @@ p { max-width: 66ch; }
 .section-note h2 { margin-top: 0; }
 .section-note p { color: var(--muted); }
 
+/* Case studies and class pages: title and description, then a summary column beside the text. */
+.article-head { padding: 0 0 2rem; margin: 0 0 2.5rem; border-bottom: 1px solid var(--line); }
+.article-head h1 { margin-bottom: .9rem; }
+.article-head .dek { max-width: 60ch; margin: 0; color: var(--muted); font-size: 1.2rem; line-height: 1.6; }
+.article-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 4rem; align-items: start; }
+.spec { position: sticky; top: calc(var(--header-height, 0px) + 1.5rem); max-height: calc(100dvh - var(--header-height, 0px) - 3rem); overflow-y: auto; font-size: .9rem; }
+.spec dl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1rem; margin: 0 0 1.5rem; }
+.spec dl > div { padding: .7rem 0; border-top: 1px solid var(--line); }
+.spec dl > div:first-child, .spec dl > div:nth-child(2):not(.wide) { padding-top: 0; border-top: 0; }
+.spec dl > div.wide { grid-column: 1 / -1; }
+.spec dt { color: var(--muted); font-size: .78rem; }
+.spec dd { margin: .15rem 0 0; color: var(--heading); line-height: 1.5; }
+.toc summary { padding: .3rem 0; color: var(--heading); font-weight: 700; cursor: pointer; }
+.toc nav { margin-top: .4rem; }
+.toc a { display: block; padding: .35rem .6rem; border-left: 2px solid var(--line); color: var(--muted); line-height: 1.45; text-decoration: none; }
+.toc a:hover { color: var(--heading); }
+.toc a[aria-current='location'] { border-left-color: var(--warm); color: var(--heading); }
+.js .toc:not([data-ready]) > nav { display: none; }
+.prose .result { max-width: 66ch; margin: 0 0 2rem; padding: 1rem 1.25rem; border-left: 3px solid var(--warm); border-radius: 0 8px 8px 0; background: var(--surface); color: var(--text); font-size: 1rem; }
+.prose .result strong { color: var(--warm); }
+.article-grid .shot { margin: 0 0 2.5rem; }
+@media (max-width: 960px) {
+  .article-grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .spec { position: static; max-height: none; overflow: visible; }
+  .toc { padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 8px; background: #0e2033; }
+}
+
 /* Case studies retain comfortable line lengths and accessible section navigation. */
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: baseline; gap: .65rem; margin-bottom: 2.5rem; font-size: .78rem; color: var(--muted); }
 .breadcrumbs a { display: inline-flex; align-items: center; min-height: 32px; color: var(--muted); }
@@ -203,18 +230,6 @@ p { max-width: 66ch; }
 .prose code { overflow-wrap: anywhere; background: #17334c; font-size: .87em; border-radius: 3px; padding: .1em .3em; }
 .prose table code { overflow-wrap: normal; }
 .prose pre code { padding: 0; background: none; font-size: inherit; }
-.evidence-note { max-width: 66ch; margin: 1.75rem 0 2.5rem; padding: .2rem 1.25rem; border-left: 3px solid var(--accent); background: var(--ink); font-size: .94rem; }
-/* A case study's summary: role, tools and result in one band, stacked when narrow. */
-.glance { max-width: 60rem; margin: 2rem 0 2.75rem; }
-@media screen { .glance { container-type: inline-size; } }
-.glance dl { display: grid; grid-auto-flow: column; grid-template-rows: auto 1fr; grid-auto-columns: minmax(0, 1fr); column-gap: 2rem; margin: 0; padding: 1.4rem 1.6rem; border: 1px solid #47769b; border-left: 4px solid var(--warm); border-radius: 10px; background: var(--surface); }
-.glance dt { margin: 0 0 .35rem; color: var(--warm); font-size: .82rem; font-weight: 700; }
-.glance dd { margin: 0; color: var(--text); font-size: .95rem; line-height: 1.65; }
-.prose .glance dd p { margin: 0; }
-@container (max-width: 40em) {
-  .glance dl { display: block; }
-  .glance dd + dt { margin-top: 1.1rem; }
-}
 .architecture { margin: 2rem 0; }
 .architecture-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; list-style: none; }
 .prose .architecture-flow { padding: 0; }
@@ -285,7 +300,7 @@ p { max-width: 66ch; }
 }
 @media screen and (min-width: 761px) {
   /* In columns, the first row's labels head each column; later rows keep theirs for screen readers only. */
-  @container (min-width: 41em) {
+  @container (width > 41em) {
     .narrative-list:not(.narrative-list--pairs) dt:not(:first-of-type) ~ dd > strong:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   }
 }
@@ -446,10 +461,12 @@ p { max-width: 66ch; }
   .narrative-list dt, .narrative-list dd { padding: .6rem .45rem; font-size: 10pt; break-inside: avoid; }
   .prose li { margin: .5em 0; orphans: 3; widows: 3; break-inside: avoid; }
   .dark-section, .page-context span, .page-context span + span, .prose th, .prose tbody tr:nth-child(even), .prose pre, .prose code { background: #fff; color: #000; }
-  .evidence-note, .architecture-flow li { background: #fff; color: #000; }
-  .evidence-note { margin: 1rem 0; }
-  .glance dl { background: #fff; border-color: #888; break-inside: avoid; }
-  .glance dt, .glance dd { color: #000; }
+  .architecture-flow li { background: #fff; color: #000; }
+  .spec, .prose .result { position: static; max-height: none; overflow: visible; background: #fff; color: #000; border-color: #888; break-inside: avoid; }
+  .spec dt, .spec dd, .prose .result strong { color: #000; }
+  .toc, .article-grid .shot { display: none; }
+  .article-grid { display: block; }
+  .article-head { margin-bottom: 1rem; padding-bottom: 1rem; }
   .architecture-flow small { color: #333; }
   .evidence-figure, .architecture { break-inside: avoid; }
   .evidence-scroll { overflow: visible; }

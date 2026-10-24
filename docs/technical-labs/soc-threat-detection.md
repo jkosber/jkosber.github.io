@@ -8,6 +8,11 @@ tools: [Security Onion, Wireshark, NetworkMiner, Snort]
 detail: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops
+summary:
+  role: "I worked the supplied alerts from timeline to host to files, looked up the file hashes and wrote the after-action report."
+  built_with: ["Security Onion", "Sguil", "Wireshark", "NetworkMiner", "VirusTotal", "Snort and iptables in a separate Mininet lab"]
+  result: "Identified the affected Windows host and three downloaded malware files by hash, with containment recommendations. In the lab, an existing Snort rule fired, and after I added a firewall rule my written retest recorded the download as blocked."
+  source: {label: "CSIA 115 repository", url: "https://github.com/jkosber/CyberOps-115"}
 ---
 
 # CyberOps & traffic investigation
@@ -15,23 +20,6 @@ class_name: CSIA 115 Cyber Ops
 In **CSIA 115: Cyber Ops**, I investigated a historical Pushdo malware scenario using a Cisco-provided Security Onion VM. I narrowed the alert window in Sguil, identified the affected Windows host, inspected reconstructed files in NetworkMiner and recorded existing VirusTotal findings in an after-action report.
 
 The [Snort, firewall rules & HTTP recovery](snort-firewall-lab.md) case study covers a separate lab using live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.
-
-<div class="glance" markdown>
-
-My role
-: I worked the supplied alerts from timeline to host to files, looked up the file hashes and wrote the after-action report.
-
-Built with
-: Security Onion, Sguil, Wireshark, NetworkMiner and VirusTotal; Snort and `iptables` in a separate Mininet lab.
-
-Result
-: Identified the affected Windows host and three downloaded malware files by hash, with containment recommendations. In the lab, an existing Snort rule fired, and after I added a firewall rule my written retest recorded the download as blocked.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Coursework, March 2026.** Course-provided environments and training data. The Pushdo alerts describe activity from June 27, 2017.
-</div>
 
 ## Investigating Pushdo alerts {#investigating-a-pushdo-infection}
 

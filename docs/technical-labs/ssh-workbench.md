@@ -23,30 +23,6 @@ SSH Workbench is a terminal app that keeps the machines I work on in one list, e
 
 It also shows whether each machine's SSH port is answering and walks through setting up key-based login. It runs on Windows 11 and Linux, and I've tested it against my Proxmox host, a Linux Mint laptop and two Windows PCs.
 
-<div class="glance" markdown>
-
-My role
-: I defined what Workbench does, planned each release as small tested tasks and tested it on my own machines.
-
-Built with
-: Python 3.14, Textual, OpenSSH, uv, pytest, Ruff and GitHub Actions.
-
-Result
-: Five tagged releases from October 20 to 23, 2026, after work began October 9. Version 0.3.0 passes 1,077 automated tests on Windows and Ubuntu.
-
-</div>
-
-<div class="evidence-note" markdown>
-**Version 0.3.0, October 23, 2026.** From the project's README, changelog, validation log and CI results. The repository is private.
-</div>
-
-<figure class="evidence-figure">
-  <div class="evidence-scroll" role="region" tabindex="0" aria-label="SSH Workbench machine list and details; scroll horizontally if needed">
-    <img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp" width="900" height="413" alt="SSH Workbench in Windows Terminal. The header counts 5 machines: 3 online, 1 offline and 1 can't check. The Machines list shows Web server, Lab box, Storage NAS, Build runner and Garage Pi, each with its alias or address on the right. The details pane for Lab box shows one row per field: ID, name, status Online at 192.0.2.20, a direct connection, two addresses, user, port 2222, key file and two links. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="lazy">
-  </div>
-  <figcaption>The look that shipped in 0.3.0, in Windows Terminal at 110×22, captured October 22, 2026. The machines and addresses are fictional and the statuses come from a stand-in checker. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp">Open the full-size screenshot</a>.</figcaption>
-</figure>
-
 ## Why I wanted it
 
 I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. I did not want a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client I already use.

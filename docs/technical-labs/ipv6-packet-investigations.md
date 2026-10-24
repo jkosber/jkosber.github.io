@@ -6,6 +6,11 @@ status: "May 2026"
 detail: true
 class_page: coursework/csia-210/
 class_name: CSIA 210 Network Protocol Analysis
+summary:
+  role: "I filtered the supplied traffic, identified the relevant frames, compared them with the host configuration and documented the conclusions. I did not build or repair the supplied network."
+  built_with: ["Wireshark", "DHCPv6 and ICMPv6 display filters", "supplied Windows ipconfig output"]
+  result: "Matched a Windows host's DHCPv6 address to the reply in frame 9306, separated a duplicate address from general connectivity, and traced a lost IPv6 gateway to a Router Advertisement."
+  source: {label: "CSIA 210 repository", url: "https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis"}
 ---
 
 # IPv6 packet investigations
@@ -13,10 +18,6 @@ class_name: CSIA 210 Network Protocol Analysis
 A Windows host can have an IPv6 address and still fail to reach another network. In my **CSIA 210** final capstone, I used supplied traces and host output to investigate address assignment, duplicate addresses, source-address changes and loss of a default router.
 
 The work connected fields inside DHCPv6 and ICMPv6 packets to the symptoms shown by the hosts. My contribution was filtering the traffic, identifying relevant frames, comparing them with host configuration and documenting the conclusions. I did not build or repair the supplied network during this analysis.
-
-<div class="evidence-note" markdown>
-**Coursework, May 2026.** From my final-capstone submission and screenshots dated May 12, 2026. Packet numbers refer to the two course traces, which are not in the repository.
-</div>
 
 ## Environment and analysis method
 
