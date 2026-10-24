@@ -1,6 +1,6 @@
 ---
 title: AdventureWorks on AWS
-description: Deployed a course-provided PHP application and SQL Server database on two EC2 instances, with recorded catalog searches and review submission.
+description: I deployed the course's PHP app and SQL Server database on two EC2 servers, then searched the catalog and saved a review through it.
 kind: Completed coursework
 status: "May 2026"
 visual: assets/project-aws.svg
@@ -9,7 +9,7 @@ detail: true
 class_page: coursework/svad-111/
 class_name: SVAD 111 Linux and Virtualization Technologies
 summary:
-  role: "I provisioned both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course supplied the application, data and two-tier design."
+  role: "I launched both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course provided the app, the data and the two-server design."
   built_with: ["AWS EC2", "Ubuntu 22.04", "Apache", "PHP 8.1", "Microsoft SQL Server and sqlcmd", "PuTTY and WinSCP"]
   result: "A working two-server deployment: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app."
   source: {label: "SVAD 111 repository", url: "https://github.com/jkosber/SVAD-111-Linux-Virtualization"}
@@ -17,7 +17,9 @@ summary:
 
 # AdventureWorks on AWS
 
-I deployed a course-provided product-review application on two Ubuntu servers in AWS: Apache and PHP served the website, while Microsoft SQL Server held the AdventureWorks catalog and reviews. The completed demonstration could search products, display a product page and accept a review.
+I deployed the course's AdventureWorks product-review app on two Ubuntu servers in an AWS Academy lab: Apache and PHP on one, Microsoft SQL Server with the AdventureWorks catalog on the other. By the end the site searched the catalog, opened product pages and saved reviews to the database.
+
+The course provided the app, the data, the two-server design and the install commands for each milestone. I launched the servers, ran the installs, imported the data, connected the two tiers, tested the app and wrote the final report.
 
 ## Architecture and connection paths
 
@@ -27,26 +29,22 @@ I deployed a course-provided product-review application on two Ubuntu servers in
     <li><strong>Web instance</strong><span>Ubuntu 22.04<br>Apache + PHP 8.1<br>SQL Server PHP drivers</span><small>SQL connection · TCP 1433</small></li>
     <li><strong>Database instance</strong><span>Ubuntu 22.04<br>Microsoft SQL Server<br>AdventureWorks database</span><small>Catalog and review storage</small></li>
   </ol>
-  <figcaption>Historical coursework architecture. PuTTY and WinSCP provided separate administrative connections over SSH to each instance. Role labels replace the original instance addresses.</figcaption>
+  <figcaption>The two EC2 instances, labeled by role instead of address. PuTTY and WinSCP connected to each over SSH for administration.</figcaption>
 </figure>
 
-The browser contacted the web instance. PHP then connected to the database instance using its internal address in `config.php`; the browser did not query SQL Server directly. Keeping the tiers separate made the network rule, database login and PHP driver configuration part of the application's working path.
-
-The recorded security-group rules allowed broader access than these application paths required; the security limits are described below.
+The browser only talks to the web server. PHP connects to SQL Server through the database server's internal address in `config.php`, so the security-group rule, the database login and the PHP drivers all sit on the path every page request takes.
 
 ## Server setup
 
-The final report shows two EC2 instances and describes Ubuntu 22.04 on both. I used PuTTY for shell access and WinSCP to transfer the supplied archives. The database setup used Microsoft's SQL Server repository, the SQL Server service and the `sqlcmd` client. The web setup added Apache, PHP and the Microsoft ODBC/PHP components.
+I used PuTTY for shells and WinSCP to move the course's archives onto the servers. On the database server I added Microsoft's signing key and package repository, installed SQL Server 2022 and the `sqlcmd` client, and ran a test query with my name. On the web server I installed Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
 
-I checked the dependencies in stages: SQL queries confirmed imported data, `test.php` confirmed PHP execution, and the application pages exercised the connection between the two servers.
+I checked each layer before building on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
 
 ## Database and application configuration
 
 ### Adapting the data import for Linux
 
-The supplied `adventureworks-db.tar.gz` contained a Windows-oriented SQL import script and data files. Milestone 2B prescribed converting the script from UTF-16 to UTF-8, setting its data directory, removing `CODEPAGE` lines and matching the row terminator to the files' CRLF endings.
-
-Selected commands from that milestone's workflow:
+The course's data archive was built for Windows. Milestone 2B's steps converted the import script from UTF-16 to UTF-8, pointed it at the data folder, removed its `CODEPAGE` lines and changed the row terminator to match the data files' Windows line endings:
 
 ```bash
 iconv -f UTF-16 -t UTF-8 instawdb.sql.orig > instawdb.sql
@@ -54,9 +52,7 @@ sed -i -e /CODEPAGE/d instawdb.sql
 sed -i -e 's/\\n/\\r\\n/' instawdb.sql
 ```
 
-The encoding conversion made the script usable by the text-processing commands. The row-terminator change aligned the bulk-import statements with the supplied CSV files. The instructions also set `SqlSamplesSourceDataPath` to the extracted data directory, including its trailing slash. The submitted screenshot shows the completed import and subsequent queries; the preparation commands above come from the milestone instructions.
-
-I checked two tables through `sqlcmd`:
+Those are the milestone's commands; my submission shows the finished import rather than each step. I checked it with two counts in `sqlcmd`:
 
 ```sql
 SELECT COUNT(*) FROM Production.Product;
@@ -65,81 +61,54 @@ SELECT COUNT(*) FROM Person.Person;
 GO
 ```
 
-The queries returned **504 products** and **19,972 people**, confirming that both expected tables contained imported data.
+They returned **504 products** and **19,972 people**.
 
 ### Connecting PHP to SQL Server
 
-Milestone 3B specified PHP 8.1 with the `sqlsrv` and `pdo_sqlsrv` extensions, enabled through `phpenmod`. It also configured Apache's prefork module and PHP module. The submitted `test.php` screenshot shows PHP 8.1.2 running through the Apache handler. That established PHP execution before adding the application's database dependency.
-
-I transferred the supplied application archive, placed the PHP files in `/var/www/html`, and set the database address and login information in `config.php`. The milestone removed Apache's default `index.html` so it would no longer take precedence over the application entry page. Credentials and original host addresses are omitted here.
-
-The catalog and review pages then exercised more of the system than `test.php`: Apache served the request, PHP ran the supplied code, and the application reached the database.
+I enabled the `sqlsrv` and `pdo_sqlsrv` extensions, set Apache to the prefork module with the PHP module, and loaded `test.php`, which showed PHP 8.1.2 running under Apache. Then I copied the app into `/var/www/html`, set the database address and login in `config.php`, and removed Apache's default `index.html` so the app's page loads first. Credentials and addresses are left out here.
 
 ## Troubleshooting
 
-These are the problems my final report records and how I worked through them.
+My final report lists four problems and what fixed them:
 
-<div class="narrative-list" markdown>
-
-Web-to-database connection timed out
-: **Investigation and change.** The report attributes the failure to the EC2 security group and records adding access for SQL Server on TCP 1433.
-: **Verification.** Later catalog and review pages show the web server reaching the database.
-
-Microsoft packages could not be found
-: **Investigation and change.** Added the Microsoft signing key and repository source, then continued installation.
-: **Verification.** Later submissions show SQL queries and PHP working.
-
-Initial PuTTY connection could not reach EC2
-: **Investigation and change.** The report identifies blocked outbound SSH on the access network and records switching to a hotspot.
-: **Verification.** Later shell screenshots show working access.
-
-</div>
-
-The report also records a SQL login failure and an authentication change that followed it, without the error code or the exact setting.
+- **The web server timed out reaching the database.** The security group didn't allow SQL Server traffic, so I added a rule for port 1433 from the web server, and the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
+- **The SQL login failed** even with the right password. I enabled SQL Authentication in the SQL Server setup.
+- **Microsoft's packages weren't found.** I added Microsoft's signing key and repository, and the installs went through.
+- **PuTTY couldn't reach EC2.** The network I was on blocked outbound SSH, so I switched to a hotspot.
 
 ## Testing the result
 
-The final report's screenshots show the following results, from data import through use of the supplied interface.
-
-| Check | Recorded result | What it establishes |
-|---|---|---|
-| Count database rows | `Production.Product`: 504; `Person.Person`: 19,972 | The import populated two expected tables. |
-| Open `test.php` | PHP version and Apache handler information appeared | PHP executed on the web server. |
-| Search with no term | 304 catalog results | The application retrieved the catalog. |
-| Search for `Mountain-300` | Four matching products | A named search returned the expected product family. |
-| Open product 787 | Mountain-300 Black, 44 with a bicycle image | The product-detail route retrieved that product. |
-| Submit a review | A review row with my name, rating and comment appeared | The submitted review was displayed in the application. |
-
-The catalog result below shows four Mountain-300 Black variants, including product 787. This is the application's returned result list; the search text itself is not visible in the preserved image.
+| Check | Result |
+|---|---|
+| Row counts in `sqlcmd` | `Production.Product` 504, `Person.Person` 19,972 |
+| `test.php` | PHP 8.1.2 running under Apache |
+| Search with no term | 304 catalog results |
+| Search for Mountain-300 | Four products, 785 to 788 |
+| Open product 787 | Mountain-300 Black, 44, with its picture |
+| Submit a review | My review appeared in the app with my name, a rating of 3 and "This is a good bike." |
 
 <figure class="evidence-figure">
-  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical AdventureWorks search results; scroll horizontally if needed">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="AdventureWorks search results; scroll horizontally if needed">
     <img src="../../assets/evidence/aws/mountain-300-results-2026-05-08.png" width="670" height="390" alt="AdventureWorks application displaying 4 Results: Mountain-300 Black products 785, 786, 787 and 788 in sizes 38, 40, 44 and 48." loading="lazy">
   </div>
-  <figcaption>Application output preserved in the final report dated May 8, 2026. The crop retains the result count and product rows; browser and desktop details are excluded. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open the full-size crop</a>.</figcaption>
+  <figcaption>The Mountain-300 search in my final report, May 8, 2026, cropped to the results. <a href="../../assets/evidence/aws/mountain-300-results-2026-05-08.png">Open full size</a>.</figcaption>
 </figure>
 
 ## Limits and what I'd change {#scope-and-follow-up-ideas}
 
-The assignment reached a working demonstration. Validation covered the imported row counts and application actions above; database-wide integrity, review retention after restart, load, abuse resistance and recovery were not tested in the submitted records.
+- I tested the import counts and the app actions above. I didn't test database integrity, whether reviews survive a restart, load or recovery.
+- The site ran on HTTP. My report recommended HTTPS, user accounts for reviewers and photo uploads; none of them were built.
+- The milestone's instructions opened SSH and HTTP to any address and added rules for ports 1433 and 3306, and my last screenshot shows those four. The app only used SQL Server.
+- The app connected as SQL Server's `SA` account, and the milestones trusted the database certificate for lab setup, so there's no least-privilege login or verified database TLS.
+- `test.php` showed PHP's configuration, and my files don't show it being removed.
 
-The historical deployment also had security limits:
+For a real deployment I'd restrict administration and database access first, give the app its own database login, remove the test page, add HTTPS and test recovery.
 
-- The browser used **HTTP**. HTTPS was a recommendation in the final report, not an implemented feature.
-- The milestone instructed broad inbound access for SSH and HTTP and additional rules for ports 1433 and 3306. The final screenshot shows those four ports. The application used SQL Server; a MySQL service is not evidenced simply because a 3306 rule existed.
-- The database milestones used the administrative `SA` login and certificate-trust options for lab setup. A least-privilege application account and validated database TLS are not demonstrated.
-- `test.php` exposed PHP configuration during validation. Its later removal is not documented.
-- Reviews did not require user accounts. The report proposed accounts and photo uploads as future features.
+## Sources {#source-material}
 
-For a new deployment, I would first restrict administration and database access, use a dedicated application login, remove diagnostic pages, add HTTPS and test recovery. These are retrospective recommendations, not changes made to the coursework deployment. The historical commands above explain that assignment and are not a current deployment guide.
+- [Final report, May 8, 2026](https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/AdventureWorks%20Project%20-%20Jadon%20Kosberg.docx): screenshots, the problems and fixes, app tests and recommendations
+- [Module 03 milestone](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module03): the two EC2 instances
+- [Module 05 milestones](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module05): SQL Server install, the import and the query output
+- [Module 07 milestones](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module07): security-group rules, Apache and PHP, and the app tests
 
-## Source material
-
-- [Final report, May 8, 2026](https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/AdventureWorks%20Project%20-%20Jadon%20Kosberg.docx): implementation screenshots, reported problems, application tests and original recommendations.
-- [Module 03 infrastructure submission](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module03): initial EC2 environment.
-- [Module 05 database milestones](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module05): installation instructions, Linux import preparation and submitted query output.
-- [Module 07 web milestones](https://github.com/jkosber/SVAD-111-Linux-Virtualization/tree/main/Module07): security-group setup, Apache/PHP integration and application validation.
-
-The same course included a [system-information Bash script](https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/m05p2b/ex1.sh) and a [number-guessing exercise](https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/m05p2b/ex4.sh). They are separate scripting exercises, not components of this deployment.
-
-[All projects](index.md) · [Proxmox homelab](proxmox-virtualization.md)
+[SVAD 111 class page](../coursework/svad-111.md) · [All coursework](../coursework/index.md)
