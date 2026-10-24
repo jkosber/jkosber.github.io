@@ -25,7 +25,8 @@
 {%- endmacro %}
 
 {# A lead project on the homepage: copy beside its screenshot. The screenshot comes first in the
-   source because it sits above the copy in one column, so keyboard order follows what you see. #}
+   source because it sits above the copy in one column, so keyboard order follows what you see.
+   The caption's link is the screenshot's one keyboard stop; the image link stays out of the tab order. #}
 {% macro feature(project, flip=false, lazy=true) -%}
 {% set shot = project.meta.screenshot %}
 {% set summary = project.meta.summary or {} %}
@@ -33,7 +34,7 @@
 {% set tools = project.meta.tools or (summary.built_with or [])[:4] %}
 <article class="feature{% if flip %} feature--flip{% endif %}">
   <figure class="shot reveal">
-    <a class="zoom" href="{{ shot.src | url }}"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}"{% if lazy %} loading="lazy"{% endif %}></a>
+    <a class="zoom" href="{{ shot.src | url }}" tabindex="-1"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}"{% if lazy %} loading="lazy"{% endif %}></a>
     <figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption>
   </figure>
   <div class="feature-copy">
@@ -50,18 +51,21 @@
 {% macro minor_row(project) -%}
 {% set summary = project.meta.summary or {} %}
 {% set art = project.meta.art %}
+{% set notes = summary.result or project.meta.status %}
 <article class="minor">
   <div>
     <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
-    <p class="desc">{{ project.meta.description }}</p>
+    {% if project.meta.description %}<p class="desc">{{ project.meta.description }}</p>{% endif %}
   </div>
+  {% if art or notes %}
   <div class="minor-side">
     {% if art %}<img class="minor-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
-    <div>
+    {% if notes %}<div>
       {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
       {% if project.meta.status %}<p class="minor-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}.</p>{% endif %}
-    </div>
+    </div>{% endif %}
   </div>
+  {% endif %}
 </article>
 {%- endmacro %}
 
@@ -72,7 +76,7 @@
   {% if art %}<img class="tile-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
   <span class="tile-code">{{ class_page.meta.code }}</span>
   <span class="tile-name">{{ class_page.meta.course }}</span>
-  <span class="tile-meta">{{ class_page.meta.term }}, {{ class_page.meta.get('items') }}</span>
+  <span class="tile-meta">{{ class_page.meta.term }}{% if class_page.meta.get('items') %}, {{ class_page.meta.get('items') }}{% endif %}</span>
 </a></li>
 {%- endmacro %}
 

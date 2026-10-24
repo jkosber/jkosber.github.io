@@ -135,7 +135,9 @@ class ClassSections:
     def labs(self, blocks):
         for heading, content in items(blocks):
             count = sum(table["rows"] for block in content for table in block["tables"])
-            self.edit(heading["end"], heading["end"], f'<span class="lab-count">{count} lab{"" if count == 1 else "s"}</span></summary>')
+            # A module without lab rows shows no count rather than "0 labs".
+            label = f'<span class="lab-count">{count} lab{"" if count == 1 else "s"}</span>' if count else ""
+            self.edit(heading["end"], heading["end"], f"{label}</summary>")
             self.wrap((heading, content), '<details class="lab-module"><summary>', "</details>")
             for block in content:
                 if "table-hint" in classes(block):

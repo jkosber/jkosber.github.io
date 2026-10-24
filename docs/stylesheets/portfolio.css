@@ -81,7 +81,8 @@ p { max-width: 35em; }
 .band { background: var(--band); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s1) var(--s2); margin-bottom: var(--s4); }
-.section-head h2 { margin: 0; font-size: clamp(1.625rem, 2.6vw, var(--t-h2)); }
+/* min-width: 0 lets a long heading wrap inside the row at 200% text on the narrowest phones. */
+.section-head h2 { min-width: 0; margin: 0; font-size: clamp(1.625rem, 2.6vw, var(--t-h2)); }
 .section-head a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 650; font-size: .9375rem; }
 .result { padding: var(--s2) 1.25rem; background: var(--inset); border-left: 3px solid var(--warm); border-radius: 0 var(--r-m) var(--r-m) 0; font-size: 1rem; line-height: 1.6; }
 .result strong, .result-label { color: var(--warm); font-weight: 700; }
@@ -391,12 +392,9 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
 .architecture-flow small { color: var(--muted); font-size: var(--t-small); }
 .architecture figcaption, .evidence-figure figcaption { color: var(--muted); font-size: var(--t-small); line-height: 1.5; margin-top: .75rem; max-width: 75ch; }
 .evidence-figure { margin: 2rem 0; }
-.evidence-figure img { display: block; height: auto; border: 1px solid var(--line); border-radius: 5px; }
+/* A screenshot fits its column at every width; the caption's link opens the full-size file. */
+.evidence-figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 5px; }
 .evidence-scroll { max-width: 100%; overflow-x: auto; scrollbar-color: var(--accent) var(--surface); }
-/* Phones show the whole screenshot at column width; the caption links the full-size file. */
-@media (min-width: 761px) {
-  .evidence-scroll img { max-width: none; }
-}
 @media screen and (max-width: 650px) {
   /* Only tables with three or more columns need a minimum width and the scroll hint. */
   .table-scroll table:has(tr > :nth-child(3)) { min-width: 38rem; }
@@ -590,7 +588,7 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
   @keyframes fade { from { opacity: 0; } }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  /* translate, not transform: the scroll fade-up's end state holds transform and would cancel the lift. */
+  /* translate, not transform: the scroll fade-up animates transform, so the lift uses a property it never touches. */
   .lift:hover { translate: 0 -2px; }
 }
 @media screen and (max-width: 960px) and (prefers-reduced-motion: no-preference) {
@@ -635,7 +633,6 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; } /* anti-slop-allow: reduced-motion preference must override every component */
-  .button:hover, .lift:hover { transform: none !important; } /* anti-slop-allow: reduced-motion preference must override hover transforms */
 }
 @media (max-height: 480px) {
   .js .site-header { position: relative; }
@@ -674,9 +671,10 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .architecture-flow small { color: #333; }
   .evidence-figure, .architecture { break-inside: avoid; }
   .evidence-scroll { overflow: visible; }
-  .evidence-scroll img { max-width: 100%; }
   .table-scroll { overflow: visible; margin: 1rem 0; }
   .table-scroll table { min-width: 0; }
+  /* Closed lab modules print their rows too, even without the script that opens them first. */
+  details.lab-module::details-content { content-visibility: visible; display: block; }
   .prose .table-hint { display: none; }
   .site-header, .site-footer, .contents, .skip-link, .crumbs, .button, .back-to-top, .role-art { display: none; }
   .print-identity { display: grid; gap: .15rem; padding-bottom: .75rem; margin-bottom: 1rem; border-bottom: 1px solid #bbb; font-size: 10pt; }

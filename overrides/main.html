@@ -154,7 +154,7 @@
         </div></section>
         {% if shot %}
         <div class="wrap lead-shot"><figure class="shot">
-          <a class="zoom" href="{{ shot.src | url }}"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="eager"></a>
+          <a class="zoom" href="{{ shot.src | url }}" tabindex="-1"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="eager"></a>
           <figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption>
         </figure></div>
         {% endif %}

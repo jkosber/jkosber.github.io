@@ -56,10 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateHeaderOffset);
   updateHeaderOffset();
 
-  // The contents list starts closed where it sits above the article instead of beside it.
+  // The contents list starts closed where it sits above the article instead of beside it, and
+  // follows the layout when the window crosses that width, as when a tablet rotates.
   const contents = document.querySelector('details.contents');
   if (contents) {
-    if (window.matchMedia('(max-width: 1100px)').matches) contents.open = false;
+    const stacked = window.matchMedia('(max-width: 1100px)');
+    if (stacked.matches) contents.open = false;
+    stacked.addEventListener('change', () => { contents.open = !stacked.matches; });
     contents.dataset.ready = 'true';
   }
 
@@ -121,21 +124,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateReadingPosition();
 
-  // Screenshots open full size in a dialog on wide screens. On phones the link opens the image
-  // file, so pinch zoom works; a modified click still opens it in a new tab or window.
+  // Screenshots open full size in a dialog on wide screens, from the image link or from the
+  // caption's "Open full size" link. On phones the link opens the image file, so pinch zoom works;
+  // a modified click still opens it in a new tab or window.
   const lightbox = document.querySelector('dialog.lightbox');
   if (lightbox && lightbox.showModal) {
     const wide = window.matchMedia('(min-width: 761px)');
     // The image joins the dialog on first use, so no page carries an image without a source.
     const image = document.createElement('img');
     let opener = null;
-    for (const link of document.querySelectorAll('a.zoom')) {
+    // A caption link takes part only when it links its own figure's screenshot.
+    const openers = [...document.querySelectorAll('a.zoom, figure figcaption a')]
+      .filter((link) => link.matches('.zoom') || link.href === link.closest('figure').querySelector('img')?.src);
+    for (const link of openers) {
+      const shot = link.querySelector('img') || link.closest('figure').querySelector('img');
       link.addEventListener('click', (event) => {
         if (!wide.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         opener = link;
+        // Drop the last screenshot first, so it never shows while the next one loads.
+        image.removeAttribute('src');
         image.src = link.href;
-        image.alt = link.querySelector('img')?.alt || '';
+        image.alt = shot?.alt || '';
         if (!image.isConnected) lightbox.append(image);
         lightbox.showModal();
       });
