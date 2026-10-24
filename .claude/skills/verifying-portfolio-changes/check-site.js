@@ -5,7 +5,7 @@ async (page) => {
   const BASE = 'http://127.0.0.1:8765';
   const WIDTHS = [320, 390, 768, 1440];
   const MISSING = '/a-missing-page/';
-  const result = { routes: [], problems: [], checks: {}, filters: {}, menu: {}, print: null };
+  const result = { routes: [], problems: [], checks: {}, menu: {}, print: null };
   // Each named check block below records how much it covered in result.checks.
   const fail = (message) => result.problems.push(message);
 
@@ -110,15 +110,18 @@ async (page) => {
   if (!footer.some((link) => link.href === 'https://github.com/jkosber/jkosber.github.io')) fail('footer: missing the site source link');
   if (footer.some((link) => link.text === 'About me')) fail('footer: still has the About me link');
 
-  // Project filters: the count text and the number of visible cards must agree.
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(BASE + '/technical-labs/');
-  for (const filter of ['personal', 'coursework', 'all']) {
-    await page.click(`[data-filter="${filter}"]`);
-    const count = await page.textContent('.project-count');
-    const visible = await page.locator('.project-card:visible').count();
-    result.filters[filter] = { count, visible };
-    if (parseInt(count, 10) !== visible) result.problems.push(`filter ${filter}: says "${count}", shows ${visible}`);
+  // Projects index: one row per project in nav order, no filters or card art (filters removed, approved Oct 23).
+  result.checks.projectsIndex = {};
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(BASE + '/technical-labs/');
+    const index = await page.evaluate(() => ({
+      rows: [...document.querySelectorAll('main .project-row h3')].map((title) => title.textContent.trim()),
+      leftovers: document.querySelectorAll('main .project-toolbar, main [data-filter], main .card-art, main .project-card').length,
+    }));
+    result.checks.projectsIndex[width] = index.rows;
+    if (index.rows[0] !== 'Proxmox homelab' || index.rows[1] !== 'SSH Workbench' || !index.rows.includes('Job scan and resume tailor')) fail(`projectsIndex @${width}: rows ${index.rows.join(', ')}`);
+    if (index.leftovers) fail(`projectsIndex @${width}: ${index.leftovers} filter, toolbar or card element(s) remain`);
   }
 
   // Homepage: intro with facts, real captures for the lead projects, rows for the rest,
