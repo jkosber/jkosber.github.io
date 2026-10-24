@@ -14,7 +14,7 @@ IT support
 : Help desk across 12 offices, clinical software accounts, workstation deployment and retirement at [Ladd Dental](../experience/ladd-dental.md); printer setup and conversion support through [Vaco / Verizon](../experience/verizon-conversions.md).
 
 Networking
-: Meraki client and port checks, static-IP printer configuration, network equipment installation and Ethernet cabling in professional roles; [Cisco and packet-analysis coursework](../technical-labs/cisco-networking-analysis.md).
+: Meraki client and port checks, static-IP printer configuration, network equipment installation and Ethernet cabling in professional roles; [Cisco and packet-analysis coursework](../coursework/neti-109.md).
 
 Cybersecurity
 : CompTIA Security+ and a [CyberOps training investigation](../technical-labs/soc-threat-detection.md) using Security Onion alerts, packet captures and file-hash checks.
@@ -32,7 +32,7 @@ Systems & infrastructure
 | Area | Tools | Where |
 |---|---|---|
 | IT support | Level RMM, ClickUp, workstation deployment and domain join, cable toner and punchdown tool | [Healthcare IT support](../experience/ladd-dental.md) |
-| Networking | Cisco Meraki Dashboard, Cisco Packet Tracer, Wireshark | [Retail conversions](../experience/verizon-conversions.md), [networking coursework](../technical-labs/cisco-networking-analysis.md) |
+| Networking | Cisco Meraki Dashboard, Cisco Packet Tracer, Wireshark | [Retail conversions](../experience/verizon-conversions.md), [networking coursework](../coursework/neti-109.md) |
 | Systems | Proxmox VE, Ubuntu Server, Debian, Docker, Portainer, AWS EC2, Apache, SQL Server | [Homelab](../technical-labs/proxmox-virtualization.md), [AWS coursework](../technical-labs/aws-linux-infrastructure.md) |
 | Monitoring | Beszel, Uptime Kuma, Homepage | [Homelab](../technical-labs/proxmox-virtualization.md#monitoring-and-alerts) |
 | Security | Security Onion, Sguil, NetworkMiner, Snort, `iptables` | [CyberOps coursework](../technical-labs/soc-threat-detection.md) |

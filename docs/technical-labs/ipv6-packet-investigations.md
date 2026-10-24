@@ -111,4 +111,4 @@ The [final capstone submission](https://github.com/jkosber/CSIA-210-Network-Prot
 
 The [protocol-analysis repository](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis) contains other coursework and a separate introductory capture. Verifying the later frame references and reconstructing the SLAAC lifetime sequence would require the missing capstone traces and corresponding host output.
 
-[Networking & packet analysis](cisco-networking-analysis.md) · [CyberOps & traffic investigation](soc-threat-detection.md) · [All projects](index.md)
+[CSIA 210 class page](../coursework/csia-210.md) · [CyberOps & traffic investigation](soc-threat-detection.md) · [All projects](index.md)

@@ -52,7 +52,6 @@ nav:
       - CSIA 210 Network Protocol Analysis: coursework/csia-210.md
       - CSIA 105 Introduction to Cyber Security: coursework/csia-105.md
       - SDEV 120 Computing Logic: coursework/sdev-120.md
-      - Networking & packet analysis: technical-labs/cisco-networking-analysis.md
       - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
       - CyberOps & traffic investigation: technical-labs/soc-threat-detection.md
       - Snort and firewall lab: technical-labs/snort-firewall-lab.md

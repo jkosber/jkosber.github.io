@@ -42,7 +42,7 @@ B.S., Indiana University. 2022.
 
 I completed the **Introduction to Networks** and **Networking Basics** courses. These are course-completion credentials, separate from the CCNA certification.
 
-The [networking coursework page](../technical-labs/cisco-networking-analysis.md) covers the related Packet Tracer and packet-analysis work.
+The [NETI 109 class page](../coursework/neti-109.md) covers the related Packet Tracer labs.
 
 ## Academic recognition
 

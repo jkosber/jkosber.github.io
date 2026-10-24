@@ -93,4 +93,4 @@ The stream's HTTP `Content-Length` and the saved file listing both show **345,08
 
 The [CyberOps coursework repository](https://github.com/jkosber/CyberOps-115) also holds exercises in Windows administration, Linux logs and permissions, Nmap, protocol analysis, access control lists and incident handling.
 
-[Networking & packet analysis](cisco-networking-analysis.md) · [Certifications](../credentials/index.md) · [All projects](index.md)
+[CSIA 115 class page](../coursework/csia-115.md) · [Certifications](../credentials/index.md) · [All projects](index.md)

@@ -23,4 +23,4 @@ I used Cisco Meraki Dashboard to check client IP addresses and port status. I al
 
 I worked remotely with field technicians to complete installations. After conversion, I continued supporting stores with device and connectivity issues as staff returned to using the systems.
 
-[More professional experience](index.md) · [Networking coursework](../technical-labs/cisco-networking-analysis.md)
+[More professional experience](index.md) · [Networking coursework](../coursework/neti-109.md)
