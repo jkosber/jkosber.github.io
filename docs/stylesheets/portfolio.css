@@ -325,10 +325,10 @@ p { max-width: 66ch; }
 .contents a:hover { color: var(--accent); text-decoration: underline; }
 .contents a[aria-current='location'] { background: #173958; color: #c3e6ff; border-radius: 5px; box-shadow: -3px 0 0 #59adff; }
 .credential-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
-.credential { position: relative; padding: 2rem; border: 1px solid #846331; border-left: 4px solid #ffc36b; border-radius: 10px; background: #2d2d2b; color: var(--text); }
-.credential:nth-child(2) { background: #173550; border-color: #406f97; border-left-color: #59adff; }
+.credential { position: relative; padding: 2rem; border: 1px solid var(--line); border-left: 4px solid var(--warm); border-radius: 10px; background: var(--surface); color: var(--text); }
 .credential h3 { color: #fff; font-size: 1.4rem; margin: 0 0 1.5rem; }
 .credential p { margin: 0; color: #c7d8e8; font-size: .9rem; }
+.credential p + p { margin-top: .75rem; }
 .education-entry { position: relative; padding: .3rem 0 .3rem 1.5rem; border-left: 3px solid #4e9bd8; margin: 1.5rem 0 2rem; }
 .education-entry h3 { margin: 0 0 .8rem; }
 .education-entry p { margin: .8rem 0; }
@@ -490,7 +490,7 @@ p { max-width: 66ch; }
   .page-heading, .collection .page-heading { padding: 0 0 1rem; margin: 0 0 1rem; }
   .article-layout, .home-intro, .home-experience { display: block; }
   .experience-entry, .role { padding: 1rem 0; }
-  .credential, .credential:nth-child(2), .experience-entry, .role, .section-note, .component-list li { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
+  .credential, .experience-entry, .role, .section-note, .component-list li { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
   .credential h3, .credential p, .experience-date p, .role-org, .role-dates, .role-intro { color: #000; }
   .credential-grid { margin: .75rem 0; gap: 1rem; }
   .credential { padding: .65rem 1rem; }

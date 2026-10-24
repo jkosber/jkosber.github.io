@@ -57,6 +57,4 @@ nav:
       - Snort and firewall lab: technical-labs/snort-firewall-lab.md
       - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
   - Experience: experience/index.md
-  - About:
-      - Background and credentials: credentials/index.md
-      - Skills & focus: career-paths/index.md
+  - About: credentials/index.md
