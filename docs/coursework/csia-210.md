@@ -27,44 +27,6 @@ The course provided the textbook's hands-on project steps, the trace files for e
 - Filtered the course's traces, expanded the packets each question asked about and wrote the answers
 - Wrote a summary for each capstone lab
 
-## Labs {#labs}
-
-### Addressing, headers and ICMP
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured my own traffic and picked out my address and the broadcast address |
-| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found my IPv6 link-local address and watched an ARP entry return after a ping |
-| Chapter 3 | Read IPv4, IPv6 and UDP header fields | Read each field, including the IPv6 traffic class split into DSCP and ECN |
-| Chapter 4 | ARP, routes and routing-protocol packets | Captured the ARP cache and route table and expanded RIP, OSPF and EIGRP packets |
-| Chapter 5 | ICMP packets and filters | Expanded ICMP packets and filtered ICMPv4 and ICMPv6 out of a trace |
-| Chapter 6 | IPv6 Neighbor Discovery filters | Filtered each Neighbor Discovery message type, 133 to 136, and combined a type with a source address |
-
-### DHCP, DNS and the midterm
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Chapter 7 | DHCP and DHCPv6 exchanges | Matched a client identifier to its hardware address, listed the request's options and followed a lease renewal that failed (see below) |
-| Chapter 8 | Host DNS settings and DNS queries | Captured my DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
-| Midterm capstone | Nine labs on DHCP, DHCPv6, OSPF, device identification, IPv6 next headers, Packet Too Big and AAAA queries | Worked all nine (see below); one screenshot answer in Lab 2.2 is missing |
-
-### Transport and IPv6 transition
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Chapter 9 | UDP and TCP headers and the three-way handshake | Explained the ports, header lengths, acknowledgment numbers, and the MSS and window options in the handshake |
-| Chapter 10 | ISATAP, 6to4 and Teredo traces | Expanded the transition headers in each trace and identified the ISATAP gateway and client |
-| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on my computer |
-
-### Security, troubleshooting and IPv6 in practice
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Chapter 12 | Recognize ARP, port and OS scans | Identified the scanner and the targets in each trace (see below) |
-| Chapter 13 | Troubleshoot a website outage and a chatty host | Used Expert Information and I/O graphs to find bursts of TCP errors |
-| Chapter 14 | IPv6 deployment traces | Filtered router advertisements and AAAA queries |
-| Final capstone | Seven labs on application traffic, DHCPv6, router advertisement flags, SSH and HTTPS, duplicate addresses, SLAAC and router lifetime | Worked all seven (see below) |
-
 ## Strongest work {#strongest-work}
 
 ### Final capstone: a lost IPv6 gateway {#final-capstone}
@@ -104,6 +66,44 @@ The chapter's three traces each held a different scan:
 ### A DHCP lease that ran out (Chapter 7)
 
 In one trace a client tried to renew its lease with a unicast request and got no reply. When its timer ran out it broadcast the request to any DHCP server, and when that went unanswered too it dropped to `0.0.0.0` and started over with a Discover. I followed each step and wrote what the client was doing at each one.
+
+## Labs {#labs}
+
+### Addressing, headers and ICMP
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured my own traffic and picked out my address and the broadcast address |
+| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found my IPv6 link-local address and watched an ARP entry return after a ping |
+| Chapter 3 | Read IPv4, IPv6 and UDP header fields | Read each field, including the IPv6 traffic class split into DSCP and ECN |
+| Chapter 4 | ARP, routes and routing-protocol packets | Captured the ARP cache and route table and expanded RIP, OSPF and EIGRP packets |
+| Chapter 5 | ICMP packets and filters | Expanded ICMP packets and filtered ICMPv4 and ICMPv6 out of a trace |
+| Chapter 6 | IPv6 Neighbor Discovery filters | Filtered each Neighbor Discovery message type, 133 to 136, and combined a type with a source address |
+
+### DHCP, DNS and the midterm
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Chapter 7 | DHCP and DHCPv6 exchanges | Matched a client identifier to its hardware address, listed the request's options and followed a lease renewal that failed (see above) |
+| Chapter 8 | Host DNS settings and DNS queries | Captured my DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
+| Midterm capstone | Nine labs on DHCP, DHCPv6, OSPF, device identification, IPv6 next headers, Packet Too Big and AAAA queries | Worked all nine (see above); one screenshot answer in Lab 2.2 is missing |
+
+### Transport and IPv6 transition
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Chapter 9 | UDP and TCP headers and the three-way handshake | Explained the ports, header lengths, acknowledgment numbers, and the MSS and window options in the handshake |
+| Chapter 10 | ISATAP, 6to4 and Teredo traces | Expanded the transition headers in each trace and identified the ISATAP gateway and client |
+| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on my computer |
+
+### Security, troubleshooting and IPv6 in practice
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Chapter 12 | Recognize ARP, port and OS scans | Identified the scanner and the targets in each trace (see above) |
+| Chapter 13 | Troubleshoot a website outage and a chatty host | Used Expert Information and I/O graphs to find bursts of TCP errors |
+| Chapter 14 | IPv6 deployment traces | Filtered router advertisements and AAAA queries |
+| Final capstone | Seven labs on application traffic, DHCPv6, router advertisement flags, SSH and HTTPS, duplicate addresses, SLAAC and router lifetime | Worked all seven (see above) |
 
 ## Skills {#skills}
 

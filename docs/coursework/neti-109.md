@@ -29,64 +29,6 @@ The course provided the Cisco Networking Academy activities and lab sheets: the 
 
 The device configurations are inside the Packet Tracer files, which GitHub can't display. This page is built from my written answers.
 
-## Labs {#labs}
-
-### Getting started, IOS and the physical layer
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 1.0.5 Logical and Physical Mode Exploration | Tour Packet Tracer's physical mode and add a backup router | Answered the device and rack questions |
-| 1.5.5 Network Representation | Name device types and explain clients, servers, LANs and WANs | Counted 15 end devices and 11 intermediary devices and explained LAN and WAN |
-| 1.9.3 Research IT and Networking Job Opportunities | Look up networking jobs and the certifications they ask for | Compared network administrator and engineer postings and their certifications |
-| 2.3.7 Navigate the IOS | Move between IOS modes and use help | Wrote down how the prompt changes in each mode and what the error messages mean |
-| 2.5.5 Configure Initial Switch Settings | Set a hostname, passwords, a banner and save the config | Explained why `login` is needed and why the secret shows as a hash, then saved to NVRAM |
-| 2.7.6 Implement Basic Connectivity | Address two PCs and give two switches a management address | Explained why a switch needs an IP address and what `no shutdown` does |
-| 3.4.4 Research Networking Standards | Find what the IETF, IEEE, ITU and W3C each do | Answered 23 questions and wrote why shared standards matter |
-| 3.5.5 Investigate the TCP/IP and OSI Models in Action | Follow a web request layer by layer in simulation mode | Listed the ports and the layer 2, 3, 4 and 7 fields at each step |
-| 3.7.10 Use Wireshark to View Network Traffic | Capture pings to a local host and to remote sites | Found that local pings carry the peer's MAC and remote pings carry the gateway's |
-| 4.6.5 Connect a Wired and Wireless LAN | Pick the right cables and connect a small network | Answered the media and physical-view questions |
-| 4.7.1 Physical Layer Exploration | Trace a path from a home to a server across ISPs and an undersea cable | Read the hop interfaces and cable landing points off the map |
-| 4.7.2 Connect the Physical Layer | Identify router ports and modules and cable a network | Identified the management ports, interface bandwidths and the added switch module |
-
-### Switching and address resolution
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 7.1.6 Use Wireshark to Examine Ethernet Frames | Read Ethernet II fields in a sample capture and in my own | Explained the frame type, the preamble and which MAC a remote ping uses |
-| 7.2.7 View Network Device MAC Addresses | Read MAC addresses with `show interfaces`, `show arp` and the MAC table | Found the switch and PC MACs in my own run and explained what the broadcast MAC is for |
-| 7.3.7 View the Switch MAC Address Table | Clear the MAC table and watch it fill again | Watched four devices get relearned and wrote how ARP and MAC tables can be spoofed |
-| 9.1.3 Identify MAC and IP Addresses | Note the addresses at each hop in simulation | Filled four PDU tables and explained why the router rewrites MAC addresses |
-| 9.2.9 Examine the ARP Table | Watch ARP requests and replies, including to a remote host | Found that ARP for an off-subnet host asks for the gateway's address |
-| 9.3.4 IPv6 Neighbor Discovery | Follow Neighbor Discovery on a local and a remote network | Identified the ICMPv6 types and the solicited-node multicast addresses |
-
-### Routers and addressing
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 10.1.4 Configure Initial Router Settings | Set up a router and look at flash | Identified the IOS image in flash and why `enable secret` overrides `enable password` |
-| 10.3.4 Connect a Router to a LAN | Configure interfaces and read the routing table | Counted connected and OSPF routes and explained what happens to unlisted destinations |
-| 10.3.5 Troubleshoot Default Gateway Issues | Find and fix four addressing faults | Found and fixed all four (see below) |
-| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer; the write-up only notes which version I had |
-| 11.5.5 Subnet an IPv4 Network | Split a /24 for 50 and 40 hosts and address the devices | Worked out four /26 subnets and filled the addressing table |
-| 11.6.6 Calculate IPv4 Subnets | Six subnet calculations | Got all 48 values right |
-| 11.7.5 Subnetting Scenario | Split a /24 into /27s for five networks | Filled the subnet and addressing tables |
-| 11.9.3 VLSM Design and Implementation Practice | VLSM for four LANs and a router link | Picked the masks and built the subnet and addressing tables |
-| 11.10.1 Design and Implement a VLSM Addressing Scheme | VLSM for four LANs and a router link, largest first | Designed the plan and the device addressing (see below) |
-| 12.4.5 Basic Device Configuration | Configure IPv4 and IPv6 on a router, switch and hosts | Filled the dual-stack addressing table |
-| 12.7.4 Identify IPv6 Addresses | Classify, shorten and expand IPv6 addresses | Matched all eight addresses to their types and wrote the short forms |
-| 12.9.1 Implement a Subnetted IPv6 Addressing Scheme | Subnet an IPv6 /64 block and address two routers | Worked out the five subnets and the interface addresses |
-| 13.2.6 Verify IPv4 and IPv6 Addressing | Check a dual-stack network with ping and traceroute | Checked every ping and mapped each traceroute hop to its interface |
-
-### Transport, applications, security and a small network
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 14.8.1 TCP and UDP Communications | Compare HTTP, FTP, DNS and email at layer 4 in simulation | Compared the ports, sequence numbers and flags for each and explained why DNS used UDP |
-| 15.4.8 Observe DNS Resolution | Look up A, PTR and MX records | Explained why browsing by IP can fail for a CDN site and how MX preference works |
-| 16.2.6 Research Network Security Threats | Use SANS and CISA to research a current attack | Wrote up a SYN flood case and how to defend against it |
-| 17.5.9 Interpret show Command Output | Match `show` commands to questions about a router | Answered which command shows the IOS version, flash, users, routes and interfaces |
-| 17.7.6 Troubleshoot Connectivity Issues | Find why four clients can't reach a web server | Traced each fault and flagged the one I wasn't allowed to fix (see below) |
-
 ## Strongest work {#strongest-work}
 
 ### Designing a VLSM plan (11.10.1) {#addressing-a-small-network}
@@ -132,6 +74,64 @@ The lab sheet's own test table at the end was left mostly blank, so there's no w
 ### Following IPv6 Neighbor Discovery (9.3.4)
 
 In simulation mode I watched a PC find another PC's MAC address with Neighbor Discovery instead of ARP. I wrote down the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. In my words: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."
+
+## Labs {#labs}
+
+### Getting started, IOS and the physical layer
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 1.0.5 Logical and Physical Mode Exploration | Tour Packet Tracer's physical mode and add a backup router | Answered the device and rack questions |
+| 1.5.5 Network Representation | Name device types and explain clients, servers, LANs and WANs | Counted 15 end devices and 11 intermediary devices and explained LAN and WAN |
+| 1.9.3 Research IT and Networking Job Opportunities | Look up networking jobs and the certifications they ask for | Compared network administrator and engineer postings and their certifications |
+| 2.3.7 Navigate the IOS | Move between IOS modes and use help | Wrote down how the prompt changes in each mode and what the error messages mean |
+| 2.5.5 Configure Initial Switch Settings | Set a hostname, passwords, a banner and save the config | Explained why `login` is needed and why the secret shows as a hash, then saved to NVRAM |
+| 2.7.6 Implement Basic Connectivity | Address two PCs and give two switches a management address | Explained why a switch needs an IP address and what `no shutdown` does |
+| 3.4.4 Research Networking Standards | Find what the IETF, IEEE, ITU and W3C each do | Answered 23 questions and wrote why shared standards matter |
+| 3.5.5 Investigate the TCP/IP and OSI Models in Action | Follow a web request layer by layer in simulation mode | Listed the ports and the layer 2, 3, 4 and 7 fields at each step |
+| 3.7.10 Use Wireshark to View Network Traffic | Capture pings to a local host and to remote sites | Found that local pings carry the peer's MAC and remote pings carry the gateway's |
+| 4.6.5 Connect a Wired and Wireless LAN | Pick the right cables and connect a small network | Answered the media and physical-view questions |
+| 4.7.1 Physical Layer Exploration | Trace a path from a home to a server across ISPs and an undersea cable | Read the hop interfaces and cable landing points off the map |
+| 4.7.2 Connect the Physical Layer | Identify router ports and modules and cable a network | Identified the management ports, interface bandwidths and the added switch module |
+
+### Switching and address resolution
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 7.1.6 Use Wireshark to Examine Ethernet Frames | Read Ethernet II fields in a sample capture and in my own | Explained the frame type, the preamble and which MAC a remote ping uses |
+| 7.2.7 View Network Device MAC Addresses | Read MAC addresses with `show interfaces`, `show arp` and the MAC table | Found the switch and PC MACs in my own run and explained what the broadcast MAC is for |
+| 7.3.7 View the Switch MAC Address Table | Clear the MAC table and watch it fill again | Watched four devices get relearned and wrote how ARP and MAC tables can be spoofed |
+| 9.1.3 Identify MAC and IP Addresses | Note the addresses at each hop in simulation | Filled four PDU tables and explained why the router rewrites MAC addresses |
+| 9.2.9 Examine the ARP Table | Watch ARP requests and replies, including to a remote host | Found that ARP for an off-subnet host asks for the gateway's address |
+| 9.3.4 IPv6 Neighbor Discovery | Follow Neighbor Discovery on a local and a remote network | Identified the ICMPv6 types and the solicited-node multicast addresses |
+
+### Routers and addressing
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 10.1.4 Configure Initial Router Settings | Set up a router and look at flash | Identified the IOS image in flash and why `enable secret` overrides `enable password` |
+| 10.3.4 Connect a Router to a LAN | Configure interfaces and read the routing table | Counted connected and OSPF routes and explained what happens to unlisted destinations |
+| 10.3.5 Troubleshoot Default Gateway Issues | Find and fix four addressing faults | Found and fixed all four (see above) |
+| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer; the write-up only notes which version I had |
+| 11.5.5 Subnet an IPv4 Network | Split a /24 for 50 and 40 hosts and address the devices | Worked out four /26 subnets and filled the addressing table |
+| 11.6.6 Calculate IPv4 Subnets | Six subnet calculations | Got all 48 values right |
+| 11.7.5 Subnetting Scenario | Split a /24 into /27s for five networks | Filled the subnet and addressing tables |
+| 11.9.3 VLSM Design and Implementation Practice | VLSM for four LANs and a router link | Picked the masks and built the subnet and addressing tables |
+| 11.10.1 Design and Implement a VLSM Addressing Scheme | VLSM for four LANs and a router link, largest first | Designed the plan and the device addressing (see above) |
+| 12.4.5 Basic Device Configuration | Configure IPv4 and IPv6 on a router, switch and hosts | Filled the dual-stack addressing table |
+| 12.7.4 Identify IPv6 Addresses | Classify, shorten and expand IPv6 addresses | Matched all eight addresses to their types and wrote the short forms |
+| 12.9.1 Implement a Subnetted IPv6 Addressing Scheme | Subnet an IPv6 /64 block and address two routers | Worked out the five subnets and the interface addresses |
+| 13.2.6 Verify IPv4 and IPv6 Addressing | Check a dual-stack network with ping and traceroute | Checked every ping and mapped each traceroute hop to its interface |
+
+### Transport, applications, security and a small network
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 14.8.1 TCP and UDP Communications | Compare HTTP, FTP, DNS and email at layer 4 in simulation | Compared the ports, sequence numbers and flags for each and explained why DNS used UDP |
+| 15.4.8 Observe DNS Resolution | Look up A, PTR and MX records | Explained why browsing by IP can fail for a CDN site and how MX preference works |
+| 16.2.6 Research Network Security Threats | Use SANS and CISA to research a current attack | Wrote up a SYN flood case and how to defend against it |
+| 17.5.9 Interpret show Command Output | Match `show` commands to questions about a router | Answered which command shows the IOS version, flash, users, routes and interfaces |
+| 17.7.6 Troubleshoot Connectivity Issues | Find why four clients can't reach a web server | Traced each fault and flagged the one I wasn't allowed to fix (see above) |
 
 ## Skills {#skills}
 

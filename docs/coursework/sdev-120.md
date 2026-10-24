@@ -27,46 +27,6 @@ The course provided the assignment prompts and scenarios, the Excel templates fo
 - Wrote the Python for Modules 6 and 7 and the in-class practice scripts
 - Led a five-person team project, responsible for employee data management and for security and compliance
 
-## Labs {#labs}
-
-### Planning and design
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Module 1 Rules of Pseudocode | State five pseudocode conventions | Wrote five rules in my own words: one statement per line, capitalized keywords, indentation, standard keywords and plain English |
-| Module 1 Program development workbook | Order the development stages, name flowchart symbols and write pseudocode for weekly and yearly work hours | Put the seven stages in order, named the symbols and wrote the hours pseudocode |
-| Module 1 Pseudocode and flowcharts | Plan three everyday tasks in pseudocode and Lucidchart | Planned miles per gallon, daily rent and making breakfast, each as pseudocode and a flowchart |
-| Module 2 Cleaning-service charge | Hierarchy chart, pseudocode and flowchart for a service-charge program | Split it into housekeeping, detail loop and end-of-job modules with named constants and a `ZZZZ` sentinel (see below) |
-| Module 2 Job cost estimate | The same pattern for a contractor's estimate | Wrote the modules with an hourly-rate constant, a 20 percent materials markup and a 0-hours sentinel |
-| Module 2 Security Practices discussion | Explain why security matters when writing code | Wrote about input validation against SQL injection, encryption, access control and the 2017 Equifax breach |
-| Module 5 Quiz game plan and flowchart | Plan a category-and-points quiz game and flowchart it | Wrote the rules and steps, then drew the flowchart (see below) |
-| Module 5 UML Use Case Diagram | Draw a use-case diagram for an online shopping system | Drew three actors and ten use cases with include and extend links |
-
-### Computer foundations
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Module 3 Character Values | Convert four sentences to ASCII codes and answer two Unicode questions | Coded every character of the four sentences and answered the Unicode questions |
-| Module 3 Memory | Memory and storage, networking basics and logic-gate truth tables | Sorted 18 memory and storage items, answered four networking questions and filled in the gate tables |
-
-### Languages, debugging and structures
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Module 4 Programming and scripting languages | Short essay with sources | Compared compiled and scripted languages and server-side scripting, with three sources |
-| Module 4 Debugging exercise 1 | Review and debug a pseudocode program | Wrote how I'd review the logic and formatting first, then get a peer review, and how flowcharts, indentation and comments prevent errors |
-| Module 4 Number-guess flowchart | Use selection and loop structures | Drew a guess loop with "too high" and "too low" branches back to the input |
-| Module 4 Dictionary-search flowchart | The same structures for a real-world task | Drew a search that flips forward or backward until it finds the word |
-| Module 4 Group project check-in | Report the team's status | Reported our meeting schedule and the five roles; mine was team leader |
-
-### Python
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Module 6 IDLE script | Variables and string concatenation | Built and printed a sentence from three variables and turned in the IDLE output |
-| Module 7 Python using loops | A `for` loop with a decision | Looped over 15 numbers and printed whether each is even or odd, with the IDLE output |
-| Class 4 practice | Sequence, selection and a list loop | Took input, used a pass/fail `if` and built a list of employees in a loop |
-
 ## Strongest work {#strongest-work}
 
 ### Breaking a program into modules (Module 2) {#breaking-a-program-into-modules}
@@ -113,6 +73,46 @@ Our five-person team built a payroll script in Python. I was team leader, respon
 - **Export:** collects ten employees and writes them to `Payroll.xlsx` with pandas
 
 What I'd fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of my role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
+
+## Labs {#labs}
+
+### Planning and design
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Module 1 Rules of Pseudocode | State five pseudocode conventions | Wrote five rules in my own words: one statement per line, capitalized keywords, indentation, standard keywords and plain English |
+| Module 1 Program development workbook | Order the development stages, name flowchart symbols and write pseudocode for weekly and yearly work hours | Put the seven stages in order, named the symbols and wrote the hours pseudocode |
+| Module 1 Pseudocode and flowcharts | Plan three everyday tasks in pseudocode and Lucidchart | Planned miles per gallon, daily rent and making breakfast, each as pseudocode and a flowchart |
+| Module 2 Cleaning-service charge | Hierarchy chart, pseudocode and flowchart for a service-charge program | Split it into housekeeping, detail loop and end-of-job modules with named constants and a `ZZZZ` sentinel (see above) |
+| Module 2 Job cost estimate | The same pattern for a contractor's estimate | Wrote the modules with an hourly-rate constant, a 20 percent materials markup and a 0-hours sentinel |
+| Module 2 Security Practices discussion | Explain why security matters when writing code | Wrote about input validation against SQL injection, encryption, access control and the 2017 Equifax breach |
+| Module 5 Quiz game plan and flowchart | Plan a category-and-points quiz game and flowchart it | Wrote the rules and steps, then drew the flowchart (see above) |
+| Module 5 UML Use Case Diagram | Draw a use-case diagram for an online shopping system | Drew three actors and ten use cases with include and extend links |
+
+### Computer foundations
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Module 3 Character Values | Convert four sentences to ASCII codes and answer two Unicode questions | Coded every character of the four sentences and answered the Unicode questions |
+| Module 3 Memory | Memory and storage, networking basics and logic-gate truth tables | Sorted 18 memory and storage items, answered four networking questions and filled in the gate tables |
+
+### Languages, debugging and structures
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Module 4 Programming and scripting languages | Short essay with sources | Compared compiled and scripted languages and server-side scripting, with three sources |
+| Module 4 Debugging exercise 1 | Review and debug a pseudocode program | Wrote how I'd review the logic and formatting first, then get a peer review, and how flowcharts, indentation and comments prevent errors |
+| Module 4 Number-guess flowchart | Use selection and loop structures | Drew a guess loop with "too high" and "too low" branches back to the input |
+| Module 4 Dictionary-search flowchart | The same structures for a real-world task | Drew a search that flips forward or backward until it finds the word |
+| Module 4 Group project check-in | Report the team's status | Reported our meeting schedule and the five roles; mine was team leader |
+
+### Python
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Module 6 IDLE script | Variables and string concatenation | Built and printed a sentence from three variables and turned in the IDLE output |
+| Module 7 Python using loops | A `for` loop with a decision | Looped over 15 numbers and printed whether each is even or odd, with the IDLE output |
+| Class 4 practice | Sequence, selection and a list loop | Took input, used a pass/fail `if` and built a list of employees in a loop |
 
 ## Skills {#skills}
 

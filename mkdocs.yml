@@ -14,6 +14,7 @@ hooks:
   - hooks/asset_versions.py
   - hooks/tool_icons.py
   - hooks/reading_accessibility.py
+  - hooks/class_sections.py
 markdown_extensions:
   - attr_list
   - md_in_html

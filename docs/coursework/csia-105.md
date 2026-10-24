@@ -26,53 +26,6 @@ The textbook provided each hands-on and case project: the numbered steps, the qu
 - Answered each project's questions in my own words, with screenshots
 - Wrote the case projects: comparisons of fuzzers and password managers, a presentation on encryption options, and short papers on policy, cyber insurance and the field
 
-## Labs {#labs}
-
-### Cryptography and certificates
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 3-1 Using OpenPuff Steganography | Hide a file inside an image and recover it | Hid a zip file in a JPEG behind three passwords, recovered it and compared the file sizes (see below) |
-| 3-8 Software Data Encryption | Present encryption options to a fictional firm | Built a 10-slide deck on encryption software, full-disk encryption, self-encrypting drives, HSMs and TPMs |
-| 4-1 Trending Cyber | Suggest precautions against losing encryption keys | Recommended a password manager, regular password changes and MFA with a hardware token |
-| 4-1 SSL Server and Browser Tests | Grade servers and browsers with Qualys SSL Labs | Graded three sites and two browsers and explained each grade (see below) |
-| 4-3 Viewing CRLs and Untrusted Certificates | Inspect trusted roots, a revocation list and untrusted certificates | Read a certificate revocation list and the untrusted store in the Certificates snap-in |
-
-### Endpoints and mobile
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 5-1 Microsoft Safety Scanner | Run a quick malware scan | Ran the scan, which found no threats |
-| 5-3 Configuring Microsoft Windows Security | Compare Defender protection presets | Compared what the Default, High and Max presets change |
-| 5-7 Using a Software Keylogger | See what a keylogger captures | Ran a keylogger trial offline in the VM and explained how an attacker would use its log of my typing and browsing |
-| 6-1 Creating and Using QR Codes | Show how QR codes can be abused | Made and decoded QR codes and described Wi-Fi, payment and file-download abuse |
-| 6-3 Installing NoxPlayer Android Emulator | Run an Android emulator | Installed the emulator and changed its resolution |
-| 6-4 Fuzzers | Compare three fuzzers | Compared Burp Suite, OWASP ZAP and Wfuzz in a table and recommended ZAP |
-
-### Identity and wireless
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Virtual machine setup | Set up the class's Windows VM | Set up the Windows 10 VM in VirtualBox |
-| 7-1 Trending Cyber | Take a position on digital-legacy contacts | Wrote a policy position covering identity checks and how the feature could be abused |
-| 7-9 Password Managers | Compare four password managers | Compared Google Password Manager, LastPass, KeePass and Bitwarden on nine points and ranked them |
-| 8-3 MAC Spoofing | Change a network adapter's MAC address | Opened a MAC address changer on the VM's adapter and explained the OUI and how attackers use spoofing |
-| 10-1 Using a Wireless Monitor Tool | Inspect nearby Wi-Fi networks | Answered questions on hidden SSIDs, channel overlap, WPS and security settings |
-| 10-4 Using Microsoft Windows Netsh Commands | Query and control Wi-Fi from the command line | Read my adapter's capabilities, blocked and unblocked a network and generated a wireless report (see below) |
-
-### Vulnerabilities, forensics and policy
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| 12-1 Exploring CVE | Search the CVE list | Searched cve.org for "passwords" (2,847 results) and answered the questions |
-| 12-2 Exploring the NVD | Compare CVE with NVD and explore NVD's data | Explained how CVE and NVD differ, read the score distribution and searched by keyword |
-| 13-3 Viewing Windows Hidden Data | Find deleted and slack-space data | Searched slack space with Directory Snoop and found three hits in deleted entries (see below) |
-| 15-1 Backups | Schedule a cloud backup | Scheduled a backup with iDrive; the first run had no files selected |
-| 15-2 Journaling | Set up sync and real-time backup | Set up sync and real-time protection in iDrive and answered the questions |
-| Additional readings | Summarize ethics principles and change control | Summarized eight ethics principles and six benefits of change control |
-| 15-11 Cybersecurity Insurance for Users | Weigh personal cyber insurance | Listed four pros and four cons and made a recommendation |
-| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what surprised me and where I want to go in the field |
-
 ## Strongest work {#strongest-work}
 
 ### Grading TLS on servers and browsers (4-1) {#grading-tls}
@@ -109,6 +62,53 @@ The screenshots show my own and nearby networks, so I haven't reproduced them he
 ### Finding deleted data in slack space (13-3)
 
 With Directory Snoop's NTFS module I browsed the drive's master file table and read a document's raw text, then searched slack space for the word "country" and got three hits in deleted entries. I explained that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.
+
+## Labs {#labs}
+
+### Cryptography and certificates
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 3-1 Using OpenPuff Steganography | Hide a file inside an image and recover it | Hid a zip file in a JPEG behind three passwords, recovered it and compared the file sizes (see above) |
+| 3-8 Software Data Encryption | Present encryption options to a fictional firm | Built a 10-slide deck on encryption software, full-disk encryption, self-encrypting drives, HSMs and TPMs |
+| 4-1 Trending Cyber | Suggest precautions against losing encryption keys | Recommended a password manager, regular password changes and MFA with a hardware token |
+| 4-1 SSL Server and Browser Tests | Grade servers and browsers with Qualys SSL Labs | Graded three sites and two browsers and explained each grade (see above) |
+| 4-3 Viewing CRLs and Untrusted Certificates | Inspect trusted roots, a revocation list and untrusted certificates | Read a certificate revocation list and the untrusted store in the Certificates snap-in |
+
+### Endpoints and mobile
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 5-1 Microsoft Safety Scanner | Run a quick malware scan | Ran the scan, which found no threats |
+| 5-3 Configuring Microsoft Windows Security | Compare Defender protection presets | Compared what the Default, High and Max presets change |
+| 5-7 Using a Software Keylogger | See what a keylogger captures | Ran a keylogger trial offline in the VM and explained how an attacker would use its log of my typing and browsing |
+| 6-1 Creating and Using QR Codes | Show how QR codes can be abused | Made and decoded QR codes and described Wi-Fi, payment and file-download abuse |
+| 6-3 Installing NoxPlayer Android Emulator | Run an Android emulator | Installed the emulator and changed its resolution |
+| 6-4 Fuzzers | Compare three fuzzers | Compared Burp Suite, OWASP ZAP and Wfuzz in a table and recommended ZAP |
+
+### Identity and wireless
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Virtual machine setup | Set up the class's Windows VM | Set up the Windows 10 VM in VirtualBox |
+| 7-1 Trending Cyber | Take a position on digital-legacy contacts | Wrote a policy position covering identity checks and how the feature could be abused |
+| 7-9 Password Managers | Compare four password managers | Compared Google Password Manager, LastPass, KeePass and Bitwarden on nine points and ranked them |
+| 8-3 MAC Spoofing | Change a network adapter's MAC address | Opened a MAC address changer on the VM's adapter and explained the OUI and how attackers use spoofing |
+| 10-1 Using a Wireless Monitor Tool | Inspect nearby Wi-Fi networks | Answered questions on hidden SSIDs, channel overlap, WPS and security settings |
+| 10-4 Using Microsoft Windows Netsh Commands | Query and control Wi-Fi from the command line | Read my adapter's capabilities, blocked and unblocked a network and generated a wireless report (see above) |
+
+### Vulnerabilities, forensics and policy
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| 12-1 Exploring CVE | Search the CVE list | Searched cve.org for "passwords" (2,847 results) and answered the questions |
+| 12-2 Exploring the NVD | Compare CVE with NVD and explore NVD's data | Explained how CVE and NVD differ, read the score distribution and searched by keyword |
+| 13-3 Viewing Windows Hidden Data | Find deleted and slack-space data | Searched slack space with Directory Snoop and found three hits in deleted entries (see above) |
+| 15-1 Backups | Schedule a cloud backup | Scheduled a backup with iDrive; the first run had no files selected |
+| 15-2 Journaling | Set up sync and real-time backup | Set up sync and real-time protection in iDrive and answered the questions |
+| Additional readings | Summarize ethics principles and change control | Summarized eight ethics principles and six benefits of change control |
+| 15-11 Cybersecurity Insurance for Users | Weigh personal cyber insurance | Listed four pros and four cons and made a recommendation |
+| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what surprised me and where I want to go in the field |
 
 ## Skills {#skills}
 

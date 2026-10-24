@@ -28,6 +28,37 @@ The course provided the Cisco Networking Academy lab sheets, the CyberOps Workst
 
 The Snort lab's detection rule and firewall command came with the lab; I ran them and read the results.
 
+## Strongest work {#strongest-work}
+
+### A Pushdo infection and my after-action report {#pushdo-after-action-report}
+
+The final assessment gave me Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. Then I wrote an after-action report recommending that the host be isolated, the three domains blocked, the network segmented and users trained. In the assessment I wrote: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
+
+The full write-up is on [CyberOps & traffic investigation](../technical-labs/soc-threat-detection.md).
+
+### Rebuilding an exploit kit infection (27.2.15) {#rebuilding-an-exploit-kit-infection}
+
+The data came from a January 2017 infection. I started in Kibana with the first alert, which tied the traffic to the RIG exploit kit, then moved to the Sguil and CapMe transcripts to rebuild what happened:
+
+1. A search took the user to a compromised home-improvement site.
+2. The site loaded a script from a redirector, which sent the browser to the exploit kit.
+3. The exploit kit served a Flash exploit.
+4. The later alerts named the payload as Cerber ransomware.
+
+The whole exploit took less than a minute, from 22:54:42 to 22:55:28. Reading the saved page, I found how its script avoided detection: "The javascript file avoids detection by splitting the iframe tag." I hashed the downloaded Flash file, and VirusTotal flagged it on 33 of 62 engines. A second alert under a different file name carried the same hash: "Yes the two hashes match even though the filenames are different indicating the same malware."
+
+### Separating a misconfiguration from an attack (27.2.16) {#separating-a-misconfiguration-from-an-attack}
+
+A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. I judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
+
+The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there I identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
+
+### Snort and a firewall rule (26.1.7)
+
+In a Mininet network, I ran Snort on the router and requested a file from the lab's malicious server. My first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.
+
+The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-labs/snort-firewall-lab.md).
+
 ## Labs {#labs}
 
 ### Security operations and Windows
@@ -93,51 +124,20 @@ The Snort lab's detection rule and firewall command came with the lab; I ran the
 |---|---|---|
 | 25.3.10 Explore a NetFlow Implementation | Read NetFlow data in Packet Tracer | Filled in the flow fields for a request and its response |
 | 25.3.11 Logging from Multiple Sources | Syslog, AAA and NetFlow in Packet Tracer | Read the routing syslog messages, the AAA login entries and the NetFlow data |
-| 26.1.7 Snort and Firewall Rules | Trigger a Snort alert, then block the server with iptables | Ran the lab's Snort rule and firewall command and read the results (see below) |
+| 26.1.7 Snort and Firewall Rules | Trigger a Snort alert, then block the server with iptables | Ran the lab's Snort rule and firewall command and read the results (see above) |
 | 27.1.5 Convert Data into a Universal Format | Normalize log timestamps with `awk` | Fixed my first Apache conversion, which turned every date into 1970, and summarized five security tools |
 | 27.2.9 Regular Expression Tutorial | Learn regular expressions for searching logs | Filled in the metacharacter table and searched a log with a regular expression in `less` |
 | 27.2.10 Extract an Executable from a PCAP | Export a file from a capture | Followed the HTTP stream and exported the 345,088-byte executable |
 | 27.2.12 Interpret HTTP and DNS Data to Isolate Threat Actor | Find a SQL injection and DNS exfiltration in Kibana | Found the injected request and the data it returned, then decoded the DNS queries back into the stolen file |
 | 27.2.14 Isolate Compromised Host Using 5-Tuple | Pivot from Sguil to Wireshark to Kibana | Rebuilt what the attacker ran after getting a root shell, found the FTP transfer that followed and recommended containment steps |
-| 27.2.15 Investigating a Malware Exploit | Investigate an exploit kit infection | Rebuilt the chain from a search result to ransomware (see below) |
-| 27.2.16 Investigating an Attack on a Windows Host | Investigate a compromised Windows host | Separated a likely misconfiguration from the attack and identified two trojan downloads (see below) |
+| 27.2.15 Investigating a Malware Exploit | Investigate an exploit kit infection | Rebuilt the chain from a search result to ransomware (see above) |
+| 27.2.16 Investigating an Attack on a Windows Host | Investigate a compromised Windows host | Separated a likely misconfiguration from the attack and identified two trojan downloads (see above) |
 
 ### Final skills assessment
 
 | Lab | What it asked | What I did |
 |---|---|---|
-| CyberOps Associates Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see below) |
-
-## Strongest work {#strongest-work}
-
-### A Pushdo infection and my after-action report {#pushdo-after-action-report}
-
-The final assessment gave me Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. Then I wrote an after-action report recommending that the host be isolated, the three domains blocked, the network segmented and users trained. In the assessment I wrote: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
-
-The full write-up is on [CyberOps & traffic investigation](../technical-labs/soc-threat-detection.md).
-
-### Rebuilding an exploit kit infection (27.2.15) {#rebuilding-an-exploit-kit-infection}
-
-The data came from a January 2017 infection. I started in Kibana with the first alert, which tied the traffic to the RIG exploit kit, then moved to the Sguil and CapMe transcripts to rebuild what happened:
-
-1. A search took the user to a compromised home-improvement site.
-2. The site loaded a script from a redirector, which sent the browser to the exploit kit.
-3. The exploit kit served a Flash exploit.
-4. The later alerts named the payload as Cerber ransomware.
-
-The whole exploit took less than a minute, from 22:54:42 to 22:55:28. Reading the saved page, I found how its script avoided detection: "The javascript file avoids detection by splitting the iframe tag." I hashed the downloaded Flash file, and VirusTotal flagged it on 33 of 62 engines. A second alert under a different file name carried the same hash: "Yes the two hashes match even though the filenames are different indicating the same malware."
-
-### Separating a misconfiguration from an attack (27.2.16) {#separating-a-misconfiguration-from-an-attack}
-
-A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. I judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
-
-The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there I identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
-
-### Snort and a firewall rule (26.1.7)
-
-In a Mininet network, I ran Snort on the router and requested a file from the lab's malicious server. My first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.
-
-The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-labs/snort-firewall-lab.md).
+| CyberOps Associates Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see above) |
 
 ## Skills {#skills}
 

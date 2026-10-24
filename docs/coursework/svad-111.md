@@ -27,53 +27,6 @@ The course provided the worksheets and their questions, an AWS Academy lab accou
 - Wrote the input-checked scripts and the wallpaper downloader in Bash and ran each one
 - Answered the worksheet questions in my own words and wrote the final project report
 
-## Labs {#labs}
-
-### Virtualization and the cloud
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| M01 Building Virtual Machines | Install two Linux VMs in a Type 2 hypervisor | Built Linux Mint 22.3 and Fedora VMs in VirtualBox; Fedora kept booting the installer until I ejected the ISO by hand |
-| M01 Pros and Cons to Virtualization | Argue for or against virtualization | Wrote a one-page case covering hardware use, snapshots and the risk of one host failing |
-| M03 Presentation: Cloud Computing | Present cloud service models | Built a 12-slide deck on IaaS, PaaS and SaaS, moving to the cloud, its risks and vendors |
-
-### Command line, files and processes
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| M04 Part 1 Using Linux Programs | Compare the default apps on two distributions; research LAMP, Apache and NGINX, and deb and rpm packages | Filled the app and version table for Mint and Fedora, installing Evolution where Fedora had no mail client, and answered 12 research questions |
-| M04 Reflection: Repositories | Compare Linux and Windows software installs, and rolling and point releases | Wrote four answers and compared package repositories with how I install software on Windows with Winget |
-| M04P1B Command Line Exercises | Shell history, tab completion, shortcuts and man page sections | Predicted what `!ech` would rerun, confirmed it, and wrote why history expansion can run the wrong command |
-| M04P2A Hardware Exploration | Inspect the CPU, buses and disks | Captured `uname`, `lscpu`, `lspci`, `lsusb`, `lsblk` and `df` output |
-| M04P2B Working with Files | Create, move, delete and link files | Explained why a hard link still opens after the original file is deleted while a soft link breaks |
-| M05P1A File Editing | Edit files in vi and nano | Answered the textbook quiz inside vi |
-| M05P1B Archiving | `grep`, `find`, regular expressions, redirection, pipes and `tar` | Worked all 12 steps and noted that the worksheet never created the folder it unpacked into, so I cleaned up by hand |
-| M05P1C Processes | Package tools, `ps`, `pstree` and `top` | Installed a package with apt and inspected the running processes on Ubuntu |
-| M05P2A Scripting | Variables, input, math and `if` | Ran the five practice scripts and explained the difference between single and double quotes |
-| M05P2B Secure Scripting Basics | Add input checks to a game and take its range from arguments | Wrote four scripts (see below) |
-
-### Security, users and networking
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| M06P1A Secure Scripting Advanced | Write a script that downloads, scans, converts and renames a wallpaper | Wrote `dl_wallpaper.sh` (see below) |
-| M06P2A Linux Security | Read account data in passwd and shadow and check who is logged in | Answered 18 questions on account fields, password aging, `id`, `who` and `w` |
-| M06P2B Users and Groups | Add, change and delete users and groups | Added a user, set its comment field, put it in a new group, then deleted it |
-| M06P2C Permissions | Change owners and modes and test what can still be deleted | Made a file read-only with `chmod 444` and explained why I could still delete it from a folder I own |
-| M07P1 Networking | `ip`, `nmcli`, `ping`, `traceroute` and `dig` | Answered 12 questions, compared VirtualBox NAT with a bridged adapter, and looked up MX, NS, TXT and SOA records |
-
-### AdventureWorks project
-
-| Lab | What it asked | What I did |
-|---|---|---|
-| Milestone 1 AWS Environment Build | Launch a web server and a database server in EC2 | Launched both Ubuntu instances in the AWS Academy lab |
-| Milestone 2A Database Server Setup | Install SQL Server and `sqlcmd` | Installed and configured SQL Server 2022, checked the service and ran a test query with my name |
-| Milestone 2B Database Server Setup | Convert and import the AdventureWorks data | Imported the data and checked the counts: 504 products and 19,972 people |
-| Milestone 3A Web Server Setup | Open the application ports in the security group | Added rules for ports 80, 1433 and 3306 next to SSH |
-| Milestone 3B Web Server Setup | Install Apache, PHP 8.1 and the SQL Server drivers | Brought up a `test.php` page showing PHP 8.1.2 under Apache |
-| Milestone 3C Web Server Setup | Deploy the app and test it | Searched the catalog, opened product 787 and saved a review |
-| Milestone 4 Final report | Write up the build | Wrote the summary, the build steps, a table of four problems and their fixes, and three recommendations |
-
 ## Strongest work {#strongest-work}
 
 ### AdventureWorks on two AWS servers
@@ -130,6 +83,53 @@ The assignment asked for a script that takes an image URL and a new name, then d
 | Not already a JPEG | Converts it with ImageMagick |
 
 My run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. What I'd change: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
+
+## Labs {#labs}
+
+### Virtualization and the cloud
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| M01 Building Virtual Machines | Install two Linux VMs in a Type 2 hypervisor | Built Linux Mint 22.3 and Fedora VMs in VirtualBox; Fedora kept booting the installer until I ejected the ISO by hand |
+| M01 Pros and Cons to Virtualization | Argue for or against virtualization | Wrote a one-page case covering hardware use, snapshots and the risk of one host failing |
+| M03 Presentation: Cloud Computing | Present cloud service models | Built a 12-slide deck on IaaS, PaaS and SaaS, moving to the cloud, its risks and vendors |
+
+### Command line, files and processes
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| M04 Part 1 Using Linux Programs | Compare the default apps on two distributions; research LAMP, Apache and NGINX, and deb and rpm packages | Filled the app and version table for Mint and Fedora, installing Evolution where Fedora had no mail client, and answered 12 research questions |
+| M04 Reflection: Repositories | Compare Linux and Windows software installs, and rolling and point releases | Wrote four answers and compared package repositories with how I install software on Windows with Winget |
+| M04P1B Command Line Exercises | Shell history, tab completion, shortcuts and man page sections | Predicted what `!ech` would rerun, confirmed it, and wrote why history expansion can run the wrong command |
+| M04P2A Hardware Exploration | Inspect the CPU, buses and disks | Captured `uname`, `lscpu`, `lspci`, `lsusb`, `lsblk` and `df` output |
+| M04P2B Working with Files | Create, move, delete and link files | Explained why a hard link still opens after the original file is deleted while a soft link breaks |
+| M05P1A File Editing | Edit files in vi and nano | Answered the textbook quiz inside vi |
+| M05P1B Archiving | `grep`, `find`, regular expressions, redirection, pipes and `tar` | Worked all 12 steps and noted that the worksheet never created the folder it unpacked into, so I cleaned up by hand |
+| M05P1C Processes | Package tools, `ps`, `pstree` and `top` | Installed a package with apt and inspected the running processes on Ubuntu |
+| M05P2A Scripting | Variables, input, math and `if` | Ran the five practice scripts and explained the difference between single and double quotes |
+| M05P2B Secure Scripting Basics | Add input checks to a game and take its range from arguments | Wrote four scripts (see above) |
+
+### Security, users and networking
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| M06P1A Secure Scripting Advanced | Write a script that downloads, scans, converts and renames a wallpaper | Wrote `dl_wallpaper.sh` (see above) |
+| M06P2A Linux Security | Read account data in passwd and shadow and check who is logged in | Answered 18 questions on account fields, password aging, `id`, `who` and `w` |
+| M06P2B Users and Groups | Add, change and delete users and groups | Added a user, set its comment field, put it in a new group, then deleted it |
+| M06P2C Permissions | Change owners and modes and test what can still be deleted | Made a file read-only with `chmod 444` and explained why I could still delete it from a folder I own |
+| M07P1 Networking | `ip`, `nmcli`, `ping`, `traceroute` and `dig` | Answered 12 questions, compared VirtualBox NAT with a bridged adapter, and looked up MX, NS, TXT and SOA records |
+
+### AdventureWorks project
+
+| Lab | What it asked | What I did |
+|---|---|---|
+| Milestone 1 AWS Environment Build | Launch a web server and a database server in EC2 | Launched both Ubuntu instances in the AWS Academy lab |
+| Milestone 2A Database Server Setup | Install SQL Server and `sqlcmd` | Installed and configured SQL Server 2022, checked the service and ran a test query with my name |
+| Milestone 2B Database Server Setup | Convert and import the AdventureWorks data | Imported the data and checked the counts: 504 products and 19,972 people |
+| Milestone 3A Web Server Setup | Open the application ports in the security group | Added rules for ports 80, 1433 and 3306 next to SSH |
+| Milestone 3B Web Server Setup | Install Apache, PHP 8.1 and the SQL Server drivers | Brought up a `test.php` page showing PHP 8.1.2 under Apache |
+| Milestone 3C Web Server Setup | Deploy the app and test it | Searched the catalog, opened product 787 and saved a review |
+| Milestone 4 Final report | Write up the build | Wrote the summary, the build steps, a table of four problems and their fixes, and three recommendations |
 
 ## Skills {#skills}
 

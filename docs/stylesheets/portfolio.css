@@ -460,6 +460,62 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
   /* Wide tables bleed to the screen edge; the shade at the right edge says there is more to scroll. */
   .body > .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(var(--gutter) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
 }
+/* Class pages: each Strongest work item is a panel; two short items in a row sit side by side without one. */
+.work { margin-top: var(--s2); padding: 2rem; background: var(--surface); border-radius: var(--r-l); }
+.work > h3 { margin: 0 0 var(--s2); font-size: 1.5rem; letter-spacing: -.025em; }
+.work > p, .work > ul, .work > ol { max-width: 35em; margin: var(--s2) 0 0; }
+.work > h3 + * { margin-top: 0; }
+.work > :is(ul, ol) { padding-left: 1.375rem; }
+.work > :is(ul, ol) > li { margin: 0; }
+.work > :is(ul, ol) > li + li { margin-top: .625rem; }
+.work > :last-child { margin-bottom: 0; }
+.work .table-scroll { margin: var(--s3) 0 0; background: var(--inset); }
+.work th { background: var(--band); }
+.work-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); margin-top: var(--s4); }
+.work-pair > .work { margin: 0; }
+.work--brief { padding: 0; background: none; border-radius: 0; }
+.work--brief > h3 { margin-bottom: .625rem; font-size: var(--t-lead); letter-spacing: -.02em; }
+/* Lab modules: one closed disclosure per course module, then its table. */
+details.lab-module { margin-top: .75rem; background: var(--surface); border-radius: var(--r-m); }
+.lab-module > summary { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem var(--s2); min-height: 4rem; padding: .75rem var(--s3); cursor: pointer; list-style: none; }
+.lab-module > summary::-webkit-details-marker { display: none; }
+/* The heading takes a line of its own, with the count below it, once enlarged text leaves it too little room. */
+.lab-module > summary h3 { flex: 1 1 8em; min-width: 0; margin: 0; hyphens: auto; font-size: 1.1875rem; line-height: 1.3; letter-spacing: -.015em; }
+.lab-count { margin-left: auto; color: var(--muted); font-size: .9375rem; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* The chevron points down while the module is closed and up once it opens. */
+.lab-module > summary::after { content: ''; flex: none; width: .5rem; height: .5rem; margin: 0 .25rem .25rem 0; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); }
+.lab-module[open] > summary::after { margin: .25rem .25rem 0 0; transform: rotate(-135deg); }
+.lab-module .lab-table { margin: 0; padding: 0 var(--s3) .75rem; background: none; border-radius: 0; }
+.lab-module .lab-table th { padding: .75rem 1.25rem .75rem 0; background: none; color: var(--muted); border-top: 1px solid var(--line); }
+.lab-module .lab-table td { padding: var(--s2) 1.25rem var(--s2) 0; border-top: 1px solid var(--line); }
+.lab-module .lab-table :is(th, td):last-child { padding-right: 0; }
+.lab-module .lab-table :is(th, td):first-child { min-width: 4.5em; }
+.lab-module .lab-table td:first-child { color: var(--heading); font-weight: 650; }
+.lab-module .lab-table td:nth-child(2) { color: var(--muted); }
+.did-label { display: none; }
+/* Side padding stops growing with enlarged text, so long words keep room on a phone. */
+@media (max-width: 760px) {
+  .work { padding: 1.5rem min(1.25rem, 5vw); }
+  .work--brief { padding: 0; }
+  .work-pair { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+  .lab-module > summary { padding-inline: min(1.25rem, 5vw); }
+  .lab-module > summary h3 { font-size: var(--t-body); }
+}
+@media screen and (max-width: 760px) {
+  /* A wide table bleeds to the panel's edges, with the same scroll shade as the body's tables. */
+  .work .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(min(1.25rem, 5vw) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
+  /* Each lab stacks: the lab, what it asked, then what I did under a visible label. The hook's
+     roles keep the table semantics that display: block drops. */
+  .lab-module .lab-table { padding: 0 min(1.25rem, 5vw) .5rem; }
+  .body .table-scroll.lab-table table { min-width: 0; }
+  .lab-table :is(table, thead, tbody, tr, th, td) { display: block; }
+  .lab-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .lab-module .lab-table tr { padding: var(--s2) 0; border-top: 1px solid var(--line); }
+  .lab-module .lab-table td { padding: 0; border: 0; }
+  .lab-module .lab-table td + td { margin-top: .25rem; }
+  .lab-module .lab-table code { overflow-wrap: anywhere; }
+  .did-label { display: inline; color: var(--muted); font-weight: 700; }
+}
 .page-context { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; font-size: .78rem; }
 .page-context span { padding: .25rem .75rem; border-radius: 4px; color: var(--accent); background: var(--surface); border: 1px solid var(--line-strong); }
 .page-context span + span { color: var(--muted); background: transparent; border-color: var(--line); }
@@ -649,5 +705,5 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
 @media (forced-colors: active) {
   .main-nav a[aria-current] { text-decoration-color: CanvasText; }
   /* Panels lose their fills in forced colors, so they get a border instead. */
-  .panel, .facts, .feature, .minor, .tile, .role-card { border: 1px solid CanvasText; }
+  .panel, .facts, .feature, .minor, .tile, .role-card, .work:not(.work--brief), details.lab-module { border: 1px solid CanvasText; }
 }
