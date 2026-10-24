@@ -1,5 +1,20 @@
 # Portfolio change record
 
+## October 24, 2026 — visual upgrade
+
+- Four surface layers (page, band, panel, raised) with an inset for Result wells and code, one spacing scale and one type scale. Flat fills; amber is limited to buttons, Result labels and bars, the footer email, the current nav item and the contents rail's current-item bar.
+- Homepage: a hero band with the facts panel hanging over its edge, Proxmox and SSH Workbench as feature panels with their screenshots rising above the panel, the job-scan tool as a minor row with its illustration, the six classes as tiles in their own band, and the two roles as cards. Amber "Read the case study" buttons name their project for screen readers. Facts gained a `detail` line.
+- Case studies and class pages: a header band with breadcrumbs, title, description, a Status, Updated and Source strip and the Result; the summary column is gone. My role and Built with sit in a panel, beside the Result on class pages. The contents are a sticky rail from 1100px and an "On this page" disclosure below it.
+- Class pages: Strongest work comes before Labs, each item in a panel (two short items in a row sit side by side), and each lab module folds closed with its lab count. Lab rows stack on phones. Anchors are unchanged.
+- Tool logos: 13 Simple Icons logos (16.35.0, CC0), stored locally and inlined beside tool names; tools without a logo show as text. Homepage feature panels read a new short `tools` list.
+- Screenshots open in a lightbox above 760px (Escape, backdrop click and Close; focus returns to the link). On phones and without JavaScript the link opens the image file.
+- Class and job-scan illustrations come from the existing set until new ones are drawn. Experience and About use the card and table components; the Experience closing note links to Projects and Coursework.
+- Motion: the intro entrance finishes by 0.48s, the hover lift also covers class tiles, the lightbox fades and scales in 0.2s. All of it is off with reduced motion, and print shows every element, including closed lab modules.
+- Checks: `check-site.js` gained `navCurrent`, `firstShot`, `coveredButtons`, `tileLift`, `pageHead`, `labModuleAnchor`, `lightbox` and `printModules`, and `classPages` now checks the section order, lab modules and the first Strongest work panel. Checks that encoded the summary column and the old row layout were replaced by the page head checks. New tests cover the tokens, the logo lookup and the class-page hook.
+- `CLAUDE.md` and the verification skill describe the new tokens, components and checks.
+
+Validation: 31 tests and the strict build passed. The rendered checks in Chromium and WebKit run in the final pass before this branch is published.
+
 ## October 23, 2026 — site redesign
 
 - Homepage: the name, today's intro and a facts column (latest role, certifications, education); Proxmox and SSH Workbench lead with real screenshots, the job-scan tool follows as a row, then a list of the six classes and both roles. The hero scene, project cards and filters are gone.
