@@ -244,18 +244,21 @@ async (page) => {
     }
   }
 
-  // Experience: both roles on one page, Ladd Dental in the wording approved at gate 2,
-  // and the homepage linking each role with its one-line summary.
+  // Experience: both roles on one page, Ladd Dental in the gate 2 wording plus the master resume's
+  // points (Oct 23), the Verizon contract ending October 2026, and the homepage linking each role
+  // with its one-line summary.
   const LADD_BULLETS = [
     'Handled 20+ tickets a week: workstations, printers, peripherals, network problems and the clinical software, through Level RMM or onsite',
     'Wrote up each ticket in ClickUp: symptoms, what I tried, the fix and any follow-up',
-    'Set up 30+ new workstations, from hardware setup and software installs to domain join',
-    "Retired 50+ workstations that couldn't run Windows 11: wiped, degaussed or crushed the drives and kept a chain-of-custody record",
+    'Set up 30+ new workstations, from hardware setup, software installs and network configuration to domain join',
+    "Retired 50+ workstations that couldn't run Windows 11, so every office stayed on a supported OS: wiped, degaussed or crushed the drives under HIPAA-aligned procedures and kept a chain-of-custody record",
     'Ran HDMI to 7 operatory rooms to replace VGA, building the keystone outlets myself',
-    'Pulled, terminated and tested an Ethernet run between switches in two offices',
+    'Pulled, terminated and tested an Ethernet run between switches in two offices, extending an existing fiber uplink',
     'Fixed a dead wall jack by toning it back to the patch panel and repunching the keystone',
     'Set up accounts and roles in the clinical software and installed it on workstations',
+    'Reinforced secure habits with staff: workstation handling, password hygiene and protecting patient information',
   ];
+  const ROLE_DATES = { 'verizon-conversions': 'July 2026 to October 2026', 'ladd-dental': 'November 2025 to May 2026' };
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/experience/');
   const roles = await page.evaluate(async () => {
@@ -281,6 +284,7 @@ async (page) => {
   if (roles.map((role) => role.id).join('|') !== 'verizon-conversions|ladd-dental') fail(`experience: roles ${roles.map((role) => role.id).join(', ')}`);
   for (const role of roles) {
     for (const field of ['title', 'organization', 'dates']) if (!role[field]) fail(`experience #${role.id}: no ${field}`);
+    if (ROLE_DATES[role.id] && role.dates !== ROLE_DATES[role.id]) fail(`experience #${role.id}: dates "${role.dates}", expected "${ROLE_DATES[role.id]}"`);
     if (!role.image || !role.image.src.includes('assets/roles/')) fail(`experience #${role.id}: image ${JSON.stringify(role.image)}`);
     if (role.bullets.length < 4) fail(`experience #${role.id}: ${role.bullets.length} bullets`);
   }
