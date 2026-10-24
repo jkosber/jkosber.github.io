@@ -276,7 +276,7 @@ async (page) => {
     const values = [];
     const count = await target.evaluate(() => document.querySelectorAll('.reveal').length);
     for (let index = 0; index < count; index += 1) {
-      await target.evaluate((i) => document.querySelectorAll('.reveal')[i].scrollIntoView({ block: 'center' }), index);
+      await target.evaluate((i) => document.querySelectorAll('.reveal')[i].scrollIntoView({ block: 'center', behavior: 'instant' }), index);
       await target.waitForTimeout(200);
       values.push(await target.evaluate((i) => parseFloat(getComputedStyle(document.querySelectorAll('.reveal')[i]).opacity), index));
     }
