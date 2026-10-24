@@ -19,30 +19,38 @@ Python 3.14. MkDocs 1.6.1 and Material 9.7.7 are pinned in `requirements.txt`; r
 
 | Path | Owns |
 |---|---|
-| `docs/**/*.md` | Page content. Frontmatter drives cards, experience entries and layouts |
-| `docs/technical-labs/` | Project case studies. Their order in the `mkdocs.yml` nav sets card order |
-| `overrides/main.html` | Shared shell: head metadata, homepage JSON-LD, header, page layouts, footer |
-| `overrides/partials/components.html` | `icon`, `project_card` and `experience_entries` macros; the URL-to-symbol chain and symbol-to-thumbnail map |
-| `overrides/partials/home.html` | Homepage. Features the Projects nav children `[1:4]`; the first keeps its artwork |
-| `overrides/partials/system-scene.html` | Decorative hero SVG driven by the three scene buttons |
-| `docs/stylesheets/portfolio.css` | All styles: tokens, components, breakpoints, reduced motion, print |
-| `docs/javascripts/portfolio.js` | Mobile menu, project filters, hero scene, section tracking, back-to-top |
+| `docs/**/*.md` | Page content. Frontmatter drives the summary column, class pages, experience roles and layouts |
+| `docs/technical-labs/` | Personal projects and the four coursework case studies. Project order in the `mkdocs.yml` nav sets row order |
+| `docs/coursework/` | Coursework index and one page per class |
+| `docs/experience/index.md` | Both roles, in `roles` frontmatter; the homepage reads the same data |
+| `docs/credentials/index.md` | About: background, certifications with Credly links, education, the skills table, recognition |
+| `docs/<old path>/index.html` | Redirect files for retired addresses: a meta refresh to the new page and section |
+| `overrides/main.html` | Shared shell: head metadata, JSON-LD, header, layouts (projects, coursework, experience, and the reading layout with the summary column), footer |
+| `overrides/partials/components.html` | `icon`, `project_showcase`, `project_row` and `experience_entries` macros |
+| `overrides/partials/home.html` | Homepage: intro and facts, projects with a `screenshot` as showcases and the rest as rows, the class list, experience |
+| `docs/stylesheets/portfolio.css` | All styles: tokens, components, breakpoints, motion, reduced motion, print |
+| `docs/javascripts/portfolio.js` | Mobile menu, the "On this page" contents and section tracking, back-to-top |
 | `hooks/asset_versions.py` | Content-hash query strings on the CSS/JS URLs, so returning browsers never mix old CSS with new HTML |
-| `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions, named from the preceding heading |
-| `tests/` | Unit tests for the reading-accessibility hook |
+| `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions named from the preceding heading; gives two-column tables explicit table roles so they can stack on phones |
+| `tests/` | Hook tests, and the copy voice test that caps report vocabulary per page |
+| `.claude/skills/verifying-portfolio-changes/` | The verification skill, `check-site.js` (rendered checks) and `run-check.js` (runs them in Chromium or WebKit) |
 
 ## Frontmatter
 
 | Field | Effect |
 |---|---|
-| `title`, `description` | Page title, meta description, card text |
-| `kind` | Card label. `Completed coursework` puts a project under the Coursework filter; any other value is Personal |
-| `status` | Card footer and the chip above a case study's title |
-| `visual` | 600×340 SVG for card art; also selects the card tint via `data-visual` |
-| `tools` | Card tags; the first four show |
-| `detail: true` | Supporting lab: stays in the nav, excluded from cards and counts, linked from its parent page |
-| `layout` | `home`, `projects`, `experience` or `wide`; omitted means the reading layout with "On this page" |
-| `role`, `organization`, `dates` | Experience entries |
+| `title`, `description` | Page title, meta description, the line under a case study's title, row text |
+| `summary` | `role`, `built_with`, `result`, optional `source: {label, url}`. Renders the summary column and the Result panel |
+| `screenshot` | `src`, `width`, `height`, `alt`, `caption` (with its date). The lead capture on a case study and its homepage showcase |
+| `status`, `updated` | Status and Updated rows in the summary column; status also shows on project rows |
+| `detail: true` | Coursework case study: listed under its class on the Coursework index, not on Projects |
+| `class_page`, `class_name` | A case study's class, for the breadcrumb and the index |
+| `code`, `course`, `term`, `items`, `repo` | Class pages: the Coursework index table and the summary column |
+| `layout` | `home`, `projects`, `coursework`, `experience` or `wide`; omitted means the reading layout |
+| `roles` | Experience: `id`, `title`, `organization`, `dates`, `image`, `icon`, `summary`, `intro`, `bullets` |
+| `facts` | Homepage facts column: `label`, `text`, optional `href` |
+
+`kind`, `tools` and `visual` remain on some pages, but no template reads them.
 
 ## Content rules
 
@@ -50,7 +58,10 @@ The site is public and recruiters read it. These hold for every edit:
 
 - Every claim traces to a source: the project repositories, coursework submissions, Jadon's resume or his project notes. Never invent work, tests, outcomes or habits. Label coursework as coursework.
 - First person, plain and specific. Lead with what was built and what happened; keep real limits in one short Limits section instead of hedging each sentence.
-- A primary case study opens with its intro, a `.glance` block (My role / Built with / Result) and a one-line `.evidence-note` with the date and source. Supporting labs (`detail: true`) skip the glance and `tools`.
+- Case studies and class pages keep their summary in frontmatter; the template renders the summary column and the Result panel. Don't repeat the summary in the body.
+- A class page says what the course provided and what Jadon did, lists every lab with work of his in tables, then strongest work, skills, limits and sources linking files on `main`. Leave blank or empty files out and say so in Limits.
+- Report vocabulary (evidence, recorded, supplied, historical, established) stays at three or fewer per page; `tests/test_copy_voice.py` enforces it.
+- AI coding agents are credited only in SSH Workbench's "How I worked"; a product that runs an agent, like the job-scan tool, can say so.
 - Dates are local time, not UTC, in copy, filenames and the changelog.
 - Describe Jadon's role with verbs that are true for the work: defined, planned, configured, tested, shipped.
 - Never publish personal location, phone numbers, private host names, IP addresses, paths, credentials or resumes. Use documentation ranges (`192.0.2.0/24`) and `example.com` in examples. `mkdocs.yml` excludes five raw assets as a guard; keep them out.
@@ -62,23 +73,21 @@ The site is public and recruiters read it. These hold for every edit:
 
 | Component | Markup | Use for |
 |---|---|---|
-| Glance | `<div class="glance" markdown>` around a definition list: My role, Built with, Result | Summary under a case study's intro |
-| Evidence note | `<div class="evidence-note" markdown>` | One line with the date and source |
 | Architecture flow | `<figure class="architecture">` with an `<ol class="architecture-flow">` | A simple left-to-right path. Use a table for branching topology |
 | Evidence figure | `<figure class="evidence-figure">` with a focusable `.evidence-scroll` region (`role="region"`, `tabindex="0"`, `aria-label`), a dated caption and a full-size link | Screenshots |
 | Narrative list | A definition list inside `<div class="narrative-list" markdown>`, each term with `: **Label.** ...` definitions; add `narrative-list--pairs` for one definition per term | Paragraph-length comparisons |
-| Table | Plain Markdown after a descriptive heading; the hook names its scroll region from that heading | Inventories and numbers |
+| Table | Plain Markdown after a descriptive heading; the hook names its scroll region from that heading. Two-column tables stack into label and value on phones | Inventories and numbers |
+| Terminal run | A `text` code block with the prompt shortened to `$` | A run whose screenshot carries a username or host name |
 
 ## Adding a project
 
 | Step | Detail |
 |---|---|
-| Sources | Read the project's repo (README, changelog, CI results) and Jadon's project note. For coursework, separate what Jadon did from what the course supplied |
-| Page | `docs/technical-labs/<slug>.md`, modeled on `ssh-workbench.md`: intro, glance, evidence note, sections, `## Limits`, `## Sources`, footer links |
-| Nav | Add to the `mkdocs.yml` Projects list before the supporting labs. Position decides the homepage features (children `[1:4]`) |
-| Artwork | New subject: `docs/assets/project-<name>.svg` (600×340) and `docs/assets/thumbnails/<name>.svg` (240×160) in the existing isometric style; extend the symbol chain and thumbnail map in `components.html`, add an `icon()` case and a `[data-visual$='project-<name>.svg']` tint in `portfolio.css`. Otherwise the card falls back to the security icon |
+| Sources | Read the project's repo (README, changelog, CI results) and Jadon's project note. For coursework, separate what Jadon did from what the course provided |
+| Page | `docs/technical-labs/<slug>.md`, modeled on `ssh-workbench.md`: `summary` frontmatter, intro, sections, `## Limits`, `## Sources`, footer links. A coursework case study also sets `detail: true`, `class_page` and `class_name`, and its class page links to it |
+| Nav | Personal projects go in the `mkdocs.yml` Projects list, in display order. A project with a `screenshot` becomes a homepage showcase; the rest are rows. Coursework case studies go under Coursework after the class pages |
 | Screenshots | Real captures with fictional or cropped data, WebP, no metadata. Set `width`/`height` to the display size (half the pixels for a 2x capture), or it overflows the column on desktop |
-| Links | Projects index intro, Skills & focus, related case-study footers; the hero's scene links if relevant |
+| Links | The About skills table, related case-study footers, and the class page for coursework |
 | Check | `verifying-portfolio-changes` skill, then a CHANGELOG entry |
 
 ## Design system
@@ -88,21 +97,22 @@ Dark navy, blue structure, amber emphasis; print styles switch to white. Tokens 
 | Token | Value | Use |
 |---|---|---|
 | `--background` | `#091827` | Page |
-| `--surface` | `#142a40` | Panels, glance blocks |
+| `--surface` | `#142a40` | Panels, the Result panel, certification cards |
 | `--accent` | `#80c5ff` | Links and technical structure |
-| `--warm` | `#ffc36b` | Primary actions, dates, glance labels |
+| `--warm` | `#ffc36b` | Primary actions, dates, the Result label |
 | `--heading` | `#f2f7ff` | Headings |
 | `--muted` | `#afc2d8` | Secondary text |
 
 - Sora for headings, Manrope for body text, both local WOFF2 subsets. No external fonts, scripts or runtime dependencies.
-- Illustrations are local isometric SVGs in the palette: 600×340 card art and 240×160 thumbnails. They are conceptual and never presented as evidence.
+- Real captures lead: the homepage and case studies open on screenshots, not illustrations. The only illustrations are the two 240×160 isometric role SVGs in `docs/assets/roles/`, conceptual and never presented as evidence.
 - Real screenshots go in `docs/assets/evidence/<project>/` with a date in the filename, sanitized, with descriptive alt text and a dated caption.
-- Motion: one finite hero entrance plus interaction-driven changes; `prefers-reduced-motion` turns it off. Every page works without JavaScript.
+- Motion: a 0.4 s entrance on the homepage intro; a 12 px fade-up tied to scroll on screenshots and list rows (`.reveal`); a 2 px hover lift on whole-row links (`.lift`, using `translate` so the fade-up can't cancel it); 0.18 s menu and page transitions. Nothing over 0.5 s, nothing loops, and `prefers-reduced-motion` turns it all off. Every page works without JavaScript.
 - `!important` appears only where marked `anti-slop-allow` with its reason.
 
 ## Verification and publishing
 
-- Before any commit that changes the site: hook tests and a strict build. Before asking to publish: the `verifying-portfolio-changes` skill.
+- Before any commit that changes the site: the tests and a strict build. Before asking to publish: the `verifying-portfolio-changes` skill, in Chromium and in WebKit (`run-check.js` with `PLAYWRIGHT_MODULE` set).
+- Retiring or renaming a page: add a redirect file and a `REDIRECTS` entry in `check-site.js`.
 - Work on a branch. A push to `main` deploys through `.github/workflows/deploy.yml` (`mkdocs gh-deploy` to `gh-pages`), so push, merge or deploy only with Jadon's approval of that specific change.
 - Record meaningful changes in `CHANGELOG.md` with what was checked.
 
@@ -115,7 +125,7 @@ Dark navy, blue structure, amber emphasis; print styles switch to white. Tokens 
 | Layout and visual design | `frontend-design` plugin, enabled for this project in `.claude/settings.json` |
 | Keep this file current | `claude-md-management` plugin: its improver skill audits CLAUDE.md; `/revise-claude-md` captures session learnings |
 | Review copy for filler and cliches | `anti-slop:slop-check` |
-| Rendered checks | Playwright MCP; close the browser when done |
+| Rendered checks | `check-site.js` through the Playwright MCP or `run-check.js`; close the browser when done |
 | MkDocs or Material documentation | context7 |
 
 ## Private context
