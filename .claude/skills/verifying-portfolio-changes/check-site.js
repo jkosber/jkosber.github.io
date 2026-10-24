@@ -305,11 +305,49 @@ async (page) => {
     else if (entry.summary.split(' ').length < 8) fail(`experience: homepage role ${index + 1} summary is "${entry.summary}"`);
   });
 
+  // About: one page with certifications, education and a single skills table. Both certifications
+  // share one look, and each links to its public Credly badge.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/credentials/');
+  const about = await page.evaluate(() => {
+    const main = document.querySelector('main');
+    const skills = main.querySelector('h2#skills');
+    let tables = 0;
+    for (let node = skills && skills.nextElementSibling; node && node.tagName !== 'H2'; node = node.nextElementSibling) tables += node.matches('table') ? 1 : node.querySelectorAll('table').length;
+    const credentials = [...main.querySelectorAll('.credential')].map((card) => {
+      const style = getComputedStyle(card);
+      return {
+        name: (card.querySelector('h3') || { textContent: '' }).textContent.trim(),
+        look: [style.backgroundColor, style.borderTopColor, style.borderLeftColor, style.color].join(' '),
+        credly: [...card.querySelectorAll('a')].map((link) => link.href).filter((href) => href.includes('credly')),
+      };
+    });
+    return {
+      h1: (main.querySelector('h1') || { textContent: '' }).textContent.trim(),
+      anchors: [...main.querySelectorAll('h2[id]')].map((heading) => heading.id),
+      tables,
+      credentials,
+    };
+  });
+  result.checks.about = about.credentials.map((card) => `${card.name}: ${card.credly.length} Credly link(s)`);
+  if (about.h1 !== 'About') fail(`about: h1 is "${about.h1}"`);
+  for (const id of ['certifications', 'education', 'skills']) if (!about.anchors.includes(id)) fail(`about: missing #${id}`);
+  if (about.tables !== 1) fail(`about: ${about.tables} tables under Skills, expected 1`);
+  if (about.credentials.map((card) => card.name).join('|') !== 'CompTIA Security+|CompTIA A+') fail(`about: certifications ${about.credentials.map((card) => card.name).join(', ')}`);
+  if (new Set(about.credentials.map((card) => card.look)).size !== 1) fail(`about: the certifications look different (${about.credentials.map((card) => card.look).join(' / ')})`);
+  for (const card of about.credentials) {
+    if (card.credly.length !== 1) { fail(`about: ${card.name} has ${card.credly.length} Credly links`); continue; }
+    if (!card.credly[0].startsWith('https://www.credly.com/')) fail(`about: ${card.name} links to ${card.credly[0]}`);
+    const status = (await page.request.get(card.credly[0])).status();
+    if (status !== 200) fail(`about: ${card.name} Credly link returns ${status}`);
+  }
+
   // Moved pages: the old address answers with a refresh to the new page and lands on the right section.
   const REDIRECTS = [
     ['/technical-labs/cisco-networking-analysis/', '/coursework/neti-109/', '#strongest-work'],
     ['/experience/ladd-dental/', '/experience/', '#ladd-dental'],
     ['/experience/verizon-conversions/', '/experience/', '#verizon-conversions'],
+    ['/career-paths/', '/credentials/', '#skills'],
   ];
   result.checks.redirects = 0;
   await page.setViewportSize({ width: 1440, height: 900 });
