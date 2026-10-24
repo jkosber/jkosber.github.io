@@ -3,8 +3,19 @@ title: Proxmox homelab
 description: I built and maintain a Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network.
 kind: Personal homelab
 status: Ongoing
-visual: assets/lab.svg
 tools: [Proxmox VE, Linux, Docker, SDN]
+summary:
+  role: "I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
+  built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "A Caddy reverse-proxy pilot", "OPNsense in progress"]
+  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord."
+  source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
+updated: "October 23, 2026"
+screenshot:
+  src: assets/evidence/homelab/homepage-dashboard-2026-10-23.webp
+  width: 1232
+  height: 944
+  alt: "Homepage dashboard on October 23. Proxmox shows 1 of 10 VMs and 1 of 2 containers running; Portainer shows 7 containers running and none stopped; the host, VM 109 and CT 110 are up; Beszel reports 3 of 3 systems up; Uptime Kuma shows 7 sites up, 0 down and 100% uptime. Link lists for documentation and repositories sit below the panels."
+  caption: "My homelab dashboard, October 23, 2026"
 ---
 
 # Proxmox homelab

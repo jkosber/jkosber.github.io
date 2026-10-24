@@ -3,8 +3,18 @@ title: SSH Workbench
 description: A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
 status: Version 0.3.0
-visual: assets/project-terminal.svg
 tools: [Python, Textual, OpenSSH, GitHub Actions]
+summary:
+  role: "I defined what Workbench does, planned each release as small tested tasks and tested it on my own machines."
+  built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
+  result: "Five tagged releases from October 20 to 23, 2026, after work began October 9. Version 0.3.0 passes 1,077 automated tests on Windows and Ubuntu."
+updated: "October 23, 2026"
+screenshot:
+  src: assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp
+  width: 900
+  height: 413
+  alt: "SSH Workbench in Windows Terminal. The header counts 5 machines: 3 online, 1 offline and 1 can't check. The Machines list shows Web server, Lab box, Storage NAS, Build runner and Garage Pi, each with its alias or address on the right. The details pane for Lab box shows one row per field: ID, name, status Online at 192.0.2.20, a direct connection, two addresses, user, port 2222, key file and two links. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit."
+  caption: "Version 0.3.0 in Windows Terminal, with fictional machines"
 ---
 
 # SSH Workbench
