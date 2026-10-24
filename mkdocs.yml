@@ -12,6 +12,7 @@ theme:
 plugins: []
 hooks:
   - hooks/asset_versions.py
+  - hooks/tool_icons.py
   - hooks/reading_accessibility.py
 markdown_extensions:
   - attr_list

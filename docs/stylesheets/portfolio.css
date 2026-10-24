@@ -482,6 +482,10 @@ p { max-width: 35em; }
 @media (max-height: 480px) {
   .js .site-header { position: relative; }
 }
+/* Built-with lists: logo and name per tool. */
+ul.tools { display: flex; flex-wrap: wrap; gap: .625rem var(--s3); margin: 0; padding: 0; list-style: none; }
+ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin: 0; font-size: .9375rem; font-weight: 600; }
+.tool-icon { flex: none; fill: var(--accent); }
 @media print {
   :root { --bg: #fff; --band: #fff; --surface: #fff; --raised: #fff; --inset: #fff; --text: #000; --heading: #000; --muted: #333; --accent: #183b68; --line: #bbb; --line-strong: #888; --code-text: #000; color-scheme: light; }
   body { background: #fff; color: #000; font-size: 11pt; line-height: 1.4; }
