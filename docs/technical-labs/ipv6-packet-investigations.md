@@ -1,114 +1,102 @@
 ---
 title: IPv6 packet investigations
-description: Correlating DHCPv6 replies, duplicate-address evidence and Router Advertisements with Windows host behavior in a supplied protocol-analysis capstone.
+description: In my CSIA 210 final capstone I matched Windows hosts' IPv6 behavior to DHCPv6 replies and router advertisements, including a lost gateway traced to one advertisement.
 kind: Completed coursework
 status: "May 2026"
 detail: true
 class_page: coursework/csia-210/
 class_name: CSIA 210 Network Protocol Analysis
 summary:
-  role: "I filtered the supplied traffic, identified the relevant frames, compared them with the host configuration and documented the conclusions. I did not build or repair the supplied network."
-  built_with: ["Wireshark", "DHCPv6 and ICMPv6 display filters", "supplied Windows ipconfig output"]
+  role: "I filtered the course's capstone traces, found the frames behind each host's behavior, compared them with the host output and wrote up the conclusions. I didn't build or repair the network."
+  built_with: ["Wireshark", "DHCPv6 and ICMPv6 display filters", "Windows ipconfig output from the course"]
   result: "Matched a Windows host's DHCPv6 address to the reply in frame 9306, separated a duplicate address from general connectivity, and traced a lost IPv6 gateway to a Router Advertisement."
   source: {label: "CSIA 210 repository", url: "https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis"}
 ---
 
 # IPv6 packet investigations
 
-A Windows host can have an IPv6 address and still fail to reach another network. In my **CSIA 210** final capstone, I used supplied traces and host output to investigate address assignment, duplicate addresses, source-address changes and loss of a default router.
+A Windows host can have an IPv6 address and still fail to reach another network. My CSIA 210 final capstone was about finding out why from the packets: which reply assigned an address, which hosts shared a duplicate, which source address a host picked, and what made a gateway disappear.
 
-The work connected fields inside DHCPv6 and ICMPv6 packets to the symptoms shown by the hosts. My contribution was filtering the traffic, identifying relevant frames, comparing them with host configuration and documenting the conclusions. I did not build or repair the supplied network during this analysis.
+The course provided the traces, the network diagrams and the hosts' `ipconfig` output. I filtered the traffic, found the frames that explained each symptom, compared them with the host output and wrote up the conclusions.
 
 ## Environment and analysis method
 
-The screenshots show `capstone-labs-3-trace-file.pcapng` and `capstone-labs-4-trace-file.pcapng` in Wireshark. The scenarios include Windows hosts, DHCPv6 exchanges, a layer-3 device sending Router Advertisements, and destinations outside the hosts' local IPv6 network. IPv4 remains available in the dual-stack examples.
+The traces came from a network with Windows hosts, DHCPv6 and a layer 3 device sending router advertisements, with IPv4 running alongside. Every IPv6 address here uses the `2001:db8::/32` documentation prefix. These four filters did most of the work:
 
-I used display filters to reduce each trace, expanded the relevant protocol fields, and compared those values with the supplied `ipconfig` output. The IPv6 addresses shown here use the course's `2001:db8::/32` documentation prefix; they are not addresses from my own network.
-
-| Filter used in the submission | Purpose |
+| Filter | What it shows |
 |---|---|
-| `dhcpv6.msgtype == 7` | Show DHCPv6 Reply messages when looking for the assigned address. |
-| `dhcpv6.iaaddr.ip == 2001:db8:1ab:1001::108` | Match the IA Address value being correlated with the Windows host. |
-| `icmpv6.type == 134` | Isolate Router Advertisements and inspect their flags, prefixes and router lifetime. |
-| `ipv6` | Follow the broader IPv6 sequence, including address changes and neighbor discovery. |
+| `dhcpv6.msgtype == 7` | DHCPv6 Reply messages, to find the one that assigned an address |
+| `dhcpv6.iaaddr.ip == 2001:db8:1ab:1001::108` | Replies carrying the address the Windows host reported |
+| `icmpv6.type == 134` | Router advertisements, with their flags, prefixes and router lifetime |
+| `ipv6` | The wider IPv6 sequence, including address changes and neighbor discovery |
 
 ## Finding the DHCPv6 address assignment
 
-The first question was which reply supplied the address visible on the Windows 10 host. I filtered for DHCPv6 replies, inspected their IA Address options and recorded **frame 9306** as the first matching reply for the address ending in `::108`.
-
-The original Wireshark screenshot records the fields below. The crop shows the expanded **IA Address** option: notice the address ending in `::108` and its separate preferred and valid lifetimes.
+The first question was which reply gave the Windows 10 host its address. I filtered for DHCPv6 replies and checked their IA Address options. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
 
 <figure class="evidence-figure">
-  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Historical DHCPv6 address fields; scroll horizontally if needed">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
     <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="465" height="140" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
   </div>
-  <figcaption>Historical capture from the May 12, 2026 submission, cropped to the IA Address fields of selected frame 9306. The frame number, Reply type and UDP ports are visible in the original screenshot, outside this crop. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open the full-size crop</a>.</figcaption>
+  <figcaption>Frame 9306's IA Address option in my May 12, 2026 submission, cropped to the address and its lifetimes. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open full size</a>.</figcaption>
 </figure>
 
-| Frame 9306 field | Recorded value | Interpretation |
-|---|---|---|
-| Message type | Reply, type 7 | The server's response in the DHCPv6 exchange. |
-| UDP ports | Source 547, destination 546 | Server-to-client direction for this reply. |
-| Address option | IA Address, option 5 | The assigned address is inside an option, distinct from the packet's destination address. |
-| IPv6 address | `2001:db8:1ab:1001::108` | Value matched to the host configuration in my written analysis. |
-| Preferred / valid lifetime | 120 / 180 seconds | The two lifetimes recorded for this address. |
-
-Earlier replies visible in the original screenshot carry an address ending in `::109`, so checking only the message type would not establish the match. The IA Address field was the useful link to the host output.
-
-The host-address match comes from my written `ipconfig` comparison; that section of the submission does not include the corresponding host-output image.
+| Frame 9306 field | Value |
+|---|---|
+| Message type | Reply (7) |
+| UDP ports | 547 to 546, server to client |
+| Option | IA Address (5) |
+| Address | `2001:db8:1ab:1001::108` |
+| Preferred and valid lifetime | 120 and 180 seconds |
 
 ## Separating a duplicate address from general connectivity
 
-In the second trace, my analysis followed two Windows hosts using the same target address, ending in `::117`. The answers compare their different source MAC addresses with neighbor-discovery information and the Windows output marking the address as duplicate.
+In the second trace two Windows hosts were using the same address, ending in `::117`. I compared their source MAC addresses in the neighbor discovery traffic with the Windows output, which marked the address as a duplicate.
 
-The reported connectivity result was mixed: an ordinary ping used IPv4 and received two replies, while the forced IPv6 attempt failed. The submission also records a name-resolution error on that forced attempt, so that error alone would not establish the cause. The duplicate-address indication and neighbor-discovery comparison provide the additional evidence for the address conflict.
-
-The record ends with the diagnosis; no address correction or successful IPv6 retest is recorded.
+A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. In my summary: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
 
 ## Tracking source-address changes
 
-A separate sequence followed the Windows 10 host as it acquired public and temporary SLAAC addresses alongside its DHCPv6 address. My answers record:
+Next I followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address:
 
-| Point in the sequence | Historical observation |
+| Point in the trace | What I found |
 |---|---|
-| Router Advertisement analysis | Managed configuration enabled; on-link and autonomous prefix flags set. |
-| Frame 6913 | The host used its temporary SLAAC address as the source. |
-| Frame 7512 | A later advertisement was recorded with the autonomous flag unset. |
-| Subsequent host output | Both SLAAC addresses were reported as deprecated; a later packet used the DHCPv6 address ending in `::117`. |
+| Router advertisement | Managed flag set; on-link and autonomous prefix flags set |
+| Frame 6913 | The host used its temporary SLAAC address as the source |
+| Frame 7512 | A later advertisement with the autonomous flag off |
+| Host output after that | Both SLAAC addresses deprecated; a later packet used the DHCPv6 address ending in `::117` |
 
-The original explanation attributed deprecation directly to the autonomous flag becoming zero. That is too strong. For SLAAC processing, an unset autonomous flag makes the host ignore that Prefix Information option; an address becomes deprecated when its preferred lifetime expires. The original capture and full lifetime sequence would be needed to establish the precise timing here. [RFC 4862, Router Advertisement processing and lifetime expiry](https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3).
-
-The later address-state changes and frame references come from my written answers. This section's screenshot shows only the start of the trace.
+I wrote at the time that the autonomous flag turning off deprecated the SLAAC addresses. That overstates it: an unset autonomous flag makes the host ignore that prefix information, and an address is deprecated when its preferred lifetime runs out ([RFC 4862, section 5.5.3](https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3)). Pinning down the timing would take the full lifetime sequence from the trace.
 
 ## Losing the gateway while retaining the address
 
-The final investigation separated address assignment from default-router state. The Windows host initially had a preferred IPv6 address and an IPv6 gateway. A later host-output check retained the address but no longer listed the IPv6 gateway, and traffic to an off-link destination failed.
+In the last trace the Windows host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. I filtered router advertisements and lined up their router lifetimes with what the host did:
 
-I filtered Router Advertisements and compared their router lifetimes with the host's behavior. The written submission records this sequence:
-
-| Evidence point | Recorded state or result |
+| Point in the trace | What happened |
 |---|---|
-| Initial Router Advertisement | Router lifetime 270 seconds. The embedded screenshot directly shows this value in frame 1. |
-| Frame 9660 | First packet in the earlier group of four pings. |
-| Frame 9725 | Router Advertisement with lifetime 0; the host subsequently lacked its IPv6 default gateway. |
-| Host configuration check | IPv6 address remained preferred; only the IPv4 default gateway was listed. |
-| Frame 9887 | Later Router Advertisement restored a 270-second router lifetime. |
-| Frame 9991 | First packet in the later ping group; the written summary records restored connectivity. |
+| Frame 1 | A router advertisement with a 270-second router lifetime |
+| Frame 9660 | The first of an earlier group of four pings |
+| Frame 9725 | A router advertisement with lifetime 0; the host dropped its IPv6 default gateway |
+| Host output | The IPv6 address stayed preferred; only the IPv4 gateway was listed |
+| Frame 9887 | A new advertisement brought the 270-second lifetime back |
+| Frame 9991 | The first ping of the later group, with connectivity restored |
 
-The diagnosis is consistent with Router Advertisement processing: receiving a lifetime of zero for an existing default-router entry removes that entry. A later advertisement with a nonzero lifetime can restore it. This is separate from the DHCPv6 address lease; the lease itself did not supply the default gateway. [RFC 4861, processing received Router Advertisements](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4).
-
-The screenshot shows the initial 270-second lifetime. The zero-lifetime advertisement, recovery frame and ping outcome come from the written answers.
+A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back ([RFC 4861, section 6.3.4](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4)). The DHCPv6 lease never supplied the gateway, which is why the address survived. My summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
 
 ## What remained visible in encrypted traffic
 
-The same capstone examined SSH and HTTPS. My answers reference SSH frames 27218 and 27364, and HTTPS frames 27902 and 29910. The SSH screenshot shows readable protocol banners, key exchange and subsequent packets identified as encrypted.
+The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902 and 29910). Only the banners and algorithm names were readable; the application data wasn't. I didn't decrypt either session.
 
-Application content was unreadable in the inspected traffic, while connection information and parts of setup remained visible. Neither session was decrypted.
+## Limits
 
-## Sources and scope
+- The traces aren't in the repository, so the frame numbers can't be rechecked from it. My screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the last trace; the other frame numbers come from my written answers.
+- My submission doesn't include the host output I compared against for the `::108` match.
+- I diagnosed the duplicate address but didn't fix it or retest.
+- The SLAAC explanation above corrects what I wrote in the submission.
 
-The [final capstone submission](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis/blob/main/Module08/CSIA%20210%20Finals%20Capstone%20submission%20file%20-%20Jadon%20Kosberg.docx) contains the answers and screenshots for Capstone Labs 3 and 4. The original document is preserved, including explanations qualified above.
+## Sources {#sources-and-scope}
 
-The [protocol-analysis repository](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis) contains other coursework and a separate introductory capture. Verifying the later frame references and reconstructing the SLAAC lifetime sequence would require the missing capstone traces and corresponding host output.
+- [Final capstone submission](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis/blob/main/Module08/CSIA%20210%20Finals%20Capstone%20submission%20file%20-%20Jadon%20Kosberg.docx): my answers and screenshots for Capstone Labs 3 and 4
+- [CSIA 210 repository](https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis), with the rest of the class's submissions
 
-[CSIA 210 class page](../coursework/csia-210.md) · [CyberOps & traffic investigation](soc-threat-detection.md) · [All projects](index.md)
+[CSIA 210 class page](../coursework/csia-210.md) · [All coursework](../coursework/index.md)
