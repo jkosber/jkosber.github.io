@@ -84,6 +84,28 @@ async (page) => {
     }
   }
 
+  // Body screenshots fit their column on desktops, beside the contents rail or inside a panel;
+  // none is cropped behind a sideways scroll.
+  result.checks.evidenceFit = 0;
+  for (const [width, height] of [[1440, 900], [1920, 1080]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      const regions = await page.evaluate(async () => {
+        for (const image of document.querySelectorAll('.evidence-scroll img')) {
+          image.loading = 'eager';
+          if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
+        }
+        return [...document.querySelectorAll('.evidence-scroll')].map((region) => ({
+          label: (region.getAttribute('aria-label') || '').split(';')[0],
+          hidden: region.scrollWidth - region.clientWidth,
+        }));
+      });
+      result.checks.evidenceFit += regions.length;
+      for (const region of regions) if (region.hidden > 1) fail(`evidenceFit ${route} @${width}: "${region.label}" hides ${region.hidden}px behind a sideways scroll`);
+    }
+  }
+
   // Mobile menu: opens, then Escape closes it.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(BASE + '/');
@@ -464,6 +486,29 @@ async (page) => {
     }
   }
 
+  // The contents rail opens again when the window widens past 1100 px, as when a tablet rotates.
+  await page.setViewportSize({ width: 1024, height: 1366 });
+  await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
+  {
+    const railState = () => page.evaluate(() => {
+      const contents = document.querySelector('details.contents');
+      const link = contents && contents.querySelector('nav a');
+      const box = link ? link.getBoundingClientRect() : null;
+      return {
+        open: contents ? contents.open : null,
+        linkVisible: Boolean(link && box.width > 0 && box.height > 0 && (!link.checkVisibility || link.checkVisibility())),
+      };
+    });
+    const narrow = await railState();
+    await page.setViewportSize({ width: 1366, height: 1024 });
+    await page.waitForTimeout(200);
+    const widened = await railState();
+    result.checks.railWidened = { narrow, widened };
+    if (narrow.open !== false) fail(`railWidened: On this page is ${narrow.open === null ? 'missing' : 'open'} at 1024x1366, expected closed`);
+    if (!widened.open) fail('railWidened: On this page stays closed after widening from 1024 to 1366');
+    if (!widened.linkVisible) fail('railWidened: the first contents link is not visible after widening from 1024 to 1366');
+  }
+
   // Experience: both roles on one page, Ladd Dental in the gate 2 wording plus the master resume's
   // points (Oct 23), the Verizon contract ending October 2026, and the homepage linking each role
   // with its one-line summary.
@@ -727,6 +772,20 @@ async (page) => {
     if (state.split.length) fail(`text200 ${route}: words broken mid-word: ${[...new Set(state.split)].join(', ')}`);
   }
 
+  // At the narrowest width, 200% text still never widens the page.
+  await page.setViewportSize({ width: 320, height: 800 });
+  result.checks.text200narrow = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    const overflow = await page.evaluate(async () => {
+      document.documentElement.style.fontSize = '200%';
+      await new Promise((done) => setTimeout(done, 150));
+      return document.documentElement.scrollWidth - document.documentElement.clientWidth;
+    });
+    result.checks.text200narrow += 1;
+    if (overflow > 0) fail(`text200 ${route} @320: ${overflow}px horizontal overflow`);
+  }
+
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/');
@@ -814,6 +873,54 @@ async (page) => {
     await page.setViewportSize({ width: 1440, height: 900 });
   }
 
+  // A screenshot has one keyboard stop, its caption's "Open full size" link; the image link stays
+  // clickable but leaves the tab order.
+  result.checks.zoomTabStops = 0;
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const route of ['/', '/technical-labs/proxmox-virtualization/']) {
+    await page.goto(BASE + route);
+    const links = await page.evaluate(() => [...document.querySelectorAll('a.zoom')].map((link) => ({
+      tabindex: link.getAttribute('tabindex'),
+      caption: Boolean(link.closest('figure') && link.closest('figure').querySelector('figcaption a[href]')),
+    })));
+    result.checks.zoomTabStops += links.length;
+    if (!links.length) fail(`zoomTabStops ${route}: no a.zoom`);
+    links.forEach((link, index) => {
+      if (link.tabindex !== '-1') fail(`zoomTabStops ${route}: a.zoom ${index + 1} has tabindex ${link.tabindex}, expected -1`);
+      if (!link.caption) fail(`zoomTabStops ${route}: a.zoom ${index + 1} has no caption link`);
+    });
+  }
+
+  // On desktops the caption link opens the same lightbox as the image link, in body screenshots and
+  // template ones, and focus returns to the caption link on close.
+  result.checks.captionLightbox = {};
+  for (const [route, selector] of [['/coursework/csia-105/', '.evidence-figure figcaption a'], ['/', '.feature figcaption a']]) {
+    await page.goto(BASE + route);
+    const where = `captionLightbox ${route} @1440`;
+    const link = page.locator(selector).first();
+    if (await link.count() === 0) { fail(`${where}: no ${selector}`); continue; }
+    const file = (await link.getAttribute('href')).split('/').pop();
+    await link.click();
+    await page.waitForTimeout(300);
+    const opened = await page.evaluate(() => {
+      const box = document.querySelector('dialog.lightbox[open]');
+      const image = box && box.querySelector('img');
+      return { url: location.pathname, open: Boolean(box), src: image ? image.src : null };
+    });
+    let focusOnLink = false;
+    if (opened.open) {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(300);
+      focusOnLink = await page.evaluate((target) => document.activeElement === document.querySelector(target), selector);
+    }
+    result.checks.captionLightbox[route] = { ...opened, focusOnLink };
+    if (!opened.open) fail(`${where}: clicking ${selector} opens no dialog.lightbox (now on ${opened.url})`);
+    else {
+      if (!opened.src || !opened.src.endsWith(file)) fail(`${where}: the dialog image is ${opened.src}, expected ${file}`);
+      if (!focusOnLink) fail(`${where}: focus does not return to the caption link after Escape`);
+    }
+  }
+
   // Scroll fade-up targets end fully visible once they are in view.
   // Waits happen on the Node side: in-page timers can stall with JavaScript disabled.
   const revealOpacities = async (target) => {
@@ -850,6 +957,30 @@ async (page) => {
     if (plainHeader.missing.length) fail(`no-JS ${route}: header missing ${plainHeader.missing.join(', ')}`);
     const hidden = (await revealOpacities(plain)).filter((value) => value < 0.99).length;
     if (hidden) fail(`no-JS ${route}: ${hidden} .reveal element(s) stay hidden in view`);
+  }
+  // Printing without JavaScript still prints the lab rows inside the closed modules. Chromium lays
+  // out a hidden table when script measures it, so the module's own height beside its summary and
+  // the table's visibility are what show whether the rows print.
+  await plain.setViewportSize({ width: 1440, height: 900 });
+  await plain.emulateMedia({ media: 'print' });
+  await plain.goto(BASE + '/coursework/neti-109/');
+  const printedLabs = await plain.evaluate(() => {
+    const module = document.querySelector('details.lab-module');
+    const table = module && module.querySelector('.lab-table table');
+    if (!table) return null;
+    return {
+      table: Math.round(table.getBoundingClientRect().height),
+      belowSummary: Math.round(module.getBoundingClientRect().height - module.querySelector('summary').getBoundingClientRect().height),
+      visible: table.checkVisibility ? table.checkVisibility() : true,
+    };
+  });
+  await plain.emulateMedia({ media: null });
+  result.checks.noJsPrintLabs = printedLabs;
+  if (!printedLabs) fail('no-JS print: no details.lab-module .lab-table table on /coursework/neti-109/');
+  else {
+    if (printedLabs.table <= 0) fail(`no-JS print: the first lab module's table is ${printedLabs.table}px tall`);
+    if (printedLabs.belowSummary < printedLabs.table) fail(`no-JS print: the first lab module is ${printedLabs.belowSummary}px taller than its summary, so its ${printedLabs.table}px table does not print`);
+    if (!printedLabs.visible) fail('no-JS print: the first lab module\'s table is hidden');
   }
   await noJs.close();
 

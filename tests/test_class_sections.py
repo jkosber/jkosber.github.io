@@ -109,6 +109,15 @@ class ClassSectionsTests(unittest.TestCase):
         hints = [around for node, around in tree.elements if has_class(node, "table-hint")]
         self.assertEqual([nearest(around, "details") for around in hints if nearest(around, "details")], [])
 
+    def test_a_module_without_lab_rows_shows_no_count(self):
+        source = '<h2 id="labs">Labs</h2>\n<h3 id="m0">Zero</h3>\n<p>Nothing of mine survived.</p>\n' + module("m1", "One", [
+            ("1.1 First lab", "Asked", "Did"),
+        ], 1)
+        result = ClassSections(source).render()
+        self.assertIn('<details class="lab-module"><summary><h3 id="m0">Zero</h3></summary>', result)
+        self.assertIn('<summary><h3 id="m1">One</h3><span class="lab-count">1 lab</span></summary>', result)
+        self.assertNotIn("0 labs", result)
+
     def test_lab_tables_get_roles_and_a_visual_label(self):
         result = ClassSections(LABS).render()
         tree = Tree(result)
