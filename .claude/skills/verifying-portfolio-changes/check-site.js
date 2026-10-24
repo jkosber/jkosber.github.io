@@ -281,18 +281,89 @@ async (page) => {
   }
 
   // Class pages: the same sections everywhere, a link to the course repo; case studies link back to their class.
+  // Strongest work comes before the labs and opens on a full panel; the labs fold into one closed
+  // module per course module, and a module's rows stack on phones instead of scrolling sideways.
+  const LAB_MODULES = { '/coursework/neti-109/': 4, '/coursework/svad-111/': 4, '/coursework/csia-115/': 6, '/coursework/csia-210/': 4, '/coursework/csia-105/': 4, '/coursework/sdev-120/': 4 };
   result.checks.classPages = 0;
+  result.checks.labModules = {};
   for (const row of classes.filter((item) => item.href)) {
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BASE + row.href);
-    const shape = await page.evaluate(() => ({
-      anchors: [...document.querySelectorAll('main h2[id]')].map((heading) => heading.id),
-      repo: [...document.querySelectorAll('main a')].some((link) => /^https:\/\/github\.com\/jkosber\/[^/]+\/?$/.test(link.href)),
-    }));
+    const shape = await page.evaluate(() => {
+      const strongest = document.querySelector('main h2#strongest-work');
+      let firstWork = null;
+      for (let node = strongest && strongest.nextElementSibling; node && node.tagName !== 'H2'; node = node.nextElementSibling) {
+        if (node.matches('section.work, .work-pair')) { firstWork = node; break; }
+      }
+      return {
+        anchors: [...document.querySelectorAll('main h2[id]')].map((heading) => heading.id),
+        repo: [...document.querySelectorAll('main a')].some((link) => /^https:\/\/github\.com\/jkosber\/[^/]+\/?$/.test(link.href)),
+        modules: document.querySelectorAll('main details.lab-module').length,
+        openModules: document.querySelectorAll('main details.lab-module[open]').length,
+        firstWork: firstWork ? { plain: firstWork.matches('section.work:not(.work--brief)'), name: `${firstWork.tagName.toLowerCase()}.${firstWork.className.trim().split(/\s+/).join('.')}` } : null,
+        labCounts: [...document.querySelectorAll('main details.lab-module .lab-count')].map((count) => parseInt(count.textContent, 10)),
+      };
+    });
     result.checks.classPages += 1;
+    result.checks.labModules[row.href] = shape.labCounts;
     for (const id of ['what-the-course-provided', 'labs', 'strongest-work', 'skills', 'limits', 'sources']) {
       if (!shape.anchors.includes(id)) fail(`classPages ${row.href}: missing #${id}`);
     }
     if (!shape.repo) fail(`classPages ${row.href}: no link to the course repository`);
+    const strongestAt = shape.anchors.indexOf('strongest-work');
+    const labsAt = shape.anchors.indexOf('labs');
+    if (strongestAt !== -1 && labsAt !== -1 && strongestAt > labsAt) fail(`classPages ${row.href}: strongest-work after labs`);
+    if (shape.modules !== LAB_MODULES[row.href]) fail(`classPages ${row.href}: ${shape.modules} details.lab-module, expected ${LAB_MODULES[row.href]}`);
+    if (shape.openModules) fail(`classPages ${row.href}: ${shape.openModules} lab module(s) open at load`);
+    if (!shape.firstWork) fail(`classPages ${row.href}: no section.work or .work-pair after #strongest-work`);
+    else if (!shape.firstWork.plain) fail(`classPages ${row.href}: the first item after #strongest-work is ${shape.firstWork.name}, expected a plain section.work`);
+    if (row.href === '/coursework/neti-109/') {
+      const labs = shape.labCounts.reduce((sum, count) => sum + count, 0);
+      if (labs !== 36) fail(`classPages ${row.href}: lab counts sum to ${labs}, expected 36`);
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(BASE + row.href);
+    const summary = page.locator('main details.lab-module > summary').first();
+    if (await summary.count() === 0) continue;
+    await summary.click();
+    const phone = await page.evaluate(() => {
+      const first = document.querySelector('main details.lab-module');
+      const table = first.querySelector('.lab-table');
+      const firstRow = table && table.querySelector('tbody tr');
+      return {
+        open: first.open,
+        overflow: table ? table.scrollWidth - table.clientWidth : null,
+        display: firstRow ? getComputedStyle(firstRow).display : null,
+      };
+    });
+    if (!phone.open) fail(`classPages ${row.href} @390: clicking the first module's summary does not open it`);
+    if (phone.overflow === null) fail(`classPages ${row.href} @390: the first module has no .lab-table`);
+    else if (phone.overflow > 0) fail(`classPages ${row.href} @390: the first module's .lab-table scrolls ${phone.overflow}px sideways`);
+    if (phone.display !== 'block') fail(`classPages ${row.href} @390: the first lab row is display ${phone.display}, expected block`);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+
+  // Arriving at a closed lab module by its heading's own id lands on that heading (Review Focus 1).
+  await page.goto(BASE + '/coursework/neti-109/');
+  const moduleId = await page.evaluate(() => { const heading = document.querySelector('details.lab-module h3[id]'); return heading ? heading.id : null; });
+  if (!moduleId) fail('labModuleAnchor: no details.lab-module h3 with an id on /coursework/neti-109/');
+  else {
+    await page.goto('about:blank');
+    await page.goto(`${BASE}/coursework/neti-109/#${moduleId}`);
+    // The page scrolls smoothly to the fragment; wait on the Node side until it stops.
+    let lastY = null;
+    for (let tries = 0; tries < 30; tries += 1) {
+      const y = await page.evaluate(() => scrollY);
+      if (y === lastY) break;
+      lastY = y;
+      await page.waitForTimeout(100);
+    }
+    const box = await page.evaluate((id) => {
+      const rect = document.getElementById(id).getBoundingClientRect();
+      return { top: Math.round(rect.top), bottom: Math.round(rect.bottom), viewport: innerHeight };
+    }, moduleId);
+    result.checks.labModuleAnchor = { id: moduleId, ...box };
+    if (box.top < 0 || box.bottom > box.viewport) fail(`labModuleAnchor: #${moduleId} sits at ${box.top} to ${box.bottom}px, outside the ${box.viewport}px viewport`);
   }
   for (const [study, classHref] of [['/technical-labs/aws-linux-infrastructure/', '/coursework/svad-111/'], ['/technical-labs/soc-threat-detection/', '/coursework/csia-115/'], ['/technical-labs/snort-firewall-lab/', '/coursework/csia-115/'], ['/technical-labs/ipv6-packet-investigations/', '/coursework/csia-210/']]) {
     await page.goto(BASE + study);
