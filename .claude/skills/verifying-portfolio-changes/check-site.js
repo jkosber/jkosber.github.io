@@ -622,7 +622,7 @@ async (page) => {
     if (bottom === null || bottom > height) fail(`factsFit ${width}x${height}: facts end at ${bottom}px`);
   }
 
-  // Motion limits: nothing over 0.5 s, nothing infinite, no transition on `all`;
+  // Motion limits: nothing over 0.5 s, delay included, nothing infinite, no transition on `all`;
   // with reduced motion, no animations at all.
   const motionState = () => page.evaluate(() => {
     const seconds = (value) => value.split(',').map((part) => {
@@ -645,6 +645,12 @@ async (page) => {
         });
         if (style.animationName !== 'none') {
           if (seconds(style.animationDuration).some((value) => value > 0.5)) issues.push(`${name}: animation ${style.animationName} ${style.animationDuration}`);
+          // A delayed entrance still has to finish by 0.5 s.
+          const delays = seconds(style.animationDelay);
+          seconds(style.animationDuration).forEach((duration, index) => {
+            const delay = delays[index % delays.length];
+            if (delay + duration > 0.5) issues.push(`${name}: animation ${style.animationName} ends at ${(delay + duration).toFixed(2)}s (delay ${delay}s)`);
+          });
           if (style.animationIterationCount.split(',').some((value) => value.trim() === 'infinite')) issues.push(`${name}: infinite animation ${style.animationName}`);
         }
       }
@@ -759,6 +765,55 @@ async (page) => {
     if (lifted > -1.5) fail(`tileLift: a hovered class tile moves ${lifted}px, expected about -2px`);
   }
 
+  // Lightbox: on desktops a screenshot opens full size in a named dialog, focus moves into it,
+  // Escape closes it and focus returns to the screenshot link. On phones the link opens the
+  // image file itself, so pinch zoom works.
+  result.checks.lightbox = {};
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/');
+  if (await page.locator('.feature a.zoom').count() === 0) fail('lightbox: no .feature a.zoom on the homepage');
+  else {
+    await page.locator('.feature a.zoom').first().click();
+    await page.waitForTimeout(300);
+    const opened = await page.evaluate(() => {
+      const box = document.querySelector('dialog.lightbox[open]');
+      const image = box && box.querySelector('img');
+      return {
+        open: Boolean(box),
+        name: box ? (box.getAttribute('aria-label') || '').trim() : '',
+        src: image ? image.src : null,
+        focusInside: Boolean(box && box.contains(document.activeElement)),
+      };
+    });
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    const closed = await page.evaluate(() => ({
+      open: Boolean(document.querySelector('dialog.lightbox[open]')),
+      focusOnLink: document.activeElement === document.querySelector('.feature a.zoom'),
+    }));
+    result.checks.lightbox.desktop = { ...opened, closedOpen: closed.open, focusOnLink: closed.focusOnLink };
+    if (!opened.open) fail('lightbox @1440: clicking the first .feature a.zoom opens no dialog.lightbox');
+    else {
+      if (!opened.name) fail('lightbox @1440: the dialog has no accessible name');
+      if (!opened.src || !opened.src.endsWith('homepage-dashboard-2026-10-23.webp')) fail(`lightbox @1440: the dialog image is ${opened.src}, expected homepage-dashboard-2026-10-23.webp`);
+      if (!opened.focusInside) fail('lightbox @1440: focus is not inside the open dialog');
+      if (closed.open) fail('lightbox @1440: Escape leaves the dialog open');
+      if (!closed.focusOnLink) fail('lightbox @1440: focus does not return to the screenshot link after Escape');
+    }
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(BASE + '/');
+    await page.locator('.feature a.zoom').first().click();
+    await page.waitForURL(/\.webp$/, { timeout: 5000 }).catch(() => {});
+    const phoneUrl = page.url();
+    const phoneDialog = phoneUrl.endsWith('.webp') ? false : await page.evaluate(() => Boolean(document.querySelector('dialog.lightbox[open]')));
+    result.checks.lightbox.phone = { url: phoneUrl, dialog: phoneDialog };
+    if (phoneDialog) fail('lightbox @390: clicking a screenshot opens the dialog instead of the image file');
+    if (!phoneUrl.endsWith('.webp')) fail(`lightbox @390: clicking a screenshot stays on ${phoneUrl}, expected the .webp file`);
+    if (phoneUrl.endsWith('.webp')) await page.goBack();
+    await page.setViewportSize({ width: 1440, height: 900 });
+  }
+
   // Scroll fade-up targets end fully visible once they are in view.
   // Waits happen on the Node side: in-page timers can stall with JavaScript disabled.
   const revealOpacities = async (target) => {
@@ -814,6 +869,27 @@ async (page) => {
   }
   if (result.print.checked < 14) fail(`print: only ${result.print.checked} summary panels checked`);
   await page.emulateMedia({ media: 'screen' });
+
+  // Print: a class page prints every lab. Printing opens the folded lab modules, and afterwards
+  // closes only the ones it opened, so a module the reader opened stays open.
+  await page.goto(BASE + '/coursework/neti-109/');
+  {
+    const moduleState = () => page.evaluate(() => [...document.querySelectorAll('details.lab-module')].map((module) => module.open));
+    const before = await moduleState();
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+    const printing = await moduleState();
+    await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+    const after = await moduleState();
+    await page.evaluate(() => { const first = document.querySelector('details.lab-module'); if (first) first.open = true; });
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+    await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+    const kept = await moduleState();
+    result.checks.printModules = { modules: before.length, before, printing, after, kept };
+    if (!before.length) fail('printModules: no details.lab-module on /coursework/neti-109/');
+    if (printing.some((open) => !open)) fail(`printModules: ${printing.filter((open) => !open).length} lab module(s) stay closed after beforeprint`);
+    if (after.some((open) => open)) fail(`printModules: ${after.filter((open) => open).length} lab module(s) stay open after afterprint`);
+    if (kept.length && (!kept[0] || kept.slice(1).some((open) => open))) fail(`printModules: after printing with the first module open, modules are ${kept.join(', ')}, expected only the first open`);
+  }
 
   if (pageErrors.length) result.problems.push(...pageErrors);
   return result;
