@@ -511,6 +511,20 @@ async (page) => {
   const ladd = roles.find((role) => role.id === 'ladd-dental');
   if (ladd && ladd.bullets.join('\n') !== LADD_BULLETS.join('\n')) fail('experience #ladd-dental: bullets differ from the approved wording');
 
+  // The page closes on one plain paragraph linking to both Projects and Coursework; the oversized
+  // section note it replaced is gone.
+  const closing = await page.evaluate(() => {
+    const note = document.querySelector('main p.related-link');
+    return {
+      sectionNotes: document.querySelectorAll('main .section-note').length,
+      links: note ? [...note.querySelectorAll('a')].map((link) => new URL(link.href).pathname) : null,
+    };
+  });
+  result.checks.experienceClosing = closing.links;
+  if (closing.sectionNotes) fail(`experience: closing note: ${closing.sectionNotes} .section-note element(s) remain`);
+  if (!closing.links) fail('experience: closing note: no p.related-link');
+  else for (const target of ['/technical-labs/', '/coursework/']) if (!closing.links.includes(target)) fail(`experience: closing note does not link to ${target}`);
+
   // Role illustrations load and are decorative.
   result.checks.roleArt = roles.filter((role) => role.image && role.image.loaded).length;
   for (const role of roles) {
