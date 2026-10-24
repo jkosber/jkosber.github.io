@@ -16,13 +16,15 @@
   --accent: #80c5ff;
   --warm: #ffc36b;
   --on-warm: #10233a;
-  /* Derived from the colors above: hover fills, code text, a soft link underline and shadows. */
+  /* Derived from the colors above: hover fills, code text, a soft link underline, shadows and the lightbox backdrop. */
   --warm-hover: #ffd496;
   --tint-hover: #ffffff12;
   --code-text: #e4edfb;
   --link-underline: #80c5ff59;
   --shadow-float: 0 5px 20px #071c3022;
   --shadow-lift: 0 28px 56px -24px #01060ce6, 0 0 0 1px #4a7aa680;
+  --shadow-lightbox: 0 30px 80px #000c;
+  --backdrop: #050d18e0;
   --edge-shade: #00000059;
   /* Space: tight inside groups (1 to 3), loose between groups and sections (4 to 7). */
   --s1: .5rem;
@@ -162,6 +164,12 @@ p { max-width: 35em; }
 .shot figcaption a { white-space: nowrap; }
 /* A screenshot link opens the full-size image. */
 .zoom { display: block; border-radius: var(--r-m); cursor: zoom-in; }
+/* On wide screens it opens in a dialog instead: Close in flow above the image, both inside the viewport. */
+.lightbox { max-width: min(1400px, 94vw); max-height: 92dvh; padding: 0; overflow: visible; background: transparent; border: 0; }
+.lightbox[open] { display: flex; flex-direction: column; align-items: flex-end; gap: var(--s1); }
+.lightbox img { max-height: calc(92dvh - 3.25rem); width: auto; border-radius: var(--r-m); box-shadow: var(--shadow-lightbox); }
+.lightbox::backdrop { background: var(--backdrop); }
+.lightbox-close { min-height: 44px; padding: 0 var(--s2); color: var(--heading); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-s); font: 600 .9375rem var(--body); cursor: pointer; }
 
 /* Coursework: a band of whole-card links, one per class. */
 .home-coursework { padding-block: var(--s6); }
@@ -559,22 +567,29 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 
 /* Motion: under half a second, nothing loops, and the end state is the default.
    Hidden starting states live only inside @supports and @starting-style. */
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .18s; }
-  .home-intro > * { animation: calm-in .4s cubic-bezier(.2,.7,.2,1) both; }
-  @keyframes calm-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  @keyframes calm-fade { from { opacity: 0; } to { opacity: 1; } }
+  /* The homepage intro rises 10 px once: the name, then the role line and intro, then the facts, done by .48 s. */
+  .enter { animation: rise .4s cubic-bezier(.2,.7,.2,1) both; }
+  .enter-2 { animation-delay: .04s; }
+  .enter-3 { animation-delay: .08s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
   /* Screenshots and list rows fade up 12 px as they enter view, tied to scroll position. */
   @supports (animation-timeline: view()) {
-    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
-    @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(12px); } }
   }
   .lift, .main-nav a { transition: translate .15s ease-out, transform .15s ease-out, color .15s ease-out, background-color .15s ease-out; }
   .button { transition: background-color .15s ease-out, box-shadow .15s ease-out, transform .1s ease-out; }
   .button:active { transform: scale(.97); }
+  /* The lightbox fades in and grows from 96%; its backdrop fades with it. */
+  .lightbox[open] { animation: zoom-in .2s cubic-bezier(.2,.7,.2,1); }
+  .lightbox[open]::backdrop { animation: fade .2s ease-out; }
+  @keyframes zoom-in { from { opacity: 0; transform: scale(.96); } }
+  @keyframes fade { from { opacity: 0; } }
 }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
   /* translate, not transform: the scroll fade-up's end state holds transform and would cancel the lift. */
   .lift:hover { translate: 0 -2px; }
 }
@@ -687,6 +702,8 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .prose h3 { font-size: 13pt; margin: 1rem 0 .5rem; }
   a { color: inherit; }
   * { animation: none !important; transition: none !important; } /* anti-slop-allow: print output must never animate */
+  /* Printed pages show every element, whatever state an entrance or fade-up was in. */
+  .reveal, .enter { opacity: 1; transform: none; }
 }
 @media (forced-colors: active) {
   .main-nav a[aria-current] { text-decoration-color: CanvasText; }

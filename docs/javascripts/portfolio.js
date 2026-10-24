@@ -120,4 +120,56 @@ document.addEventListener('DOMContentLoaded', () => {
     backToTop.addEventListener('click', () => document.querySelector('#main').focus({ preventScroll: true }));
   }
   updateReadingPosition();
+
+  // Screenshots open full size in a dialog on wide screens. On phones the link opens the image
+  // file, so pinch zoom works; a modified click still opens it in a new tab or window.
+  const lightbox = document.querySelector('dialog.lightbox');
+  if (lightbox && lightbox.showModal) {
+    const wide = window.matchMedia('(min-width: 761px)');
+    // The image joins the dialog on first use, so no page carries an image without a source.
+    const image = document.createElement('img');
+    let opener = null;
+    for (const link of document.querySelectorAll('a.zoom')) {
+      link.addEventListener('click', (event) => {
+        if (!wide.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        image.src = link.href;
+        image.alt = link.querySelector('img')?.alt || '';
+        if (!image.isConnected) lightbox.append(image);
+        lightbox.showModal();
+      });
+    }
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox || event.target.closest('.lightbox-close')) lightbox.close();
+    });
+    // Safari doesn't focus a link on click, so return focus here rather than rely on the browser.
+    lightbox.addEventListener('close', () => opener?.focus());
+  }
+
+  // An image file can't take part in a page transition; skip it rather than leave Chromium to
+  // report the skipped transition as an error on the image.
+  window.addEventListener('pageswap', (event) => {
+    const destination = event.activation?.entry?.url;
+    if (!event.viewTransition || !destination || !/\.(?!html?$)\w+$/i.test(new URL(destination).pathname)) return;
+    event.viewTransition.ready.catch(() => {});
+    event.viewTransition.skipTransition();
+  });
+
+  // Print every lab: open the folded modules, then close only the ones printing opened.
+  const labModules = [...document.querySelectorAll('details.lab-module')];
+  if (labModules.length) {
+    let openedForPrint = [];
+    window.addEventListener('beforeprint', () => {
+      for (const details of labModules) {
+        if (details.open) continue;
+        details.open = true;
+        openedForPrint.push(details);
+      }
+    });
+    window.addEventListener('afterprint', () => {
+      for (const details of openedForPrint) details.open = false;
+      openedForPrint = [];
+    });
+  }
 });
