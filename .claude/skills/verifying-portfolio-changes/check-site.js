@@ -244,9 +244,72 @@ async (page) => {
     }
   }
 
+  // Experience: both roles on one page, Ladd Dental in the wording approved at gate 2,
+  // and the homepage linking each role with its one-line summary.
+  const LADD_BULLETS = [
+    'Handled 20+ tickets a week: workstations, printers, peripherals, network problems and the clinical software, through Level RMM or onsite',
+    'Wrote up each ticket in ClickUp: symptoms, what I tried, the fix and any follow-up',
+    'Set up 30+ new workstations, from hardware setup and software installs to domain join',
+    "Retired 50+ workstations that couldn't run Windows 11: wiped, degaussed or crushed the drives and kept a chain-of-custody record",
+    'Ran HDMI to 7 operatory rooms to replace VGA, building the keystone outlets myself',
+    'Pulled, terminated and tested an Ethernet run between switches in two offices',
+    'Fixed a dead wall jack by toning it back to the patch panel and repunching the keystone',
+    'Set up accounts and roles in the clinical software and installed it on workstations',
+  ];
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/experience/');
+  const roles = await page.evaluate(async () => {
+    const articles = [...document.querySelectorAll('main article.role')];
+    for (const image of document.querySelectorAll('main article.role img')) {
+      image.scrollIntoView({ behavior: 'instant' });
+      if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
+    }
+    const text = (element) => (element ? element.textContent.replace(/\s+/g, ' ').trim() : '');
+    return articles.map((role) => {
+      const image = role.querySelector('img');
+      return {
+        id: role.id,
+        title: text(role.querySelector('h2')),
+        organization: text(role.querySelector('.role-org')),
+        dates: text(role.querySelector('.role-dates')),
+        image: image ? { src: image.getAttribute('src'), loaded: image.naturalWidth > 0, alt: image.getAttribute('alt') } : null,
+        bullets: [...role.querySelectorAll('li')].map(text),
+      };
+    });
+  });
+  result.checks.experience = roles.map((role) => `${role.id}: ${role.bullets.length} bullets`);
+  if (roles.map((role) => role.id).join('|') !== 'verizon-conversions|ladd-dental') fail(`experience: roles ${roles.map((role) => role.id).join(', ')}`);
+  for (const role of roles) {
+    for (const field of ['title', 'organization', 'dates']) if (!role[field]) fail(`experience #${role.id}: no ${field}`);
+    if (!role.image || !role.image.src.includes('assets/roles/')) fail(`experience #${role.id}: image ${JSON.stringify(role.image)}`);
+    if (role.bullets.length < 4) fail(`experience #${role.id}: ${role.bullets.length} bullets`);
+  }
+  const ladd = roles.find((role) => role.id === 'ladd-dental');
+  if (ladd && ladd.bullets.join('\n') !== LADD_BULLETS.join('\n')) fail('experience #ladd-dental: bullets differ from the approved wording');
+
+  // Role illustrations load and are decorative.
+  result.checks.roleArt = roles.filter((role) => role.image && role.image.loaded).length;
+  for (const role of roles) {
+    if (!role.image || !role.image.loaded) fail(`roleArt #${role.id}: image did not load`);
+    else if (role.image.alt !== '') fail(`roleArt #${role.id}: alt is "${role.image.alt}", expected ""`);
+  }
+
+  await page.goto(BASE + '/');
+  const homeRoles = await page.evaluate(() => [...document.querySelectorAll('.home-experience .experience-entry')].map((entry) => ({
+    link: [...entry.querySelectorAll('a')].map((link) => { const url = new URL(link.href); return url.pathname + url.hash; }),
+    summary: (entry.querySelector('.role-summary') || { textContent: '' }).textContent.replace(/\s+/g, ' ').trim(),
+  })));
+  ['/experience/#verizon-conversions', '/experience/#ladd-dental'].forEach((target, index) => {
+    const entry = homeRoles[index];
+    if (!entry || !entry.link.includes(target)) fail(`experience: homepage role ${index + 1} does not link to ${target}`);
+    else if (entry.summary.split(' ').length < 8) fail(`experience: homepage role ${index + 1} summary is "${entry.summary}"`);
+  });
+
   // Moved pages: the old address answers with a refresh to the new page and lands on the right section.
   const REDIRECTS = [
     ['/technical-labs/cisco-networking-analysis/', '/coursework/neti-109/', '#strongest-work'],
+    ['/experience/ladd-dental/', '/experience/', '#ladd-dental'],
+    ['/experience/verizon-conversions/', '/experience/', '#verizon-conversions'],
   ];
   result.checks.redirects = 0;
   await page.setViewportSize({ width: 1440, height: 900 });
