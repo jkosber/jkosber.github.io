@@ -5,7 +5,7 @@ async (page) => {
   const BASE = 'http://127.0.0.1:8765';
   const WIDTHS = [320, 390, 768, 1440];
   const MISSING = '/a-missing-page/';
-  const result = { routes: [], problems: [], checks: {}, filters: {}, menu: {}, scene: {}, print: null };
+  const result = { routes: [], problems: [], checks: {}, filters: {}, menu: {}, print: null };
   // Each named check block below records how much it covered in result.checks.
   const fail = (message) => result.problems.push(message);
 
@@ -121,14 +121,59 @@ async (page) => {
     if (parseInt(count, 10) !== visible) result.problems.push(`filter ${filter}: says "${count}", shows ${visible}`);
   }
 
-  // Hero scene buttons each reveal their own detail link.
+  // Homepage: intro with facts, real captures for the lead projects, rows for the rest,
+  // the classes (once Coursework exists) and both roles. The hero scene is gone (approved Oct 23).
+  result.checks.home = {};
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(BASE + '/');
+    const home = await page.evaluate(() => {
+      const main = document.querySelector('main');
+      const showcases = [...main.querySelectorAll('.showcase')];
+      const firstImage = showcases[0] && showcases[0].querySelector('img');
+      const navTitles = [...document.querySelectorAll('.main-nav a')].map((link) => link.textContent.trim());
+      return {
+        name: (main.querySelector('h1') || {}).textContent?.replace(/\s+/g, ' ').trim(),
+        facts: main.querySelectorAll('.facts > div').length,
+        showcases: showcases.map((item) => item.querySelector('h3').textContent.trim()),
+        firstImage: firstImage ? { src: firstImage.getAttribute('src'), width: firstImage.getAttribute('width'), height: firstImage.getAttribute('height') } : null,
+        rows: main.querySelectorAll('.project-row').length,
+        hasCoursework: navTitles.includes('Coursework'),
+        classes: main.querySelectorAll('.class-list li').length,
+        roles: main.querySelectorAll('.home-experience .experience-entry').length,
+        scene: main.querySelectorAll('.hero-visual, .scene-art, [data-scene-select]').length,
+        reveals: main.querySelectorAll('.reveal').length,
+      };
+    });
+    result.checks.home[width] = home;
+    const where = `home @${width}`;
+    if (home.name !== 'Jadon Kosberg') fail(`${where}: h1 is "${home.name}"`);
+    if (home.facts !== 3) fail(`${where}: ${home.facts} facts, expected 3`);
+    if (home.showcases.length !== 2 || home.showcases[0] !== 'Proxmox homelab') fail(`${where}: showcases ${home.showcases.join(', ')}`);
+    if (!home.firstImage || !home.firstImage.src.endsWith('homepage-dashboard-2026-10-23.webp') || !home.firstImage.width || !home.firstImage.height) fail(`${where}: first showcase image ${JSON.stringify(home.firstImage)}`);
+    if (home.rows < 1) fail(`${where}: no project rows after the showcases`);
+    if (home.hasCoursework && home.classes !== 6) fail(`${where}: coursework lists ${home.classes} classes, expected 6`);
+    if (home.roles !== 2) fail(`${where}: ${home.roles} roles, expected 2`);
+    if (home.scene) fail(`${where}: the hero scene is still on the page`);
+    if (home.reveals < 2) fail(`${where}: ${home.reveals} .reveal targets, expected at least 2`);
+  }
+
+  // Keyboard order on a phone follows what you see, top to bottom (deferred minor a).
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(BASE + '/');
-  for (const scene of ['compute', 'network', 'software']) {
-    await page.click(`[data-scene-select="${scene}"]`);
-    result.scene[scene] = await page.locator(`#scene-${scene} a`).isVisible()
-      ? await page.getAttribute(`#scene-${scene} a`, 'href')
-      : 'NOT VISIBLE';
-    if (result.scene[scene] === 'NOT VISIBLE') result.problems.push(`scene ${scene}: detail link hidden`);
+  const tabOrder = await page.evaluate(() => [...document.querySelectorAll('main a[href], main button, main [tabindex="0"]')]
+    .filter((element) => element.offsetParent !== null && !element.closest('[hidden]'))
+    .map((element) => ({ text: (element.textContent || element.getAttribute('aria-label') || '').trim().slice(0, 40), top: Math.round(element.getBoundingClientRect().top + scrollY) })));
+  result.checks.domOrder = tabOrder.length;
+  tabOrder.forEach((item, index) => { if (index && item.top < tabOrder[index - 1].top - 2) fail(`domOrder: "${item.text}" (y ${item.top}) comes after "${tabOrder[index - 1].text}" (y ${tabOrder[index - 1].top})`); });
+
+  // The facts column fits a laptop's first screen (deferred minor d).
+  for (const [width, height] of [[1366, 768], [1440, 790]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(BASE + '/');
+    const bottom = await page.evaluate(() => { const facts = document.querySelector('.facts'); return facts ? Math.round(facts.getBoundingClientRect().bottom) : null; });
+    result.checks.factsFit = { ...(result.checks.factsFit || {}), [`${width}x${height}`]: bottom };
+    if (bottom === null || bottom > height) fail(`factsFit ${width}x${height}: facts end at ${bottom}px`);
   }
 
   // Motion limits: nothing over 0.5 s, nothing infinite, no transition on `all`;
