@@ -57,9 +57,14 @@ p { max-width: 66ch; }
 /* The navigation occupies one quiet horizontal band; fallback menus remain in flow. */
 .site-header { position: relative; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; min-height: 90px; padding: 1rem max(var(--gutter), calc((100% - 1200px) / 2)); background: #091827ef; border-bottom: 1px solid #ffffff0c; }
 .js .site-header { position: sticky; top: 0; backdrop-filter: blur(16px); }
-.identity { min-width: 0; }
+.identity { display: flex; align-items: center; gap: .25rem; min-width: 0; }
 .brand { display: inline-flex; align-items: center; gap: .8rem; min-width: 0; color: var(--heading); font-weight: 750; font-size: .96rem; text-decoration: none; }
 .brand span { overflow-wrap: anywhere; }
+.brand { margin-right: .5rem; }
+/* GitHub and LinkedIn sit beside the name and stay outside the phone menu. */
+.social { display: inline-grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; color: var(--muted); }
+.social .icon { width: 19px; height: 19px; }
+.social:hover { color: var(--heading); background: #ffffff0d; }
 .brand img { flex-shrink: 0; width: 38px; height: 38px; }
 .site-menu { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; min-width: 0; gap: clamp(1rem, 3vw, 3rem); }
 .main-nav { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; padding: .3rem; background: transparent; border: 0; border-radius: 30px; }
@@ -368,6 +373,8 @@ p { max-width: 66ch; }
 .footer-brand { font-size: .85rem; font-weight: 750; color: #fff; text-decoration: none; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: .8rem; }
 .footer-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); }
+.footer-built { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: .8rem; }
+.footer-built a { color: var(--muted); }
 .error-page { padding: 3rem 0; }
 
 /* Motion: under half a second, nothing loops, and the end state is the default.
@@ -409,7 +416,7 @@ p { max-width: 66ch; }
 @media (max-width: 960px) {
   .site-header { display: block; min-height: 80px; padding: 1rem var(--gutter); }
   .js .site-header { max-height: 100dvh; overflow-y: auto; }
-  .identity { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: center; }
+  .identity { flex-wrap: wrap; gap: .25rem; }
   .identity .brand { flex: 1 1 min-content; max-width: max-content; }
   .identity .brand span { min-width: 0; overflow-wrap: break-word; }
   .menu-toggle { display: inline-flex; margin-left: auto; }
@@ -462,6 +469,9 @@ p { max-width: 66ch; }
   .contact-email { justify-self: start; }
   /* A floating control would cover text on a phone; the footer copy remains. */
   .back-to-top:not(.back-to-top--in-footer):not(:focus) { display: none; }
+}
+@media screen and (max-width: 360px) {
+  .menu-toggle span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (max-width: 480px) {
   .brand { font-size: .84rem; gap: .6rem; }

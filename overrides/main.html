@@ -51,11 +51,13 @@
         <img src="{{ 'assets/favicon.svg' | url }}" width="40" height="40" alt="">
         <span>Jadon Kosberg</span>
       </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile">{{ icon('github') }}</a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile">{{ icon('linkedin') }}</a>
       <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden>{{ icon('menu') }}<span>Menu</span></button>
     </div>
     <div class="site-menu" id="site-menu">
       <nav class="main-nav" aria-label="Main navigation">
-        {% for item in nav %}
+        {% for item in nav if not item.is_homepage %}
         {% set destination = item.children[0].url if item.children else item.url %}
         <a href="{{ destination | url }}"{% if item.active %} aria-current="{{ 'page' if page and page.url == destination else 'true' }}"{% endif %}><span>{{ item.title }}</span></a>
         {% endfor %}
@@ -131,7 +133,8 @@
     <footer class="site-footer" id="contact">
       <div class="footer-inner">
         <div class="footer-heading"><h2>Contact</h2><a class="contact-email" href="mailto:Jadon@jnkos.com"><span>Jadon@jnkos.com</span>{{ icon('email') }}</a></div>
-        <div class="footer-bottom"><a class="footer-brand" href="{{ nav.homepage.url | url }}">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a><a href="{{ 'credentials/' | url }}">About me</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a></div>
+        <div class="footer-bottom"><a class="footer-brand" href="{{ nav.homepage.url | url }}">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a></div>
+        <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
       </div>
     </footer>
   </div>

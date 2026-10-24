@@ -35,8 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     toggle.addEventListener('click', () => {
       setOpen(toggle.getAttribute('aria-expanded') !== 'true');
     });
-    header.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && mobile.matches) {
+    // Listen on the document: Safari does not focus a button on click, so focus may not be in the header.
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && mobile.matches && toggle.getAttribute('aria-expanded') === 'true') {
         setOpen(false);
         toggle.focus();
       }
