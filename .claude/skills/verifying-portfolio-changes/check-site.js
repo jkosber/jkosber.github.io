@@ -204,6 +204,46 @@ async (page) => {
     if (!back) fail(`classPages ${study}: no breadcrumb link back to ${classHref}`);
   }
 
+  // Case studies and class pages: a summary column beside the text on wide screens; on phones
+  // the title, description, summary and closed contents come before the article.
+  const summaryPages = {
+    role: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/job-scan-tailor/',
+      '/technical-labs/aws-linux-infrastructure/', '/technical-labs/soc-threat-detection/', '/technical-labs/snort-firewall-lab/',
+      '/technical-labs/ipv6-packet-investigations/', '/technical-labs/cisco-networking-analysis/'],
+    term: ['/coursework/neti-109/', '/coursework/svad-111/', '/coursework/csia-115/', '/coursework/csia-210/', '/coursework/csia-105/', '/coursework/sdev-120/'],
+  };
+  result.checks.summaryColumn = 0;
+  for (const [kind, list] of Object.entries(summaryPages)) {
+    for (const route of list) {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      if ((await page.goto(BASE + route)).status() !== 200) continue;
+      const wide = await page.evaluate((needed) => {
+        const spec = document.querySelector('aside.spec');
+        const article = document.querySelector('main article');
+        if (!spec || !article) return { missing: true };
+        const labels = [...spec.querySelectorAll('dt')].map((term) => term.textContent.trim());
+        return { left: spec.getBoundingClientRect().right <= article.getBoundingClientRect().left, sticky: getComputedStyle(spec).position === 'sticky', hasLabel: labels.includes(needed) };
+      }, kind === 'role' ? 'My role' : 'Term');
+      result.checks.summaryColumn += 1;
+      if (wide.missing) { fail(`summaryColumn ${route}: no aside.spec beside the article`); continue; }
+      if (!wide.left) fail(`summaryColumn ${route} @1440: the summary is not left of the article`);
+      if (!wide.sticky) fail(`summaryColumn ${route} @1440: the summary is not sticky`);
+      if (!wide.hasLabel) fail(`summaryColumn ${route}: the summary has no ${kind === 'role' ? 'My role' : 'Term'} row`);
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(BASE + route);
+      const narrow = await page.evaluate(() => {
+        const items = ['.breadcrumbs', 'main h1', '.dek', 'aside.spec', 'details.toc', 'main article'].map((selector) => [selector, document.querySelector(selector)]);
+        const missing = items.filter(([, element]) => !element).map(([selector]) => selector);
+        const outOfOrder = items.filter(([, element]) => element).some(([, element], index, list) => index && (list[index - 1][1].compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING) === 0);
+        const toc = document.querySelector('details.toc');
+        return { missing, outOfOrder, tocOpen: toc ? toc.open : false };
+      });
+      if (narrow.missing.length) fail(`summaryColumn ${route} @390: missing ${narrow.missing.join(', ')}`);
+      if (narrow.outOfOrder) fail(`summaryColumn ${route} @390: title, description, summary, contents and article are out of order`);
+      if (narrow.tocOpen) fail(`summaryColumn ${route} @390: On this page starts open`);
+    }
+  }
+
   // Keyboard order on a phone follows what you see, top to bottom (deferred minor a).
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(BASE + '/');
@@ -360,7 +400,7 @@ async (page) => {
   result.print = { checked: 0 };
   for (const route of routes.filter((r) => r.startsWith('/technical-labs/') && r !== '/technical-labs/')) {
     await page.goto(BASE + route);
-    const panels = await page.evaluate(() => [...document.querySelectorAll('.glance dl, .evidence-note')].map((panel) => {
+    const panels = await page.evaluate(() => [...document.querySelectorAll('.spec, .result')].map((panel) => {
       const text = panel.querySelector('dd') || panel;
       return { background: getComputedStyle(panel).backgroundColor, color: getComputedStyle(text).color };
     }));
@@ -369,6 +409,7 @@ async (page) => {
       if (panel.background !== 'rgb(255, 255, 255)' || panel.color !== 'rgb(0, 0, 0)') result.problems.push(`print ${route}: panel ${panel.background} / ${panel.color}`);
     }
   }
+  if (result.print.checked < 14) fail(`print: only ${result.print.checked} summary panels checked`);
   await page.emulateMedia({ media: 'screen' });
 
   if (pageErrors.length) result.problems.push(...pageErrors);
