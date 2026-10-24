@@ -99,6 +99,34 @@ async (page) => {
   result.checks.nav = navTexts;
   if (navTexts.join('|') !== 'Projects|Coursework|Experience|About') fail(`nav: expected Projects, Coursework, Experience, About, got ${navTexts.join(', ')}`);
 
+  // Current page: the nav item carries an amber underline, not just a color, and keeps it in forced colors.
+  // Forced-colors emulation may be missing in some engines; record that instead of failing.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
+  const currentNav = () => page.evaluate(() => {
+    const link = document.querySelector('.main-nav a[aria-current]');
+    if (!link) return null;
+    const style = getComputedStyle(link);
+    return { line: style.textDecorationLine, color: style.textDecorationColor };
+  });
+  const navCurrent = await currentNav();
+  result.checks.navCurrent = navCurrent ? { ...navCurrent } : { missing: true };
+  if (!navCurrent) fail('navCurrent: no .main-nav a[aria-current] on the Proxmox page');
+  else {
+    if (!navCurrent.line.includes('underline')) fail(`navCurrent: text-decoration-line is "${navCurrent.line}", expected underline`);
+    if (navCurrent.color !== 'rgb(255, 195, 107)') fail(`navCurrent: text-decoration-color is ${navCurrent.color}, expected rgb(255, 195, 107)`);
+    let forcedColors = true;
+    try { await page.emulateMedia({ forcedColors: 'active' }); } catch { forcedColors = false; }
+    if (forcedColors) {
+      const forced = await currentNav();
+      await page.emulateMedia({ forcedColors: 'none' });
+      result.checks.navCurrent.forcedColors = forced.line;
+      if (!forced.line.includes('underline')) fail(`navCurrent: in forced colors text-decoration-line is "${forced.line}", expected underline`);
+    } else {
+      result.checks.navCurrent.forcedColors = 'unsupported';
+    }
+  }
+
   // Footer: email, both profiles, the site's source; no duplicate About link.
   const footer = await page.$$eval('.site-footer a', (links) => links.map((link) => ({ text: link.textContent.trim(), href: link.getAttribute('href') })));
   result.checks.footer = footer.length;
