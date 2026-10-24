@@ -7,6 +7,7 @@ course: Linux and Virtualization Technologies
 term: Spring 2026
 items: 25 assignments and 5 scripts
 repo: https://github.com/jkosber/SVAD-111-Linux-Virtualization
+art: {src: assets/thumbnails/aws.svg, width: 240, height: 160}
 summary:
   role: "I built the VirtualBox VMs and the two AWS servers, worked the Linux labs, wrote the Bash scripts and wrote the final project report. The course provided the worksheets, the install commands, the application and its data."
   built_with: ["VirtualBox", "Linux Mint and Fedora", "Bash", "AWS EC2", "Ubuntu 22.04", "SQL Server and Apache"]

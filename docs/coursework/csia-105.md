@@ -7,6 +7,7 @@ course: Introduction to Cyber Security
 term: Spring 2026
 items: 25 assignments
 repo: https://github.com/jkosber/IntroToCybersecurity-105
+art: {src: assets/project-terminal.svg, width: 600, height: 340}
 summary:
   role: "I ran the textbook's hands-on projects in a Windows VM and on my own computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
   built_with: ["Windows 10 in VirtualBox", "Qualys SSL Labs", "OpenPuff", "netsh", "NVD and CVE", "Directory Snoop"]

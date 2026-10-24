@@ -3,7 +3,7 @@ title: Proxmox homelab
 description: I built and maintain a Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network.
 kind: Personal homelab
 status: Ongoing
-tools: [Proxmox VE, Linux, Docker, SDN]
+tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]

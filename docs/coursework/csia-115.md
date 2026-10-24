@@ -7,6 +7,7 @@ course: Cyber Ops
 term: Spring 2026
 items: 47 labs and a skills assessment
 repo: https://github.com/jkosber/CyberOps-115
+art: {src: assets/thumbnails/security.svg, width: 240, height: 160}
 summary:
   role: "I ran the Cisco labs in VirtualBox, worked each investigation from the alerts and captures, and wrote the answers and the final after-action report. The course provided the virtual machines, the captures and the alert data."
   built_with: ["Security Onion", "Sguil and Kibana", "Wireshark", "NetworkMiner", "VirusTotal", "Linux and Windows tools"]

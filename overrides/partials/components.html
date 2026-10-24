@@ -24,19 +24,68 @@
 </svg>
 {%- endmacro %}
 
-{% macro project_showcase(project) -%}
+{# A lead project on the homepage: copy beside its screenshot. The screenshot comes first in the
+   source because it sits above the copy in one column, so keyboard order follows what you see. #}
+{% macro feature(project, flip=false, lazy=true) -%}
 {% set shot = project.meta.screenshot %}
-{% set tools = (project.meta.summary.built_with if project.meta.summary else project.meta.tools or [])[:3] %}
-<article class="showcase">
-  <div class="showcase-copy">
-    <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
-    <p>{{ project.meta.description }}</p>
-    <p class="showcase-meta">{{ project.meta.status }}. {{ tools | join(', ') }}.</p>
-  </div>
+{% set summary = project.meta.summary or {} %}
+{% set title = project.meta.title or project.title %}
+{% set tools = project.meta.tools or (summary.built_with or [])[:4] %}
+<article class="feature{% if flip %} feature--flip{% endif %}">
   <figure class="shot reveal">
-    <img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy">
+    <a class="zoom" href="{{ shot.src | url }}"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}"{% if lazy %} loading="lazy"{% endif %}></a>
     <figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption>
   </figure>
+  <div class="feature-copy">
+    <h3><a href="{{ project.url | url }}">{{ title }}</a></h3>
+    <p class="desc">{{ project.meta.description }}</p>
+    {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+    {% if tools %}<ul class="tools" role="list" aria-label="Built with">{% for name in tools %}<li>{{ tool_icon(name) }}{{ name }}</li>{% endfor %}</ul>{% endif %}
+    <a class="button" href="{{ project.url | url }}">Read the case study<span class="sr"> about {{ title }}</span></a>
+  </div>
+</article>
+{%- endmacro %}
+
+{# A project without a screenshot: title and description beside its illustration and Result. #}
+{% macro minor_row(project) -%}
+{% set summary = project.meta.summary or {} %}
+{% set art = project.meta.art %}
+<article class="minor">
+  <div>
+    <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
+    <p class="desc">{{ project.meta.description }}</p>
+  </div>
+  <div class="minor-side">
+    {% if art %}<img class="minor-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
+    <div>
+      {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+      {% if project.meta.status %}<p class="minor-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}.</p>{% endif %}
+    </div>
+  </div>
+</article>
+{%- endmacro %}
+
+{# One class on the homepage: the whole card links to its page. #}
+{% macro class_tile(class_page) -%}
+{% set art = class_page.meta.art %}
+<li><a class="tile lift" href="{{ class_page.url | url }}">
+  {% if art %}<img class="tile-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
+  <span class="tile-code">{{ class_page.meta.code }}</span>
+  <span class="tile-name">{{ class_page.meta.course }}</span>
+  <span class="tile-meta">{{ class_page.meta.term }}, {{ class_page.meta.get('items') }}</span>
+</a></li>
+{%- endmacro %}
+
+{# One role on the homepage, linking to its full entry on the Experience page. #}
+{% macro role_card(role, experience_url) -%}
+<article class="role-card">
+  <img class="role-art" src="{{ role.image | url }}" width="240" height="160" alt="" loading="lazy">
+  <div>
+    <h3><a href="{{ experience_url }}#{{ role.id }}">{{ role.title }}</a></h3>
+    <p class="role-org">{{ role.organization }}</p>
+    <p class="role-dates">{{ role.dates }}</p>
+    <p class="role-summary">{{ role.summary }}</p>
+  </div>
 </article>
 {%- endmacro %}
 
@@ -48,19 +97,9 @@
 </li>
 {%- endmacro %}
 
-{# Roles live in the Experience page's frontmatter: the full entries there, a one-line summary on the homepage. #}
-{% macro experience_entries(compact=false) -%}
+{# Roles live in the Experience page's frontmatter: the full entries there, a card per role on the homepage. #}
+{% macro experience_entries() -%}
 {% for experience in nav if experience.title == 'Experience' %}
-{% if compact %}
-<div class="experience-list experience-list--compact">
-{% for role in experience.meta.roles %}
-  <article class="experience-entry">
-    <div class="experience-date"><p>{{ role.dates }}</p><span>{{ role.title }}</span></div>
-    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon(role.icon) }}</div><h3 class="experience-title"><a href="{{ experience.url | url }}#{{ role.id }}">{{ role.organization }}</a></h3><p class="role-summary">{{ role.summary }}</p></div>
-  </article>
-{% endfor %}
-</div>
-{% else %}
 <div class="role-list">
 {% for role in experience.meta.roles %}
   <article class="role" id="{{ role.id }}">
@@ -77,6 +116,5 @@
   </article>
 {% endfor %}
 </div>
-{% endif %}
 {% endfor %}
 {%- endmacro %}

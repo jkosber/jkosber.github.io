@@ -9,6 +9,7 @@ summary:
   built_with: ["Python", "python-docx", "headless LibreOffice for PDF conversion", "pypdf", "an AI agent", "browser automation"]
   result: "A ranked report of every posting, tailored one-page resumes for the strongest matches and a local review page. A build fails on missing required details, listed banned terms or a second page."
 updated: "September 24, 2026"
+art: {src: assets/project-resume.svg, width: 600, height: 340}
 ---
 
 # Job scan and resume tailor

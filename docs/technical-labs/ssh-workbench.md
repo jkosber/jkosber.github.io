@@ -3,7 +3,7 @@ title: SSH Workbench
 description: A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
 status: Version 0.3.0
-tools: [Python, Textual, OpenSSH, GitHub Actions]
+tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "I defined what Workbench does, planned each release as small tested tasks and tested it on my own machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]

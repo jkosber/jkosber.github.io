@@ -16,11 +16,13 @@
   --accent: #80c5ff;
   --warm: #ffc36b;
   --on-warm: #10233a;
-  /* Derived from the colors above: hover fills, code text and the floating control's shadow. */
+  /* Derived from the colors above: hover fills, code text, a soft link underline and shadows. */
   --warm-hover: #ffd496;
   --tint-hover: #ffffff12;
   --code-text: #e4edfb;
+  --link-underline: #80c5ff59;
   --shadow-float: 0 5px 20px #071c3022;
+  --shadow-lift: 0 28px 56px -24px #01060ce6, 0 0 0 1px #4a7aa680;
   /* Space: tight inside groups (1 to 3), loose between groups and sections (4 to 7). */
   --s1: .5rem;
   --s2: 1rem;
@@ -110,38 +112,120 @@ p { max-width: 35em; }
 .menu-toggle { flex-shrink: 0; align-items: center; gap: var(--s1); min-height: 44px; padding: 0 .875rem; color: var(--heading); background: transparent; border: 1px solid var(--line-strong); border-radius: var(--r-s); font-weight: 600; font-size: .9375rem; cursor: pointer; }
 .page-shell { min-height: 65vh; }
 .page-pad { padding-block: var(--s5) var(--s6); }
-.section-inner, .home-intro { max-width: 1200px; margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+/* Homepage hero: the name, then the role line beside the intro, in a band.
+   The facts panel hangs over the band's lower edge. */
+.hero { padding-top: var(--s5); }
+/* flow-root keeps the facts' negative margin inside the band, so the panel hangs over its lower edge. */
+.hero > .wrap { display: flow-root; container-type: inline-size; }
+/* One continuous size for the name at every width; it never breaks inside a word.
+   "Kosberg" is about 4 em wide, so with very large text on a phone the 24cqi cap keeps it in the column. */
+.hero h1 { margin: 0; font-size: min(clamp(var(--t-h1), 5.4vw, var(--t-name)), 24cqi); font-weight: 600; line-height: 1; letter-spacing: -.045em; overflow-wrap: normal; hyphens: manual; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s3); }
+.hero-grid > p { margin: 0; }
+.hero .role-line { max-width: 22ch; color: var(--heading); font: 500 var(--t-h3)/1.3 var(--display); letter-spacing: -.02em; }
+.hero .intro { max-width: 36em; color: var(--muted); }
+.facts { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s4) 0 calc(var(--overhang) * -1); background: var(--surface); border-radius: var(--r-l); }
+.facts > div { padding: var(--s3) 1.75rem; }
+.facts > div + div { border-left: 1px solid var(--line); }
+.facts dt { color: var(--muted); font-size: var(--t-small); }
+.facts dd { margin: .25rem 0 0; line-height: 1.45; }
+.facts a { color: var(--heading); font-weight: 650; text-decoration-color: var(--link-underline); }
+.facts .detail { display: block; margin-top: .125rem; color: var(--muted); font-size: .9375rem; }
 
-.intro-copy { min-width: 0; position: relative; z-index: 1; }
-/* One continuous size for the name at every width; it never breaks inside a word. */
-.prose.intro-copy h1 { margin: 0 0 1.4rem; font-size: clamp(2.5rem, 4.6vw, 3.75rem); font-weight: 600; line-height: 1.02; letter-spacing: -.04em; max-width: none; overflow-wrap: normal; hyphens: manual; }
-.intro-body { min-width: 0; }
-.prose.intro-copy .intro-specialties { max-width: 29ch; margin: 0 0 1.4rem; color: var(--heading); font-size: clamp(1.2rem, 1.9vw, 1.55rem); font-weight: 450; line-height: 1.5; letter-spacing: -.015em; }
-.intro-body > p { max-width: 56ch; font-size: .95rem; color: var(--muted); }
-
-/* Homepage: name and introduction beside a short facts column, then real captures of the lead projects. */
-.home-intro { position: relative; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: 2rem 5rem; align-items: end; padding-top: 4rem; padding-bottom: 3rem; }
-/* The rule under the introduction stops at the text edges, not the gutters. */
-.home-intro::after { content: ''; position: absolute; left: var(--gutter); right: var(--gutter); bottom: 0; border-bottom: 1px solid var(--line); }
-.facts { margin: 0; padding-left: 1.5rem; border-left: 2px solid var(--accent); }
-.facts > div + div { margin-top: 1.1rem; }
-.facts dt { color: var(--muted); font-size: .8rem; }
-.facts dd { margin: .15rem 0 0; color: var(--heading); font-size: .95rem; font-weight: 650; line-height: 1.45; }
-.facts a { color: var(--heading); text-decoration: none; }
-.facts a:hover { text-decoration: underline; }
-.home-projects, .home-experience { padding-top: 3.5rem; }
-.home-projects > h2, .home-experience > h2 { margin: 0 0 1.5rem; font-size: clamp(1.6rem, 2.4vw, 2rem); }
-.showcase { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 2.5rem; align-items: start; padding: 2rem 0; }
-.showcase + .showcase { border-top: 1px solid var(--line); }
-.showcase h3 { margin: 0 0 .75rem; font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
-.showcase h3 a, .project-row-title a, .coursework-block h3 a { color: var(--heading); text-decoration: none; }
-.showcase h3 a:hover, .project-row-title a:hover, .coursework-block h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
-.showcase-copy > p { color: var(--muted); }
-.showcase-copy > .showcase-meta { margin: 0; color: var(--text); font-size: .88rem; }
+/* Projects: feature panels whose screenshot rises above the panel edge, then the job-scan row. */
+.home-projects { padding-top: calc(var(--overhang) + var(--s5)); padding-bottom: var(--s6); }
+.feature { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s5); align-items: start; margin-top: calc(var(--overhang) + var(--s4)); padding: var(--s4); background: var(--surface); border-radius: var(--r-l); }
+.section-head + .feature { margin-top: calc(var(--overhang) + var(--s2)); }
+/* The screenshot comes first in the source; wide panels put the copy on the left unless flipped. */
+.feature-copy { order: -1; }
+.feature--flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.feature--flip .feature-copy { order: 0; }
+.feature .shot { margin-top: calc(var(--overhang) * -1 - var(--s4)); }
+.feature .shot img { border: 0; box-shadow: var(--shadow-lift); }
+.feature h3, .minor h3 { margin: 0; font-size: var(--t-h3); letter-spacing: -.03em; }
+.feature h3 a, .minor h3 a { color: var(--heading); text-decoration: none; }
+.feature h3 a:hover, .minor h3 a:hover { text-decoration: underline; }
+.feature-copy > * { margin: 0; }
+.feature-copy > * + * { margin-top: var(--s2); }
+.feature-copy > :is(.result, .tools, .button) { margin-top: var(--s3); }
+.minor { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s5); align-items: center; margin-top: var(--s4); padding: var(--s4); background: var(--inset); border-radius: var(--r-l); }
+.minor p { margin: 0; }
+.minor .desc { margin-top: var(--s2); }
+.minor-side { display: flex; gap: var(--s3); align-items: center; }
+.minor-side > div { flex: 1 1 auto; min-width: 0; }
+.minor-art { flex: none; width: 9rem; aspect-ratio: 3 / 2; object-fit: contain; }
+.minor .minor-status { margin-top: var(--s1); color: var(--muted); font-size: .9375rem; }
 .shot { min-width: 0; margin: 0; }
 .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line-strong); border-radius: var(--r-m); }
-.shot figcaption { margin-top: .5rem; color: var(--muted); font-size: .8rem; }
-.more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.shot figcaption { margin-top: .75rem; color: var(--muted); font-size: var(--t-small); line-height: 1.5; }
+.shot figcaption a { white-space: nowrap; }
+/* A screenshot link opens the full-size image. */
+.zoom { display: block; border-radius: var(--r-m); cursor: zoom-in; }
+
+/* Coursework: a band of whole-card links, one per class. */
+.home-coursework { padding-block: var(--s6); }
+.section-dek { max-width: 34em; margin: calc(var(--s4) * -1 + var(--s2)) 0 var(--s4); color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s2); margin: 0; padding: 0; list-style: none; container-type: inline-size; }
+.tiles > li { margin: 0; }
+.tile { display: grid; align-content: start; gap: .25rem; height: 100%; padding: .75rem .75rem 1.25rem; background: var(--surface); border-radius: var(--r-l); color: var(--text); text-decoration: none; }
+.tile:hover { background: var(--raised); }
+.tile-art { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin-bottom: .75rem; background: var(--inset); border-radius: var(--r-m); }
+.tile-code, .tile-name, .tile-meta { padding-inline: .5rem; }
+.tile-code { color: var(--muted); font-weight: 700; font-size: var(--t-small); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.tile-name { color: var(--heading); font: 500 var(--t-lead)/1.3 var(--display); letter-spacing: -.02em; }
+.tile:hover .tile-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.tile-meta { color: var(--muted); font-size: .9375rem; }
+
+/* Experience: a card per role; the Experience page shows the full entries. */
+.home-experience { padding-block: var(--s6); }
+.role-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+.role-card { display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); gap: var(--s3); align-items: start; padding: var(--s4) 2rem; background: var(--surface); border-radius: var(--r-l); }
+.role-card .role-art { width: 10.5rem; }
+.role-card h3 { margin: 0; font-size: var(--t-h3); letter-spacing: -.025em; }
+.role-card h3 a { color: var(--heading); text-decoration: none; }
+.role-card h3 a:hover { text-decoration: underline; }
+.role-card p { margin: 0; }
+.role-card .role-org { margin-top: .25rem; color: var(--heading); font-size: inherit; font-weight: 650; }
+.role-card .role-dates { margin-top: .125rem; color: var(--muted); font-size: .9375rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+.role-card .role-summary { margin-top: var(--s2); color: var(--muted); }
+@media (max-width: 1100px) {
+  .feature, .feature--flip, .minor { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+  .feature { padding: 0 var(--s4) var(--s4); }
+  .feature-copy, .feature--flip .feature-copy { order: 0; }
+  .feature .shot { margin-top: calc(var(--overhang) * -1); }
+}
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s2); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .facts > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--s2); padding: 1.125rem var(--s3); }
+  .facts > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .facts dd { margin: 0; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .role-cards { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .hero { padding-top: var(--s4); }
+  .facts > div { grid-template-columns: minmax(0, 1fr); gap: .125rem; }
+  .home-projects, .home-coursework, .home-experience { padding-bottom: var(--s5); }
+  .home-coursework, .home-experience { padding-top: var(--s5); }
+  .feature { padding: 0 1.25rem 1.5rem; }
+  .minor { padding: 1.5rem 1.25rem; }
+  .minor-side { flex-direction: column; align-items: flex-start; }
+  .minor-art { width: 7.5rem; }
+  .tiles { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .tile { grid-template-columns: 6rem minmax(0, 1fr); column-gap: var(--s2); align-items: center; padding: .75rem; }
+  .tile-art { grid-row: 1 / 4; width: 6rem; margin: 0; }
+  .tile-code, .tile-name, .tile-meta { padding-inline: 0; }
+  .tile-name { font-size: 1.125rem; }
+  .role-card { grid-template-columns: minmax(0, 1fr); padding: 1.5rem 1.25rem; }
+  .role-card .role-art { width: 8.75rem; }
+}
+/* With very large text a compact tile leaves the name no room beside the art, so the art goes on top. */
+@container (width < 15rem) {
+  .tile { grid-template-columns: minmax(0, 1fr); }
+  .tile-art { grid-row: auto; }
+}
+
 .project-rows { margin: 0; padding: 0; list-style: none; }
 .project-index { max-width: 52rem; }
 /* Coursework index: one row per class; the code sits before the course name. */
@@ -167,37 +251,11 @@ p { max-width: 35em; }
 .project-row { margin: 0 -.75rem; padding: 1rem .75rem; border-radius: 8px; }
 .project-row + .project-row { border-top: 1px solid var(--line); border-radius: 0; }
 .project-row:hover { background: var(--inset); }
-.project-row-title, .coursework-block h3 { margin: 0 0 .4rem; font-size: 1.25rem; }
+.project-row-title { margin: 0 0 .4rem; font-size: 1.25rem; }
+.project-row-title a { color: var(--heading); text-decoration: none; }
+.project-row-title a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
 .project-row p { margin: 0 0 .35rem; color: var(--muted); font-size: .95rem; }
 .project-status { color: var(--muted); font-size: .82rem; font-weight: 700; }
-.coursework-block { padding-top: 1rem; }
-.class-list { margin: .5rem 0 0; padding: 0; list-style: none; columns: 2; column-gap: 1.5rem; font-size: .93rem; }
-.class-list li { break-inside: avoid; margin: 0; padding: .25rem 0; }
-.class-list span { display: inline-block; min-width: 5.4em; color: var(--muted); font-variant-numeric: tabular-nums; }
-.home-experience .experience-entry { grid-template-columns: minmax(160px, .35fr) minmax(0, 1fr); gap: 2rem; padding: 1.5rem 0; }
-.home-experience .experience-entry:first-child { border-top: 0; padding-top: 0; }
-@media (max-width: 960px) {
-  .home-intro { grid-template-columns: minmax(0, 1fr); padding-top: 2.5rem; }
-}
-@media (max-width: 760px) {
-  .showcase { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: 1.5rem 0; }
-  .more { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-  .class-list { columns: 1; }
-  .home-experience .experience-entry { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
-}
-
-/* The homepage lists each role with a one-line summary; the Experience page shows the full entries. */
-
-.experience-list { position: relative; }
-.experience-entry { position: relative; display: grid; grid-template-columns: minmax(160px, .45fr) 1fr; gap: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--line); }
-.experience-date p { color: var(--muted); font-weight: 700; font-size: .85rem; margin: .2rem 0 .75rem; }
-.experience-date span { display: block; max-width: 23ch; color: var(--heading); font-size: 1.05rem; font-weight: 650; line-height: 1.5; }
-.experience-copy { position: relative; padding-left: 4rem; }
-.role-symbol { display: grid; place-items: center; position: absolute; left: 0; top: .2rem; width: 44px; height: 44px; border-radius: var(--r-m); color: var(--accent); background: var(--surface); border: 1px solid var(--line-strong); }
-.experience-title { margin: 0 0 1rem; font-size: 1.65rem; }
-.experience-title a { color: var(--heading); text-decoration: none; }
-.experience-title a:hover { text-decoration: underline; }
-.experience-copy p { font-size: 1rem; margin: 0 0 .8rem; color: var(--muted); }
 .role { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 3rem; align-items: start; padding: 2.5rem 0; border-top: 1px solid var(--line); }
 .page-heading + .role-list > .role:first-child { padding-top: 0; border-top: 0; }
 .role-art { display: block; width: 100%; height: auto; }
@@ -437,13 +495,6 @@ p { max-width: 35em; }
   .page-pad { padding-block: var(--s4) var(--s5); }
   .brand { font-size: .9375rem; gap: .625rem; }
   .brand img { width: 30px; height: 30px; }
-  .intro-body { padding-bottom: 0; }
-  .intro-body > p { max-width: 56ch; }
-  .prose.intro-copy .intro-specialties { max-width: 38ch; font-size: 1.25rem; }
-  /* Credentials come before the illustration on one column; the source order stays for keyboard users on wide screens. */
-  .experience-entry { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2rem 0; }
-  .experience-date span { max-width: none; }
-  .experience-date p { margin-bottom: .3rem; }
   .role { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: 2rem 0; }
   .role-art { width: 160px; }
   /* A floating control would cover text on a phone; the footer copy remains. */
@@ -458,10 +509,6 @@ p { max-width: 35em; }
   .site-menu { align-items: stretch; flex-direction: column; }
   .main-nav { display: flex; flex-wrap: wrap; gap: .25rem; }
   .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .125rem); justify-content: flex-start; }
-  .intro-body > p { font-size: .96rem; }
-  .experience-copy { padding-left: 0; }
-  .role-symbol { display: none; }
-  .experience-title { font-size: 1.5rem; }
   .prose { font-size: 1rem; }
   .prose > p:first-of-type { font-size: 1.1rem; }
   .prose h2 { font-size: 1.75rem; }
@@ -513,30 +560,32 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .table-scroll { overflow: visible; margin: 1rem 0; }
   .table-scroll table { min-width: 0; }
   .prose .table-hint { display: none; }
-  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .button, .back-to-top, .role-symbol, .role-art { display: none; }
+  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .button, .back-to-top, .role-art { display: none; }
   .print-identity { display: grid; gap: .15rem; padding-bottom: .75rem; margin-bottom: 1rem; border-bottom: 1px solid #bbb; font-size: 10pt; }
-  .page-shell, .wrap, .page-pad, .error-page, .home-intro, .home-projects > .section-inner, .home-experience { padding: 0; max-width: none; }
+  .page-shell, .wrap, .page-pad, .error-page, .hero, .home-coursework { padding: 0; max-width: none; }
   .page-heading, .collection .page-heading { padding: 0 0 1rem; margin: 0 0 1rem; }
-  .article-layout, .home-intro, .home-experience { display: block; }
-  .experience-entry, .role { padding: 1rem 0; }
-  .credential, .experience-entry, .role, .section-note { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
-  .credential h3, .credential p, .experience-date p, .role-org, .role-dates, .role-intro { color: #000; }
+  .article-layout, .hero-grid, .feature, .minor, .role-card { display: block; }
+  /* Overhangs and screen shadows don't belong on paper. */
+  .facts, .feature, .minor { margin: 1rem 0; break-inside: avoid; }
+  .feature .shot { margin: 0 0 1rem; }
+  .feature .shot img { box-shadow: none; }
+  .role { padding: 1rem 0; }
+  .credential, .role, .section-note { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
+  .credential h3, .credential p, .role-org, .role-dates, .role-intro { color: #000; }
   .credential-grid { margin: .75rem 0; gap: 1rem; }
   .credential { padding: .65rem 1rem; }
   .prose .credential h3, .prose .education-entry h3 { margin: 0 0 .5rem; }
   .education-entry { margin: .75rem 0; padding: 0 0 0 1rem; }
   .section-note { margin-top: 1rem; padding: 1rem; }
-  .experience-copy p, .intro-body > p { font-size: 11pt; line-height: 1.4; }
-  .experience-title { font-size: 16pt; margin: .5rem 0; }
-  h1, .prose.intro-copy h1, .page-heading.prose h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
+  .hero .intro { font-size: 11pt; line-height: 1.4; }
+  h1, .hero h1, .page-heading.prose h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
   h2, h3 { break-after: avoid; }
   .prose h3 { font-size: 13pt; margin: 1rem 0 .5rem; }
   a { color: inherit; }
-  .experience-copy { padding-left: 0; }
   * { animation: none !important; transition: none !important; } /* anti-slop-allow: print output must never animate */
 }
 @media (forced-colors: active) {
   .main-nav a[aria-current] { text-decoration-color: CanvasText; }
   /* Panels lose their fills in forced colors, so they get a border instead. */
-  .panel { border: 1px solid CanvasText; }
+  .panel, .facts, .feature, .minor, .tile, .role-card { border: 1px solid CanvasText; }
 }

@@ -7,6 +7,7 @@ course: Computing Logic
 term: Fall 2025
 items: 7 modules
 repo: https://github.com/jkosber/SDEV-120
+art: {src: assets/thumbnails/terminal.svg, width: 240, height: 160}
 summary:
   role: "I wrote the pseudocode, drew the flowcharts and the UML diagram, filled in the workbooks and wrote the Python scripts. In the team project I was team leader, responsible for employee data management and for security and compliance."
   built_with: ["Python 3.14 and IDLE", "Lucidchart", "Excel", "Pseudocode"]

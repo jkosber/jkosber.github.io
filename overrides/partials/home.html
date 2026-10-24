@@ -1,34 +1,39 @@
-<section class="home-intro section-inner" aria-labelledby="jadon-kosberg">
-  <div class="intro-copy prose">{{ page.content }}</div>
-  {% if page.meta.facts %}
-  <dl class="facts">
-    {% for fact in page.meta.facts %}
-    <div><dt>{{ fact.label }}</dt><dd>{% if fact.href %}<a href="{{ fact.href | url }}">{{ fact.text }}</a>{% else %}{{ fact.text }}{% endif %}</dd></div>
-    {% endfor %}
-  </dl>
-  {% endif %}
+<section class="hero home-intro band" aria-labelledby="jadon-kosberg">
+  <div class="wrap">
+    {{ page.content }}
+    {% if page.meta.facts %}
+    <dl class="facts enter enter-3">
+      {% for fact in page.meta.facts %}
+      <div><dt>{{ fact.label }}</dt><dd>{% if fact.href %}<a href="{{ fact.href | url }}">{{ fact.text }}</a>{% else %}{{ fact.text }}{% endif %}{% if fact.detail %}<span class="detail">{{ fact.detail }}</span>{% endif %}</dd></div>
+      {% endfor %}
+    </dl>
+    {% endif %}
+  </div>
 </section>
 {% for section in nav if section.title == 'Projects' %}
 {% set listed = section.children[1:] | rejectattr('meta.detail') | list %}
-<section class="home-projects section-inner" aria-labelledby="projects">
-  <h2 id="projects">Projects</h2>
-  {% for project in listed if project.meta.screenshot %}{{ project_showcase(project) }}{% endfor %}
-  <div class="more">
-    <ul class="project-rows">
-      {% for project in listed if not project.meta.screenshot %}{{ project_row(project) }}{% endfor %}
+<section class="home-projects wrap" aria-labelledby="projects">
+  <div class="section-head"><h2 id="projects">Projects</h2><a href="{{ section.children[0].url | url }}">All projects</a></div>
+  {% for project in listed if project.meta.screenshot %}{{ feature(project, flip=loop.index is even, lazy=not loop.first) }}{% endfor %}
+  {% for project in listed if not project.meta.screenshot %}{{ minor_row(project) }}{% endfor %}
+</section>
+{% endfor %}
+{% for section in nav if section.title == 'Coursework' %}
+<section class="home-coursework band" aria-labelledby="coursework">
+  <div class="wrap">
+    <div class="section-head"><h2 id="coursework">Coursework</h2><a href="{{ section.children[0].url | url }}">All coursework</a></div>
+    <p class="section-dek">{{ section.children[0].meta.description }}</p>
+    <ul class="tiles" role="list">
+      {% for class_page in section.children if class_page.meta.code %}{{ class_tile(class_page) }}{% endfor %}
     </ul>
-    {% for coursework in nav if coursework.title == 'Coursework' %}
-    <div class="coursework-block">
-      <h3><a href="{{ coursework.children[0].url | url }}">Coursework</a></h3>
-      <ul class="class-list">
-        {% for class in coursework.children if class.meta.code %}<li><span>{{ class.meta.code }}</span> <a href="{{ class.url | url }}">{{ class.meta.course }}</a></li>{% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
   </div>
 </section>
 {% endfor %}
-<section class="home-experience section-inner" aria-labelledby="experience">
-  <h2 id="experience">Experience</h2>
-  {{ experience_entries(true) }}
+{% for experience in nav if experience.title == 'Experience' %}
+<section class="home-experience wrap" aria-labelledby="experience">
+  <div class="section-head"><h2 id="experience">Experience</h2><a href="{{ experience.url | url }}">Full experience</a></div>
+  <div class="role-cards">
+    {% for role in experience.meta.roles %}{{ role_card(role, experience.url | url) }}{% endfor %}
+  </div>
 </section>
+{% endfor %}

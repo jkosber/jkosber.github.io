@@ -7,6 +7,7 @@ course: Networking I
 term: Fall 2025
 items: 36 lab write-ups
 repo: https://github.com/jkosber/Networking-109
+art: {src: assets/thumbnails/network.svg, width: 240, height: 160}
 summary:
   role: "I worked the Packet Tracer activities and labs and wrote up each one: addressing tables, subnet plans, and what was wrong on each device and how I fixed it."
   built_with: ["Cisco Packet Tracer", "Cisco IOS", "Wireshark"]

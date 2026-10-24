@@ -7,6 +7,7 @@ course: Network Protocol Analysis
 term: Spring 2026
 items: 16 submissions
 repo: https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis
+art: {src: assets/thumbnails/proxmox.svg, width: 240, height: 160}
 summary:
   role: "I made my first capture on my own computer, then filtered and read the course's trace files and wrote the answers and lab summaries. I didn't build or repair the capstone networks."
   built_with: ["Wireshark", "Display and capture filters", "Windows network commands"]
