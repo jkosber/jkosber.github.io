@@ -43,7 +43,7 @@
   {% endif %}
 </head>
 <body>
-  {% from "partials/components.html" import icon, feature, minor_row, class_tile, role_card, project_row, experience_entries with context %}
+  {% from "partials/components.html" import icon, feature, minor_row, class_tile, role_card, role_panel, project_row, experience_entries with context %}
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="identity">
@@ -110,6 +110,72 @@
           <div class="section-note"><h2>Projects and coursework</h2><p>My homelab, software projects and coursework cover additional Linux, networking and security work.</p><a href="{{ 'technical-labs/' | url }}">View projects</a></div>
         </div>
       {% else %}
+        {% set sections = namespace(items=[]) %}
+        {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
+        {% set summary = page.meta.summary or {} %}
+        {% set parts = page.content.split('</h1>', 1) %}
+        {% if (summary or page.meta.code) and parts | length == 2 %}
+        {# Case studies and class pages: a header band, then the body beside the contents. Case studies
+           put the Result in the band and My role atop the body; class pages put My role beside the
+           Result under the band. Class pages are the ones with a course code. #}
+        {% set is_class = page.meta.code %}
+        {% set shot = page.meta.screenshot %}
+        {% set art = page.meta.art %}
+        {% set body = parts[1].split('<h2', 1) %}
+        <section class="page-head band{% if shot %} page-head--shot{% endif %}"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="{{ nav.homepage.url | url }}">Home</a></li>
+            {% if page.parent %}{% set parent_url = page.parent.children[0].url %}{% if parent_url != page.url %}<li aria-hidden="true">/</li><li><a href="{{ parent_url | url }}">{{ page.parent.title }}</a></li>{% endif %}{% endif %}
+            {% if page.meta.class_page %}<li aria-hidden="true">/</li><li><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></li>{% endif %}
+            <li aria-hidden="true">/</li><li><span aria-current="page">{{ page_title }}</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              {{ parts[0] }}</h1>
+              {% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}
+              {% if page.meta.status or page.meta.updated or page.meta.term or page.meta.get('items') or page.meta.class_page or summary.source or page.meta.repo %}
+              <dl class="strip">
+                {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
+                {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
+                {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
+                {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
+                {% if page.meta.class_page %}<div><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
+                {% if summary.source %}<div><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
+                {% elif page.meta.repo %}<div><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
+              </dl>
+              {% endif %}
+            </div>
+            {% if is_class %}{% if art %}<img class="head-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="">{% endif %}
+            {% elif summary.result %}<p class="result head-result"><span class="result-label">Result</span>{{ summary.result }}</p>{% endif %}
+          </div>
+        </div></section>
+        {% if shot %}
+        <div class="wrap lead-shot"><figure class="shot">
+          <a class="zoom" href="{{ shot.src | url }}"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="eager"></a>
+          <figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption>
+        </figure></div>
+        {% endif %}
+        {% if is_class and (summary.role or summary.built_with or summary.result) %}
+        <div class="wrap summary-pair">
+          {% if summary.role or summary.built_with %}{{ role_panel(summary) }}{% endif %}
+          {% if summary.result %}<div class="panel panel--result"><span class="panel-title">Result</span><p>{{ summary.result }}</p></div>{% endif %}
+        </div>
+        {% endif %}
+        {# The contents come first in the source, so on phones they sit above the body. #}
+        <div class="wrap article">
+          {% if sections.items %}
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
+          </details>
+          {% endif %}
+          <div class="body prose">
+            {% if not is_class and (summary.role or summary.built_with) %}{{ role_panel(summary) }}{% endif %}
+            {{ body[0] }}
+            {% if body | length == 2 %}<h2{{ body[1] }}{% endif %}
+          </div>
+        </div>
+        {% else %}
         <div class="wrap page-pad">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
             <a href="{{ nav.homepage.url | url }}">Home</a>
@@ -120,44 +186,6 @@
             {% if page and page.meta.class_page %}<span aria-hidden="true">/</span><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a>{% endif %}
             <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
           </nav>
-          {% set sections = namespace(items=[]) %}
-          {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
-          {% set summary = page.meta.summary or {} %}
-          {% set parts = page.content.split('</h1>', 1) %}
-          {% if (summary or page.meta.code) and parts | length == 2 %}
-          {# Case studies and class pages: title and description, then a summary column beside the text. #}
-          {% set body = parts[1].split('<h2', 1) %}
-          <header class="article-head prose">{{ parts[0] }}</h1>{% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}</header>
-          <div class="article-grid">
-            <aside class="spec" aria-label="Summary">
-              <dl>
-                {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
-                {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
-                {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
-                {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
-                {% if summary.role %}<div class="wide"><dt>My role</dt><dd>{{ summary.role }}</dd></div>{% endif %}
-                {% if summary.built_with %}<div class="wide"><dt>Built with</dt><dd>{{ summary.built_with | join(', ') }}</dd></div>{% endif %}
-                {% if page.meta.class_page %}<div class="wide"><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
-                {% if summary.source %}<div class="wide"><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
-                {% elif page.meta.repo %}<div class="wide"><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
-              </dl>
-              {% if sections.items %}
-              <details class="toc" open>
-                <summary>On this page</summary>
-                <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
-              </details>
-              {% endif %}
-            </aside>
-            <article class="prose">
-              {{ body[0] }}
-              {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
-              {% if page.meta.screenshot %}{% set shot = page.meta.screenshot %}
-              <figure class="shot reveal"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy"><figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption></figure>
-              {% endif %}
-              {% if body | length == 2 %}<h2{{ body[1] }}{% endif %}
-            </article>
-          </div>
-          {% else %}
           <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
             {% if sections.items and page.meta.layout != 'wide' %}
             <aside class="contents">
@@ -176,8 +204,8 @@
               {{ page.content }}
             </article>
           </div>
-          {% endif %}
         </div>
+        {% endif %}
       {% endif %}
       {% endblock %}
     </main>

@@ -27,7 +27,7 @@ Two service guests run all the time, and the other guests start only when I'm wo
 ## How the lab fits together
 
 <figure class="architecture">
-  <ol class="architecture-flow">
+  <ol class="architecture-flow" role="list">
     <li><strong>Physical connection</strong><span>Home router<br>Wireless bridge<br>Flat access network</span><small>Wired backhaul and VLANs planned</small></li>
     <li><strong>Proxmox host</strong><span>Alienware 15 R3<br>16 GB physical RAM<br>SSD, guest-storage HDD and an unused NVMe</span><small>Virtual machines and two LXC containers</small></li>
     <li><strong>Guest attachments</strong><span>vmbr0: Ubuntu service VM + Debian LXC<br>testnet: nine experimental VMs + Caddy pilot</span><small>Service migration to SDN planned</small></li>

@@ -21,7 +21,7 @@ An AI agent does the reading and comparing. Python scripts do the repeatable par
 ## From job posting to application documents {#from-job-posting-to-application}
 
 <figure class="architecture">
-  <ol class="architecture-flow">
+  <ol class="architecture-flow" role="list">
     <li><strong>Read and compare</strong><span>Source resume<br>Posting text and metadata<br>Agent applies the fit rubric</span><small>Profile + matches.json</small></li>
     <li><strong>Build and check</strong><span>Per-role content specification<br>DOCX generation and PDF conversion<br>Document and wording checks</span><small>Resumes + ranking report</small></li>
     <li><strong>Review locally</strong><span>HTML page with sibling documents<br>Reasons, gaps and file warnings<br>My review before use</span><small>No automatic applications</small></li>

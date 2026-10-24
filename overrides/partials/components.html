@@ -89,6 +89,15 @@
 </article>
 {%- endmacro %}
 
+{# My role and every built_with entry, word for word: atop the body on case studies, beside the Result on class pages. #}
+{% macro role_panel(summary) -%}
+<div class="panel role-panel">
+  <span class="panel-title">My role</span>
+  {% if summary.role %}<p>{{ summary.role }}</p>{% endif %}
+  {% if summary.built_with %}<ul class="tools" role="list" aria-label="Built with">{% for name in summary.built_with %}<li>{{ tool_icon(name) }}{{ name }}</li>{% endfor %}</ul>{% endif %}
+</div>
+{%- endmacro %}
+
 {% macro project_row(project, heading=3) -%}
 <li class="project-row lift reveal">
   <h{{ heading }} class="project-row-title"><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h{{ heading }}>

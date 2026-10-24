@@ -24,7 +24,7 @@ The course provided the app, the data, the two-server design and the install com
 ## Architecture and connection paths
 
 <figure class="architecture">
-  <ol class="architecture-flow">
+  <ol class="architecture-flow" role="list">
     <li><strong>Browser</strong><span>Search catalog, open product, submit review</span><small>HTTP · TCP 80</small></li>
     <li><strong>Web instance</strong><span>Ubuntu 22.04<br>Apache + PHP 8.1<br>SQL Server PHP drivers</span><small>SQL connection · TCP 1433</small></li>
     <li><strong>Database instance</strong><span>Ubuntu 22.04<br>Microsoft SQL Server<br>AdventureWorks database</span><small>Catalog and review storage</small></li>

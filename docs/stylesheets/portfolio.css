@@ -23,6 +23,7 @@
   --link-underline: #80c5ff59;
   --shadow-float: 0 5px 20px #071c3022;
   --shadow-lift: 0 28px 56px -24px #01060ce6, 0 0 0 1px #4a7aa680;
+  --edge-shade: #00000059;
   /* Space: tight inside groups (1 to 3), loose between groups and sections (4 to 7). */
   --s1: .5rem;
   --s2: 1rem;
@@ -275,46 +276,73 @@ p { max-width: 35em; }
 .section-note h2 { margin-top: 0; }
 .section-note p { color: var(--muted); }
 
-/* Case studies and class pages: title and description, then a summary column beside the text. */
-.article-head { padding: 0 0 2rem; margin: 0 0 2.5rem; border-bottom: 1px solid var(--line); }
-.article-head h1 { margin-bottom: .9rem; }
-.article-head .dek { max-width: 60ch; margin: 0; color: var(--muted); font-size: 1.2rem; line-height: 1.6; }
-.article-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 4rem; align-items: start; }
-.spec { container-type: inline-size; position: sticky; top: calc(var(--header-height, 0px) + 1.5rem); max-height: calc(100dvh - var(--header-height, 0px) - 3rem); overflow-y: auto; font-size: .9rem; }
-.spec dl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1rem; margin: 0 0 1.5rem; }
-.spec dl > div { padding: .7rem 0; border-top: 1px solid var(--line); }
-.spec dl > div:first-child, .spec dl > div:nth-child(2):not(.wide) { padding-top: 0; border-top: 0; }
-.spec dl > div.wide { grid-column: 1 / -1; }
-/* With large text the column holds only a few words per line, so the pairs stack instead of splitting words. */
-@container (max-width: 15em) {
-  .spec dl { grid-template-columns: minmax(0, 1fr); }
-  .spec dl > div:nth-child(2):not(.wide) { padding-top: .7rem; border-top: 1px solid var(--line); }
+/* Case studies and class pages: a header band with the title, description and a strip of facts,
+   then the body beside a sticky contents rail. */
+.page-head { padding-block: var(--s4) var(--s5); }
+/* The lead screenshot overlaps the band's lower edge by --s7. */
+.page-head--shot { padding-bottom: calc(var(--s7) + var(--s4)); }
+.crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--s1); margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: var(--t-small); }
+.crumbs a { display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
+.crumbs [aria-current] { color: var(--heading); }
+.head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s4); }
+.page-head h1 { margin: 0; font-size: clamp(2.25rem, 4.4vw, 3.5rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
+.dek { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: clamp(1.125rem, 1.5vw, var(--t-lead)); line-height: 1.55; }
+/* break-word, not the body's anywhere: a strip item wraps whole words before it splits one. */
+.strip { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin: var(--s4) 0 0; overflow-wrap: break-word; }
+.strip dt { color: var(--muted); font-size: var(--t-small); }
+.strip dd { margin: 0; color: var(--heading); font-weight: 650; }
+.head-result { max-width: none; margin: 0; background: var(--surface); }
+.head-art { width: 100%; max-width: 22rem; height: auto; justify-self: end; }
+.lead-shot { margin-top: calc(var(--s7) * -1); }
+.lead-shot .shot img { border: 0; box-shadow: var(--shadow-lift); }
+/* Class pages: My role beside the Result, overlapping the band's lower edge. */
+.summary-pair { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: calc((var(--s5) - var(--s2)) * -1); }
+.panel .tools { margin-top: var(--s2); }
+.article { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; padding-block: var(--s5) var(--s6); }
+.article > .body { grid-column: 1; grid-row: 1; }
+.article > .contents { grid-column: 2; grid-row: 1; }
+details.contents { font-size: .9375rem; }
+details.contents summary { color: var(--heading); font-weight: 700; cursor: pointer; }
+details.contents a { color: var(--muted); text-decoration: none; }
+details.contents a:hover { color: var(--heading); }
+details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
+@media (min-width: 1101px) {
+  details.contents { position: sticky; top: calc(var(--header-height, 0px) + var(--s4)); }
+  details.contents summary { margin-bottom: .75rem; list-style: none; }
+  details.contents summary::-webkit-details-marker { display: none; }
+  /* A long list scrolls inside the rail, so its links take an inset focus ring that is never clipped. */
+  details.contents nav { max-height: calc(100dvh - var(--header-height, 0px) - var(--s4) * 2 - 3rem); overflow-y: auto; }
+  details.contents a { display: flex; align-items: center; min-height: 44px; padding: .375rem 0 .375rem .875rem; border-left: 2px solid var(--line); line-height: 1.45; }
+  details.contents a:focus-visible { outline-offset: -3px; }
+  /* The bar and the weight mark the current section, so it never depends on color alone. */
+  details.contents a[aria-current] { border-left-color: var(--warm); }
 }
-.spec dt { color: var(--muted); font-size: .78rem; }
-.spec dd { margin: .15rem 0 0; color: var(--heading); line-height: 1.5; }
-.toc summary { padding: .3rem 0; color: var(--heading); font-weight: 700; cursor: pointer; }
-.toc nav { margin-top: .4rem; }
-.toc a { display: block; padding: .35rem .6rem; border-left: 2px solid var(--line); color: var(--muted); line-height: 1.45; text-decoration: none; }
-.toc a:hover { color: var(--heading); }
-.toc a[aria-current='location'] { border-left-color: var(--warm); color: var(--heading); }
-.js .toc:not([data-ready]) > nav { display: none; }
-.prose .result { margin: 0 0 2rem; }
-/* Outranks .prose strong, which comes later. */
-.prose .result strong { color: var(--warm); }
-.article-grid .shot { margin: 0 0 2.5rem; }
+@media (max-width: 1100px) {
+  .head-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+  .head-art { display: none; }
+  .article { grid-template-columns: minmax(0, 1fr); gap: var(--s4); padding-top: var(--s4); }
+  .article > .body, .article > .contents { grid-column: auto; grid-row: auto; }
+  details.contents { padding: .25rem var(--s3); background: var(--surface); border-radius: var(--r-m); }
+  details.contents summary { padding-block: .625rem; }
+  details.contents nav { display: flex; flex-wrap: wrap; gap: .25rem var(--s3); padding-bottom: var(--s1); }
+  details.contents a { display: inline-flex; align-items: center; min-height: 44px; }
+  .js details.contents:not([data-ready]) > nav { display: none; }
+}
 @media (max-width: 960px) {
-  .article-grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-  .spec { position: static; max-height: none; overflow: visible; }
-  .toc { padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 8px; background: var(--inset); }
+  .summary-pair { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .page-head--shot { padding-bottom: 7rem; }
+  .lead-shot { margin-top: -5.5rem; }
+  .summary-pair { margin-top: calc(var(--s4) * -1); }
+  .panel { padding: 1.25rem; }
 }
 @media (max-width: 480px) {
-  .toc { padding: .5rem .6rem; }
-  .toc a { padding: .35rem .45rem; }
   /* Fixed side padding: rem padding grows with enlarged text and leaves long words no room. */
-  .prose .result { padding: .9rem 12px; }
+  .result { padding: .9rem 12px; }
 }
 
-/* Case studies retain comfortable line lengths and accessible section navigation. */
+/* The plain reading layout keeps its own breadcrumbs and contents until it moves to the frame above. */
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: baseline; gap: .65rem; margin-bottom: 2.5rem; font-size: .78rem; color: var(--muted); }
 .breadcrumbs a { display: inline-flex; align-items: center; min-height: 32px; color: var(--muted); }
 .breadcrumbs [aria-current] { color: var(--heading); }
@@ -336,15 +364,15 @@ p { max-width: 35em; }
 .prose code { overflow-wrap: anywhere; padding: .1em .35em; border-radius: 4px; background: var(--inset); box-shadow: inset 0 0 0 1px var(--line); color: var(--code-text); font-size: .86em; }
 .prose table code { overflow-wrap: normal; }
 .prose pre code { padding: 0; background: none; box-shadow: none; font-size: inherit; }
-.architecture { margin: 2rem 0; }
-.architecture-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; list-style: none; }
+/* Architecture flow: three steps with a chevron drawn in the gap before each; it points down once they stack. */
+.architecture { margin: var(--s3) 0; }
+.architecture-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4); list-style: none; }
 .prose .architecture-flow { padding: 0; }
-.architecture-flow li { position: relative; padding: 1rem; margin: 0; border: 1px solid var(--line); border-top: 3px solid var(--accent); background: var(--surface); border-radius: 5px; font-size: .9rem; }
-.architecture-flow li + li::before { content: '→'; position: absolute; left: -1.1rem; top: 1rem; color: var(--accent); }
-.architecture-flow strong, .architecture-flow span, .architecture-flow small { display: block; }
-.architecture-flow span { margin: .6rem 0; }
-.architecture-flow small { color: var(--muted); font-size: .78rem; }
-.architecture figcaption, .evidence-figure figcaption { color: var(--muted); font-size: .84rem; line-height: 1.65; margin-top: .85rem; max-width: 75ch; }
+.architecture-flow li { position: relative; display: grid; align-content: start; gap: .625rem; margin: 0; padding: 1.25rem 1.375rem; background: var(--surface); border-radius: var(--r-m); font-size: .9375rem; line-height: 1.55; }
+.architecture-flow li + li::before { content: ''; position: absolute; left: calc(var(--s4) * -1 + .875rem); top: 1.5rem; width: .75rem; height: .75rem; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); transform: rotate(45deg); }
+.architecture-flow strong { color: var(--heading); font: 500 1.125rem/1.3 var(--display); }
+.architecture-flow small { color: var(--muted); font-size: var(--t-small); }
+.architecture figcaption, .evidence-figure figcaption { color: var(--muted); font-size: var(--t-small); line-height: 1.5; margin-top: .75rem; max-width: 75ch; }
 .evidence-figure { margin: 2rem 0; }
 .evidence-figure img { display: block; height: auto; border: 1px solid var(--line); border-radius: 5px; }
 .evidence-scroll { max-width: 100%; overflow-x: auto; scrollbar-color: var(--accent) var(--surface); }
@@ -361,9 +389,9 @@ p { max-width: 35em; }
   /* On the narrowest phones code may wrap so two-column tables still fit. */
   .prose .table-scroll table:not(:has(tr > :nth-child(3))) code { overflow-wrap: anywhere; }
 }
-@media (max-width: 650px) {
-  .architecture-flow { grid-template-columns: 1fr; gap: 1.5rem; }
-  .architecture-flow li + li::before { content: '↓'; left: 1rem; top: -1.65rem; }
+@media (max-width: 760px) {
+  .architecture-flow { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+  .architecture-flow li + li::before { left: 1.375rem; top: calc(var(--s3) * -1 + .125rem); transform: rotate(135deg); }
 }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .prose table { border-collapse: collapse; width: 100%; font-size: .95rem; line-height: 1.75; margin: 1.75rem 0; }
@@ -406,15 +434,41 @@ p { max-width: 35em; }
 .prose th, .prose td { text-align: left; vertical-align: top; padding: 1rem .8rem; border-bottom: 1px solid var(--line); overflow-wrap: normal; }
 .prose th { font-weight: 750; color: var(--heading); background: var(--raised); }
 .prose tbody tr:nth-child(even) { background: var(--inset); }
+/* Case-study and class-page text, after the .prose rules it refines. */
+.body > p, .body > ul, .body > ol { max-width: 35em; margin: 1.125rem 0; }
+.body > ul, .body > ol { padding-left: 1.375rem; }
+.body > :is(ul, ol) > li { margin: 0; }
+.body > :is(ul, ol) > li + li { margin-top: .625rem; }
+.body > p:first-of-type { margin: 0 0 1.125rem; color: var(--heading); font-size: var(--t-lead); line-height: 1.6; }
+.body > .role-panel { margin-bottom: var(--s5); }
+.panel > p { max-width: none; margin: 0; }
+.body > h2 { margin: var(--s6) 0 var(--s3); padding-top: 0; font-size: clamp(1.625rem, 2.6vw, var(--t-h2)); letter-spacing: -.03em; }
+.body > :first-child { margin-top: 0; }
+/* Tables: a --surface panel with a --raised header row and --line dividers. */
+.body .table-scroll { margin: var(--s3) 0; background: var(--surface); border-radius: var(--r-m); }
+.body table { font-size: .9375rem; line-height: 1.55; }
+.body :is(th, td) { padding: .875rem 1.125rem; border-bottom: 0; }
+.body th { font-size: var(--t-small); font-weight: 700; }
+.body tbody tr:nth-child(even) { background: none; }
+.body tbody tr + tr > * { border-top: 1px solid var(--line); }
+@media (max-width: 760px) {
+  .body > p:first-of-type { font-size: 1.1875rem; }
+  .body > h2 { margin-top: var(--s5); }
+}
+@media screen and (max-width: 760px) {
+  .body :is(th, td) { padding: .625rem .75rem; }
+  /* Wide tables bleed to the screen edge; the shade at the right edge says there is more to scroll. */
+  .body > .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(var(--gutter) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
+}
 .page-context { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; font-size: .78rem; }
 .page-context span { padding: .25rem .75rem; border-radius: 4px; color: var(--accent); background: var(--surface); border: 1px solid var(--line-strong); }
 .page-context span + span { color: var(--muted); background: transparent; border-color: var(--line); }
-.contents { position: sticky; top: calc(var(--header-height, 0px) + 2rem); max-height: calc(100dvh - var(--header-height, 0px) - 4rem); overflow-y: auto; padding-left: 1.2rem; border-left: 1px solid var(--line); font-size: .8rem; }
-.contents summary { color: var(--heading); font-weight: 750; padding: .5rem 0; cursor: pointer; }
-.contents nav { margin-top: .6rem; }
-.contents a { display: block; padding: .65rem .6rem; color: var(--muted); text-decoration: none; line-height: 1.55; }
-.contents a:hover { color: var(--accent); text-decoration: underline; }
-.contents a[aria-current='location'] { background: var(--surface); color: var(--heading); border-radius: 5px; box-shadow: -3px 0 0 var(--accent); }
+aside.contents { position: sticky; top: calc(var(--header-height, 0px) + 2rem); max-height: calc(100dvh - var(--header-height, 0px) - 4rem); overflow-y: auto; padding-left: 1.2rem; border-left: 1px solid var(--line); font-size: .8rem; }
+aside.contents summary { color: var(--heading); font-weight: 750; padding: .5rem 0; cursor: pointer; }
+aside.contents nav { margin-top: .6rem; }
+aside.contents a { display: block; padding: .65rem .6rem; color: var(--muted); text-decoration: none; line-height: 1.55; }
+aside.contents a:hover { color: var(--accent); text-decoration: underline; }
+aside.contents a[aria-current='location'] { background: var(--surface); color: var(--heading); border-radius: 5px; box-shadow: -3px 0 0 var(--accent); }
 .credential-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
 .credential { position: relative; padding: 2rem; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--text); }
 .credential h3 { color: var(--heading); font-size: 1.4rem; margin: 0 0 1.5rem; }
@@ -472,10 +526,10 @@ p { max-width: 35em; }
   .article-layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .article-layout > .contents { grid-column: 1; grid-row: 1; position: static; }
   .article-layout > .prose { grid-column: 1; grid-row: 2; }
-  .contents { max-height: none; overflow: visible; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--inset); }
-  .contents nav { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
-  .contents a { padding: .5rem; }
-  .js .contents details:not([data-ready]) > nav { display: none; }
+  aside.contents { max-height: none; overflow: visible; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--inset); }
+  aside.contents nav { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
+  aside.contents a { padding: .5rem; }
+  .js aside.contents details:not([data-ready]) > nav { display: none; }
 }
 @media (max-width: 960px) {
   .site-header { display: block; }
@@ -509,11 +563,12 @@ p { max-width: 35em; }
   .site-menu { align-items: stretch; flex-direction: column; }
   .main-nav { display: flex; flex-wrap: wrap; gap: .25rem; }
   .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .125rem); justify-content: flex-start; }
-  .prose { font-size: 1rem; }
-  .prose > p:first-of-type { font-size: 1.1rem; }
-  .prose h2 { font-size: 1.75rem; }
-  .prose table { font-size: .9rem; }
-  .prose th, .prose td { padding: .8rem; min-width: 120px; }
+  /* The plain reading layout only; case-study and class-page text keeps its own phone sizes. */
+  .prose:not(.body) { font-size: 1rem; }
+  .prose:not(.body) > p:first-of-type { font-size: 1.1rem; }
+  .prose:not(.body) h2 { font-size: 1.75rem; }
+  .prose:not(.body) table { font-size: .9rem; }
+  .prose:not(.body) th, .prose:not(.body) td { padding: .8rem; min-width: 120px; }
   .breadcrumbs { font-size: .73rem; gap: .4rem; margin-bottom: 1.5rem; }
   .credential-grid { grid-template-columns: 1fr; }
   .credential { padding: 1.5rem; }
@@ -547,12 +602,19 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .prose li { margin: .5em 0; orphans: 3; widows: 3; break-inside: avoid; }
   .page-context span, .page-context span + span, .prose th, .prose tbody tr:nth-child(even), .prose pre, .prose code { background: #fff; color: #000; }
   .architecture-flow li { background: #fff; color: #000; }
-  .spec, .result, .panel { position: static; max-height: none; overflow: visible; background: #fff; color: #000; border-color: #888; box-shadow: none; break-inside: avoid; }
+  .result, .panel { position: static; max-height: none; overflow: visible; background: #fff; color: #000; border-color: #888; box-shadow: none; break-inside: avoid; }
   .panel { border: 1px solid #888; }
-  .spec dt, .spec dd, .result strong, .result-label, .panel-title { color: #000; }
-  .toc, .article-grid .shot { display: none; }
-  .article-grid { display: block; }
-  .article-head { margin-bottom: 1rem; padding-bottom: 1rem; }
+  .result strong, .result-label, .panel-title, .panel--result .panel-title { color: #000; }
+  /* The page head prints as black text on white, without the overlaps. */
+  .page-head, .page-head--shot { padding: 0 0 1rem; background: #fff; color: #000; }
+  .page-head h1, .dek, .strip dt, .strip dd { color: #000; }
+  .head-grid, .article { display: block; }
+  .head-result, .summary-pair, .lead-shot { margin: 1rem 0; }
+  .lead-shot { break-inside: avoid; }
+  .lead-shot .shot img { box-shadow: none; }
+  .head-art { display: none; }
+  .body > .role-panel { margin-bottom: 1rem; }
+  .body > h2 { margin: 1.5rem 0 .75rem; }
   .architecture-flow small { color: #333; }
   .evidence-figure, .architecture { break-inside: avoid; }
   .evidence-scroll { overflow: visible; }
@@ -560,7 +622,7 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .table-scroll { overflow: visible; margin: 1rem 0; }
   .table-scroll table { min-width: 0; }
   .prose .table-hint { display: none; }
-  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .button, .back-to-top, .role-art { display: none; }
+  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .crumbs, .button, .back-to-top, .role-art { display: none; }
   .print-identity { display: grid; gap: .15rem; padding-bottom: .75rem; margin-bottom: 1rem; border-bottom: 1px solid #bbb; font-size: 10pt; }
   .page-shell, .wrap, .page-pad, .error-page, .hero, .home-coursework { padding: 0; max-width: none; }
   .page-heading, .collection .page-heading { padding: 0 0 1rem; margin: 0 0 1rem; }
@@ -578,7 +640,7 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .education-entry { margin: .75rem 0; padding: 0 0 0 1rem; }
   .section-note { margin-top: 1rem; padding: 1rem; }
   .hero .intro { font-size: 11pt; line-height: 1.4; }
-  h1, .hero h1, .page-heading.prose h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
+  h1, .hero h1, .page-heading.prose h1, .page-head h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
   h2, h3 { break-after: avoid; }
   .prose h3 { font-size: 13pt; margin: 1rem 0 .5rem; }
   a { color: inherit; }
