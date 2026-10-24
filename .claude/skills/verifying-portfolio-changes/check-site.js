@@ -296,47 +296,100 @@ async (page) => {
   }
   for (const [study, classHref] of [['/technical-labs/aws-linux-infrastructure/', '/coursework/svad-111/'], ['/technical-labs/soc-threat-detection/', '/coursework/csia-115/'], ['/technical-labs/snort-firewall-lab/', '/coursework/csia-115/'], ['/technical-labs/ipv6-packet-investigations/', '/coursework/csia-210/']]) {
     await page.goto(BASE + study);
-    const back = await page.evaluate((target) => [...document.querySelectorAll('.breadcrumbs a')].some((link) => new URL(link.href).pathname === target), classHref);
+    const back = await page.evaluate((target) => [...document.querySelectorAll('.crumbs a')].some((link) => new URL(link.href).pathname === target), classHref);
     if (!back) fail(`classPages ${study}: no breadcrumb link back to ${classHref}`);
   }
 
-  // Case studies and class pages: a summary column beside the text on wide screens; on phones
-  // the title, description, summary and closed contents come before the article.
-  const summaryPages = {
-    role: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/job-scan-tailor/',
+  // Case studies and class pages: a header band with the title, description and a strip of facts.
+  // Case studies show the Result beside the title and My role at the top of the body; class pages
+  // put the role and result pair under the band. The contents sit sticky beside the body on wide
+  // screens; on phones the header, the summary and the closed contents come before the body.
+  const headPages = {
+    case: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/job-scan-tailor/',
       '/technical-labs/aws-linux-infrastructure/', '/technical-labs/soc-threat-detection/', '/technical-labs/snort-firewall-lab/',
       '/technical-labs/ipv6-packet-investigations/'],
-    term: ['/coursework/neti-109/', '/coursework/svad-111/', '/coursework/csia-115/', '/coursework/csia-210/', '/coursework/csia-105/', '/coursework/sdev-120/'],
+    class: ['/coursework/neti-109/', '/coursework/svad-111/', '/coursework/csia-115/', '/coursework/csia-210/', '/coursework/csia-105/', '/coursework/sdev-120/'],
   };
-  result.checks.summaryColumn = 0;
-  for (const [kind, list] of Object.entries(summaryPages)) {
+  // Every case study above has a summary.result; only these two have a screenshot.
+  const SHOT_PAGES = ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/'];
+  result.checks.pageHead = 0;
+  for (const [kind, list] of Object.entries(headPages)) {
     for (const route of list) {
       await page.setViewportSize({ width: 1440, height: 900 });
       if ((await page.goto(BASE + route)).status() !== 200) continue;
-      const wide = await page.evaluate((needed) => {
-        const spec = document.querySelector('aside.spec');
-        const article = document.querySelector('main article');
-        if (!spec || !article) return { missing: true };
-        const labels = [...spec.querySelectorAll('dt')].map((term) => term.textContent.trim());
-        return { left: spec.getBoundingClientRect().right <= article.getBoundingClientRect().left, sticky: getComputedStyle(spec).position === 'sticky', hasLabel: labels.includes(needed) };
-      }, kind === 'role' ? 'My role' : 'Term');
-      result.checks.summaryColumn += 1;
-      if (wide.missing) { fail(`summaryColumn ${route}: no aside.spec beside the article`); continue; }
-      if (!wide.left) fail(`summaryColumn ${route} @1440: the summary is not left of the article`);
-      if (!wide.sticky) fail(`summaryColumn ${route} @1440: the summary is not sticky`);
-      if (!wide.hasLabel) fail(`summaryColumn ${route}: the summary has no ${kind === 'role' ? 'My role' : 'Term'} row`);
+      const wide = await page.evaluate(async () => {
+        const find = (selector) => document.querySelector(selector);
+        const strip = find('dl.strip');
+        if (!find('.page-head h1') || !strip) return { missing: true };
+        const art = find('.head-art');
+        if (art && !art.complete) await new Promise((done) => { art.addEventListener('load', done, { once: true }); art.addEventListener('error', done, { once: true }); });
+        const headResult = find('.head-result');
+        const shot = find('.lead-shot img');
+        const role = find('.body .role-panel');
+        const contents = find('details.contents');
+        const body = find('.body');
+        return {
+          labels: [...strip.querySelectorAll('dt')].map((term) => term.textContent.trim()),
+          unpaired: [...strip.querySelectorAll('dt')].filter((term) => !(term.nextElementSibling && term.nextElementSibling.matches('dd'))).map((term) => term.textContent.trim()),
+          emptyValues: [...strip.querySelectorAll('dd')].filter((value) => !value.textContent.trim()).length,
+          resultBottom: headResult ? Math.round(headResult.getBoundingClientRect().bottom) : null,
+          shotTop: shot ? Math.round(shot.getBoundingClientRect().top) : null,
+          leadShot: Boolean(find('.lead-shot')),
+          shotHead: Boolean(find('.page-head--shot')),
+          role: role ? { title: role.textContent.includes('My role'), tools: role.querySelectorAll('ul.tools li').length } : null,
+          pairResult: Boolean(find('.summary-pair .panel--result')),
+          art: art ? { alt: art.getAttribute('alt'), loaded: art.naturalWidth > 0 } : null,
+          contents: contents && body ? { open: contents.open, beside: contents.getBoundingClientRect().left >= body.getBoundingClientRect().right, position: getComputedStyle(contents).position } : null,
+          spec: document.querySelectorAll('aside.spec').length,
+        };
+      });
+      result.checks.pageHead += 1;
+      const where = `pageHead ${route} @1440`;
+      if (wide.missing) fail(`${where}: no .page-head h1 or dl.strip`);
+      else {
+        if (wide.unpaired.length) fail(`${where}: strip label(s) without a value: ${wide.unpaired.join(', ')}`);
+        if (wide.emptyValues) fail(`${where}: ${wide.emptyValues} empty dd in the strip`);
+        if (kind === 'case' && !wide.labels.some((label) => label === 'Updated' || label === 'Status')) fail(`${where}: the strip has no Updated or Status (${wide.labels.join(', ')})`);
+        if (kind === 'class' && !wide.labels.includes('Term')) fail(`${where}: the strip has no Term (${wide.labels.join(', ')})`);
+        if (kind === 'case') {
+          if (wide.resultBottom === null) fail(`${where}: no .head-result`);
+          else if (wide.resultBottom > 900) fail(`${where}: .head-result ends at ${wide.resultBottom}px, expected 900 or less`);
+          if (!wide.role) fail(`${where}: no .body .role-panel`);
+          else {
+            if (!wide.role.title) fail(`${where}: the role panel does not say "My role"`);
+            if (!wide.role.tools) fail(`${where}: the role panel has no ul.tools items`);
+          }
+        }
+        if (SHOT_PAGES.includes(route)) {
+          if (wide.shotTop === null) fail(`${where}: no .lead-shot img`);
+          else if (wide.shotTop > 620) fail(`${where}: the lead screenshot starts at ${wide.shotTop}px, expected 620 or less`);
+        }
+        if (route === '/technical-labs/job-scan-tailor/' && (wide.leadShot || wide.shotHead)) fail(`${where}: a page without a screenshot has .lead-shot or .page-head--shot`);
+        if (kind === 'class') {
+          if (!wide.pairResult) fail(`${where}: no .summary-pair .panel--result`);
+          if (!wide.art) fail(`${where}: no .head-art`);
+          else if (wide.art.alt !== '' || !wide.art.loaded) fail(`${where}: .head-art ${JSON.stringify(wide.art)}`);
+        }
+        if (!wide.contents) fail(`${where}: no details.contents and .body`);
+        else {
+          if (!wide.contents.open) fail(`${where}: On this page starts closed`);
+          if (!wide.contents.beside) fail(`${where}: the contents are not right of the body`);
+          if (wide.contents.position !== 'sticky') fail(`${where}: the contents are ${wide.contents.position}, not sticky`);
+        }
+      }
+      if (wide.spec) fail(`${where}: aside.spec is still on the page`);
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(BASE + route);
-      const narrow = await page.evaluate(() => {
-        const items = ['.breadcrumbs', 'main h1', '.dek', 'aside.spec', 'details.toc', 'main article'].map((selector) => [selector, document.querySelector(selector)]);
+      const narrow = await page.evaluate((summary) => {
+        const items = ['.crumbs', 'main h1', '.dek', 'dl.strip', summary, 'details.contents', '.body'].map((selector) => [selector, document.querySelector(selector)]);
         const missing = items.filter(([, element]) => !element).map(([selector]) => selector);
         const outOfOrder = items.filter(([, element]) => element).some(([, element], index, list) => index && (list[index - 1][1].compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING) === 0);
-        const toc = document.querySelector('details.toc');
-        return { missing, outOfOrder, tocOpen: toc ? toc.open : false };
-      });
-      if (narrow.missing.length) fail(`summaryColumn ${route} @390: missing ${narrow.missing.join(', ')}`);
-      if (narrow.outOfOrder) fail(`summaryColumn ${route} @390: title, description, summary, contents and article are out of order`);
-      if (narrow.tocOpen) fail(`summaryColumn ${route} @390: On this page starts open`);
+        const contents = document.querySelector('details.contents');
+        return { missing, outOfOrder, contentsOpen: contents ? contents.open : false };
+      }, kind === 'class' ? '.summary-pair' : '.head-result');
+      if (narrow.missing.length) fail(`pageHead ${route} @390: missing ${narrow.missing.join(', ')}`);
+      if (narrow.outOfOrder) fail(`pageHead ${route} @390: breadcrumbs, title, description, strip, summary, contents and body are out of order`);
+      if (narrow.contentsOpen) fail(`pageHead ${route} @390: On this page starts open`);
     }
   }
 
@@ -462,14 +515,18 @@ async (page) => {
     if (landed.pathname !== to || landed.hash !== hash) fail(`redirects ${from}: landed on ${landed.pathname}${landed.hash}, expected ${to}${hash}`);
   }
 
-  // Keyboard order on a phone follows what you see, top to bottom (deferred minor a).
+  // Keyboard order on a phone follows what you see, top to bottom (deferred minor a), on the
+  // homepage, a case study and a class page (Review Focus 5).
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(BASE + '/');
-  const tabOrder = await page.evaluate(() => [...document.querySelectorAll('main a[href], main button, main [tabindex="0"]')]
-    .filter((element) => element.offsetParent !== null && !element.closest('[hidden]'))
-    .map((element) => ({ text: (element.textContent || element.getAttribute('aria-label') || '').trim().slice(0, 40), top: Math.round(element.getBoundingClientRect().top + scrollY) })));
-  result.checks.domOrder = tabOrder.length;
-  tabOrder.forEach((item, index) => { if (index && item.top < tabOrder[index - 1].top - 2) fail(`domOrder: "${item.text}" (y ${item.top}) comes after "${tabOrder[index - 1].text}" (y ${tabOrder[index - 1].top})`); });
+  result.checks.domOrder = 0;
+  for (const route of ['/', '/technical-labs/proxmox-virtualization/', '/coursework/neti-109/']) {
+    await page.goto(BASE + route);
+    const tabOrder = await page.evaluate(() => [...document.querySelectorAll('main a[href], main button, main [tabindex="0"]')]
+      .filter((element) => element.offsetParent !== null && !element.closest('[hidden]'))
+      .map((element) => ({ text: (element.textContent || element.getAttribute('aria-label') || '').trim().slice(0, 40), top: Math.round(element.getBoundingClientRect().top + scrollY) })));
+    result.checks.domOrder += tabOrder.length;
+    tabOrder.forEach((item, index) => { if (index && item.top < tabOrder[index - 1].top - 2) fail(`domOrder ${route}: "${item.text}" (y ${item.top}) comes after "${tabOrder[index - 1].text}" (y ${tabOrder[index - 1].top})`); });
+  }
 
   // The facts column fits a laptop's first screen (deferred minor d).
   for (const [width, height] of [[1366, 768], [1440, 790]]) {
@@ -536,7 +593,7 @@ async (page) => {
   if (Math.abs(narrowName - wideName) > 4) fail(`typeScale: name is ${narrowName}px at 959 and ${wideName}px at 961`);
 
   // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the name,
-  // the summary column, the Result panel, the coursework table or stacked tables (code excepted).
+  // the header strip, the My role panel, Result panels, the coursework table or stacked tables (code excepted).
   await page.setViewportSize({ width: 390, height: 844 });
   result.checks.text200 = 0;
   for (const route of routes) {
@@ -545,7 +602,7 @@ async (page) => {
       document.documentElement.style.fontSize = '200%';
       await new Promise((done) => setTimeout(done, 150));
       const split = [];
-      for (const block of document.querySelectorAll('.home-intro h1, aside.spec, .prose .result, .coursework-index, .table-scroll[data-columns="2"]')) {
+      for (const block of document.querySelectorAll('.hero h1, .strip, .role-panel, .result, .coursework-index, .table-scroll[data-columns="2"]')) {
         const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
         for (let node = walker.nextNode(); node; node = walker.nextNode()) {
           if (node.parentElement.closest('code')) continue;
@@ -656,14 +713,14 @@ async (page) => {
   }
   await noJs.close();
 
-  // Print: every summary and evidence panel switches to white with dark text.
+  // Print: every Result and My role panel switches to white with dark text.
   await page.emulateMedia({ media: 'print' });
   result.print = { checked: 0 };
   for (const route of routes.filter((r) => r.startsWith('/technical-labs/') && r !== '/technical-labs/')) {
     await page.goto(BASE + route);
-    const panels = await page.evaluate(() => [...document.querySelectorAll('.spec, .result')].map((panel) => {
-      const text = panel.querySelector('dd') || panel;
-      return { background: getComputedStyle(panel).backgroundColor, color: getComputedStyle(text).color };
+    const panels = await page.evaluate(() => [...document.querySelectorAll('.result, .role-panel')].map((panel) => {
+      const style = getComputedStyle(panel);
+      return { background: style.backgroundColor, color: style.color };
     }));
     result.print.checked += panels.length;
     for (const panel of panels) {
