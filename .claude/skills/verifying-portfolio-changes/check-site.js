@@ -439,7 +439,8 @@ async (page) => {
   result.checks.typeScale = { 959: narrowName, 961: wideName };
   if (Math.abs(narrowName - wideName) > 4) fail(`typeScale: name is ${narrowName}px at 959 and ${wideName}px at 961`);
 
-  // Enlarged text: 200% at 390 px never widens the page, and the name never breaks mid-word.
+  // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the name,
+  // the summary column, the Result panel, the coursework table or stacked tables (code excepted).
   await page.setViewportSize({ width: 390, height: 844 });
   result.checks.text200 = 0;
   for (const route of routes) {
@@ -448,11 +449,12 @@ async (page) => {
       document.documentElement.style.fontSize = '200%';
       await new Promise((done) => setTimeout(done, 150));
       const split = [];
-      const heading = document.querySelector('.home-intro h1');
-      if (heading) {
-        const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+      for (const block of document.querySelectorAll('.home-intro h1, aside.spec, .prose .result, .coursework-index, .table-scroll[data-columns="2"]')) {
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
         for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-          for (const match of node.data.matchAll(/\S+/g)) {
+          if (node.parentElement.closest('code')) continue;
+          // A line break after a hyphen is normal; a break inside a word part is the defect.
+          for (const match of node.data.matchAll(/[^\s-]+/g)) {
             const range = document.createRange();
             range.setStart(node, match.index);
             range.setEnd(node, match.index + match[0].length);
@@ -462,8 +464,10 @@ async (page) => {
       }
       // Two-column tables stack instead of scrolling, and the hook marks them for that.
       const pairs = [...document.querySelectorAll('.table-scroll')].filter((region) => !region.querySelector('tr > :nth-child(3)'));
+      const classTable = document.querySelector('.coursework-index .table-scroll');
       return {
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        classTableScroll: classTable ? classTable.scrollWidth - classTable.clientWidth : 0,
         split,
         pairs: pairs.length,
         scrollingPairs: pairs.filter((region) => region.scrollWidth > region.clientWidth).length,
@@ -475,7 +479,27 @@ async (page) => {
     if (state.scrollingPairs) fail(`stackedPairs ${route}: ${state.scrollingPairs} two-column table(s) scroll sideways at 200% text`);
     if (state.unmarkedPairs) fail(`stackedPairs ${route}: ${state.unmarkedPairs} two-column table(s) lack data-columns="2"`);
     if (state.overflow > 0) fail(`text200 ${route}: ${state.overflow}px horizontal overflow`);
-    if (state.split.length) fail(`text200 ${route}: name broken mid-word: ${state.split.join(', ')}`);
+    if (state.classTableScroll > 0) fail(`text200 ${route}: the coursework table scrolls ${state.classTableScroll}px sideways`);
+    if (state.split.length) fail(`text200 ${route}: words broken mid-word: ${[...new Set(state.split)].join(', ')}`);
+  }
+
+  // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/technical-labs/');
+  {
+    const row = page.locator('.project-row.lift').first();
+    await row.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    await row.hover();
+    await page.waitForTimeout(300);
+    const lifted = await row.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const shift = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform).m42;
+      const translate = style.translate === 'none' ? 0 : parseFloat(style.translate.split(' ')[1] || '0');
+      return shift + translate;
+    });
+    result.checks.hoverLift = lifted;
+    if (lifted > -1.5) fail(`hoverLift: a hovered project row moves ${lifted}px, expected about -2px`);
   }
 
   // Scroll fade-up targets end fully visible once they are in view.
