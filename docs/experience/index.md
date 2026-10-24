@@ -6,7 +6,7 @@ roles:
   - id: verizon-conversions
     title: IT Support Contractor
     organization: Vaco by Highspring, at Verizon
-    dates: July 2026 to present
+    dates: July 2026 to October 2026
     image: assets/roles/retail-conversions.svg
     icon: network
     summary: "I supported Verizon store conversions: printer setup, network checks in Cisco Meraki and remote work with field technicians."
@@ -28,12 +28,13 @@ roles:
     bullets:
       - "Handled 20+ tickets a week: workstations, printers, peripherals, network problems and the clinical software, through Level RMM or onsite"
       - "Wrote up each ticket in ClickUp: symptoms, what I tried, the fix and any follow-up"
-      - Set up 30+ new workstations, from hardware setup and software installs to domain join
-      - "Retired 50+ workstations that couldn't run Windows 11: wiped, degaussed or crushed the drives and kept a chain-of-custody record"
+      - Set up 30+ new workstations, from hardware setup, software installs and network configuration to domain join
+      - "Retired 50+ workstations that couldn't run Windows 11, so every office stayed on a supported OS: wiped, degaussed or crushed the drives under HIPAA-aligned procedures and kept a chain-of-custody record"
       - Ran HDMI to 7 operatory rooms to replace VGA, building the keystone outlets myself
-      - Pulled, terminated and tested an Ethernet run between switches in two offices
+      - Pulled, terminated and tested an Ethernet run between switches in two offices, extending an existing fiber uplink
       - Fixed a dead wall jack by toning it back to the patch panel and repunching the keystone
       - Set up accounts and roles in the clinical software and installed it on workstations
+      - "Reinforced secure habits with staff: workstation handling, password hygiene and protecting patient information"
 ---
 
 # Professional experience

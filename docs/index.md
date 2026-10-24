@@ -3,7 +3,7 @@ title: Jadon Kosberg
 description: IT support experience in healthcare and retail, with personal projects and coursework in networking, infrastructure, cybersecurity, and software.
 layout: home
 facts:
-  - {label: Now, text: "IT Support Contractor, Vaco by Highspring at Verizon"}
+  - {label: Latest role, text: "IT Support Contractor, Vaco by Highspring at Verizon, July to October 2026", href: "experience/#verizon-conversions"}
   - {label: Certifications, text: "CompTIA Security+ and A+, May 2026", href: "credentials/#certifications"}
   - {label: Education, text: "B.S. in Informatics, Indiana University. Cyber Security certificate, Ivy Tech, May 2026", href: "credentials/#education"}
 ---
