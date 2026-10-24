@@ -71,113 +71,125 @@
       {% if page and page.meta.layout == 'home' %}
         {% include "partials/home.html" %}
       {% elif page and page.meta.layout == 'projects' %}
-        <div class="page-heading prose">{{ page.content }}</div>
-        {% for section in nav if section.title == 'Projects' %}
-        <ul class="project-rows project-index">
-          {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
-        </ul>
-        {% endfor %}
-        <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
+        <div class="wrap page-pad">
+          <div class="page-heading prose">{{ page.content }}</div>
+          {% for section in nav if section.title == 'Projects' %}
+          <ul class="project-rows project-index">
+            {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
+          </ul>
+          {% endfor %}
+          <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
+        </div>
       {% elif page and page.meta.layout == 'coursework' %}
-        <div class="page-heading prose">{{ page.content }}</div>
-        {% for section in nav if section.title == 'Coursework' %}
-        <div class="prose coursework-index">
-          <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
-            <table role="table">
-              <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Class</th><th scope="col" role="columnheader">Term</th><th scope="col" role="columnheader">In the repo</th><th scope="col" role="columnheader">In depth</th></tr></thead>
-              <tbody role="rowgroup">
-                {% for class in section.children if class.meta.code %}
-                <tr role="row">
-                  <td role="cell"><a href="{{ class.url | url }}"><span class="class-code">{{ class.meta.code }}</span> {{ class.meta.course }}</a></td>
-                  <td role="cell">{{ class.meta.term }}</td>
-                  <td role="cell">{{ class.meta.get('items') }}</td>
-                  <td role="cell">{% for study in section.children if study.meta.class_page == class.url %}<a href="{{ study.url | url }}">{{ study.title }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+        <div class="wrap page-pad">
+          <div class="page-heading prose">{{ page.content }}</div>
+          {% for section in nav if section.title == 'Coursework' %}
+          <div class="prose coursework-index">
+            <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
+              <table role="table">
+                <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Class</th><th scope="col" role="columnheader">Term</th><th scope="col" role="columnheader">In the repo</th><th scope="col" role="columnheader">In depth</th></tr></thead>
+                <tbody role="rowgroup">
+                  {% for class in section.children if class.meta.code %}
+                  <tr role="row">
+                    <td role="cell"><a href="{{ class.url | url }}"><span class="class-code">{{ class.meta.code }}</span> {{ class.meta.course }}</a></td>
+                    <td role="cell">{{ class.meta.term }}</td>
+                    <td role="cell">{{ class.meta.get('items') }}</td>
+                    <td role="cell">{% for study in section.children if study.meta.class_page == class.url %}<a href="{{ study.url | url }}">{{ study.title }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       {% elif page and page.meta.layout == 'experience' %}
-        <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('experience') }}</span>{{ page.content }}</div>
-        {{ experience_entries() }}
-        <div class="section-note"><h2>Projects and coursework</h2><p>My homelab, software projects and coursework cover additional Linux, networking and security work.</p><a href="{{ 'technical-labs/' | url }}">View projects</a></div>
+        <div class="wrap page-pad">
+          <div class="page-heading prose">{{ page.content }}</div>
+          {{ experience_entries() }}
+          <div class="section-note"><h2>Projects and coursework</h2><p>My homelab, software projects and coursework cover additional Linux, networking and security work.</p><a href="{{ 'technical-labs/' | url }}">View projects</a></div>
+        </div>
       {% else %}
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="{{ nav.homepage.url | url }}">Home</a>
-          {% if page and page.parent %}
-          {% set parent_url = page.parent.children[0].url %}
-          {% if parent_url != page.url %}<span aria-hidden="true">/</span><a href="{{ parent_url | url }}">{{ page.parent.title }}</a>{% endif %}
+        <div class="wrap page-pad">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ nav.homepage.url | url }}">Home</a>
+            {% if page and page.parent %}
+            {% set parent_url = page.parent.children[0].url %}
+            {% if parent_url != page.url %}<span aria-hidden="true">/</span><a href="{{ parent_url | url }}">{{ page.parent.title }}</a>{% endif %}
+            {% endif %}
+            {% if page and page.meta.class_page %}<span aria-hidden="true">/</span><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a>{% endif %}
+            <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
+          </nav>
+          {% set sections = namespace(items=[]) %}
+          {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
+          {% set summary = page.meta.summary or {} %}
+          {% set parts = page.content.split('</h1>', 1) %}
+          {% if (summary or page.meta.code) and parts | length == 2 %}
+          {# Case studies and class pages: title and description, then a summary column beside the text. #}
+          {% set body = parts[1].split('<h2', 1) %}
+          <header class="article-head prose">{{ parts[0] }}</h1>{% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}</header>
+          <div class="article-grid">
+            <aside class="spec" aria-label="Summary">
+              <dl>
+                {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
+                {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
+                {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
+                {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
+                {% if summary.role %}<div class="wide"><dt>My role</dt><dd>{{ summary.role }}</dd></div>{% endif %}
+                {% if summary.built_with %}<div class="wide"><dt>Built with</dt><dd>{{ summary.built_with | join(', ') }}</dd></div>{% endif %}
+                {% if page.meta.class_page %}<div class="wide"><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
+                {% if summary.source %}<div class="wide"><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
+                {% elif page.meta.repo %}<div class="wide"><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
+              </dl>
+              {% if sections.items %}
+              <details class="toc" open>
+                <summary>On this page</summary>
+                <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
+              </details>
+              {% endif %}
+            </aside>
+            <article class="prose">
+              {{ body[0] }}
+              {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+              {% if page.meta.screenshot %}{% set shot = page.meta.screenshot %}
+              <figure class="shot reveal"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy"><figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption></figure>
+              {% endif %}
+              {% if body | length == 2 %}<h2{{ body[1] }}{% endif %}
+            </article>
+          </div>
+          {% else %}
+          <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
+            {% if sections.items and page.meta.layout != 'wide' %}
+            <aside class="contents">
+              <details open>
+                <summary>On this page</summary>
+                <nav aria-label="On this page">
+                  {% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}
+                </nav>
+              </details>
+            </aside>
+            {% endif %}
+            <article class="prose">
+              {% if page.meta.kind and page.meta.kind != 'Background' %}
+              <div class="page-context"><span>{{ page.meta.kind }}</span>{% if page.meta.status %}<span>{{ page.meta.status }}</span>{% endif %}</div>
+              {% endif %}
+              {{ page.content }}
+            </article>
+          </div>
           {% endif %}
-          {% if page and page.meta.class_page %}<span aria-hidden="true">/</span><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a>{% endif %}
-          <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
-        </nav>
-        {% set sections = namespace(items=[]) %}
-        {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
-        {% set summary = page.meta.summary or {} %}
-        {% set parts = page.content.split('</h1>', 1) %}
-        {% if (summary or page.meta.code) and parts | length == 2 %}
-        {# Case studies and class pages: title and description, then a summary column beside the text. #}
-        {% set body = parts[1].split('<h2', 1) %}
-        <header class="article-head prose">{{ parts[0] }}</h1>{% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}</header>
-        <div class="article-grid">
-          <aside class="spec" aria-label="Summary">
-            <dl>
-              {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
-              {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
-              {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
-              {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
-              {% if summary.role %}<div class="wide"><dt>My role</dt><dd>{{ summary.role }}</dd></div>{% endif %}
-              {% if summary.built_with %}<div class="wide"><dt>Built with</dt><dd>{{ summary.built_with | join(', ') }}</dd></div>{% endif %}
-              {% if page.meta.class_page %}<div class="wide"><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
-              {% if summary.source %}<div class="wide"><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
-              {% elif page.meta.repo %}<div class="wide"><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
-            </dl>
-            {% if sections.items %}
-            <details class="toc" open>
-              <summary>On this page</summary>
-              <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
-            </details>
-            {% endif %}
-          </aside>
-          <article class="prose">
-            {{ body[0] }}
-            {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
-            {% if page.meta.screenshot %}{% set shot = page.meta.screenshot %}
-            <figure class="shot reveal"><img src="{{ shot.src | url }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt | e }}" loading="lazy"><figcaption>{{ shot.caption }}. <a href="{{ shot.src | url }}">Open full size</a></figcaption></figure>
-            {% endif %}
-            {% if body | length == 2 %}<h2{{ body[1] }}{% endif %}
-          </article>
         </div>
-        {% else %}
-        <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
-          {% if sections.items and page.meta.layout != 'wide' %}
-          <aside class="contents">
-            <details open>
-              <summary>On this page</summary>
-              <nav aria-label="On this page">
-                {% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}
-              </nav>
-            </details>
-          </aside>
-          {% endif %}
-          <article class="prose">
-            {% if page.meta.kind and page.meta.kind != 'Background' %}
-            <div class="page-context"><span>{{ page.meta.kind }}</span>{% if page.meta.status %}<span>{{ page.meta.status }}</span>{% endif %}</div>
-            {% endif %}
-            {{ page.content }}
-          </article>
-        </div>
-        {% endif %}
       {% endif %}
       {% endblock %}
     </main>
     <footer class="site-footer" id="contact">
-      <div class="footer-inner">
-        <div class="footer-heading"><h2>Contact</h2><a class="contact-email" href="mailto:Jadon@jnkos.com"><span>Jadon@jnkos.com</span>{{ icon('email') }}</a></div>
-        <div class="footer-bottom"><a class="footer-brand" href="{{ nav.homepage.url | url }}">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a></div>
-        <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="{{ nav.homepage.url | url }}">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden>{{ icon('up') }}<span>Back to top</span></a>
+        </div>
       </div>
     </footer>
   </div>
