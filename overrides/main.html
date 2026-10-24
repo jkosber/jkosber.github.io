@@ -66,23 +66,24 @@
   </header>
   <div class="site-body">
     <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
-    <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}{% if page and page.meta.layout == 'projects' %} collection{% endif %}">
+    <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}">
       {% block content %}
       {% if page and page.meta.layout == 'home' %}
         {% include "partials/home.html" %}
       {% elif page and page.meta.layout == 'projects' %}
+        {# Index pages and Experience: the title and intro in a band, then the list below it. #}
+        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
-          <div class="page-heading prose">{{ page.content }}</div>
           {% for section in nav if section.title == 'Projects' %}
-          <ul class="project-rows project-index">
+          <ul class="project-rows" role="list">
             {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
           </ul>
           {% endfor %}
           <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
         </div>
       {% elif page and page.meta.layout == 'coursework' %}
+        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
-          <div class="page-heading prose">{{ page.content }}</div>
           {% for section in nav if section.title == 'Coursework' %}
           <div class="prose coursework-index">
             <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
@@ -104,20 +105,22 @@
           {% endfor %}
         </div>
       {% elif page and page.meta.layout == 'experience' %}
+        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
-          <div class="page-heading prose">{{ page.content }}</div>
           {{ experience_entries() }}
-          <div class="section-note"><h2>Projects and coursework</h2><p>My homelab, software projects and coursework cover additional Linux, networking and security work.</p><a href="{{ 'technical-labs/' | url }}">View projects</a></div>
+          <p class="related-link">My homelab, software projects and coursework cover more Linux, networking and security work: see <a href="{{ 'technical-labs/' | url }}">Projects</a> and <a href="{{ 'coursework/' | url }}">Coursework</a>.</p>
         </div>
       {% else %}
         {% set sections = namespace(items=[]) %}
         {% for heading in page.toc %}{% for item in heading.children %}{% set sections.items = sections.items + [item] %}{% endfor %}{% endfor %}
         {% set summary = page.meta.summary or {} %}
         {% set parts = page.content.split('</h1>', 1) %}
-        {% if (summary or page.meta.code) and parts | length == 2 %}
-        {# Case studies and class pages: a header band, then the body beside the contents. Case studies
-           put the Result in the band and My role atop the body; class pages put My role beside the
-           Result under the band. Class pages are the ones with a course code. #}
+        {% if parts | length == 2 %}
+        {# Every reading page: a header band, then the body beside the contents. Case studies put the
+           Result in the band and My role atop the body; class pages, the ones with a course code, put
+           My role beside the Result under the band. A plain page such as About has neither, and shows
+           no description under its title. #}
+        {% set framed = summary or page.meta.code %}
         {% set is_class = page.meta.code %}
         {% set shot = page.meta.screenshot %}
         {% set art = page.meta.art %}
@@ -132,7 +135,7 @@
           <div class="head-grid">
             <div class="head-text">
               {{ parts[0] }}</h1>
-              {% if page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}
+              {% if framed and page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}
               {% if page.meta.status or page.meta.updated or page.meta.term or page.meta.get('items') or page.meta.class_page or summary.source or page.meta.repo %}
               <dl class="strip">
                 {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
@@ -161,9 +164,11 @@
           {% if summary.result %}<div class="panel panel--result"><span class="panel-title">Result</span><p>{{ summary.result }}</p></div>{% endif %}
         </div>
         {% endif %}
-        {# The contents come first in the source, so on phones they sit above the body. #}
-        <div class="wrap article">
-          {% if sections.items %}
+        {# The contents come first in the source, so on phones they sit above the body. A wide page,
+           or one without sections, gives the body the full width. #}
+        {% set wide = page.meta.layout == 'wide' or not sections.items %}
+        <div class="wrap article{% if wide %} article--wide{% endif %}">
+          {% if not wide %}
           <details class="contents" open>
             <summary>On this page</summary>
             <nav aria-label="On this page">{% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}</nav>
@@ -176,35 +181,8 @@
           </div>
         </div>
         {% else %}
-        <div class="wrap page-pad">
-          <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <a href="{{ nav.homepage.url | url }}">Home</a>
-            {% if page and page.parent %}
-            {% set parent_url = page.parent.children[0].url %}
-            {% if parent_url != page.url %}<span aria-hidden="true">/</span><a href="{{ parent_url | url }}">{{ page.parent.title }}</a>{% endif %}
-            {% endif %}
-            {% if page and page.meta.class_page %}<span aria-hidden="true">/</span><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a>{% endif %}
-            <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
-          </nav>
-          <div class="article-layout{% if page.meta.layout == 'wide' or not sections.items %} article-layout--wide{% endif %}">
-            {% if sections.items and page.meta.layout != 'wide' %}
-            <aside class="contents">
-              <details open>
-                <summary>On this page</summary>
-                <nav aria-label="On this page">
-                  {% for item in sections.items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}
-                </nav>
-              </details>
-            </aside>
-            {% endif %}
-            <article class="prose">
-              {% if page.meta.kind and page.meta.kind != 'Background' %}
-              <div class="page-context"><span>{{ page.meta.kind }}</span>{% if page.meta.status %}<span>{{ page.meta.status }}</span>{% endif %}</div>
-              {% endif %}
-              {{ page.content }}
-            </article>
-          </div>
-        </div>
+        {# A page without an h1 keeps its content whole. #}
+        <div class="wrap article article--wide"><div class="body prose">{{ page.content }}</div></div>
         {% endif %}
       {% endif %}
       {% endblock %}

@@ -227,10 +227,52 @@ p { max-width: 35em; }
   .tile-art { grid-row: auto; }
 }
 
-.project-rows { margin: 0; padding: 0; list-style: none; }
-.project-index { max-width: 52rem; }
-/* Coursework index: one row per class; the code sits before the course name. */
-.coursework-index { max-width: 60rem; }
+/* Index pages and Experience: the title and intro sit in the band, set like a case study's description. */
+.page-heading { padding-top: var(--s2); }
+.related-link { margin: var(--s4) 0 0; color: var(--muted); }
+
+/* Projects index: a surface row per project. The title's link stretches over the row, so the whole
+   row is one link whose name is just the title. */
+.project-rows { display: grid; gap: var(--s2); margin: 0; padding: 0; list-style: none; }
+.project-row { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "title desc" "status desc"; grid-template-rows: auto 1fr; gap: .25rem var(--s5); margin: 0; padding: var(--s3) 2rem; background: var(--surface); border-radius: var(--r-l); }
+.project-row:hover { background: var(--raised); }
+.project-row-title { grid-area: title; margin: 0; font-size: var(--t-h3); letter-spacing: -.025em; }
+.project-row-title a { color: var(--heading); text-decoration: none; }
+.project-row-title a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-l); }
+/* The focus ring goes around the whole row the link covers. */
+.project-row-title a:focus-visible { outline: 0; }
+.project-row-title a:focus-visible::after { outline: 3px solid var(--accent); outline-offset: 4px; }
+.project-row:hover .project-row-title a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.project-row p { grid-area: desc; margin: 0; }
+.project-status { grid-area: status; color: var(--muted); font-size: var(--t-small); font-weight: 600; }
+@media (max-width: 960px) {
+  .project-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "desc" "status"; grid-template-rows: none; gap: var(--s1); }
+  .project-row p { margin-top: .25rem; }
+}
+@media (max-width: 760px) {
+  .project-row { padding: 1.5rem min(1.25rem, 5vw); }
+  .project-row-title { font-size: 1.375rem; }
+}
+
+/* Experience: a card per role, the art beside the text; the art goes on top on phones. */
+.role-list { display: grid; gap: var(--s3); }
+.role { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: var(--s4); align-items: start; padding: var(--s4); background: var(--surface); border-radius: var(--r-l); }
+.role-art { display: block; width: 100%; height: auto; }
+.role-body h2 { margin: 0; font-size: var(--t-h3); letter-spacing: -.025em; }
+.role-body p { margin: 0; }
+.role-org { color: var(--heading); font-weight: 650; }
+.role-body .role-org { margin-top: .25rem; }
+.role-body .role-dates { margin-top: .125rem; color: var(--muted); font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.role-body .role-intro { margin-top: var(--s2); color: var(--muted); }
+.role-points { max-width: 35em; margin: var(--s2) 0 0; padding-left: 1.375rem; }
+.role-points li { margin: 0; padding-left: .25rem; }
+.role-points li + li { margin-top: .625rem; }
+@media (max-width: 760px) {
+  .role { grid-template-columns: minmax(0, 1fr); gap: var(--s3); padding: 1.5rem min(1.25rem, 5vw); }
+  .role > .role-art { width: 10rem; }
+}
+
+/* Coursework index: one row per class in the table panel; the code sits before the course name. */
 .coursework-index td:first-child a { color: var(--heading); font-weight: 700; text-decoration: none; }
 .coursework-index td:first-child a:hover { text-decoration: underline; }
 .class-code { color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -242,42 +284,17 @@ p { max-width: 35em; }
   @container (width < 40em) {
     .coursework-index :is(table, thead, tbody, tr, th, td) { display: block; }
     .coursework-index thead tr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-    .prose.coursework-index tr { padding: .9rem .75rem; border-bottom: 1px solid var(--line); }
-    .prose.coursework-index td { min-width: 0; padding: .1rem 0; border: 0; }
+    /* Side padding stops growing with enlarged text, so long course names keep room on a phone. */
+    .prose.coursework-index tr { padding: .875rem min(1.125rem, 5vw); }
+    .prose.coursework-index tbody tr + tr { border-top: 1px solid var(--line); }
+    .prose.coursework-index td { min-width: 0; padding: .125rem 0; border: 0; }
     .prose.coursework-index td:nth-child(2), .prose.coursework-index td:nth-child(3) { display: inline; color: var(--muted); }
     .coursework-index td:nth-child(2)::after { content: ", "; }
     .coursework-index td:empty { display: none; }
   }
 }
-.project-row { margin: 0 -.75rem; padding: 1rem .75rem; border-radius: 8px; }
-.project-row + .project-row { border-top: 1px solid var(--line); border-radius: 0; }
-.project-row:hover { background: var(--inset); }
-.project-row-title { margin: 0 0 .4rem; font-size: 1.25rem; }
-.project-row-title a { color: var(--heading); text-decoration: none; }
-.project-row-title a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
-.project-row p { margin: 0 0 .35rem; color: var(--muted); font-size: .95rem; }
-.project-status { color: var(--muted); font-size: .82rem; font-weight: 700; }
-.role { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 3rem; align-items: start; padding: 2.5rem 0; border-top: 1px solid var(--line); }
-.page-heading + .role-list > .role:first-child { padding-top: 0; border-top: 0; }
-.role-art { display: block; width: 100%; height: auto; }
-.role-body h2 { margin: 0 0 .4rem; font-size: 1.65rem; }
-.role-org { margin: 0; color: var(--heading); font-size: 1.05rem; font-weight: 650; }
-.role-dates { margin: .2rem 0 1rem; color: var(--muted); font-size: .85rem; font-weight: 700; }
-.role-intro { max-width: 68ch; margin: 0 0 1rem; color: var(--muted); }
-.role-points { max-width: 68ch; margin: 0; padding-left: 1.2rem; }
-.role-points li { margin: .45rem 0; padding-left: .2rem; }
-
-.page-heading { position: relative; padding: 1rem 0 2.75rem; margin: 0 0 2.5rem; border-bottom: 1px solid var(--line); }
-.page-heading.prose h1 { margin-bottom: 1.3rem; }
-.page-heading.prose > p { max-width: 52ch; margin: 0; }
-.collection .page-heading { padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
-.related-link { margin-top: 3rem; color: var(--muted); font-size: .95rem; }
-.section-note { margin-top: 2rem; padding: 2.5rem; background: var(--surface); border-radius: var(--r-l); }
-.section-note h2 { margin-top: 0; }
-.section-note p { color: var(--muted); }
-
-/* Case studies and class pages: a header band with the title, description and a strip of facts,
-   then the body beside a sticky contents rail. */
+/* Reading pages: a header band with the title, and on case studies and class pages the description
+   and a strip of facts, then the body beside a sticky contents rail. */
 .page-head { padding-block: var(--s4) var(--s5); }
 /* The lead screenshot overlaps the band's lower edge by --s7. */
 .page-head--shot { padding-bottom: calc(var(--s7) + var(--s4)); }
@@ -285,8 +302,8 @@ p { max-width: 35em; }
 .crumbs a { display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
 .crumbs [aria-current] { color: var(--heading); }
 .head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s4); }
-.page-head h1 { margin: 0; font-size: clamp(2.25rem, 4.4vw, 3.5rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
-.dek { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: clamp(1.125rem, 1.5vw, var(--t-lead)); line-height: 1.55; }
+.page-head h1, .error-page h1 { margin: 0; font-size: clamp(2.25rem, 4.4vw, 3.5rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
+.dek, .page-heading > p { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: clamp(1.125rem, 1.5vw, var(--t-lead)); line-height: 1.55; }
 /* break-word, not the body's anywhere: a strip item wraps whole words before it splits one. */
 .strip { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin: var(--s4) 0 0; overflow-wrap: break-word; }
 .strip dt { color: var(--muted); font-size: var(--t-small); }
@@ -301,6 +318,7 @@ p { max-width: 35em; }
 .article { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; padding-block: var(--s5) var(--s6); }
 .article > .body { grid-column: 1; grid-row: 1; }
 .article > .contents { grid-column: 2; grid-row: 1; }
+.article--wide { grid-template-columns: minmax(0, 1fr); }
 details.contents { font-size: .9375rem; }
 details.contents summary { color: var(--heading); font-weight: 700; cursor: pointer; }
 details.contents a { color: var(--muted); text-decoration: none; }
@@ -342,18 +360,9 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
   .result { padding: .9rem 12px; }
 }
 
-/* The plain reading layout keeps its own breadcrumbs and contents until it moves to the frame above. */
-.breadcrumbs { display: flex; flex-wrap: wrap; align-items: baseline; gap: .65rem; margin-bottom: 2.5rem; font-size: .78rem; color: var(--muted); }
-.breadcrumbs a { display: inline-flex; align-items: center; min-height: 32px; color: var(--muted); }
-.breadcrumbs [aria-current] { color: var(--heading); }
-.article-layout { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
-.article-layout > .prose { grid-column: 1; grid-row: 1; }
-.article-layout > .contents { grid-column: 2; grid-row: 1; }
-.article-layout--wide { display: block; }
 .prose { min-width: 0; font-size: 1.0625rem; }
 .prose > p:first-of-type { font-size: 1.18rem; line-height: 1.75; color: var(--muted); margin: 0 0 2rem; }
 .prose p { margin: 1.3rem 0; }
-.article-layout .prose > p, .article-layout .prose > ul, .article-layout .prose > ol { max-width: 66ch; }
 .prose > h2 { font-size: clamp(1.65rem, 2.3vw, 2.1rem); margin: 3rem 0 1.2rem; padding-top: .5rem; border-top: 0; }
 .prose h3 { margin: 1.8rem 0 .8rem; }
 .prose li { margin: .8rem 0; }
@@ -444,19 +453,21 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
 .panel > p { max-width: none; margin: 0; }
 .body > h2 { margin: var(--s6) 0 var(--s3); padding-top: 0; font-size: clamp(1.625rem, 2.6vw, var(--t-h2)); letter-spacing: -.03em; }
 .body > :first-child { margin-top: 0; }
-/* Tables: a --surface panel with a --raised header row and --line dividers. */
-.body .table-scroll { margin: var(--s3) 0; background: var(--surface); border-radius: var(--r-m); }
-.body table { font-size: .9375rem; line-height: 1.55; }
-.body :is(th, td) { padding: .875rem 1.125rem; border-bottom: 0; }
-.body th { font-size: var(--t-small); font-weight: 700; }
-.body tbody tr:nth-child(even) { background: none; }
-.body tbody tr + tr > * { border-top: 1px solid var(--line); }
+/* Tables, in reading pages and the coursework index: a --surface panel with a --raised header row
+   and --line dividers. */
+:is(.body, .coursework-index) .table-scroll { margin: var(--s3) 0; background: var(--surface); border-radius: var(--r-m); }
+:is(.body, .coursework-index) table { font-size: .9375rem; line-height: 1.55; }
+:is(.body, .coursework-index) :is(th, td) { padding: .875rem 1.125rem; border-bottom: 0; }
+:is(.body, .coursework-index) th { font-size: var(--t-small); font-weight: 700; }
+:is(.body, .coursework-index) tbody tr:nth-child(even) { background: none; }
+:is(.body, .coursework-index) tbody tr + tr > * { border-top: 1px solid var(--line); }
+.coursework-index > .table-scroll { margin: 0; }
 @media (max-width: 760px) {
   .body > p:first-of-type { font-size: 1.1875rem; }
   .body > h2 { margin-top: var(--s5); }
 }
 @media screen and (max-width: 760px) {
-  .body :is(th, td) { padding: .625rem .75rem; }
+  :is(.body, .coursework-index) :is(th, td) { padding: .625rem .75rem; }
   /* Wide tables bleed to the screen edge; the shade at the right edge says there is more to scroll. */
   .body > .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(var(--gutter) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
 }
@@ -516,23 +527,15 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
   .lab-module .lab-table code { overflow-wrap: anywhere; }
   .did-label { display: inline; color: var(--muted); font-weight: 700; }
 }
-.page-context { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; font-size: .78rem; }
-.page-context span { padding: .25rem .75rem; border-radius: 4px; color: var(--accent); background: var(--surface); border: 1px solid var(--line-strong); }
-.page-context span + span { color: var(--muted); background: transparent; border-color: var(--line); }
-aside.contents { position: sticky; top: calc(var(--header-height, 0px) + 2rem); max-height: calc(100dvh - var(--header-height, 0px) - 4rem); overflow-y: auto; padding-left: 1.2rem; border-left: 1px solid var(--line); font-size: .8rem; }
-aside.contents summary { color: var(--heading); font-weight: 750; padding: .5rem 0; cursor: pointer; }
-aside.contents nav { margin-top: .6rem; }
-aside.contents a { display: block; padding: .65rem .6rem; color: var(--muted); text-decoration: none; line-height: 1.55; }
-aside.contents a:hover { color: var(--accent); text-decoration: underline; }
-aside.contents a[aria-current='location'] { background: var(--surface); color: var(--heading); border-radius: 5px; box-shadow: -3px 0 0 var(--accent); }
-.credential-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
-.credential { position: relative; padding: 2rem; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--text); }
-.credential h3 { color: var(--heading); font-size: 1.4rem; margin: 0 0 1.5rem; }
-.credential p { margin: 0; color: var(--text); font-size: .9rem; }
-.credential p + p { margin-top: .75rem; }
-.education-entry { position: relative; padding: .3rem 0 .3rem 1.5rem; border-left: 3px solid var(--line-strong); margin: 1.5rem 0 2rem; }
-.education-entry h3 { margin: 0 0 .8rem; }
-.education-entry p { margin: .8rem 0; }
+/* About: the two certifications as matching cards, then each education entry under a divider. */
+.credential-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin: var(--s3) 0; }
+.credential { padding: var(--s3) 1.75rem; background: var(--surface); border-radius: var(--r-l); color: var(--text); }
+.credential h3, .education-entry h3 { margin: 0; font-size: var(--t-lead); letter-spacing: -.02em; }
+.credential p { margin: .25rem 0 0; color: var(--muted); font-size: .9375rem; }
+.credential p + p { margin-top: var(--s2); }
+.education-entry { margin: var(--s3) 0; }
+.education-entry + .education-entry { padding-top: var(--s3); border-top: 1px solid var(--line); }
+.education-entry p { max-width: 35em; margin: .5rem 0 0; }
 .back-to-top { position: fixed; z-index: 15; right: 1.5rem; bottom: 1.25rem; display: inline-flex; align-items: center; gap: .6rem; min-height: 46px; padding: .7rem 1rem; border-radius: var(--r-s); color: var(--heading); background: var(--surface); border: 1px solid var(--line-strong); box-shadow: var(--shadow-float); font-size: .8rem; text-decoration: none; }
 .back-to-top:hover { background: var(--raised); }
 .back-to-top.back-to-top--in-footer { position: static; margin-left: auto; box-shadow: none; }
@@ -550,8 +553,9 @@ aside.contents a[aria-current='location'] { background: var(--surface); color: v
 .footer-name:hover { text-decoration: underline; }
 .footer-built { margin: 0; }
 .footer-built a { color: var(--muted); }
-/* The 404 page fills its own content block, outside the layouts' .wrap. */
-.error-page { max-width: 1200px; margin-inline: auto; padding: var(--s5) var(--gutter) var(--s6); }
+/* The 404 page sits between the header and footer bands: the code above the title, the way home below it. */
+.error-code { margin: 0 0 var(--s1); color: var(--muted); font-weight: 700; font-size: var(--t-small); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.error-action { margin: var(--s4) 0 0; }
 
 /* Motion: under half a second, nothing loops, and the end state is the default.
    Hidden starting states live only inside @supports and @starting-style. */
@@ -578,15 +582,6 @@ aside.contents a[aria-current='location'] { background: var(--surface); color: v
   .js .site-menu { transition: opacity .18s ease-out, transform .18s ease-out; }
   @starting-style { .js .site-menu { opacity: 0; transform: translateY(-4px); } }
 }
-@media (max-width: 1200px) {
-  .article-layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .article-layout > .contents { grid-column: 1; grid-row: 1; position: static; }
-  .article-layout > .prose { grid-column: 1; grid-row: 2; }
-  aside.contents { max-height: none; overflow: visible; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--inset); }
-  aside.contents nav { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
-  aside.contents a { padding: .5rem; }
-  .js aside.contents details:not([data-ready]) > nav { display: none; }
-}
 @media (max-width: 960px) {
   .site-header { display: block; }
   .js .site-header { max-height: 100dvh; overflow-y: auto; }
@@ -605,8 +600,6 @@ aside.contents a[aria-current='location'] { background: var(--surface); color: v
   .page-pad { padding-block: var(--s4) var(--s5); }
   .brand { font-size: .9375rem; gap: .625rem; }
   .brand img { width: 30px; height: 30px; }
-  .role { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: 2rem 0; }
-  .role-art { width: 160px; }
   /* A floating control would cover text on a phone; the footer copy remains. */
   .back-to-top:not(.back-to-top--in-footer):not(:focus) { display: none; }
 }
@@ -619,16 +612,8 @@ aside.contents a[aria-current='location'] { background: var(--surface); color: v
   .site-menu { align-items: stretch; flex-direction: column; }
   .main-nav { display: flex; flex-wrap: wrap; gap: .25rem; }
   .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .125rem); justify-content: flex-start; }
-  /* The plain reading layout only; case-study and class-page text keeps its own phone sizes. */
-  .prose:not(.body) { font-size: 1rem; }
-  .prose:not(.body) > p:first-of-type { font-size: 1.1rem; }
-  .prose:not(.body) h2 { font-size: 1.75rem; }
-  .prose:not(.body) table { font-size: .9rem; }
-  .prose:not(.body) th, .prose:not(.body) td { padding: .8rem; min-width: 120px; }
-  .breadcrumbs { font-size: .73rem; gap: .4rem; margin-bottom: 1.5rem; }
-  .credential-grid { grid-template-columns: 1fr; }
-  .credential { padding: 1.5rem; }
-  .section-note { padding: 1.5rem; }
+  .credential-grid { grid-template-columns: minmax(0, 1fr); }
+  .credential { padding: 1.25rem min(1.25rem, 5vw); }
   .back-to-top { right: .8rem; bottom: .8rem; padding: .7rem; }
   .back-to-top span { display: none; }
 }
@@ -656,14 +641,14 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .prose tr { break-inside: avoid; }
   .narrative-list dt, .narrative-list dd { padding: .6rem .45rem; font-size: 10pt; break-inside: avoid; }
   .prose li { margin: .5em 0; orphans: 3; widows: 3; break-inside: avoid; }
-  .page-context span, .page-context span + span, .prose th, .prose tbody tr:nth-child(even), .prose pre, .prose code { background: #fff; color: #000; }
+  .prose th, .prose tbody tr:nth-child(even), .prose pre, .prose code { background: #fff; color: #000; }
   .architecture-flow li { background: #fff; color: #000; }
   .result, .panel { position: static; max-height: none; overflow: visible; background: #fff; color: #000; border-color: #888; box-shadow: none; break-inside: avoid; }
   .panel { border: 1px solid #888; }
   .result strong, .result-label, .panel-title, .panel--result .panel-title { color: #000; }
   /* The page head prints as black text on white, without the overlaps. */
   .page-head, .page-head--shot { padding: 0 0 1rem; background: #fff; color: #000; }
-  .page-head h1, .dek, .strip dt, .strip dd { color: #000; }
+  .page-head h1, .dek, .page-heading > p, .error-code, .strip dt, .strip dd { color: #000; }
   .head-grid, .article { display: block; }
   .head-result, .summary-pair, .lead-shot { margin: 1rem 0; }
   .lead-shot { break-inside: avoid; }
@@ -678,25 +663,26 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
   .table-scroll { overflow: visible; margin: 1rem 0; }
   .table-scroll table { min-width: 0; }
   .prose .table-hint { display: none; }
-  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .crumbs, .button, .back-to-top, .role-art { display: none; }
+  .site-header, .site-footer, .contents, .skip-link, .crumbs, .button, .back-to-top, .role-art { display: none; }
   .print-identity { display: grid; gap: .15rem; padding-bottom: .75rem; margin-bottom: 1rem; border-bottom: 1px solid #bbb; font-size: 10pt; }
   .page-shell, .wrap, .page-pad, .error-page, .hero, .home-coursework { padding: 0; max-width: none; }
-  .page-heading, .collection .page-heading { padding: 0 0 1rem; margin: 0 0 1rem; }
-  .article-layout, .hero-grid, .feature, .minor, .role-card { display: block; }
+  .hero-grid, .feature, .minor, .role-card, .project-row { display: block; }
+  .project-row { padding: .65rem 1rem; border: 1px solid #888; break-inside: avoid; }
+  .project-row-title a::after { content: none; }
   /* Overhangs and screen shadows don't belong on paper. */
   .facts, .feature, .minor { margin: 1rem 0; break-inside: avoid; }
   .feature .shot { margin: 0 0 1rem; }
   .feature .shot img { box-shadow: none; }
   .role { padding: 1rem 0; }
-  .credential, .role, .section-note { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
-  .credential h3, .credential p, .role-org, .role-dates, .role-intro { color: #000; }
+  .credential, .role { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
+  .credential h3, .credential p, .role-org, .role-body .role-dates, .role-body .role-intro { color: #000; }
   .credential-grid { margin: .75rem 0; gap: 1rem; }
-  .credential { padding: .65rem 1rem; }
+  .credential { padding: .65rem 1rem; border: 1px solid #888; }
   .prose .credential h3, .prose .education-entry h3 { margin: 0 0 .5rem; }
-  .education-entry { margin: .75rem 0; padding: 0 0 0 1rem; }
-  .section-note { margin-top: 1rem; padding: 1rem; }
+  .education-entry { margin: .75rem 0; }
+  .education-entry + .education-entry { padding-top: .75rem; }
   .hero .intro { font-size: 11pt; line-height: 1.4; }
-  h1, .hero h1, .page-heading.prose h1, .page-head h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
+  h1, .hero h1, .page-head h1, .error-page h1 { font-size: 28pt; max-width: none; letter-spacing: -.025em; }
   h2, h3 { break-after: avoid; }
   .prose h3 { font-size: 13pt; margin: 1rem 0 .5rem; }
   a { color: inherit; }
@@ -705,5 +691,5 @@ ul.tools li { display: inline-flex; align-items: center; gap: var(--s1); margin:
 @media (forced-colors: active) {
   .main-nav a[aria-current] { text-decoration-color: CanvasText; }
   /* Panels lose their fills in forced colors, so they get a border instead. */
-  .panel, .facts, .feature, .minor, .tile, .role-card, .work:not(.work--brief), details.lab-module { border: 1px solid CanvasText; }
+  .panel, .facts, .feature, .minor, .tile, .role-card, .work:not(.work--brief), details.lab-module, .project-row, .role, .credential { border: 1px solid CanvasText; }
 }
