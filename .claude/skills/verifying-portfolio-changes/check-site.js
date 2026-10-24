@@ -91,6 +91,110 @@ async (page) => {
     if (result.scene[scene] === 'NOT VISIBLE') result.problems.push(`scene ${scene}: detail link hidden`);
   }
 
+  // Motion limits: nothing over 0.5 s, nothing infinite, no transition on `all`;
+  // with reduced motion, no animations at all.
+  const motionState = () => page.evaluate(() => {
+    const seconds = (value) => value.split(',').map((part) => {
+      const text = part.trim();
+      return text.endsWith('ms') ? parseFloat(text) / 1000 : parseFloat(text);
+    });
+    const issues = [];
+    let checked = 0;
+    for (const element of document.querySelectorAll('*')) {
+      for (const pseudo of [null, '::before', '::after']) {
+        const style = getComputedStyle(element, pseudo);
+        const name = `${element.tagName.toLowerCase()}${element.className && typeof element.className === 'string' ? '.' + element.className.trim().split(/\s+/).join('.') : ''}${pseudo || ''}`;
+        checked += 1;
+        const durations = seconds(style.transitionDuration);
+        const properties = style.transitionProperty.split(',').map((item) => item.trim());
+        properties.forEach((property, index) => {
+          const duration = durations[index % durations.length];
+          if (duration > 0.5) issues.push(`${name}: transition ${property} ${duration}s`);
+          if (property === 'all' && duration > 0) issues.push(`${name}: transition on all`);
+        });
+        if (style.animationName !== 'none') {
+          if (seconds(style.animationDuration).some((value) => value > 0.5)) issues.push(`${name}: animation ${style.animationName} ${style.animationDuration}`);
+          if (style.animationIterationCount.split(',').some((value) => value.trim() === 'infinite')) issues.push(`${name}: infinite animation ${style.animationName}`);
+        }
+      }
+    }
+    const animated = [...document.querySelectorAll('*')].filter((element) => getComputedStyle(element).animationName !== 'none').length;
+    return { issues, checked, animated };
+  });
+  result.checks.motion = 0;
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const route of ['/', '/technical-labs/proxmox-virtualization/']) {
+    await page.goto(BASE + route);
+    const state = await motionState();
+    result.checks.motion += state.checked;
+    for (const issue of [...new Set(state.issues)]) fail(`motion ${route}: ${issue}`);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(BASE + route);
+    const reduced = await motionState();
+    if (reduced.animated) fail(`motion ${route}: ${reduced.animated} element(s) animate with reduced motion`);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+  }
+
+  // Type scale: the name keeps its size across the 960 px layout switch.
+  const nameSize = async (width) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(BASE + '/');
+    return page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('h1')).fontSize));
+  };
+  const narrowName = await nameSize(959);
+  const wideName = await nameSize(961);
+  result.checks.typeScale = { 959: narrowName, 961: wideName };
+  if (Math.abs(narrowName - wideName) > 4) fail(`typeScale: name is ${narrowName}px at 959 and ${wideName}px at 961`);
+
+  // Enlarged text: 200% at 390 px never widens the page, and the name never breaks mid-word.
+  await page.setViewportSize({ width: 390, height: 844 });
+  result.checks.text200 = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    const state = await page.evaluate(async () => {
+      document.documentElement.style.fontSize = '200%';
+      await new Promise((done) => setTimeout(done, 150));
+      const split = [];
+      const heading = document.querySelector('.home-intro h1');
+      if (heading) {
+        const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          for (const match of node.data.matchAll(/\S+/g)) {
+            const range = document.createRange();
+            range.setStart(node, match.index);
+            range.setEnd(node, match.index + match[0].length);
+            if (new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size > 1) split.push(match[0]);
+          }
+        }
+      }
+      return { overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, split };
+    });
+    result.checks.text200 += 1;
+    if (state.overflow > 0) fail(`text200 ${route}: ${state.overflow}px horizontal overflow`);
+    if (state.split.length) fail(`text200 ${route}: name broken mid-word: ${state.split.join(', ')}`);
+  }
+
+  // Scroll fade-up targets end fully visible once they are in view.
+  // Waits happen on the Node side: in-page timers can stall with JavaScript disabled.
+  const revealOpacities = async (target) => {
+    const values = [];
+    const count = await target.evaluate(() => document.querySelectorAll('.reveal').length);
+    for (let index = 0; index < count; index += 1) {
+      await target.evaluate((i) => document.querySelectorAll('.reveal')[i].scrollIntoView({ block: 'center' }), index);
+      await target.waitForTimeout(200);
+      values.push(await target.evaluate((i) => parseFloat(getComputedStyle(document.querySelectorAll('.reveal')[i]).opacity), index));
+    }
+    return values;
+  };
+  await page.setViewportSize({ width: 1440, height: 900 });
+  result.checks.revealSettles = 0;
+  for (const route of routes.filter((r) => r !== MISSING)) {
+    await page.goto(BASE + route);
+    const values = await revealOpacities(page);
+    result.checks.revealSettles += values.length;
+    values.forEach((value, index) => { if (value < 0.99) fail(`revealSettles ${route}: .reveal ${index + 1} stays at opacity ${value}`); });
+  }
+
   // Without JavaScript: content and navigation stay usable at the narrowest width.
   const noJs = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 700 } });
   const plain = await noJs.newPage();
@@ -102,6 +206,8 @@ async (page) => {
     }));
     if (state.overflow > 0) result.problems.push(`no-JS ${route}: ${state.overflow}px horizontal overflow`);
     if (state.navLinks === 0) result.problems.push(`no-JS ${route}: navigation hidden`);
+    const hidden = (await revealOpacities(plain)).filter((value) => value < 0.99).length;
+    if (hidden) fail(`no-JS ${route}: ${hidden} .reveal element(s) stay hidden in view`);
   }
   await noJs.close();
 
