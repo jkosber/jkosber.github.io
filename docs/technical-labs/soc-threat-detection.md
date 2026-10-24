@@ -5,6 +5,9 @@ kind: Completed coursework
 status: "March 2026"
 visual: assets/project-security.svg
 tools: [Security Onion, Wireshark, NetworkMiner, Snort]
+detail: true
+class_page: coursework/csia-115/
+class_name: CSIA 115 Cyber Ops
 ---
 
 # CyberOps & traffic investigation

@@ -5,6 +5,9 @@ kind: Completed coursework
 status: "2025–2026"
 visual: assets/project-network.svg
 tools: [Packet Tracer, Wireshark, IPv4, IPv6]
+detail: true
+class_page: coursework/neti-109/
+class_name: NETI 109 Networking I
 ---
 
 # Networking & packet analysis

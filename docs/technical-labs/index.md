@@ -6,4 +6,4 @@ layout: projects
 
 # Projects
 
-My personal projects include a Proxmox homelab, SSH Workbench and a job-search document workflow. Selected coursework covers an AWS application deployment, network troubleshooting and traffic investigations.
+Personal projects I run and maintain. My coursework is on the [Coursework](../coursework/index.md) page.

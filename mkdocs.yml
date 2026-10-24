@@ -40,15 +40,23 @@ validation:
 nav:
   - Home: index.md
   - Projects:
-      - All projects: technical-labs/index.md
+      - Projects: technical-labs/index.md
       - Proxmox homelab: technical-labs/proxmox-virtualization.md
       - SSH Workbench: technical-labs/ssh-workbench.md
-      - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
-      - Networking and packet analysis: technical-labs/cisco-networking-analysis.md
       - Job scan and resume tailor: technical-labs/job-scan-tailor.md
-      - Security operations coursework: technical-labs/soc-threat-detection.md
-      - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
+  - Coursework:
+      - Coursework: coursework/index.md
+      - NETI 109 Networking I: coursework/neti-109.md
+      - SVAD 111 Linux and Virtualization Technologies: coursework/svad-111.md
+      - CSIA 115 Cyber Ops: coursework/csia-115.md
+      - CSIA 210 Network Protocol Analysis: coursework/csia-210.md
+      - CSIA 105 Introduction to Cyber Security: coursework/csia-105.md
+      - SDEV 120 Computing Logic: coursework/sdev-120.md
+      - Networking & packet analysis: technical-labs/cisco-networking-analysis.md
+      - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
+      - CyberOps & traffic investigation: technical-labs/soc-threat-detection.md
       - Snort and firewall lab: technical-labs/snort-firewall-lab.md
+      - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
   - Experience:
       - Overview: experience/index.md
       - Retail technology conversions: experience/verizon-conversions.md

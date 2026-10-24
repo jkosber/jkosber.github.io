@@ -4,6 +4,8 @@ description: Correlating DHCPv6 replies, duplicate-address evidence and Router A
 kind: Completed coursework
 status: "May 2026"
 detail: true
+class_page: coursework/csia-210/
+class_name: CSIA 210 Network Protocol Analysis
 ---
 
 # IPv6 packet investigations

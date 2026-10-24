@@ -78,6 +78,27 @@
         </ul>
         {% endfor %}
         <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
+      {% elif page and page.meta.layout == 'coursework' %}
+        <div class="page-heading prose">{{ page.content }}</div>
+        {% for section in nav if section.title == 'Coursework' %}
+        <div class="prose coursework-index">
+          <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
+            <table role="table">
+              <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Class</th><th scope="col" role="columnheader">Term</th><th scope="col" role="columnheader">In the repo</th><th scope="col" role="columnheader">In depth</th></tr></thead>
+              <tbody role="rowgroup">
+                {% for class in section.children if class.meta.code %}
+                <tr role="row">
+                  <td role="cell"><a href="{{ class.url | url }}"><span class="class-code">{{ class.meta.code }}</span> {{ class.meta.course }}</a></td>
+                  <td role="cell">{{ class.meta.term }}</td>
+                  <td role="cell">{{ class.meta['items'] }}</td>
+                  <td role="cell">{% for study in section.children if study.meta.class_page == class.url %}<a href="{{ study.url | url }}">{{ study.title }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
       {% elif page and page.meta.layout == 'experience' %}
         <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('experience') }}</span>{{ page.content }}</div>
         {{ experience_entries() }}
@@ -89,6 +110,7 @@
           {% set parent_url = page.parent.children[0].url %}
           {% if parent_url != page.url %}<span aria-hidden="true">/</span><a href="{{ parent_url | url }}">{{ page.parent.title }}</a>{% endif %}
           {% endif %}
+          {% if page and page.meta.class_page %}<span aria-hidden="true">/</span><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a>{% endif %}
           <span aria-hidden="true">/</span><span aria-current="page">{{ page_title }}</span>
         </nav>
         {% set sections = namespace(items=[]) %}

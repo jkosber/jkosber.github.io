@@ -4,6 +4,8 @@ description: Following a simulated HTTP download through Snort alerts, correctin
 kind: Completed coursework
 status: "March 2026"
 detail: true
+class_page: coursework/csia-115/
+class_name: CSIA 115 Cyber Ops
 ---
 
 # Snort, firewall rules & HTTP recovery

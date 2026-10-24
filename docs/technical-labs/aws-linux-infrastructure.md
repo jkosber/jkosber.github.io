@@ -5,6 +5,9 @@ kind: Completed coursework
 status: "May 2026"
 visual: assets/project-aws.svg
 tools: [AWS EC2, Ubuntu, Apache, SQL Server]
+detail: true
+class_page: coursework/svad-111/
+class_name: SVAD 111 Linux and Virtualization Technologies
 ---
 
 # AdventureWorks on AWS
