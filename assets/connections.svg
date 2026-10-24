@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 380" role="img" aria-labelledby="title desc">
+  <title id="title">Four connected areas of IT work</title>
+  <desc id="desc">Support, infrastructure, security and development connect through a shared network motif. This illustrates areas of work, not a deployed network.</desc>
+  <g fill="none" stroke="#6c8dc2" stroke-width="2.5">
+    <path d="M100 102v35q0 25 25 25h50q35 0 35 30v26"/>
+    <path d="M320 102v35q0 25-25 25h-50q-35 0-35 30v26"/>
+    <path d="M100 284v-27q0-27 27-27h48q35 0 35-30"/>
+    <path d="M320 284v-27q0-27-27-27h-48q-35 0-35-30"/>
+  </g>
+  <circle cx="210" cy="196" r="38" fill="#9abbfa"/>
+  <g stroke="#17202f" stroke-width="2" fill="none" stroke-linejoin="round">
+    <path d="m210 175 19 11v21l-19 11-19-11v-21zM191 186l19 11 19-11M210 197v21"/>
+  </g>
+  <g fill="#232934" stroke="#526783" stroke-width="1.5">
+    <rect x="66" y="38" width="68" height="62" rx="16"/>
+    <rect x="286" y="38" width="68" height="62" rx="16"/>
+    <rect x="66" y="284" width="68" height="62" rx="16"/>
+    <rect x="286" y="284" width="68" height="62" rx="16"/>
+  </g>
+  <g stroke="#9abbfa" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="83" y="53" width="34" height="24" rx="3"/><path d="M94 84h12M100 77v7"/>
+    <rect x="303" y="50" width="34" height="14" rx="3"/><rect x="303" y="73" width="34" height="14" rx="3"/><path d="M310 57h1m-1 23h1m8-23h11m-11 23h11"/>
+    <path d="m100 297 15 6v10c0 10-15 18-15 18s-15-8-15-18v-10zM94 314l5 5 8-10"/>
+    <path d="m311 306-9 9 9 9m18-18 9 9-9 9m-12 3 6-24"/>
+  </g>
+  <g fill="#edf1f7" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="18" font-weight="600" text-anchor="middle">
+    <text x="100" y="23">Support</text><text x="320" y="23">Infrastructure</text>
+    <text x="100" y="372">Security</text><text x="320" y="372">Development</text>
+  </g>
+  <g fill="#9abbfa"><circle cx="100" cy="129" r="4"/><circle cx="320" cy="129" r="4"/><circle cx="100" cy="262" r="4"/><circle cx="320" cy="262" r="4"/></g>
+</svg>

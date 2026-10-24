@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>SDEV 120 Computing Logic | Jadon Kosberg</title>
+  <meta name="description" content="Program design with pseudocode, flowcharts and UML, then Python loops and decisions and a team pay-calculator script.">
+  
+  <link rel="canonical" href="https://jnkos.com/coursework/sdev-120/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=512d0298c767">
+  <script src="../../javascripts/portfolio.js?v=9e86f227690b"></script>
+  
+  <meta property="og:title" content="SDEV 120 Computing Logic | Jadon Kosberg">
+  <meta property="og:description" content="Program design with pseudocode, flowcharts and UML, then Python loops and decisions and a team pay-calculator script.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/coursework/sdev-120/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../../technical-labs/"><span>Projects</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Coursework</a>
+          
+          
+          <span aria-hidden="true">/</span><span aria-current="page">SDEV 120 Computing Logic</span>
+        </nav>
+        
+        
+        
+        
+        
+        
+        
+        <header class="article-head prose"><h1 id="sdev-120-computing-logic">SDEV 120 Computing Logic</h1><p class="dek">Program design with pseudocode, flowcharts and UML, then Python loops and decisions and a team pay-calculator script.</p></header>
+        <div class="article-grid">
+          <aside class="spec" aria-label="Summary">
+            <dl>
+              
+              
+              <div><dt>Term</dt><dd>Fall 2025</dd></div>
+              <div><dt>In the repo</dt><dd>7 modules</dd></div>
+              <div class="wide"><dt>My role</dt><dd>I wrote the pseudocode, drew the flowcharts and the UML diagram, filled in the workbooks and wrote the Python scripts. In the team project I was team leader, responsible for employee data management and for security and compliance.</dd></div>
+              <div class="wide"><dt>Built with</dt><dd>Python 3.14 and IDLE, Lucidchart, Excel, Pseudocode</dd></div>
+              
+              <div class="wide"><dt>Source</dt><dd><a href="https://github.com/jkosber/SDEV-120">SDEV 120 repository</a></dd></div>
+            </dl>
+            
+            <details class="toc" open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page"><a href="#what-the-course-provided">What the course provided and what I did</a><a href="#labs">Labs</a><a href="#strongest-work">Strongest work</a><a href="#skills">Skills</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+            </details>
+            
+          </aside>
+          <article class="prose">
+            
+<p>Computing Logic was a programming foundations class: planning a program in pseudocode, flowcharts and UML before writing it, then writing small Python programs in IDLE. It ran as an eight-week late-start section.</p>
+
+            <p class="result"><strong>Result.</strong> Seven modules of program design and Python: modular pseudocode with hierarchy charts and flowcharts, a UML use-case diagram, loop and decision scripts with their IDLE output, and a team pay-calculator script.</p>
+            
+            <h2 id="what-the-course-provided">What the course provided and what I did</h2>
+<p>The course provided the assignment prompts and scenarios, the Excel templates for Modules 1 and 3, Lucidchart for the diagrams, and the team project brief. My part:</p>
+<ul>
+<li>Wrote the pseudocode and drew the flowcharts, hierarchy charts and UML diagram</li>
+<li>Filled in the number-system, memory and logic-gate workbooks</li>
+<li>Wrote the Python for Modules 6 and 7 and the in-class practice scripts</li>
+<li>Led a five-person team project, responsible for employee data management and for security and compliance</li>
+</ul>
+<h2 id="labs">Labs</h2>
+<h3 id="planning-and-design">Planning and design</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Planning and design"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Module 1 Rules of Pseudocode</td>
+<td>State five pseudocode conventions</td>
+<td>Wrote five rules in my own words: one statement per line, capitalized keywords, indentation, standard keywords and plain English</td>
+</tr>
+<tr>
+<td>Module 1 Program development workbook</td>
+<td>Order the development stages, name flowchart symbols and write pseudocode for weekly and yearly work hours</td>
+<td>Put the seven stages in order, named the symbols and wrote the hours pseudocode</td>
+</tr>
+<tr>
+<td>Module 1 Pseudocode and flowcharts</td>
+<td>Plan three everyday tasks in pseudocode and Lucidchart</td>
+<td>Planned miles per gallon, daily rent and making breakfast, each as pseudocode and a flowchart</td>
+</tr>
+<tr>
+<td>Module 2 Cleaning-service charge</td>
+<td>Hierarchy chart, pseudocode and flowchart for a service-charge program</td>
+<td>Split it into housekeeping, detail loop and end-of-job modules with named constants and a <code>ZZZZ</code> sentinel (see below)</td>
+</tr>
+<tr>
+<td>Module 2 Job cost estimate</td>
+<td>The same pattern for a contractor's estimate</td>
+<td>Wrote the modules with an hourly-rate constant, a 20 percent materials markup and a 0-hours sentinel</td>
+</tr>
+<tr>
+<td>Module 2 Security Practices discussion</td>
+<td>Explain why security matters when writing code</td>
+<td>Wrote about input validation against SQL injection, encryption, access control and the 2017 Equifax breach</td>
+</tr>
+<tr>
+<td>Module 5 Quiz game plan and flowchart</td>
+<td>Plan a category-and-points quiz game and flowchart it</td>
+<td>Wrote the rules and steps, then drew the flowchart (see below)</td>
+</tr>
+<tr>
+<td>Module 5 UML Use Case Diagram</td>
+<td>Draw a use-case diagram for an online shopping system</td>
+<td>Drew three actors and ten use cases with include and extend links</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="computer-foundations">Computer foundations</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 2: Computer foundations"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Module 3 Character Values</td>
+<td>Convert four sentences to ASCII codes and answer two Unicode questions</td>
+<td>Coded every character of the four sentences and answered the Unicode questions</td>
+</tr>
+<tr>
+<td>Module 3 Memory</td>
+<td>Memory and storage, networking basics and logic-gate truth tables</td>
+<td>Sorted 18 memory and storage items, answered four networking questions and filled in the gate tables</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="languages-debugging-and-structures">Languages, debugging and structures</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 3: Languages, debugging and structures"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Module 4 Programming and scripting languages</td>
+<td>Short essay with sources</td>
+<td>Compared compiled and scripted languages and server-side scripting, with three sources</td>
+</tr>
+<tr>
+<td>Module 4 Debugging exercise 1</td>
+<td>Review and debug a pseudocode program</td>
+<td>Wrote how I'd review the logic and formatting first, then get a peer review, and how flowcharts, indentation and comments prevent errors</td>
+</tr>
+<tr>
+<td>Module 4 Number-guess flowchart</td>
+<td>Use selection and loop structures</td>
+<td>Drew a guess loop with "too high" and "too low" branches back to the input</td>
+</tr>
+<tr>
+<td>Module 4 Dictionary-search flowchart</td>
+<td>The same structures for a real-world task</td>
+<td>Drew a search that flips forward or backward until it finds the word</td>
+</tr>
+<tr>
+<td>Module 4 Group project check-in</td>
+<td>Report the team's status</td>
+<td>Reported our meeting schedule and the five roles; mine was team leader</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="python">Python</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 4: Python"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Module 6 IDLE script</td>
+<td>Variables and string concatenation</td>
+<td>Built and printed a sentence from three variables and turned in the IDLE output</td>
+</tr>
+<tr>
+<td>Module 7 Python using loops</td>
+<td>A <code>for</code> loop with a decision</td>
+<td>Looped over 15 numbers and printed whether each is even or odd, with the IDLE output</td>
+</tr>
+<tr>
+<td>Class 4 practice</td>
+<td>Sequence, selection and a list loop</td>
+<td>Took input, used a pass/fail <code>if</code> and built a list of employees in a loop</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h2 id="strongest-work">Strongest work</h2>
+<h3 id="breaking-a-program-into-modules">Breaking a program into modules (Module 2)</h3>
+<p>The scenario was a cleaning service that charges a base fee plus a rate per bathroom and per other room. I drew a hierarchy chart, then wrote the pseudocode as three modules: housekeeping asks for a customer's last name, the detail loop takes the room counts and shows the charge, and end-of-job closes the program. The rates are named constants, and typing <code>ZZZZ</code> as the name ends the loop:</p>
+<pre role="group" tabindex="0" aria-label="Code example 1: Breaking a program into modules (Module 2)"><code class="language-text">Constants:
+  BATHROOM_CHARGE = 15
+  OTHER_ROOM_CHARGE = 10
+  BASE_CHARGE = 40
+
+Call Housekeeping Module
+
+While lastName != &quot;ZZZZ&quot;
+    Call Detail Loop Module
+End While
+
+Call End-of-Job Module
+</code></pre>
+<p>The flowchart matches it, with module-call symbols and a Yes/No loop on the sentinel. I did the second exercise, a contractor's job estimate, the same way: an <code>HOURLY_RATE</code> constant, materials marked up 20 percent from wholesale, and 0 hours to stop.</p>
+<h3 id="planning-a-quiz-game">Planning a quiz game (Module 5)</h3>
+<p>I wrote the rules first: each question can be answered only once, a right answer adds points, a wrong one leaves the score alone, and the game has to handle invalid input. Then I turned the rules into steps and the steps into a flowchart. It loops while questions are left, sends an invalid choice back to the prompt, and branches on the answer before marking the question as answered.</p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Quiz game flowchart; scroll horizontally if needed">
+    <img src="../../assets/evidence/sdev-120/quiz-game-flowchart-2025-12-13.webp" width="600" height="869" alt="Flowchart of the quiz game. Start, initialize the game, display categories and point values, then the decision: are there unanswered questions? Yes leads to the player choosing a category and point value and an is-choice-valid check that loops back on No. A valid choice displays the question and takes the answer. Is the answer correct? Yes adds points, No keeps the score the same; both mark the question answered and go back to the unanswered-questions decision. No unanswered questions leads to display final score, then Stop." loading="lazy">
+  </div>
+  <figcaption>My Module 5 flowchart, drawn in Lucidchart and committed on December 13, 2025. <a href="../../assets/evidence/sdev-120/quiz-game-flowchart-2025-12-13.webp">Open full size</a>.</figcaption>
+</figure>
+
+<p>One step didn't make it from the plan into the chart: the plan ends by announcing a winner, and the chart only shows the final score.</p>
+<h3 id="the-team-pay-calculator">The team pay calculator</h3>
+<p>Our five-person team built a payroll script in Python. I was team leader, responsible for employee data management and for security and compliance. The file doesn't mark who wrote which section, so this describes the team's code:</p>
+<ul>
+<li><strong>Employee data:</strong> a table of ten employee IDs and hourly rates, and a loop that asks for an ID until it matches one</li>
+<li><strong>Time tracking:</strong> a loop that rejects hours outside 0 to 80</li>
+<li><strong>Payroll:</strong> 40 regular hours, overtime at 1.5 times the rate, flat 5.6 percent state and 7.9 percent federal tax, and net pay</li>
+<li><strong>Export:</strong> collects ten employees and writes them to <code>Payroll.xlsx</code> with pandas</li>
+</ul>
+<p>What I'd fix: typing a word for hours crashes it, because <code>float()</code> runs before the range check; the number of dependents is collected but never used; and the security side of my role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.</p>
+<h2 id="skills">Skills</h2>
+<ul>
+<li>Pseudocode and modular program design (Modules 1, 2 and 5)</li>
+<li>Flowcharts, hierarchy charts and UML use-case diagrams in Lucidchart (Modules 1, 2, 4 and 5)</li>
+<li>Sequence, selection and loops (Module 4 flowcharts, Module 7, class practice)</li>
+<li>Python basics in IDLE: variables, strings, lists, <code>for</code> loops and <code>if</code> (Modules 6 and 7)</li>
+<li>Functions, dictionaries, input loops and an Excel export, as team code (pay calculator)</li>
+<li>Number systems, character encoding, memory and logic gates (Module 3)</li>
+<li>Leading a team project (Module 4 check-in)</li>
+<li>Writing about secure coding (Module 2 discussion)</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>Most of this class is design work: pseudocode and diagrams that never ran. The only run output is the two IDLE screenshots for Modules 6 and 7.</li>
+<li>The pay calculator is the team's file, and the repository has no final project write-up. I haven't run it for this page; it needs pandas and an Excel writer.</li>
+<li>Debugging exercises 2 to 4 are the program listings only, without my changes.</li>
+<li>A few answers have mistakes: two spaces coded as "NULL" instead of 32 in the ASCII sheet, a NAND truth table filled in with NOR's values, and a UML diagram that draws Log In and Process Payment as extensions of Checkout where include fits better.</li>
+<li>The Module 6 flowchart is a Lucidchart link, not a file in the repository.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/SDEV-120">SDEV 120 repository</a>, with every assignment above</li>
+<li><a href="https://github.com/jkosber/SDEV-120/blob/main/Module2/Assignment2/A2E1%20Pseudocode.txt">Module 2 cleaning-service pseudocode</a> and <a href="https://github.com/jkosber/SDEV-120/blob/main/Module2/Assignment2/Flowchart%20Module%202%20-%20Exercise%201%20-%20Jadon%20Kosberg.pdf">flowchart</a></li>
+<li><a href="https://github.com/jkosber/SDEV-120/blob/main/Module5/Module%205%20-%20Excercise%201%20Plan%20-%20Jadon%20Kosberg.docx">Module 5 quiz game plan</a> and <a href="https://github.com/jkosber/SDEV-120/blob/main/Module5/Module%205%20-%20Exercise%201%20Flowcharting%20-%20Jadon%20Kosberg.pdf">flowchart</a></li>
+<li><a href="https://github.com/jkosber/SDEV-120/blob/main/SDEV120%20Pay%20Calc.py">Team pay calculator</a></li>
+<li><a href="https://github.com/jkosber/SDEV-120/blob/main/Module7/Module%207%20Assignment%20-%20Python%20using%20loops%20-%20Jadon%20Kosberg.py">Module 7 loop script</a></li>
+</ul>
+<p><a href="../">All coursework</a> · <a href="../svad-111/">SVAD 111 Linux and Virtualization Technologies</a> · <a href="../neti-109/">NETI 109 Networking I</a></p>
+          </article>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Contact</h2><a class="contact-email" href="mailto:Jadon@jnkos.com"><span>Jadon@jnkos.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a></div>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a></div>
+        <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

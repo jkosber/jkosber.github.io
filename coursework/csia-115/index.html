@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>CSIA 115 Cyber Ops | Jadon Kosberg</title>
+  <meta name="description" content="Cisco CyberOps labs in Security Onion and the CyberOps Workstation: alert investigations, packet analysis, Snort and firewall rules.">
+  
+  <link rel="canonical" href="https://jnkos.com/coursework/csia-115/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=512d0298c767">
+  <script src="../../javascripts/portfolio.js?v=9e86f227690b"></script>
+  
+  <meta property="og:title" content="CSIA 115 Cyber Ops | Jadon Kosberg">
+  <meta property="og:description" content="Cisco CyberOps labs in Security Onion and the CyberOps Workstation: alert investigations, packet analysis, Snort and firewall rules.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/coursework/csia-115/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../../technical-labs/"><span>Projects</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="../..">Home</a>
+          
+          
+          <span aria-hidden="true">/</span><a href="../">Coursework</a>
+          
+          
+          <span aria-hidden="true">/</span><span aria-current="page">CSIA 115 Cyber Ops</span>
+        </nav>
+        
+        
+        
+        
+        
+        
+        
+        <header class="article-head prose"><h1 id="csia-115-cyber-ops">CSIA 115 Cyber Ops</h1><p class="dek">Cisco CyberOps labs in Security Onion and the CyberOps Workstation: alert investigations, packet analysis, Snort and firewall rules.</p></header>
+        <div class="article-grid">
+          <aside class="spec" aria-label="Summary">
+            <dl>
+              
+              
+              <div><dt>Term</dt><dd>Spring 2026</dd></div>
+              <div><dt>In the repo</dt><dd>47 labs and a skills assessment</dd></div>
+              <div class="wide"><dt>My role</dt><dd>I ran the Cisco labs in VirtualBox, worked each investigation from the alerts and captures, and wrote the answers and the final after-action report. The course provided the virtual machines, the captures and the alert data.</dd></div>
+              <div class="wide"><dt>Built with</dt><dd>Security Onion, Sguil and Kibana, Wireshark, NetworkMiner, VirusTotal, Linux and Windows tools</dd></div>
+              
+              <div class="wide"><dt>Source</dt><dd><a href="https://github.com/jkosber/CyberOps-115">CSIA 115 repository</a></dd></div>
+            </dl>
+            
+            <details class="toc" open>
+              <summary>On this page</summary>
+              <nav aria-label="On this page"><a href="#what-the-course-provided">What the course provided and what I did</a><a href="#labs">Labs</a><a href="#strongest-work">Strongest work</a><a href="#skills">Skills</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+            </details>
+            
+          </aside>
+          <article class="prose">
+            
+<p>Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. I ran the labs in VirtualBox and turned in my answers and screenshots for each one.</p>
+
+            <p class="result"><strong>Result.</strong> 47 labs and a skills assessment, ending with Security Onion investigations of an exploit kit infection, a compromised Windows host, a root shell traced across three tools, and a Pushdo infection written up as an after-action report.</p>
+            
+            <h2 id="what-the-course-provided">What the course provided and what I did</h2>
+<p>The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. My part:</p>
+<ul>
+<li>Ran every lab in VirtualBox on my own computer and answered its questions in my own words</li>
+<li>Worked the Security Onion investigations from alert to host to file with Sguil, Kibana, Wireshark, NetworkMiner and VirusTotal</li>
+<li>Wrote the after-action report for the final skills assessment</li>
+</ul>
+<p>The Snort lab's detection rule and firewall command came with the lab; I ran them and read the results.</p>
+<h2 id="labs">Labs</h2>
+<h3 id="security-operations-and-windows">Security operations and Windows</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Security operations and Windows"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.6 Top Hacker Shows Us How It Is Done</td>
+<td>Research one hack from a conference talk</td>
+<td>Wrote up a key-fob jam-and-replay attack and how to defend against it</td>
+</tr>
+<tr>
+<td>1.1.5 Installing the Virtual Machines</td>
+<td>Import the CyberOps Workstation VM</td>
+<td>Imported and booted the VM and wrote the pros and cons of working in VMs</td>
+</tr>
+<tr>
+<td>1.2.3 Learning the Details of Attacks</td>
+<td>Research an IoT vulnerability</td>
+<td>Researched unencrypted IoT traffic and mitigations such as putting IoT devices on their own VLAN</td>
+</tr>
+<tr>
+<td>2.2.5 Becoming a Defender</td>
+<td>Research certifications and security job postings</td>
+<td>Compared CISSP, Security+ and GSEC and summarized what 26 job postings asked for</td>
+</tr>
+<tr>
+<td>3.0.3 Identify Running Processes</td>
+<td>Identify processes with TCPView</td>
+<td>Identified lsass, wininit, spoolsv and svchost and watched a browser's connections open and close</td>
+</tr>
+<tr>
+<td>3.2.11 Exploring Processes, Threads, Handles, and Windows Registry</td>
+<td>Use Process Explorer and edit the registry</td>
+<td>Traced a child process to its parent, checked a process on VirusTotal and changed a registry value to bring back a license prompt</td>
+</tr>
+<tr>
+<td>3.3.10 Create User Accounts</td>
+<td>Create, promote and delete a local account</td>
+<td>Created a local user, made it an administrator and deleted it</td>
+</tr>
+<tr>
+<td>3.3.11 Using Windows PowerShell</td>
+<td>Compare cmd and PowerShell</td>
+<td>Compared the two shells, matched a connection's process ID to its service and listed cmdlets an analyst would use</td>
+</tr>
+<tr>
+<td>3.3.12 Windows Task Manager</td>
+<td>Processes, services and performance</td>
+<td>Followed a process tree, ended a process and read the service and performance tabs</td>
+</tr>
+<tr>
+<td>3.3.13 Monitor and Manage System Resources in Windows</td>
+<td>Services, Event Viewer and Performance Monitor</td>
+<td>Started and stopped a service, found its events in Event Viewer and built a Performance Monitor data collector</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="linux">Linux</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 2: Linux"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.2.6 Working with Text Files in the CLI</td>
+<td>Edit configuration files with SciTE and nano</td>
+<td>Edited <code>.bashrc</code> and wrote an nginx server configuration, then started and stopped the server</td>
+</tr>
+<tr>
+<td>4.2.7 Getting Familiar with the Linux Shell</td>
+<td>Basic shell commands</td>
+<td>Worked through <code>man</code>, <code>mkdir</code>, <code>cd</code>, redirection, <code>ls</code>, <code>cp</code>, <code>mv</code> and <code>rm</code></td>
+</tr>
+<tr>
+<td>4.3.4 Linux Servers</td>
+<td>Find running servers with <code>ps</code> and <code>netstat</code></td>
+<td>Found nginx listening on port 80 and tested it with <code>telnet</code></td>
+</tr>
+<tr>
+<td>4.4.4 Locating Log Files</td>
+<td>Find and follow Linux logs</td>
+<td>Read logs with <code>journalctl</code> and followed the nginx access log with <code>tail -f</code> while loading the page</td>
+</tr>
+<tr>
+<td>4.5.4 Navigating the Linux Filesystem and Permission Settings</td>
+<td>Mounts, permissions and links</td>
+<td>Mounted a disk, changed permissions with <code>chmod</code> and compared hard and symbolic links</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="networks-and-wireshark">Networks and Wireshark</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 3: Networks and Wireshark"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.1.5 Tracing a Route</td>
+<td>Use <code>ping</code> and <code>traceroute</code></td>
+<td>Compared terminal and web-based traceroute results and why they differ</td>
+</tr>
+<tr>
+<td>5.3.7 Introduction to Wireshark</td>
+<td>Capture pings in Mininet</td>
+<td>Captured pings between Mininet hosts and matched the MAC addresses to their interfaces</td>
+</tr>
+<tr>
+<td>7.2.8 Verify IPv4 and IPv6 Addressing</td>
+<td>Check addressing with ping and tracert in Packet Tracer</td>
+<td>Mapped each tracert hop to a router interface for IPv4 and IPv6</td>
+</tr>
+<tr>
+<td>8.2.8 Using Wireshark to Examine Ethernet Frames</td>
+<td>Read Ethernet II fields</td>
+<td>Showed that a ping to a remote host carries the gateway's MAC as its destination</td>
+</tr>
+<tr>
+<td>9.2.6 Using Wireshark to Observe the TCP 3-Way Handshake</td>
+<td>Observe SYN, SYN-ACK and ACK</td>
+<td>Wrote down the flags, sequence and acknowledgment numbers of the three packets and read the capture back with <code>tcpdump</code></td>
+</tr>
+<tr>
+<td>9.3.8 Exploring Nmap</td>
+<td>Scan with Nmap</td>
+<td>Scanned the VM itself and Nmap's test server and listed the open and filtered ports</td>
+</tr>
+<tr>
+<td>10.2.7 Using Wireshark to Examine a UDP DNS Capture</td>
+<td>Read a DNS query and response</td>
+<td>Read the ports and addresses in both and explained why DNS uses UDP</td>
+</tr>
+<tr>
+<td>10.4.3 Using Wireshark to Examine TCP and UDP Captures</td>
+<td>Compare FTP over TCP with TFTP over UDP</td>
+<td>Compared the two headers and explained why Wireshark marked the UDP checksum incorrect</td>
+</tr>
+<tr>
+<td>10.6.7 Using Wireshark to Examine HTTP and HTTPS Traffic</td>
+<td>Compare HTTP and HTTPS</td>
+<td>Recovered the lab's test login from the HTTP capture and showed the HTTPS data was unreadable</td>
+</tr>
+<tr>
+<td>12.1.9 Identify Packet Flow</td>
+<td>Predict packet paths in Packet Tracer, then break a link</td>
+<td>Predicted and watched the DNS and HTTP paths and how they changed after a link failed</td>
+</tr>
+<tr>
+<td>12.3.4 ACL Demonstration</td>
+<td>Test an access list in Packet Tracer</td>
+<td>Showed which pings the access list blocked, read it with <code>show access-lists</code>, removed it and retested</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="threats-attacks-and-cryptography">Threats, attacks and cryptography</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 4: Threats, attacks and cryptography"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15.0.3 What's Going On</td>
+<td>Count connections in TCPView</td>
+<td>Counted the listening and established endpoints and watched a browser open its connections</td>
+</tr>
+<tr>
+<td>15.2.7 Logging Network Activity</td>
+<td>Sniff FTP, read syslog and see NAT's effect in Packet Tracer</td>
+<td>Read the FTP login in cleartext, recommended SFTP and explained why NAT hides which inside host replied</td>
+</tr>
+<tr>
+<td>17.1.7 Exploring DNS Traffic</td>
+<td>Capture a DNS lookup</td>
+<td>Flushed the cache, captured an <code>nslookup</code> and read the query and response fields</td>
+</tr>
+<tr>
+<td>17.2.6 Attacking a mySQL Database</td>
+<td>Read a SQL injection in a capture</td>
+<td>Followed the injection in the capture to the database version, the table names, and a password hash and its plaintext</td>
+</tr>
+<tr>
+<td>17.2.7 Reading Server Logs</td>
+<td>Read logs with <code>cat</code>, <code>more</code>, <code>less</code>, <code>tail</code> and <code>journalctl</code></td>
+<td>Compared the tools and explained why log timestamps need synchronized clocks</td>
+</tr>
+<tr>
+<td>21.0.3 Creating Codes</td>
+<td>Encrypt a message with an online tool</td>
+<td>Encrypted and decrypted a message and saw a wrong key fail</td>
+</tr>
+<tr>
+<td>21.1.6 Hashing Things Out</td>
+<td>Hash files and verify a download</td>
+<td>Showed that an edit changes a file's hash and checked a download against its signature file</td>
+</tr>
+<tr>
+<td>21.2.10 Encrypting and Decrypting Data Using OpenSSL</td>
+<td>Use AES-256 with OpenSSL</td>
+<td>Encrypted and decrypted a file, using Base64 to make the output readable</td>
+</tr>
+<tr>
+<td>21.2.11 Encrypting and Decrypting Data Using a Hacker Tool</td>
+<td>Crack zip passwords with fcrackzip</td>
+<td>Timed cracks from under a second to about two minutes as passwords got longer and recommended at least 8 characters</td>
+</tr>
+<tr>
+<td>21.2.12 Examining Telnet and SSH in Wireshark</td>
+<td>Compare Telnet and SSH</td>
+<td>Read a Telnet login in cleartext and showed the SSH session was encrypted</td>
+</tr>
+<tr>
+<td>21.4.7 Certificate Authority Stores</td>
+<td>Browser CA stores and certificate fingerprints</td>
+<td>Compared a site's certificate fingerprint with a reference table and explained why a mismatch alone doesn't prove interception</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="security-data-and-investigations">Security data and investigations</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 5: Security data and investigations"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>25.3.10 Explore a NetFlow Implementation</td>
+<td>Read NetFlow data in Packet Tracer</td>
+<td>Filled in the flow fields for a request and its response</td>
+</tr>
+<tr>
+<td>25.3.11 Logging from Multiple Sources</td>
+<td>Syslog, AAA and NetFlow in Packet Tracer</td>
+<td>Read the routing syslog messages, the AAA login entries and the NetFlow data</td>
+</tr>
+<tr>
+<td>26.1.7 Snort and Firewall Rules</td>
+<td>Trigger a Snort alert, then block the server with iptables</td>
+<td>Ran the lab's Snort rule and firewall command and read the results (see below)</td>
+</tr>
+<tr>
+<td>27.1.5 Convert Data into a Universal Format</td>
+<td>Normalize log timestamps with <code>awk</code></td>
+<td>Fixed my first Apache conversion, which turned every date into 1970, and summarized five security tools</td>
+</tr>
+<tr>
+<td>27.2.9 Regular Expression Tutorial</td>
+<td>Learn regular expressions for searching logs</td>
+<td>Filled in the metacharacter table and searched a log with a regular expression in <code>less</code></td>
+</tr>
+<tr>
+<td>27.2.10 Extract an Executable from a PCAP</td>
+<td>Export a file from a capture</td>
+<td>Followed the HTTP stream and exported the 345,088-byte executable</td>
+</tr>
+<tr>
+<td>27.2.12 Interpret HTTP and DNS Data to Isolate Threat Actor</td>
+<td>Find a SQL injection and DNS exfiltration in Kibana</td>
+<td>Found the injected request and the data it returned, then decoded the DNS queries back into the stolen file</td>
+</tr>
+<tr>
+<td>27.2.14 Isolate Compromised Host Using 5-Tuple</td>
+<td>Pivot from Sguil to Wireshark to Kibana</td>
+<td>Rebuilt what the attacker ran after getting a root shell, found the FTP transfer that followed and recommended containment steps</td>
+</tr>
+<tr>
+<td>27.2.15 Investigating a Malware Exploit</td>
+<td>Investigate an exploit kit infection</td>
+<td>Rebuilt the chain from a search result to ransomware (see below)</td>
+</tr>
+<tr>
+<td>27.2.16 Investigating an Attack on a Windows Host</td>
+<td>Investigate a compromised Windows host</td>
+<td>Separated a likely misconfiguration from the attack and identified two trojan downloads (see below)</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="final-skills-assessment">Final skills assessment</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 6: Final skills assessment"><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>What it asked</th>
+<th>What I did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CyberOps Associates Skills Assessment</td>
+<td>Investigate a Pushdo infection from Security Onion alerts and write an after-action report</td>
+<td>Built the timeline, identified the host and the three downloaded files, and wrote the report (see below)</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h2 id="strongest-work">Strongest work</h2>
+<h3 id="pushdo-after-action-report">A Pushdo infection and my after-action report</h3>
+<p>The final assessment gave me Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. Then I wrote an after-action report recommending that the host be isolated, the three domains blocked, the network segmented and users trained. In the assessment I wrote: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."</p>
+<p>The full write-up is on <a href="../../technical-labs/soc-threat-detection/">CyberOps &amp; traffic investigation</a>.</p>
+<h3 id="rebuilding-an-exploit-kit-infection">Rebuilding an exploit kit infection (27.2.15)</h3>
+<p>The data came from a January 2017 infection. I started in Kibana with the first alert, which tied the traffic to the RIG exploit kit, then moved to the Sguil and CapMe transcripts to rebuild what happened:</p>
+<ol>
+<li>A search took the user to a compromised home-improvement site.</li>
+<li>The site loaded a script from a redirector, which sent the browser to the exploit kit.</li>
+<li>The exploit kit served a Flash exploit.</li>
+<li>The later alerts named the payload as Cerber ransomware.</li>
+</ol>
+<p>The whole exploit took less than a minute, from 22:54:42 to 22:55:28. Reading the saved page, I found how its script avoided detection: "The javascript file avoids detection by splitting the iframe tag." I hashed the downloaded Flash file, and VirusTotal flagged it on 33 of 62 engines. A second alert under a different file name carried the same hash: "Yes the two hashes match even though the filenames are different indicating the same malware."</p>
+<h3 id="separating-a-misconfiguration-from-an-attack">Separating a misconfiguration from an attack (27.2.16)</h3>
+<p>A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. I judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."</p>
+<p>The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there I identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, <code>F4.exe</code>, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the <code>ncsi.txt</code> connectivity check and a certificate revocation list.</p>
+<h3 id="snort-and-a-firewall-rule-2617">Snort and a firewall rule (26.1.7)</h3>
+<p>In a Mininet network, I ran Snort on the router and requested a file from the lab's malicious server. My first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.</p>
+<p>The full write-up is on <a href="../../technical-labs/snort-firewall-lab/">Snort, firewall rules &amp; HTTP recovery</a>.</p>
+<h2 id="skills">Skills</h2>
+<ul>
+<li>Alert triage and timelines in Sguil and Kibana (27.2.14 to 27.2.16, skills assessment)</li>
+<li>Following TCP streams and reading HTTP transcripts (10.6.7, 21.2.12, 27.2.10, 27.2.14 to 27.2.16)</li>
+<li>File hashing and reputation lookups in VirusTotal and Talos (21.1.6, 27.2.15, 27.2.16, skills assessment)</li>
+<li>Spotting cleartext credentials and recommending encrypted protocols (10.6.7, 15.2.7, 21.2.12, 27.2.14)</li>
+<li>Reading DNS for exfiltration and host behavior (17.1.7, 27.2.12, 27.2.16)</li>
+<li>Wireshark filters and header analysis for Ethernet, IP, TCP, UDP and DNS (5.3.7, 8.2.8, 9.2.6, 10.2.7, 10.4.3)</li>
+<li>Log analysis with <code>journalctl</code>, syslog, <code>awk</code> and regular expressions (4.4.4, 17.2.7, 27.1.5, 27.2.9)</li>
+<li>Windows and Linux administration basics (3.0.3 to 3.3.13, 4.2.6 to 4.5.4)</li>
+<li>Cryptography basics: hashing, AES, password strength and certificate stores (21.1.6 to 21.4.7)</li>
+<li>Writing an after-action report (skills assessment)</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>28.4.13 Incident Handling is in the repository but blank, so it isn't listed.</li>
+<li>The captures and alert data came from the course and aren't in the repository, so the times and file details can't be rechecked from it alone.</li>
+<li>My Pushdo report says the downloaded files ran on the host, which the alerts don't show, and it calls the OpenDNS lookup service malicious when it's a legitimate service the malware used. The containment steps are recommendations; I didn't carry them out.</li>
+<li>Some labs captured traffic on my home network, so I haven't reproduced their addresses here.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/CyberOps-115">CSIA 115 repository</a>, with every lab above</li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx">Skills assessment</a> and <a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx">after-action report</a></li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.15%20Lab%20-%20Investigating%20a%20Malware%20Exploit%20-%20Jadon%20Kosberg.docx">27.2.15 Investigating a Malware Exploit</a></li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.16%20Lab%20-%20Investigating%20an%20Attack%20on%20a%20Windows%20Host%20-%20Jadon%20Kosberg.docx">27.2.16 Investigating an Attack on a Windows Host</a></li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx">26.1.7 Snort and Firewall Rules</a></li>
+</ul>
+<p><a href="../">All coursework</a> · <a href="../../technical-labs/soc-threat-detection/">CyberOps &amp; traffic investigation</a> · <a href="../csia-210/">CSIA 210 Network Protocol Analysis</a></p>
+          </article>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-heading"><h2>Contact</h2><a class="contact-email" href="mailto:Jadon@jnkos.com"><span>Jadon@jnkos.com</span><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>
+
+</svg></a></div>
+        <div class="footer-bottom"><a class="footer-brand" href="../..">Jadon Kosberg</a><div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div><a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a></div>
+        <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
