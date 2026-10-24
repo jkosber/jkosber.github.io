@@ -134,7 +134,7 @@ The next alert was the attack. The host downloaded an executable that Cisco Talo
 
 ### Snort and a firewall rule (26.1.7)
 
-In a Mininet network, I ran Snort on the router, downloaded a file from the lab's malicious server and watched the lab's signature fire. My first two requests returned 404 because I had the file name wrong; the corrected request returned 200 and set off the alert. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.
+In a Mininet network, I ran Snort on the router and requested a file from the lab's malicious server. My first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.
 
 The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-labs/snort-firewall-lab.md).
 

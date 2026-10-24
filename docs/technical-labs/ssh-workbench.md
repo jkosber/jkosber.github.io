@@ -14,7 +14,7 @@ screenshot:
   width: 900
   height: 413
   alt: "SSH Workbench in Windows Terminal. The header counts 5 machines: 3 online, 1 offline and 1 can't check. The Machines list shows Web server, Lab box, Storage NAS, Build runner and Garage Pi, each with its alias or address on the right. The details pane for Lab box shows one row per field: ID, name, status Online at 192.0.2.20, a direct connection, two addresses, user, port 2222, key file and two links. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit."
-  caption: "Version 0.3.0 in Windows Terminal, with fictional machines"
+  caption: "Version 0.3.0 in Windows Terminal, October 22, 2026, with fictional machines and statuses from a stand-in checker"
 ---
 
 # SSH Workbench

@@ -1,6 +1,6 @@
 ---
 title: Projects
-description: Personal infrastructure and software projects, plus completed coursework in networking, Linux, and cybersecurity.
+description: Personal projects I run and maintain, including a Proxmox homelab, SSH Workbench and a job-search tool.
 layout: projects
 ---
 

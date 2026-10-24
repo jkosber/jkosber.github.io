@@ -80,7 +80,7 @@ In Wireshark I followed TCP stream 0: an HTTP GET, a 200 response with a `Conten
 - The Snort signature and the firewall command came with the lab. I didn't write either, or measure the signature's detection or false-positive rate.
 - I didn't screenshot the blocked retest, and the listing I captured shows the rule's counters at zero, so the block rests on my written answer.
 - The lab covered one HTTP request path. Encrypted traffic and whether the rule survives a restart weren't tested.
-- I didn't hash the exported file or run it, and my guess that it was a Windows command file is only a guess.
+- I didn't hash the exported file or run it.
 - The repository doesn't include either capture, so neither exercise can be replayed from it.
 
 ## Sources

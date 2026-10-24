@@ -15,7 +15,7 @@ summary:
 
 # NETI 109 Networking I
 
-Networking I was the first half of Cisco's CCNA material: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did the labs in Packet Tracer and turned in a write-up for each one.
+Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did the labs in Packet Tracer and turned in a write-up for each one.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
@@ -145,7 +145,7 @@ In simulation mode I watched a PC find another PC's MAC address with Neighbor Di
 ## Limits {#limits}
 
 - The device configurations live in the Packet Tracer files, which I haven't reproduced here. Several activities are Packet Tracer files only, with no write-up.
-- Everything on this page was done in Packet Tracer.
+- All the device configuration was done in Packet Tracer, not on real equipment.
 - A few answers have mistakes: the broadcast address above, a mask written as `244` instead of 224 in 11.7.5, and a "first usable" column filled with last usable addresses in 11.9.3.
 - My Wireshark and DNS answers came from my home network, so I haven't reproduced their addresses here.
 
