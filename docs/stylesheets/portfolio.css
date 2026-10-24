@@ -155,11 +155,10 @@ p { max-width: 66ch; }
 /* Navy reading surfaces use blue structure and amber emphasis. */
 .dark-section, .site-footer { background: transparent; color: var(--text); color-scheme: dark; }
 
-/* The homepage puts the experience introduction beside a quieter role list. */
+/* The homepage lists each role with a one-line summary; the Experience page shows the full entries. */
 
 .experience-list { position: relative; }
 .experience-entry { position: relative; display: grid; grid-template-columns: minmax(160px, .45fr) 1fr; gap: 3rem; padding: 2.5rem 0; border-top: 1px solid var(--line); }
-.page-heading + .experience-list > .experience-entry:first-child { padding-top: 0; border-top: 0; }
 .experience-date p { color: var(--warm); font-weight: 700; font-size: .85rem; margin: .2rem 0 .75rem; }
 .experience-date span { display: block; max-width: 23ch; color: var(--heading); font-size: 1.05rem; font-weight: 650; line-height: 1.5; }
 .experience-copy { position: relative; padding-left: 4rem; }
@@ -168,7 +167,15 @@ p { max-width: 66ch; }
 .experience-title a { color: var(--heading); text-decoration: none; }
 .experience-title a:hover { text-decoration: underline; }
 .experience-copy p { font-size: 1rem; margin: 0 0 .8rem; color: var(--muted); }
-.detail-link { display: inline-flex; align-items: center; min-height: 44px; font-size: .85rem; font-weight: 650; }
+.role { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 3rem; align-items: start; padding: 2.5rem 0; border-top: 1px solid var(--line); }
+.page-heading + .role-list > .role:first-child { padding-top: 0; border-top: 0; }
+.role-art { display: block; width: 100%; height: auto; }
+.role-body h2 { margin: 0 0 .4rem; font-size: 1.65rem; }
+.role-org { margin: 0; color: var(--heading); font-size: 1.05rem; font-weight: 650; }
+.role-dates { margin: .2rem 0 1rem; color: var(--warm); font-size: .85rem; font-weight: 700; }
+.role-intro { max-width: 68ch; margin: 0 0 1rem; color: var(--muted); }
+.role-points { max-width: 68ch; margin: 0; padding-left: 1.2rem; }
+.role-points li { margin: .45rem 0; padding-left: .2rem; }
 
 .page-heading { position: relative; padding: 1rem 0 2.75rem; margin: 0 0 2.5rem; border-bottom: 1px solid #ffffff20; }
 .page-emblem { display: none; }
@@ -407,6 +414,8 @@ p { max-width: 66ch; }
   .experience-entry { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2rem 0; }
   .experience-date span { max-width: none; }
   .experience-date p { margin-bottom: .3rem; }
+  .role { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: 2rem 0; }
+  .role-art { width: 160px; }
   .footer-inner { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .contact-email { justify-self: start; }
   /* A floating control would cover text on a phone; the footer copy remains. */
@@ -475,14 +484,14 @@ p { max-width: 66ch; }
   .table-scroll table { min-width: 0; }
   .prose .table-hint { display: none; }
   .workflow-steps li::before { background: #fff; color: #000; border: 1px solid #777; }
-  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .button, .back-to-top, .page-emblem, .role-symbol { display: none; }
+  .site-header, .site-footer, .contents, .skip-link, .breadcrumbs, .button, .back-to-top, .page-emblem, .role-symbol, .role-art { display: none; }
   .print-identity { display: grid; gap: .15rem; padding-bottom: .75rem; margin-bottom: 1rem; border-bottom: 1px solid #bbb; font-size: 10pt; }
   .page-shell, .home-intro, .home-projects > .section-inner, .home-experience { padding: 0; max-width: none; }
   .page-heading, .collection .page-heading { padding: 0 0 1rem; margin: 0 0 1rem; }
   .article-layout, .home-intro, .home-experience { display: block; }
-  .experience-entry { padding: 1rem 0; }
-  .credential, .credential:nth-child(2), .experience-entry, .section-note, .component-list li { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
-  .credential h3, .credential p, .experience-date p { color: #000; }
+  .experience-entry, .role { padding: 1rem 0; }
+  .credential, .credential:nth-child(2), .experience-entry, .role, .section-note, .component-list li { display: block; background: #fff; break-inside: avoid; box-shadow: none; color: #000; }
+  .credential h3, .credential p, .experience-date p, .role-org, .role-dates, .role-intro { color: #000; }
   .credential-grid { margin: .75rem 0; gap: 1rem; }
   .credential { padding: .65rem 1rem; }
   .prose .credential h3, .prose .education-entry h3 { margin: 0 0 .5rem; }
@@ -495,6 +504,5 @@ p { max-width: 66ch; }
   .prose h3 { font-size: 13pt; margin: 1rem 0 .5rem; }
   a { color: inherit; }
   .experience-copy { padding-left: 0; }
-  .detail-link { min-height: 0; }
   * { animation: none !important; transition: none !important; } /* anti-slop-allow: print output must never animate */
 }

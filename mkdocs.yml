@@ -56,10 +56,7 @@ nav:
       - CyberOps & traffic investigation: technical-labs/soc-threat-detection.md
       - Snort and firewall lab: technical-labs/snort-firewall-lab.md
       - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
-  - Experience:
-      - Overview: experience/index.md
-      - Retail technology conversions: experience/verizon-conversions.md
-      - Healthcare IT support: experience/ladd-dental.md
+  - Experience: experience/index.md
   - About:
       - Background and credentials: credentials/index.md
       - Skills & focus: career-paths/index.md

@@ -48,16 +48,35 @@
 </li>
 {%- endmacro %}
 
+{# Roles live in the Experience page's frontmatter: the full entries there, a one-line summary on the homepage. #}
 {% macro experience_entries(compact=false) -%}
-{% set heading = 3 if compact else 2 %}
-<div class="experience-list{% if compact %} experience-list--compact{% endif %}">
-{% for section in nav if section.title == 'Experience' %}
-{% for role in section.children if role.meta.organization %}
+{% for experience in nav if experience.title == 'Experience' %}
+{% if compact %}
+<div class="experience-list experience-list--compact">
+{% for role in experience.meta.roles %}
   <article class="experience-entry">
-    <div class="experience-date"><p>{{ role.meta.dates }}</p><span>{{ role.meta.role }}</span></div>
-    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon('network' if 'verizon' in role.url else 'support') }}</div><h{{ heading }} class="experience-title"><a href="{{ role.url | url }}">{{ role.meta.organization | replace(' / ', ' / ') }}</a></h{{ heading }}><p>{{ role.meta.description }}</p><a class="detail-link" href="{{ role.url | url }}">{{ role.title }}</a></div>
+    <div class="experience-date"><p>{{ role.dates }}</p><span>{{ role.title }}</span></div>
+    <div class="experience-copy"><div class="role-symbol" aria-hidden="true">{{ icon(role.icon) }}</div><h3 class="experience-title"><a href="{{ experience.url | url }}#{{ role.id }}">{{ role.organization }}</a></h3><p class="role-summary">{{ role.summary }}</p></div>
   </article>
 {% endfor %}
+</div>
+{% else %}
+<div class="role-list">
+{% for role in experience.meta.roles %}
+  <article class="role" id="{{ role.id }}">
+    <img class="role-art" src="{{ role.image | url }}" width="240" height="160" alt="">
+    <div class="role-body">
+      <h2>{{ role.title }}</h2>
+      <p class="role-org">{{ role.organization }}</p>
+      <p class="role-dates">{{ role.dates }}</p>
+      <p class="role-intro">{{ role.intro }}</p>
+      <ul class="role-points">
+        {% for point in role.bullets %}<li>{{ point }}</li>{% endfor %}
+      </ul>
+    </div>
+  </article>
 {% endfor %}
 </div>
+{% endif %}
+{% endfor %}
 {%- endmacro %}
