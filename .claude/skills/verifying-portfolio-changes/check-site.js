@@ -209,7 +209,7 @@ async (page) => {
   const summaryPages = {
     role: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/job-scan-tailor/',
       '/technical-labs/aws-linux-infrastructure/', '/technical-labs/soc-threat-detection/', '/technical-labs/snort-firewall-lab/',
-      '/technical-labs/ipv6-packet-investigations/', '/technical-labs/cisco-networking-analysis/'],
+      '/technical-labs/ipv6-packet-investigations/'],
     term: ['/coursework/neti-109/', '/coursework/svad-111/', '/coursework/csia-115/', '/coursework/csia-210/', '/coursework/csia-105/', '/coursework/sdev-120/'],
   };
   result.checks.summaryColumn = 0;
@@ -242,6 +242,23 @@ async (page) => {
       if (narrow.outOfOrder) fail(`summaryColumn ${route} @390: title, description, summary, contents and article are out of order`);
       if (narrow.tocOpen) fail(`summaryColumn ${route} @390: On this page starts open`);
     }
+  }
+
+  // Moved pages: the old address answers with a refresh to the new page and lands on the right section.
+  const REDIRECTS = [
+    ['/technical-labs/cisco-networking-analysis/', '/coursework/neti-109/', '#strongest-work'],
+  ];
+  result.checks.redirects = 0;
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [from, to, hash] of REDIRECTS) {
+    const response = await page.request.get(BASE + from);
+    const body = response.status() === 200 ? await response.text() : '';
+    result.checks.redirects += 1;
+    if (!/http-equiv="refresh"/.test(body)) { fail(`redirects ${from}: no refresh (HTTP ${response.status()})`); continue; }
+    await page.goto(BASE + from);
+    await page.waitForURL((url) => url.pathname === to, { timeout: 5000 }).catch(() => {});
+    const landed = new URL(page.url());
+    if (landed.pathname !== to || landed.hash !== hash) fail(`redirects ${from}: landed on ${landed.pathname}${landed.hash}, expected ${to}${hash}`);
   }
 
   // Keyboard order on a phone follows what you see, top to bottom (deferred minor a).
