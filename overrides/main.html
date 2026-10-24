@@ -43,7 +43,7 @@
   {% endif %}
 </head>
 <body>
-  {% from "partials/components.html" import icon, project_card, project_showcase, project_row, experience_entries with context %}
+  {% from "partials/components.html" import icon, project_showcase, project_row, experience_entries with context %}
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="identity">
@@ -66,33 +66,17 @@
   </header>
   <div class="site-body">
     <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
-    <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}{% if page and page.meta.layout == 'projects' %} collection{% endif %}"{% if page and page.meta.visual %} data-visual="{{ page.meta.visual }}"{% endif %}>
+    <main id="main" tabindex="-1" class="page-shell{% if page and page.is_homepage %} home{% endif %}{% if page and page.meta.layout == 'projects' %} collection{% endif %}">
       {% block content %}
       {% if page and page.meta.layout == 'home' %}
         {% include "partials/home.html" %}
       {% elif page and page.meta.layout == 'projects' %}
-        {% set project_list = namespace(items=[]) %}
+        <div class="page-heading prose">{{ page.content }}</div>
         {% for section in nav if section.title == 'Projects' %}
-        {% for project in section.children if project.url != page.url and not project.meta.detail %}
-          {% set project_list.items = project_list.items + [project] %}
+        <ul class="project-rows project-index">
+          {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
+        </ul>
         {% endfor %}
-        {% endfor %}
-        <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('projects') }}</span>{{ page.content }}</div>
-        <section class="project-browser" aria-label="Browse projects">
-          <div class="project-toolbar" hidden>
-            <div class="project-filters" role="group" aria-label="Filter projects">
-              <button type="button" data-filter="all" aria-pressed="true">All projects</button>
-              <button type="button" data-filter="personal" aria-pressed="false">Personal</button>
-              <button type="button" data-filter="coursework" aria-pressed="false">Coursework</button>
-            </div>
-            <p class="project-count" role="status" aria-live="polite" aria-atomic="true">{{ project_list.items | length }} {{ 'project' if project_list.items | length == 1 else 'projects' }}</p>
-          </div>
-          <div class="project-grid">
-            {% for project in project_list.items %}
-              {{ project_card(project, presentation='thumbnail') }}
-            {% endfor %}
-          </div>
-        </section>
         <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
       {% elif page and page.meta.layout == 'experience' %}
         <div class="page-heading prose"><span class="page-emblem" aria-hidden="true">{{ icon('experience') }}</span>{{ page.content }}</div>

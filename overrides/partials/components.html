@@ -24,26 +24,6 @@
 </svg>
 {%- endmacro %}
 
-{% macro project_card(project, featured=false, heading=2, presentation='default') -%}
-{% set academic = project.meta.kind == 'Completed coursework' %}
-{% set project_title = project.meta.title or project.title %}
-{% set symbol = 'server' if 'proxmox' in project.url else ('terminal' if 'ssh-workbench' in project.url else ('cloud' if 'aws-linux' in project.url else ('document' if 'job-scan' in project.url else ('network' if 'cisco' in project.url else 'security')))) %}
-{% set thumbnails = {'server': 'proxmox', 'terminal': 'terminal', 'cloud': 'aws', 'document': 'resume', 'network': 'network', 'security': 'security'} %}
-<article class="project-card{% if featured %} project-card--featured{% endif %}{% if presentation == 'summary' %} project-card--summary{% endif %}" data-category="{{ 'coursework' if academic else 'personal' }}" data-visual="{{ project.meta.visual }}">
-  {% if project.meta.visual and presentation != 'summary' %}
-  {% set artwork = 'assets/thumbnails/' ~ thumbnails[symbol] ~ '.svg' if presentation == 'thumbnail' else project.meta.visual %}
-  <a class="card-art" href="{{ project.url | url }}" aria-label="Read {{ project_title }}" tabindex="-1"><img src="{{ artwork | url }}" width="{{ 240 if presentation == 'thumbnail' else 600 }}" height="{{ 160 if presentation == 'thumbnail' else 340 }}" alt="" loading="lazy"></a>
-  {% endif %}
-  <div class="card-content">
-  <div class="card-meta"><span class="project-icon">{{ icon(symbol) }}</span><span>{{ project.meta.kind }}</span></div>
-  <h{{ heading }} class="project-title"><a href="{{ project.url | url }}">{{ project_title }}</a></h{{ heading }}>
-  <p>{{ project.meta.description }}</p>
-  {% if project.meta.tools %}<ul class="tool-tags" aria-label="Tools">{% for tool in project.meta.tools[:4] %}<li>{{ tool }}</li>{% endfor %}</ul>{% endif %}
-  <div class="card-bottom"><span>{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span><a href="{{ project.url | url }}" aria-label="View project: {{ project_title }}">View project {{ icon('arrow') }}</a></div>
-  </div>
-</article>
-{%- endmacro %}
-
 {% macro project_showcase(project) -%}
 {% set shot = project.meta.screenshot %}
 {% set tools = (project.meta.summary.built_with if project.meta.summary else project.meta.tools or [])[:3] %}
@@ -60,9 +40,9 @@
 </article>
 {%- endmacro %}
 
-{% macro project_row(project) -%}
+{% macro project_row(project, heading=3) -%}
 <li class="project-row lift reveal">
-  <h3><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h3>
+  <h{{ heading }} class="project-row-title"><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h{{ heading }}>
   <p>{{ project.meta.description }}</p>
   <span class="project-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span>
 </li>

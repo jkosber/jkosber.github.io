@@ -119,26 +119,4 @@ document.addEventListener('DOMContentLoaded', () => {
     backToTop.addEventListener('click', () => document.querySelector('#main').focus({ preventScroll: true }));
   }
   updateReadingPosition();
-
-  const browser = document.querySelector('.project-browser');
-  if (browser) {
-    const toolbar = browser.querySelector('.project-toolbar');
-    const buttons = [...browser.querySelectorAll('[data-filter]')];
-    const projects = [...browser.querySelectorAll('[data-category]')];
-    const count = browser.querySelector('.project-count');
-    const filterProjects = (filter) => {
-      let visible = 0;
-      for (const project of projects) {
-        project.hidden = filter !== 'all' && project.dataset.category !== filter;
-        if (!project.hidden) visible += 1;
-      }
-      for (const button of buttons) {
-        button.setAttribute('aria-pressed', String(button.dataset.filter === filter));
-      }
-      count.textContent = `${visible} ${visible === 1 ? 'project' : 'projects'}`;
-    };
-    buttons.forEach((button) => button.addEventListener('click', () => filterProjects(button.dataset.filter)));
-    toolbar.hidden = false;
-    filterProjects('all');
-  }
 });
