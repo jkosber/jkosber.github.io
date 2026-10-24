@@ -32,11 +32,14 @@ A strict build proves links and anchors resolve. It does not prove a page render
    - `pageHead`: each case study and class page has breadcrumbs, title, description, strip and Result in order, the My role panel, and at 390 px a closed "On this page";
    - `classPages`: anchors, the course repository link, Strongest work before Labs, the lab module count, all modules closed at load, a plain first Strongest work panel, 36 labs on NETI 109, and stacked lab rows without sideways scroll at 390 px;
    - `labModuleAnchor`: a link to a module's id lands inside the viewport;
+   - `evidenceFit`: no body screenshot hides part of itself behind a sideways scroll at 1440x900 or 1920x1080;
+   - `railWidened`: "On this page" opens again as a rail after the window widens from 1024 to 1366 px;
    - `lightbox`: at 1440 px a screenshot opens a named dialog with the full image, Escape closes it and focus returns to the link; at 390 px the link opens the image file;
+   - `zoomTabStops` and `captionLightbox`: image links stay out of the tab order, and at 1440 px a caption's "Open full size" link opens the same dialog, with focus returning to it;
    - `printModules`: `beforeprint` opens every lab module and `afterprint` restores the ones that were open;
    - every old address in `REDIRECTS` landing on its new page and section;
-   - motion limits, the type scale, 200% text at 390 px (overflow and words broken mid-word), scroll fade-ups ending visible and the row hover lift;
-   - every route with JavaScript disabled at 320 px, and print colors of the My role and Result panels.
+   - motion limits, the type scale, 200% text at 390 px (overflow and words broken mid-word) and at 320 px (overflow), scroll fade-ups ending visible and the row hover lift;
+   - every route with JavaScript disabled at 320 px, lab rows printing with JavaScript disabled (`noJsPrintLabs`), and print colors of the My role and Result panels.
 3. `problems: []` is a pass. Treat anything else as a defect. Run the same checks in WebKit with `node .claude/skills/verifying-portfolio-changes/run-check.js webkit` (`chromium` also works), with `PLAYWRIGHT_MODULE` set to a Node Playwright install whose browsers are downloaded (the workspace `CLAUDE.md` names the local one); it exits 1 when `problems` is not empty. WebKit on Windows only approximates Safari on iOS, so a pass here does not replace a check on an iPhone.
 4. Look at the pages you changed. A file `docs/<path>.md` is served at `/<path>/`, and `index.md` at its folder. Take screenshots at 390 and 1440 px and read them: hierarchy, spacing, wrapping, image crops. Automated checks miss visual regressions.
 5. New or changed images: open each one and confirm it shows no real host names, addresses, usernames or paths. The `width`/`height` attributes must match the intended display size.
