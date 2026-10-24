@@ -1,96 +1,73 @@
 ---
 title: CyberOps & traffic investigation
-description: Connected a supplied Pushdo alert timeline to a Windows host, three downloaded objects and historical malware reports; a separate lab recorded Snort alerts and a firewall retest.
+description: I traced a Pushdo malware infection in Security Onion from the alerts to one Windows host and three downloaded files, then wrote the after-action report.
 kind: Completed coursework
 status: "March 2026"
 visual: assets/project-security.svg
-tools: [Security Onion, Wireshark, NetworkMiner, Snort]
+tools: [Security Onion, Wireshark, NetworkMiner, VirusTotal]
 detail: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops
 summary:
-  role: "I worked the supplied alerts from timeline to host to files, looked up the file hashes and wrote the after-action report."
-  built_with: ["Security Onion", "Sguil", "Wireshark", "NetworkMiner", "VirusTotal", "Snort and iptables in a separate Mininet lab"]
-  result: "Identified the affected Windows host and three downloaded malware files by hash, with containment recommendations. In the lab, an existing Snort rule fired, and after I added a firewall rule my written retest recorded the download as blocked."
+  role: "I worked the alerts from timeline to host to files, looked up the file hashes and wrote the after-action report. The course provided the Security Onion VM and the alert data."
+  built_with: ["Security Onion", "Sguil", "Wireshark", "NetworkMiner", "VirusTotal"]
+  result: "I tied a 2017 Pushdo infection to one Windows host and three downloaded malware files by hash, and wrote an after-action report with containment recommendations."
   source: {label: "CSIA 115 repository", url: "https://github.com/jkosber/CyberOps-115"}
 ---
 
 # CyberOps & traffic investigation
 
-In **CSIA 115: Cyber Ops**, I investigated a historical Pushdo malware scenario using a Cisco-provided Security Onion VM. I narrowed the alert window in Sguil, identified the affected Windows host, inspected reconstructed files in NetworkMiner and recorded existing VirusTotal findings in an after-action report.
+The final skills assessment in CSIA 115 gave me a Security Onion VM loaded with alerts from a 2017 Pushdo infection, an exercise Cisco credits to malware-traffic-analysis.net. I narrowed the alerts to one time window and one internal host, matched that host to three downloaded files, looked the files up by hash and wrote an after-action report.
 
-The [Snort, firewall rules & HTTP recovery](snort-firewall-lab.md) case study covers a separate lab using live traffic within a supplied Mininet network: triggering an existing signature, diagnosing a failed HTTP download, inserting a routed firewall rule and recording the retest. A companion exercise recovered an HTTP object from a supplied packet capture.
+The [Snort and firewall lab](snort-firewall-lab.md) from the same class has its own page.
 
 ## Investigating Pushdo alerts {#investigating-a-pushdo-infection}
 
-The assessment began with executable-download and Trojan alerts already loaded in Security Onion. The training material credits Malware Traffic Analysis as the scenario's source. I investigated the alerts to identify the affected host and associated files.
+I started in Sguil and narrowed the alerts to the window where the downloads and the Pushdo signatures clustered, and to the internal host they had in common. That kept them apart from the other training events loaded in the same VM.
 
-I used Sguil to establish the time window and the common internal host, then examined associated traffic with Wireshark and NetworkMiner. Keeping the time window and host together helped distinguish the related alerts from other training events in the same VM.
+### Building the timeline {#establishing-the-timeline}
 
-### Establishing the timeline
+Times are UTC on June 27, 2017; the numbers are Sguil alert IDs.
 
-The assessment screenshot records the following alert sequence. Times are **UTC on June 27, 2017**, as recorded in my report; the identifiers are Sguil alert IDs.
-
-| Time | Alert IDs | Recorded signal |
+| Time | Alert IDs | Alert |
 |---|---|---|
-| 13:38:34 | 5.410, 5.415 | WinHttpRequest executable download and PE executable/DLL download over HTTP. |
-| 13:43:52 | 5.420 | Another PE executable/DLL download. |
-| 13:43:54 | 5.421, 5.422 | Terse executable downloader and a further PE download. |
-| 13:44:01 | 5.428, 5.429 | Public-IP lookup and Pushdo check-in. |
-| 13:44:04 | 5.431 | Pushdo command-and-control response. |
-| 13:44:32 | 5.438 | Possible Tor SSL traffic. |
+| 13:38:34 | 5.410, 5.415 | Executable download through WinHttpRequest, and a PE executable or DLL download over HTTP |
+| 13:43:52 | 5.420 | Another PE executable or DLL download |
+| 13:43:54 | 5.421, 5.422 | A terse executable downloader and another PE download |
+| 13:44:01 | 5.428, 5.429 | A public-IP lookup and a Pushdo check-in |
+| 13:44:04 | 5.431 | A Pushdo command-and-control response |
+| 13:44:32 | 5.438 | Possible Tor SSL traffic |
 
-Download alerts followed by Pushdo signatures supported the infection assessment. The selected alert window does not reveal the initial entry point or user action; those questions require endpoint evidence.
+Downloads first, then a Pushdo check-in within minutes: that order is what pointed to an infection. The alerts don't show how the first download started.
 
 ### Connecting the host to downloaded files
 
-NetworkMiner identified the internal endpoint as Windows and showed its MAC address and a Dell NIC vendor. Those values let me associate the host with the traffic without relying only on a malware label. Its Files view reconstructed three downloaded objects, and the object properties exposed their SHA-256 hashes.
+NetworkMiner identified the internal host as a Windows machine and showed its MAC address and a Dell network card. Its Files view rebuilt the three downloaded objects with their SHA-256 hashes, and I looked each one up on VirusTotal:
 
-I used those hashes to look up existing VirusTotal reports and recorded the results. The sizes below are visible in the NetworkMiner screenshots; the detection counts are from my written assessment.
-
-| Reconstructed object | Size in bytes | Vendor detections recorded during coursework | Recorded threat label |
+| Object | Size in bytes | VirusTotal detections then | Names VirusTotal listed |
 |---|---:|---:|---|
-| `gerv.gun` | 241,664 | 58 of 70 | Shiotob / Jaik |
-| `trow.exe` | 330,752 | 65 of 72 | Cutwail / Wigon |
-| `wp.exe` | 307,712 | 61 of 72 | Ursnif / Nymaim |
+| `gerv.gun` | 241,664 | 58 of 70 | Shiotob, Jaik |
+| `trow.exe` | 330,752 | 65 of 72 | Cutwail, Wigon |
+| `wp.exe` | 307,712 | 61 of 72 | Ursnif, Nymaim |
 
-The hashes linked each object to an existing malware report. These counts are the historical lookup results, not current VirusTotal verdicts or a measure of detection accuracy.
+The sizes are in my NetworkMiner screenshots and the detection counts in my written answers; today's VirusTotal results may differ. In the assessment I wrote: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
 
-The [skills-assessment submission](https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx) includes the Sguil timeline and NetworkMiner screenshots. The [after-action report](https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx) brings the host, files, hashes and recommendations together.
+### Recommendations {#response-recommendations}
 
-### What the alerts don't prove {#separating-alert-interpretation-from-proof}
+My report recommended isolating the host, updating its endpoint protection, blocking the three domains the files came from, segmenting the network and training users.
 
-Two alerts needed particular care when reviewing the original conclusions:
+## Limits {#separating-alert-interpretation-from-proof}
 
-- **Public-IP lookup:** alert 5.428 records a DNS lookup for the host's public address. It occurs after the initial downloads. Its presence does not make the public DNS resolver malicious or establish that the lookup started the infection.
-- **Possible Tor traffic:** alert 5.438 is a signature's classification of traffic. The assessment did not independently establish a working Tor tunnel or the purpose of any encrypted session.
+- My report says the downloaded files ran on the host. The alerts show downloads and network traffic, not execution; that would take endpoint logs.
+- It also calls the OpenDNS lookup malicious and suggests the lookup started the infection. The lookup came after the first downloads, and OpenDNS is a legitimate service the malware used to find its public address.
+- "Possible Tor" is how one signature labels the traffic, not a confirmed Tor connection.
+- The recommendations weren't carried out; the exercise ended with the report.
+- The repository holds the report and screenshots, not the capture or the Security Onion data, so the sequence can't be replayed from it.
 
-The report also described downloaded files as having run on the endpoint. The preserved screenshots show downloads and network alerts, but no endpoint process telemetry verifies execution.
+## Sources {#course-repository}
 
-### Response recommendations
+- [Skills assessment](https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx): the Sguil timeline, NetworkMiner screenshots and my answers
+- [After-action report](https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx): the host, files, hashes and recommendations
+- [CSIA 115 repository](https://github.com/jkosber/CyberOps-115), with the rest of the class's labs
 
-My after-action report recommended host isolation, updated endpoint protection, blocking identified malicious destinations, network segmentation and user training. These were recommendations, not response actions I performed. The exercise ended with investigation and reporting.
-
-A repeat investigation would need the original capture and endpoint logs to examine initial access, process execution and persistence. The repository preserves the report and screenshots, but not the full Security Onion evidence set. That limits independent replay of the incident sequence.
-
-## Testing an alert and a firewall rule
-
-In the Mininet lab, H5 requested a file from H10's nginx service through R1, which ran Snort and `iptables`. My screenshots show an existing Snort signature firing, several HTTP 404 responses caused by an incorrect requested filename, and a successful HTTP 200 download after correcting the name.
-
-I then inserted a DROP rule into R1's FORWARD chain for TCP traffic to the simulated server's listening port. The screenshot confirms the rule was present; my written retest answer records that the download was blocked.
-
-[Read the Snort, firewall rules & HTTP recovery case study](snort-firewall-lab.md) for the topology, command excerpts, request failure and correction, capture results and retest limits. This used the supplied Snort rule set, not signatures I authored.
-
-## Recovering a file from captured traffic
-
-The companion exercise used Wireshark's **Follow TCP Stream** and **Export Objects → HTTP** on a course-supplied capture. The recovered object was a renamed substitute executable, not real Nimda malware. I saved it under a different filename because a file with the original name already existed.
-
-The stream's HTTP `Content-Length` and the saved file listing both show **345,088 bytes**. That supports recovery of the recorded HTTP object. It is a different file from the **475,448-byte** download visible in the earlier Mininet exercise, despite their similar filenames. No hash comparison or executable analysis was recorded for the recovered substitute.
-
-[HTTP recovery evidence and limitations](snort-firewall-lab.md#recovering-the-supplied-http-object) explains the source capture and the verification shown in my submission.
-
-## Course repository
-
-The [CyberOps coursework repository](https://github.com/jkosber/CyberOps-115) also holds exercises in Windows administration, Linux logs and permissions, Nmap, protocol analysis, access control lists and incident handling.
-
-[CSIA 115 class page](../coursework/csia-115.md) · [Certifications](../credentials/index.md) · [All projects](index.md)
+[CSIA 115 class page](../coursework/csia-115.md) · [Snort and firewall lab](snort-firewall-lab.md) · [All coursework](../coursework/index.md)
