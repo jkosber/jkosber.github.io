@@ -48,12 +48,33 @@ async (page) => {
     };
   });
 
+  // Header: GitHub and LinkedIn stay visible beside the name with the menu closed.
+  const SOCIAL = [
+    ['GitHub profile', 'https://github.com/jkosber'],
+    ['LinkedIn profile', 'https://www.linkedin.com/in/jadon-kosberg'],
+  ];
+  const socialState = (target) => target.evaluate((social) => {
+    const header = document.querySelector('.site-header');
+    const missing = social.filter(([label, href]) => {
+      const link = header && header.querySelector(`a[aria-label="${label}"][href="${href}"]`);
+      if (!link || link.offsetParent === null) return true;
+      const box = link.getBoundingClientRect();
+      return box.width < 40 || box.height < 40;
+    }).map(([label]) => label);
+    return { missing, overflow: header ? header.scrollWidth - header.clientWidth : 0 };
+  }, SOCIAL);
+  result.checks.header = 0;
+
   for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of routes) {
       const response = await page.goto(BASE + route);
       const expected = route === MISSING ? 404 : 200;
       if (response.status() !== expected) result.problems.push(`${route} @${width}: HTTP ${response.status()}`);
+      const header = await socialState(page);
+      result.checks.header += 1;
+      if (header.missing.length) fail(`header ${route} @${width}: missing or under 40px: ${header.missing.join(', ')}`);
+      if (header.overflow > 0) fail(`header ${route} @${width}: header overflows by ${header.overflow}px`);
       const state = await settle();
       if (state.overflow > 0) result.problems.push(`${route} @${width}: ${state.overflow}px horizontal overflow`);
       if (state.broken.length) result.problems.push(`${route} @${width}: broken images ${state.broken.join(', ')}`);
@@ -67,8 +88,26 @@ async (page) => {
   await page.goto(BASE + '/');
   await page.click('.menu-toggle');
   result.menu.opened = await page.getAttribute('.menu-toggle', 'aria-expanded');
+  const navTexts = await page.$$eval('.main-nav a', (links) => links.map((link) => link.textContent.trim()));
   await page.keyboard.press('Escape');
   result.menu.afterEscape = await page.getAttribute('.menu-toggle', 'aria-expanded');
+  if (result.menu.opened !== 'true') fail('menu: the toggle does not open the menu');
+  if (result.menu.afterEscape !== 'false') fail('menu: Escape leaves the menu open');
+
+  // Main nav: no Home item (the name links home); sections keep their order.
+  result.checks.nav = navTexts;
+  if (navTexts.includes('Home')) fail(`nav: still lists Home (${navTexts.join(', ')})`);
+  const order = ['Projects', 'Experience', 'About'].map((title) => navTexts.indexOf(title));
+  if (order.includes(-1) || order.some((position, index) => index && position < order[index - 1])) fail(`nav: expected Projects, Experience, About in order, got ${navTexts.join(', ')}`);
+
+  // Footer: email, both profiles, the site's source; no duplicate About link.
+  const footer = await page.$$eval('.site-footer a', (links) => links.map((link) => ({ text: link.textContent.trim(), href: link.getAttribute('href') })));
+  result.checks.footer = footer.length;
+  for (const [text, href] of [['Jadon@jnkos.com', 'mailto:Jadon@jnkos.com'], ['LinkedIn', 'https://www.linkedin.com/in/jadon-kosberg'], ['GitHub', 'https://github.com/jkosber']]) {
+    if (!footer.some((link) => link.text === text && link.href === href)) fail(`footer: missing ${text} link`);
+  }
+  if (!footer.some((link) => link.href === 'https://github.com/jkosber/jkosber.github.io')) fail('footer: missing the site source link');
+  if (footer.some((link) => link.text === 'About me')) fail('footer: still has the About me link');
 
   // Project filters: the count text and the number of visible cards must agree.
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -206,6 +245,8 @@ async (page) => {
     }));
     if (state.overflow > 0) result.problems.push(`no-JS ${route}: ${state.overflow}px horizontal overflow`);
     if (state.navLinks === 0) result.problems.push(`no-JS ${route}: navigation hidden`);
+    const plainHeader = await socialState(plain);
+    if (plainHeader.missing.length) fail(`no-JS ${route}: header missing ${plainHeader.missing.join(', ')}`);
     const hidden = (await revealOpacities(plain)).filter((value) => value < 0.99).length;
     if (hidden) fail(`no-JS ${route}: ${hidden} .reveal element(s) stay hidden in view`);
   }
