@@ -154,41 +154,110 @@ async (page) => {
     if (index.leftovers) fail(`projectsIndex @${width}: ${index.leftovers} filter, toolbar or card element(s) remain`);
   }
 
-  // Homepage: intro with facts, real captures for the lead projects, rows for the rest,
-  // the classes (once Coursework exists) and both roles. The hero scene is gone (approved Oct 23).
+  // Homepage: a hero band with the name and three facts, the two lead projects as feature panels
+  // with real captures, the job-scan row, a tile per class and a card per role.
+  // The hero scene is gone (approved Oct 23).
+  const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
+  const FACT_TITLES = ['IT Support Contractor', 'CompTIA Security+ and A+', 'B.S. in Informatics, Indiana University'];
   result.checks.home = {};
   for (const [width, height] of [[1440, 900], [390, 844]]) {
     await page.setViewportSize({ width, height });
     await page.goto(BASE + '/');
-    const home = await page.evaluate(() => {
+    const home = await page.evaluate(async () => {
       const main = document.querySelector('main');
-      const showcases = [...main.querySelectorAll('.showcase')];
-      const firstImage = showcases[0] && showcases[0].querySelector('img');
-      const navTitles = [...document.querySelectorAll('.main-nav a')].map((link) => link.textContent.trim());
+      const text = (element) => (element ? element.textContent.replace(/\s+/g, ' ').trim() : '');
+      const features = [...main.querySelectorAll('.feature')];
+      const firstImage = features[0] && features[0].querySelector('img');
+      const tileArt = [];
+      for (const image of main.querySelectorAll('.tiles .tile-art')) {
+        image.scrollIntoView({ behavior: 'instant' });
+        if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
+        tileArt.push({ src: image.getAttribute('src'), alt: image.getAttribute('alt'), loaded: image.naturalWidth > 0 });
+      }
       return {
-        name: (main.querySelector('h1') || {}).textContent?.replace(/\s+/g, ' ').trim(),
-        facts: main.querySelectorAll('.facts > div').length,
-        showcases: showcases.map((item) => item.querySelector('h3').textContent.trim()),
+        name: text(main.querySelector('h1')),
+        facts: [...main.querySelectorAll('.facts > div')].map((cell) => ({ title: text(cell.querySelector('a')), detail: text(cell.querySelector('.detail')) })),
+        features: features.map((feature) => {
+          const button = feature.querySelector('a.button');
+          return {
+            title: text(feature.querySelector('h3')),
+            result: Boolean(feature.querySelector('.result')),
+            tools: feature.querySelectorAll('ul.tools[role="list"] li').length,
+            button: button ? { text: text(button), sr: text(button.querySelector('.sr')) } : null,
+          };
+        }),
         firstImage: firstImage ? { src: firstImage.getAttribute('src'), width: firstImage.getAttribute('width'), height: firstImage.getAttribute('height') } : null,
-        rows: main.querySelectorAll('.project-row').length,
-        hasCoursework: navTitles.includes('Coursework'),
-        classes: main.querySelectorAll('.class-list li').length,
-        roles: main.querySelectorAll('.home-experience .experience-entry').length,
+        liftedFeatures: main.querySelectorAll('.feature.lift').length,
+        minor: text(main.querySelector('.minor h3')),
+        tiles: main.querySelectorAll('.tiles > li').length,
+        codes: [...main.querySelectorAll('.tile-code')].map(text),
+        tileArt,
+        roles: [...main.querySelectorAll('.home-experience .role-card')].map((card) => {
+          const image = card.querySelector('img');
+          return image ? { src: image.getAttribute('src'), alt: image.getAttribute('alt') } : null;
+        }),
         scene: main.querySelectorAll('.hero-visual, .scene-art, [data-scene-select]').length,
         reveals: main.querySelectorAll('.reveal').length,
       };
     });
-    result.checks.home[width] = home;
+    result.checks.home[width] = { features: home.features.map((feature) => feature.title), tiles: home.tiles, roles: home.roles.length, reveals: home.reveals };
     const where = `home @${width}`;
     if (home.name !== 'Jadon Kosberg') fail(`${where}: h1 is "${home.name}"`);
-    if (home.facts !== 3) fail(`${where}: ${home.facts} facts, expected 3`);
-    if (home.showcases.length !== 2 || home.showcases[0] !== 'Proxmox homelab') fail(`${where}: showcases ${home.showcases.join(', ')}`);
-    if (!home.firstImage || !home.firstImage.src.endsWith('homepage-dashboard-2026-10-23.webp') || !home.firstImage.width || !home.firstImage.height) fail(`${where}: first showcase image ${JSON.stringify(home.firstImage)}`);
-    if (home.rows < 1) fail(`${where}: no project rows after the showcases`);
-    if (home.hasCoursework && home.classes !== 6) fail(`${where}: coursework lists ${home.classes} classes, expected 6`);
-    if (home.roles !== 2) fail(`${where}: ${home.roles} roles, expected 2`);
+    if (home.facts.length !== 3) fail(`${where}: ${home.facts.length} facts, expected 3`);
+    if (home.facts.map((fact) => fact.title).join('|') !== FACT_TITLES.join('|')) fail(`${where}: fact links ${home.facts.map((fact) => fact.title).join(', ')}`);
+    home.facts.forEach((fact, index) => { if (!fact.detail) fail(`${where}: fact ${index + 1} has no .detail`); });
+    if (home.features.map((feature) => feature.title).join('|') !== 'Proxmox homelab|SSH Workbench') fail(`${where}: features ${home.features.map((feature) => feature.title).join(', ')}`);
+    if (!home.firstImage || !home.firstImage.src.endsWith('homepage-dashboard-2026-10-23.webp') || !home.firstImage.width || !home.firstImage.height) fail(`${where}: first feature image ${JSON.stringify(home.firstImage)}`);
+    for (const feature of home.features) {
+      if (!feature.result) fail(`${where}: feature ${feature.title} has no .result`);
+      if (feature.tools < 3) fail(`${where}: feature ${feature.title} lists ${feature.tools} tools, expected at least 3`);
+      if (!feature.button) fail(`${where}: feature ${feature.title} has no a.button`);
+      else {
+        if (!feature.button.text.startsWith('Read the case study')) fail(`${where}: feature ${feature.title} button reads "${feature.button.text}"`);
+        if (!feature.button.sr.includes(feature.title)) fail(`${where}: feature ${feature.title} button's .sr text is "${feature.button.sr}"`);
+      }
+    }
+    if (home.liftedFeatures) fail(`${where}: ${home.liftedFeatures} feature panel(s) carry .lift`);
+    if (home.minor !== 'Job scan and resume tailor') fail(`${where}: .minor h3 is "${home.minor}"`);
+    if (home.tiles !== 6) fail(`${where}: ${home.tiles} class tiles, expected 6`);
+    if (home.codes.join('|') !== expectedClasses.join('|')) fail(`${where}: tile codes ${home.codes.join(', ')}`);
+    if (home.tileArt.length !== home.tiles) fail(`${where}: ${home.tileArt.length} tile images for ${home.tiles} tiles`);
+    for (const art of home.tileArt) {
+      if (art.alt !== '') fail(`${where}: tile art ${art.src} alt is "${art.alt}", expected ""`);
+      if (!art.loaded) fail(`${where}: tile art ${art.src} did not load`);
+    }
+    if (home.roles.length !== 2) fail(`${where}: ${home.roles.length} role cards, expected 2`);
+    home.roles.forEach((image, index) => {
+      if (!image || !image.src.includes('assets/roles/') || image.alt !== '') fail(`${where}: role card ${index + 1} image ${JSON.stringify(image)}`);
+    });
     if (home.scene) fail(`${where}: the hero scene is still on the page`);
     if (home.reveals < 2) fail(`${where}: ${home.reveals} .reveal targets, expected at least 2`);
+  }
+
+  // A real screenshot shows in the first screen on desktops.
+  result.checks.firstShot = {};
+  for (const [width, height] of [[1440, 900], [1920, 1080]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(BASE + '/');
+    const top = await page.evaluate(() => { const image = document.querySelector('.feature img'); return image ? Math.round(image.getBoundingClientRect().top) : null; });
+    result.checks.firstShot[`${width}x${height}`] = top;
+    if (top === null || top > 740) fail(`firstShot ${width}x${height}: the first feature screenshot starts at ${top}px, expected 740 or less`);
+  }
+
+  // Nothing covers a feature's button where the screenshot overhangs the panel on tablets.
+  result.checks.coveredButtons = 0;
+  for (const [width, height] of [[768, 1024], [1024, 768]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(BASE + '/');
+    const buttons = await page.evaluate(() => [...document.querySelectorAll('.feature a.button')].map((button) => {
+      button.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const box = button.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+      return { text: button.textContent.replace(/\s+/g, ' ').trim(), covered: !hit || !button.contains(hit), by: hit ? `${hit.tagName.toLowerCase()}.${hit.className}` : null };
+    }));
+    result.checks.coveredButtons += buttons.length;
+    if (buttons.length !== 2) fail(`coveredButtons @${width}: ${buttons.length} feature buttons, expected 2`);
+    for (const button of buttons) if (button.covered) fail(`coveredButtons @${width}: "${button.text}" is covered by ${button.by}`);
   }
 
   // Coursework index: one table row per class in nav order, each linking to a live class page,
@@ -201,7 +270,6 @@ async (page) => {
     depth: [...row.cells[row.cells.length - 1].querySelectorAll('a')].map((link) => link.textContent.trim()),
   })));
   result.checks.courseworkIndex = classes.map((row) => row.name);
-  const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
   if (classes.map((row) => row.name.slice(0, 8)).join('|') !== expectedClasses.join('|')) fail(`courseworkIndex: rows ${classes.map((row) => row.name).join(', ')}`);
   const expectedDepth = { 'SVAD 111': ['AdventureWorks on AWS'], 'CSIA 115': ['CyberOps & traffic investigation', 'Snort and firewall lab'], 'CSIA 210': ['IPv6 packet investigations'] };
   for (const row of classes) {
@@ -327,7 +395,7 @@ async (page) => {
   }
 
   await page.goto(BASE + '/');
-  const homeRoles = await page.evaluate(() => [...document.querySelectorAll('.home-experience .experience-entry')].map((entry) => ({
+  const homeRoles = await page.evaluate(() => [...document.querySelectorAll('.home-experience .role-card')].map((entry) => ({
     link: [...entry.querySelectorAll('a')].map((link) => { const url = new URL(link.href); return url.pathname + url.hash; }),
     summary: (entry.querySelector('.role-summary') || { textContent: '' }).textContent.replace(/\s+/g, ' ').trim(),
   })));
@@ -528,6 +596,25 @@ async (page) => {
     });
     result.checks.hoverLift = lifted;
     if (lifted > -1.5) fail(`hoverLift: a hovered project row moves ${lifted}px, expected about -2px`);
+  }
+
+  // Hover: class tiles are whole-card links and lift the same 2 px.
+  await page.goto(BASE + '/');
+  if (await page.locator('.tile.lift').count() === 0) fail('tileLift: no .tile.lift on the homepage');
+  else {
+    const tile = page.locator('.tile.lift').first();
+    await tile.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    await tile.hover();
+    await page.waitForTimeout(300);
+    const lifted = await tile.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const shift = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform).m42;
+      const translate = style.translate === 'none' ? 0 : parseFloat(style.translate.split(' ')[1] || '0');
+      return shift + translate;
+    });
+    result.checks.tileLift = lifted;
+    if (lifted > -1.5) fail(`tileLift: a hovered class tile moves ${lifted}px, expected about -2px`);
   }
 
   // Scroll fade-up targets end fully visible once they are in view.
