@@ -3,7 +3,7 @@
 {% set page_title = (page.meta.title or page.title) if page else 'Page not found' %}
 {% set full_title = page_title ~ ' | ' ~ config.site_name if not page or not page.is_homepage else config.site_name %}
 {% set page_description = (page.meta.description or config.site_description) if page else 'This page could not be found. Browse projects and professional experience from Jadon Kosberg.' %}
-{% set social_image_alt = 'Jadon Kosberg — IT portfolio. IT infrastructure, networking and cybersecurity, beside an exploded technical assembly.' %}
+{% set social_image_alt = 'Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.' %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
