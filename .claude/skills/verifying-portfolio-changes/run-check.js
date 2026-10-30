@@ -1,7 +1,7 @@
 // Runs check-site.js outside the Playwright MCP tool, in Chromium or WebKit.
 // Usage: node run-check.js <chromium|webkit>
-// PLAYWRIGHT_MODULE points at a Node Playwright install whose browser builds are
-// downloaded; without it, `playwright` is resolved the usual way.
+// PLAYWRIGHT_MODULE points at a Node Playwright install; without it, `playwright`
+// is resolved the usual way.
 // PLAYWRIGHT_CHROMIUM_PATH names a Chromium executable to launch instead of
 // Playwright's download; ignored for WebKit.
 const fs = require('fs');
@@ -22,7 +22,7 @@ function main() {
   try {
     playwright = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
   } catch {
-    console.error('Playwright not found: set PLAYWRIGHT_MODULE to a Node Playwright install whose browsers are downloaded.');
+    console.error('Playwright not found: set PLAYWRIGHT_MODULE to a Node Playwright install (its browsers need downloading only for engines not given an executable path).');
     process.exit(2);
   }
   // check-site.js is a bare function expression so the MCP tool can load it; compile it here.
