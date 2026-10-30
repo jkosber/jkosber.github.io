@@ -43,6 +43,30 @@ class Tree(HTMLParser):
                 if node[0] == tag and all(node[1].get(key) == value for key, value in attrs.items())]
 
 
+class SummaryText(HTMLParser):
+    """Each summary's text, joined the way a screen reader reads its parts in a row."""
+
+    def __init__(self, html):
+        super().__init__(convert_charrefs=True)
+        self.summaries = []
+        self.inside = False
+        self.feed(html)
+        self.close()
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "summary":
+            self.inside = True
+            self.summaries.append("")
+
+    def handle_endtag(self, tag):
+        if tag == "summary":
+            self.inside = False
+
+    def handle_data(self, data):
+        if self.inside:
+            self.summaries[-1] += data
+
+
 def nearest(around, tag):
     return next((node for node in reversed(around) if node[0] == tag), None)
 
@@ -101,8 +125,8 @@ class ClassSectionsTests(unittest.TestCase):
         tree = Tree(result)
         modules = tree.find("details")
         self.assertEqual([node[1] for node, _ in modules], [{"class": "lab-module"}, {"class": "lab-module"}])
-        self.assertIn('<summary><h3 id="m1">One</h3><span class="lab-count">2 labs</span></summary>', result)
-        self.assertIn('<summary><h3 id="m2">Two</h3><span class="lab-count">1 lab</span></summary>', result)
+        self.assertIn('<summary><h3 id="m1">One</h3> <span class="lab-count">2 labs</span></summary>', result)
+        self.assertIn('<summary><h3 id="m2">Two</h3> <span class="lab-count">1 lab</span></summary>', result)
         regions = {node[1]["aria-label"]: nearest(around, "details") for node, around in tree.find("div", role="region")}
         self.assertIs(regions["Table 1: One"], modules[0][0])
         self.assertIs(regions["Table 2: Two"], modules[1][0])
@@ -115,8 +139,15 @@ class ClassSectionsTests(unittest.TestCase):
         ], 1)
         result = ClassSections(source).render()
         self.assertIn('<details class="lab-module"><summary><h3 id="m0">Zero</h3></summary>', result)
-        self.assertIn('<summary><h3 id="m1">One</h3><span class="lab-count">1 lab</span></summary>', result)
+        self.assertIn('<summary><h3 id="m1">One</h3> <span class="lab-count">1 lab</span></summary>', result)
         self.assertNotIn("0 labs", result)
+
+    def test_the_lab_count_reads_as_a_separate_word(self):
+        # The count sits apart from the heading only through CSS; without whitespace in the markup
+        # a screen reader can run them together ("One2 labs").
+        source = '<h2 id="labs">Labs</h2>\n<h3 id="m0">Zero</h3>\n<p>Nothing of mine survived.</p>\n' + LABS.split("\n", 1)[1]
+        summaries = SummaryText(ClassSections(source).render()).summaries
+        self.assertEqual([" ".join(text.split()) for text in summaries], ["Zero", "One 2 labs", "Two 1 lab"])
 
     def test_lab_tables_get_roles_and_a_visual_label(self):
         result = ClassSections(LABS).render()
