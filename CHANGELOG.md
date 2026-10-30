@@ -1,5 +1,14 @@
 # Portfolio change record
 
+## October 30, 2026 — page titles at 200% text
+
+- Page titles: at 320 and 390px with 200% text, the titles of 15 of the 18 pages split a word across lines, among them "Workbe" and "nch" on SSH Workbench, because the title's 2.25rem floor grew to 72px in a column 225 to 310px wide. The title is now capped at 12% of its column (`12cqi`), which fits the longest title word, "AdventureWorks". The cap never drops below `72px - 2.25rem`, which is the 36px floor at the default text size and 0 at 200%, so it changes nothing at the default size. In headed Chromium at 200% text the title is now 27px at 320px, about the breadcrumb's size, and 35.4px at 390px; the description below it is 36px.
+- The page head's text column, the heading band on the index pages and Experience, and the 404 page are size containers, so the cap measures the title's own column, including the narrower one beside the Result above 1100px.
+- Checks: `check-site.js` gained `titleWrap`, which looks for words broken mid-word in every page title, the homepage name among them, at 200% text at 320 and 390px, through the same helper as the existing 200% text check. The homepage name moved from that check to `titleWrap`.
+- `CLAUDE.md` and the verification skill describe the cap and the check.
+
+Validation: 33 tests and the strict build passed. Before the fix, `run-check.js chromium` reported 25 problems, all from `titleWrap`: 10 pages at 390px and 15 at 320px. After it, `run-check.js chromium` with the system Chromium exited 0 with `problems: []` across all 18 pages and the 404 page, with `titleWrap` covering 19 titles at each width, and the Playwright MCP's headed Chromium returned `problems: []` on its first run, with `tileLift` at -2px. At the default text size, full-page screenshots of all 18 pages and the 404 page at 320, 390, 768 and 1440px matched `main` byte for byte: 76 of 76 with headless Chromium's scrollbars hidden and 76 of 76 with its 15px scrollbars shown. The same comparison at 200% text at 390px differed on every page but the homepage, whose name was unchanged. At 200% text the AdventureWorks title also split at 600, 1101 and 1440px on `main`, widths the check does not cover, and stays whole at all three now. "AdventureWorks" still splits at 320px at the default text size, as it does on `main`, since 36px is the floor there and this change leaves the default size alone. WebKit has not been run for this change. Screen readers, physical devices and Safari on iOS were not assessed.
+
 ## October 30, 2026 — screen reader fixes
 
 - Labels and values: the Result label in a case study's page head, the Result title on class pages, each strip and facts term, and each homepage facts detail line now have a space before the text beside them. CSS shows each on its own line, so the markup had none, and a screen reader could read "ResultEight tagged releases".
