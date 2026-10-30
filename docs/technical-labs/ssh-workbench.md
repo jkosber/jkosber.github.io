@@ -2,13 +2,14 @@
 title: SSH Workbench
 description: A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
-status: Version 0.3.0
+status: Version 0.3.3
 tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "I defined what Workbench does, planned each release as small tested tasks and tested it on my own machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
-  result: "Five tagged releases from October 20 to 23, 2026, after work began October 9. Version 0.3.0 passes 1,077 automated tests on Windows and Ubuntu."
-updated: "October 23, 2026"
+  result: "Eight tagged releases from October 20 to 24, 2026, after work began October 9. Version 0.3.3 passes 1,122 automated tests on Windows and Ubuntu."
+  source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
+updated: "October 30, 2026"
 screenshot:
   src: assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp
   width: 900
@@ -70,14 +71,14 @@ I developed SSH Workbench with AI coding agents in a test-first workflow. I set 
 
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
-- Every push runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.
+- Every pull request, and every push to `main` or a version tag, runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.
 - Real-machine checks use my own machines, and test keys are removed afterwards.
 
-I tested the terminal handoff in Windows Terminal, and the released version is installed as my own tool.
+I tested the terminal handoff in Windows Terminal and, on October 30, had it checked in Ghostty on Linux. The released version is installed as my own tool.
 
 ## Testing
 
-The 1,077 tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
+The automated tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
 
 Around the 0.2.0 release, checks on my own machines covered the parts tests can't:
 
@@ -97,15 +98,32 @@ Each fix started as a failing test, and the Ctrl+C handling was also checked in 
 
 The 0.3.0 layout was checked in Windows Terminal at sizes from 47×16, the narrowest it allows, up to 199×46, including a resize with the edit form open. Before it replaced my installed copy, the release build was installed separately and checked at 80×24, 50×24, 120×30 and 80×18, and it quit cleanly.
 
+Versions 0.3.1 to 0.3.3, released October 23 and 24, fixed status and key-setup problems:
+
+- Saving a machine while aliases were still being checked threw those checks away, and a `Match exec` command in the SSH config could draw over Workbench's screen. Version 0.3.1 fixed both, and each fix was compared side by side with 0.3.0 in Windows Terminal using a fictional SSH config.
+- K could open an empty key list, and it silently left out keys the SSH config offers that have no valid `.pub` file. Since 0.3.2 it says when there is no key to offer and names those keys in a "Not listed" line under the list.
+- An install error on a Windows machine printed as a block of PowerShell's CLIXML. Version 0.3.2 prints it as plain text. Version 0.3.3 keeps it on one line and, for an administrator account, says the key is installed only once the key file's permissions are set.
+
+For 0.3.2, a new script ran the POSIX key install command in bash, dash, zsh, fish and tcsh on a Linux Mint 22.3 machine, and all five passed. Key setup in 0.3.2 and 0.3.3 was checked against a Windows machine with an administrator account, where key login worked. The 0.3.1, 0.3.2 and 0.3.3 release builds each went through the same four-size check in Windows Terminal.
+
+On October 30 I had the terminal checks run on a Linux desktop for the first time: Ghostty 1.4.0 on Arch Linux under Wayland, with the repository's fixture scripts in place of real SSH and key commands. They covered the layout at 56, 59 and 111 columns and at 19 rows, the terminal handoff, key setup and quitting to a working shell. A machine's link opened example.com in the default browser. The run also caught a bug in the terminal fixture: on Linux it started its stand-in SSH under the system Python instead of the project's environment, so every connection failed until the fixture was fixed. The full suite, 1,124 tests by then, passed there with PowerShell 7 available for the Windows-script tests.
+
 ## Limits
 
-- macOS is untested, and so is opening links from a Linux desktop session.
-- The 0.3.0 layout has been checked in Windows Terminal only, not in Linux or macOS terminals.
+- macOS is untested.
+- On a Linux desktop, Workbench has been checked in one terminal, Ghostty on Arch Linux, with fixture scripts and no real SSH connection.
 - Saving rewrites the machine file in Workbench's own format, so comments and hand formatting are dropped. It asks before the first such save.
-- The repository is private, so the source is not linked here.
 
 ## Sources
 
-This page draws on the private repository's README, user guide, architecture notes, changelog, validation log and CI results as of October 23, 2026, and on my project notes.
+The repository has been public under the MIT license since October 24, 2026. This page draws on these files on `main` as of October 30, 2026, and on my project notes:
+
+- [README](https://github.com/jkosber/ssh-workbench/blob/main/README.md): features, platform support and install
+- [User guide](https://github.com/jkosber/ssh-workbench/blob/main/docs/guide.md): the machine file, every feature and troubleshooting
+- [Architecture notes](https://github.com/jkosber/ssh-workbench/blob/main/docs/architecture.md): how the code is organized and why
+- [Changelog](https://github.com/jkosber/ssh-workbench/blob/main/CHANGELOG.md): what changed in each release
+- [Validation log](https://github.com/jkosber/ssh-workbench/blob/main/docs/validation.md): checks in real terminals and on real machines, including the Linux desktop checks
+- [Testing guide](https://github.com/jkosber/ssh-workbench/blob/main/docs/testing.md): the automated checks and the manual terminal checks
+- [CI runs](https://github.com/jkosber/ssh-workbench/actions): Ruff, tests, package build and installed-package check on Windows and Ubuntu
 
 [All projects](index.md) · [Proxmox homelab](proxmox-virtualization.md)
