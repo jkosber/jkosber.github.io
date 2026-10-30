@@ -166,6 +166,34 @@ document.addEventListener('DOMContentLoaded', () => {
     event.viewTransition.skipTransition();
   });
 
+  // A table or screenshot wrapper is a named, focusable region only while it scrolls sideways, so
+  // one that fits adds no tab stop or landmark. The markup carries the attributes, so without
+  // JavaScript every wrapper stays reachable. Watching the content as well as the wrapper catches
+  // a font loading or the text size changing, which can widen a table without resizing its wrapper.
+  const scrollers = [...document.querySelectorAll('.table-scroll, .evidence-scroll')];
+  if (scrollers.length && 'ResizeObserver' in window) {
+    const built = new Map(scrollers.map((region) => [region,
+      ['role', 'tabindex', 'aria-label'].map((name) => [name, region.getAttribute(name)]).filter(([, value]) => value !== null)]));
+    const updateRegion = (region) => {
+      const scrolls = region.scrollWidth > region.clientWidth;
+      // A focused region keeps its tab stop until focus leaves, so focus never drops to the page.
+      if (!scrolls && region === document.activeElement) return;
+      for (const [name, value] of built.get(region)) {
+        if (scrolls) region.setAttribute(name, value);
+        else region.removeAttribute(name);
+      }
+    };
+    const regionObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) updateRegion(entry.target.closest('.table-scroll, .evidence-scroll'));
+    });
+    for (const region of scrollers) {
+      updateRegion(region);
+      region.addEventListener('blur', () => updateRegion(region));
+      regionObserver.observe(region);
+      if (region.firstElementChild) regionObserver.observe(region.firstElementChild);
+    }
+  }
+
   // Print every lab: open the folded modules, then close only the ones printing opened.
   const labModules = [...document.querySelectorAll('details.lab-module')];
   if (labModules.length) {

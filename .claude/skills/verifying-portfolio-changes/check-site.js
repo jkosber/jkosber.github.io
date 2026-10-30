@@ -66,6 +66,58 @@ async (page) => {
   }, SOCIAL);
   result.checks.header = 0;
 
+  // Table and screenshot wrappers are named, focusable regions only while they scroll sideways, so a
+  // wrapper that fits adds no tab stop or landmark. Without JavaScript the build-time markup keeps
+  // every one a region. A wrapper inside a closed module is neither shown nor reachable, so it is
+  // left out. `wait` gives the page's ResizeObserver two frames to follow the last layout change.
+  const regionState = (target, wait) => target.evaluate(async (frames) => {
+    if (frames) await new Promise((done) => { requestAnimationFrame(() => requestAnimationFrame(done)); setTimeout(done, 250); });
+    return [...document.querySelectorAll('.table-scroll, .evidence-scroll')].map((region, index) => ({
+      name: `${region.classList[0]} ${index + 1}`,
+      closed: Boolean(region.closest('details:not([open])')),
+      scrolls: region.scrollWidth > region.clientWidth,
+      role: region.getAttribute('role'),
+      tabindex: region.getAttribute('tabindex'),
+      label: region.getAttribute('aria-label'),
+    }));
+  }, wait);
+  const isRegion = (region) => region.role === 'region' && region.tabindex === '0' && Boolean(region.label && region.label.trim());
+  const regionProblems = (regions) => regions.filter((region) => !region.closed).flatMap((region) => {
+    if (region.scrolls && !isRegion(region)) return [`${region.name} scrolls sideways but has role ${region.role}, tabindex ${region.tabindex}, aria-label "${region.label}"`];
+    if (!region.scrolls && (region.role !== null || region.tabindex !== null || region.label !== null)) return [`${region.name} fits but keeps role ${region.role}, tabindex ${region.tabindex}, aria-label "${region.label}"`];
+    return [];
+  });
+  const regionCounts = (regions) => {
+    const shown = regions.filter((region) => !region.closed);
+    const scrolling = shown.filter((region) => region.scrolls).length;
+    return { scrolling, fitting: shown.length - scrolling, closed: regions.length - shown.length };
+  };
+  const addCounts = (total, counts) => {
+    for (const [key, value] of Object.entries(counts)) total[key] = (total[key] || 0) + value;
+    return total;
+  };
+  result.checks.scrollRegions = { load: {} };
+
+  // A label that CSS sets on its own line, or a value beside it, still needs whitespace between
+  // them in the markup, or a screen reader may run them together ("ResultEight tagged releases").
+  const labelSpacing = (target) => target.evaluate(() => {
+    const following = (node) => {
+      const range = document.createRange();
+      range.setStartAfter(node);
+      range.setEndAfter(node.parentNode.lastChild);
+      return range.toString();
+    };
+    const labels = [
+      ...document.querySelectorAll('.result-label, .panel-title, dl.strip dt, dl.facts dt, details.lab-module > summary > h3'),
+      ...[...document.querySelectorAll('dl.facts .detail')].map((detail) => detail.previousSibling).filter(Boolean),
+    ];
+    const glued = labels.map((node) => [node.textContent, following(node)])
+      .filter(([text, next]) => /\S$/.test(text) && /^\S/.test(next))
+      .map(([text, next]) => `"${text.trim().slice(-30)}" runs into "${next.trim().slice(0, 30)}"`);
+    return { checked: labels.length, glued };
+  });
+  result.checks.labelSpacing = 0;
+
   for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of routes) {
@@ -81,6 +133,14 @@ async (page) => {
       if (state.broken.length) result.problems.push(`${route} @${width}: broken images ${state.broken.join(', ')}`);
       if (state.splitWords.length) result.problems.push(`${route} @${width}: table words broken mid-word: ${state.splitWords.join(', ')}`);
       if (state.scrollingPairs) result.problems.push(`${route} @${width}: ${state.scrollingPairs} two-column table(s) scroll sideways`);
+      const regions = await regionState(page, true);
+      result.checks.scrollRegions.load[width] = addCounts(result.checks.scrollRegions.load[width] || {}, regionCounts(regions));
+      for (const problem of regionProblems(regions)) fail(`scrollRegions ${route} @${width}: ${problem}`);
+      if (width === 1440) {
+        const spacing = await labelSpacing(page);
+        result.checks.labelSpacing += spacing.checked;
+        for (const glued of spacing.glued) fail(`labelSpacing ${route}: ${glued}`);
+      }
     }
   }
 
@@ -104,6 +164,67 @@ async (page) => {
       result.checks.evidenceFit += regions.length;
       for (const region of regions) if (region.hidden > 1) fail(`evidenceFit ${route} @${width}: "${region.label}" hides ${region.hidden}px behind a sideways scroll`);
     }
+  }
+
+  // After load the regions follow the layout: narrowing the window gives a table that starts to
+  // scroll its tab stop back, widening takes it away again, larger text does the same as narrowing,
+  // and a lab module opened at 200% text on a phone makes its table a region if it scrolls.
+  result.checks.scrollRegions.resized = [];
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
+  for (const width of [1440, 320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const regions = await regionState(page, true);
+    const counts = regionCounts(regions);
+    result.checks.scrollRegions.resized.push({ width, ...counts });
+    for (const problem of regionProblems(regions)) fail(`scrollRegions /technical-labs/proxmox-virtualization/ resized to ${width}: ${problem}`);
+    if (width === 320 && !counts.scrolling) fail('scrollRegions: no region scrolls on the Proxmox page after narrowing to 320, so the resize proves nothing');
+  }
+  // Doubling the text size at 1440 px widens tables past their column without resizing the window.
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  {
+    const regions = await regionState(page, true);
+    const counts = regionCounts(regions);
+    result.checks.scrollRegions.textSize = counts;
+    for (const problem of regionProblems(regions)) fail(`scrollRegions /technical-labs/proxmox-virtualization/ @1440 at 200% text: ${problem}`);
+    if (!counts.scrolling) fail('scrollRegions: no region scrolls on the Proxmox page at 1440 with 200% text, so the text size change proves nothing');
+  }
+  // A region with keyboard focus keeps its tab stop while the window widens, so focus never drops
+  // to the page; once focus leaves, the region follows the layout again.
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
+  {
+    const index = await page.evaluate(() => {
+      const regions = [...document.querySelectorAll('.table-scroll, .evidence-scroll')];
+      const region = regions.find((item) => item.scrollWidth > item.clientWidth && item.getAttribute('tabindex') === '0');
+      if (region) region.focus();
+      return region ? regions.indexOf(region) : -1;
+    });
+    if (index === -1) fail('scrollRegions: no focusable scrolling region on the Proxmox page at 320 to focus');
+    else {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      const focused = (await regionState(page, true))[index];
+      const kept = await page.evaluate((i) => document.activeElement === document.querySelectorAll('.table-scroll, .evidence-scroll')[i], index);
+      await page.evaluate(() => document.activeElement.blur());
+      const left = (await regionState(page, true))[index];
+      result.checks.scrollRegions.focusKept = { region: focused.name, scrollsAt1440: focused.scrolls, focusKept: kept, tabindex: focused.tabindex, tabindexAfterBlur: left.tabindex };
+      const where = `scrollRegions /technical-labs/proxmox-virtualization/ ${focused.name} focused at 320 then widened to 1440`;
+      if (focused.scrolls) fail(`${where}: it still scrolls, so the check proves nothing`);
+      if (!kept) fail(`${where}: focus left it`);
+      if (!isRegion(focused)) fail(`${where}: it lost its role, tabindex or aria-label while focused (role ${focused.role}, tabindex ${focused.tabindex})`);
+      if (left.role !== null || left.tabindex !== null || left.label !== null) fail(`${where}: after focus left it keeps role ${left.role}, tabindex ${left.tabindex}`);
+    }
+  }
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(BASE + '/coursework/neti-109/');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  await page.waitForTimeout(150);
+  await page.evaluate(() => { for (const module of document.querySelectorAll('details.lab-module')) module.open = true; });
+  {
+    const regions = await regionState(page, true);
+    result.checks.scrollRegions.opened = regionCounts(regions);
+    if (!regions.length) fail('scrollRegions: no wrappers on /coursework/neti-109/');
+    for (const problem of regionProblems(regions)) fail(`scrollRegions /coursework/neti-109/ @320 at 200% text with every module open: ${problem}`);
   }
 
   // Mobile menu: opens, then Escape closes it.
@@ -764,6 +885,9 @@ async (page) => {
       };
     });
     result.checks.text200 += 1;
+    const enlarged = await regionState(page, true);
+    result.checks.scrollRegions.text200 = addCounts(result.checks.scrollRegions.text200 || {}, regionCounts(enlarged));
+    for (const problem of regionProblems(enlarged)) fail(`scrollRegions ${route} @390 at 200% text: ${problem}`);
     result.checks.stackedPairs = (result.checks.stackedPairs || 0) + state.pairs;
     if (state.scrollingPairs) fail(`stackedPairs ${route}: ${state.scrollingPairs} two-column table(s) scroll sideways at 200% text`);
     if (state.unmarkedPairs) fail(`stackedPairs ${route}: ${state.unmarkedPairs} two-column table(s) lack data-columns="2"`);
@@ -945,6 +1069,7 @@ async (page) => {
   // Without JavaScript: content and navigation stay usable at the narrowest width.
   const noJs = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 700 } });
   const plain = await noJs.newPage();
+  let noJsTables = 0;
   for (const route of routes.filter((r) => r !== MISSING)) {
     await plain.goto(BASE + route);
     const state = await plain.evaluate(() => ({
@@ -957,7 +1082,12 @@ async (page) => {
     if (plainHeader.missing.length) fail(`no-JS ${route}: header missing ${plainHeader.missing.join(', ')}`);
     const hidden = (await revealOpacities(plain)).filter((value) => value < 0.99).length;
     if (hidden) fail(`no-JS ${route}: ${hidden} .reveal element(s) stay hidden in view`);
+    const plainRegions = await regionState(plain, false);
+    result.checks.scrollRegions.noJs = (result.checks.scrollRegions.noJs || 0) + plainRegions.length;
+    noJsTables += plainRegions.filter((region) => region.name.startsWith('table-scroll') && isRegion(region)).length;
+    for (const region of plainRegions.filter((item) => !isRegion(item))) fail(`no-JS ${route}: ${region.name} lost its build-time role, tabindex or aria-label`);
   }
+  if (!noJsTables) fail('no-JS: no .table-scroll keeps role="region", tabindex="0" and an aria-label');
   // Printing without JavaScript still prints the lab rows inside the closed modules. Chromium lays
   // out a hidden table when script measures it, so the module's own height beside its summary and
   // the table's visibility are what show whether the rows print.
