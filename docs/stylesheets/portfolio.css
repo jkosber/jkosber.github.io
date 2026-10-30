@@ -322,9 +322,9 @@ p { max-width: 35em; }
 .head-text, .page-heading, .error-page { container-type: inline-size; }
 .page-head, .error-page { --title-size: min(clamp(2.25rem, 4.4vw, 3.5rem), max(100cqi / (var(--title-chars, 14) * var(--title-glyph)), 72px - 2.25rem)); }
 .page-head h1, .error-page h1 { margin: 0; font-size: var(--title-size); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
-/* The description stays smaller than the title: at most .6 of it, which binds only with enlarged text, and
-   never below its 18 px default size. */
-.dek, .page-heading > p { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: min(clamp(1.125rem, 1.5vw, var(--t-lead)), max(18px, var(--title-size) * .6)); line-height: 1.55; }
+/* With enlarged text the description shrinks to .6 of the title, but not below .9rem, about the breadcrumb's
+   size, and never above the title. At default text the product is at least 21.6 px, so none of it binds. */
+.dek, .page-heading > p { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: min(clamp(1.125rem, 1.5vw, var(--t-lead)), var(--title-size), max(.9rem, var(--title-size) * .6)); line-height: 1.55; }
 /* break-word, not the body's anywhere: a strip item wraps whole words before it splits one. */
 .strip { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin: var(--s4) 0 0; overflow-wrap: break-word; }
 .strip dt { color: var(--muted); font-size: var(--t-small); }
