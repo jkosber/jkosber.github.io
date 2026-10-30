@@ -176,6 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ['role', 'tabindex', 'aria-label'].map((name) => [name, region.getAttribute(name)]).filter(([, value]) => value !== null)]));
     const updateRegion = (region) => {
       const scrolls = region.scrollWidth > region.clientWidth;
+      // A focused region keeps its tab stop until focus leaves, so focus never drops to the page.
+      if (!scrolls && region === document.activeElement) return;
       for (const [name, value] of built.get(region)) {
         if (scrolls) region.setAttribute(name, value);
         else region.removeAttribute(name);
@@ -186,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     for (const region of scrollers) {
       updateRegion(region);
+      region.addEventListener('blur', () => updateRegion(region));
       regionObserver.observe(region);
       if (region.firstElementChild) regionObserver.observe(region.firstElementChild);
     }
