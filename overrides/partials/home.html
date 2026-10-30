@@ -4,7 +4,7 @@
     {% if page.meta.facts %}
     <dl class="facts enter enter-3">
       {% for fact in page.meta.facts %}
-      <div><dt>{{ fact.label }}</dt><dd>{% if fact.href %}<a href="{{ fact.href | url }}">{{ fact.text }}</a>{% else %}{{ fact.text }}{% endif %}{% if fact.detail %}<span class="detail">{{ fact.detail }}</span>{% endif %}</dd></div>
+      <div><dt>{{ fact.label }}</dt> <dd>{% if fact.href %}<a href="{{ fact.href | url }}">{{ fact.text }}</a>{% else %}{{ fact.text }}{% endif %}{% if fact.detail %} <span class="detail">{{ fact.detail }}</span>{% endif %}</dd></div>
       {% endfor %}
     </dl>
     {% endif %}

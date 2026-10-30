@@ -138,18 +138,18 @@
               {% if framed and page.meta.description %}<p class="dek">{{ page.meta.description }}</p>{% endif %}
               {% if page.meta.status or page.meta.updated or page.meta.term or page.meta.get('items') or page.meta.class_page or summary.source or page.meta.repo %}
               <dl class="strip">
-                {% if page.meta.status %}<div><dt>Status</dt><dd>{{ page.meta.status }}</dd></div>{% endif %}
-                {% if page.meta.updated %}<div><dt>Updated</dt><dd>{{ page.meta.updated }}</dd></div>{% endif %}
-                {% if page.meta.term %}<div><dt>Term</dt><dd>{{ page.meta.term }}</dd></div>{% endif %}
-                {% if page.meta.get('items') %}<div><dt>In the repo</dt><dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
-                {% if page.meta.class_page %}<div><dt>Class</dt><dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
-                {% if summary.source %}<div><dt>Source</dt><dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
-                {% elif page.meta.repo %}<div><dt>Source</dt><dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
+                {% if page.meta.status %}<div><dt>Status</dt> <dd>{{ page.meta.status }}</dd></div>{% endif %}
+                {% if page.meta.updated %}<div><dt>Updated</dt> <dd>{{ page.meta.updated }}</dd></div>{% endif %}
+                {% if page.meta.term %}<div><dt>Term</dt> <dd>{{ page.meta.term }}</dd></div>{% endif %}
+                {% if page.meta.get('items') %}<div><dt>In the repo</dt> <dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
+                {% if page.meta.class_page %}<div><dt>Class</dt> <dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
+                {% if summary.source %}<div><dt>Source</dt> <dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
+                {% elif page.meta.repo %}<div><dt>Source</dt> <dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}
               </dl>
               {% endif %}
             </div>
             {% if is_class %}{% if art %}<img class="head-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="">{% endif %}
-            {% elif summary.result %}<p class="result head-result"><span class="result-label">Result</span>{{ summary.result }}</p>{% endif %}
+            {% elif summary.result %}<p class="result head-result"><span class="result-label">Result</span> {{ summary.result }}</p>{% endif %}
           </div>
         </div></section>
         {% if shot %}
@@ -161,7 +161,7 @@
         {% if is_class and (summary.role or summary.built_with or summary.result) %}
         <div class="wrap summary-pair">
           {% if summary.role or summary.built_with %}{{ role_panel(summary) }}{% endif %}
-          {% if summary.result %}<div class="panel panel--result"><span class="panel-title">Result</span><p>{{ summary.result }}</p></div>{% endif %}
+          {% if summary.result %}<div class="panel panel--result"><span class="panel-title">Result</span> <p>{{ summary.result }}</p></div>{% endif %}
         </div>
         {% endif %}
         {# The contents come first in the source, so on phones they sit above the body. A wide page,
