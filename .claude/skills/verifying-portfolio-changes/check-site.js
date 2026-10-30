@@ -189,6 +189,32 @@ async (page) => {
     for (const problem of regionProblems(regions)) fail(`scrollRegions /technical-labs/proxmox-virtualization/ @1440 at 200% text: ${problem}`);
     if (!counts.scrolling) fail('scrollRegions: no region scrolls on the Proxmox page at 1440 with 200% text, so the text size change proves nothing');
   }
+  // A region with keyboard focus keeps its tab stop while the window widens, so focus never drops
+  // to the page; once focus leaves, the region follows the layout again.
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
+  {
+    const index = await page.evaluate(() => {
+      const regions = [...document.querySelectorAll('.table-scroll, .evidence-scroll')];
+      const region = regions.find((item) => item.scrollWidth > item.clientWidth && item.getAttribute('tabindex') === '0');
+      if (region) region.focus();
+      return region ? regions.indexOf(region) : -1;
+    });
+    if (index === -1) fail('scrollRegions: no focusable scrolling region on the Proxmox page at 320 to focus');
+    else {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      const focused = (await regionState(page, true))[index];
+      const kept = await page.evaluate((i) => document.activeElement === document.querySelectorAll('.table-scroll, .evidence-scroll')[i], index);
+      await page.evaluate(() => document.activeElement.blur());
+      const left = (await regionState(page, true))[index];
+      result.checks.scrollRegions.focusKept = { region: focused.name, scrollsAt1440: focused.scrolls, focusKept: kept, tabindex: focused.tabindex, tabindexAfterBlur: left.tabindex };
+      const where = `scrollRegions /technical-labs/proxmox-virtualization/ ${focused.name} focused at 320 then widened to 1440`;
+      if (focused.scrolls) fail(`${where}: it still scrolls, so the check proves nothing`);
+      if (!kept) fail(`${where}: focus left it`);
+      if (!isRegion(focused)) fail(`${where}: it lost its role, tabindex or aria-label while focused (role ${focused.role}, tabindex ${focused.tabindex})`);
+      if (left.role !== null || left.tabindex !== null || left.label !== null) fail(`${where}: after focus left it keeps role ${left.role}, tabindex ${left.tabindex}`);
+    }
+  }
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto(BASE + '/coursework/neti-109/');
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
