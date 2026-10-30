@@ -43,7 +43,7 @@
   {% endif %}
 </head>
 <body>
-  {% from "partials/components.html" import icon, feature, minor_row, class_tile, role_card, role_panel, project_row, experience_entries with context %}
+  {% from "partials/components.html" import icon, feature, minor_row, class_tile, role_card, role_panel, project_row, experience_entries, title_chars with context %}
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="identity">
@@ -72,7 +72,7 @@
         {% include "partials/home.html" %}
       {% elif page and page.meta.layout == 'projects' %}
         {# Index pages and Experience: the title and intro in a band, then the list below it. #}
-        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
+        <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
           {% for section in nav if section.title == 'Projects' %}
           <ul class="project-rows" role="list">
@@ -82,7 +82,7 @@
           <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
         </div>
       {% elif page and page.meta.layout == 'coursework' %}
-        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
+        <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
           {% for section in nav if section.title == 'Coursework' %}
           <div class="prose coursework-index">
@@ -105,7 +105,7 @@
           {% endfor %}
         </div>
       {% elif page and page.meta.layout == 'experience' %}
-        <section class="page-head band"><div class="wrap page-heading">{{ page.content }}</div></section>
+        <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
           {{ experience_entries() }}
           <p class="related-link">My homelab, software projects and coursework cover more Linux, networking and security work: see <a href="{{ 'technical-labs/' | url }}">Projects</a> and <a href="{{ 'coursework/' | url }}">Coursework</a>.</p>
@@ -125,7 +125,7 @@
         {% set shot = page.meta.screenshot %}
         {% set art = page.meta.art %}
         {% set body = parts[1].split('<h2', 1) %}
-        <section class="page-head band{% if shot %} page-head--shot{% endif %}"><div class="wrap">
+        <section class="page-head band{% if shot %} page-head--shot{% endif %}" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap">
           <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
             <li><a href="{{ nav.homepage.url | url }}">Home</a></li>
             {% if page.parent %}{% set parent_url = page.parent.children[0].url %}{% if parent_url != page.url %}<li aria-hidden="true">/</li><li><a href="{{ parent_url | url }}">{{ page.parent.title }}</a></li>{% endif %}{% endif %}
