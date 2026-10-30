@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>SSH Workbench | Jadon Kosberg</title>
+  <meta name="description" content="A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.">
+  
+  <link rel="canonical" href="https://jnkos.com/technical-labs/ssh-workbench/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fcb485258ac2">
+  <script src="../../javascripts/portfolio.js?v=635b55b9726f"></script>
+  
+  <meta property="og:title" content="SSH Workbench | Jadon Kosberg">
+  <meta property="og:description" content="A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/technical-labs/ssh-workbench/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../coursework/"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band page-head--shot"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../">Projects</a></li>
+            
+            <li aria-hidden="true">/</li><li><span aria-current="page">SSH Workbench</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="ssh-workbench">SSH Workbench</h1>
+              <p class="dek">A keyboard-driven terminal app for the machines I work on. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.</p>
+              
+              <dl class="strip">
+                <div><dt>Status</dt> <dd>Version 0.3.3</dd></div>
+                <div><dt>Updated</dt> <dd>October 30, 2026</dd></div>
+                
+                
+                
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/ssh-workbench">GitHub repository</a></dd></div>
+                
+              </dl>
+              
+            </div>
+            <p class="result head-result"><span class="result-label">Result</span> Eight tagged releases from October 20 to 24, 2026, after work began October 9. Version 0.3.3 passes 1,122 automated tests on Windows and Ubuntu.</p>
+          </div>
+        </div></section>
+        
+        <div class="wrap lead-shot"><figure class="shot">
+          <a class="zoom" href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp" tabindex="-1"><img src="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp" width="900" height="413" alt="SSH Workbench in Windows Terminal. The header counts 5 machines: 3 online, 1 offline and 1 can&#39;t check. The Machines list shows Web server, Lab box, Storage NAS, Build runner and Garage Pi, each with its alias or address on the right. The details pane for Lab box shows one row per field: ID, name, status Online at 192.0.2.20, a direct connection, two addresses, user, port 2222, key file and two links. The footer lists Connect, Link, Add, Edit, Delete, Key, Check and Quit." loading="eager"></a>
+          <figcaption>Version 0.3.0 in Windows Terminal, October 22, 2026, with fictional machines and statuses from a stand-in checker. <a href="../../assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp">Open full size</a></figcaption>
+        </figure></div>
+        
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#why-i-wanted-it">Why I wanted it</a><a href="#what-it-does">What it does</a><a href="#design-decisions">Design decisions</a><a href="#how-i-worked">How I worked</a><a href="#testing">Testing</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            <div class="panel role-panel">
+  <span class="panel-title">My role</span>
+  <p>I defined what Workbench does, planned each release as small tested tasks and tested it on my own machines.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg>Python 3.14</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M13.746 2.731H24l-1.722 3.873-3.143 1.768H17l-5.182 10.552-3.128 2.345H5.283l.747-11.216H1.67L0 6.296l2.511-1.884h8.246zM2.709 5.006l-1.45 1.088h8.952l.249-1.088zM.825 6.69l1.23 2.77h4.611l-.747 11.215h.941L10.074 6.69zm7.567 13.985 5.232-12.897h5.24l1.23-2.77H11.07L7.469 20.675zm14.02-17.35h-8.508l-1.935 1.087h8.505z"/></svg>Textual</li><li>OpenSSH</li><li>uv</li><li>pytest</li><li>Ruff</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M10.984 13.836a.5.5 0 0 1-.353-.146l-.745-.743a.5.5 0 1 1 .706-.708l.392.391 1.181-1.18a.5.5 0 0 1 .708.707l-1.535 1.533a.504.504 0 0 1-.354.146zm9.353-.147l1.534-1.532a.5.5 0 0 0-.707-.707l-1.181 1.18-.392-.391a.5.5 0 1 0-.706.708l.746.743a.497.497 0 0 0 .706-.001zM4.527 7.452l2.557-1.585A1 1 0 0 0 7.09 4.17L4.533 2.56A1 1 0 0 0 3 3.406v3.196a1.001 1.001 0 0 0 1.527.85zm2.03-2.436L4 6.602V3.406l2.557 1.61zM24 12.5c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3h-2.08a3.503 3.503 0 0 1-3.46 3 3.502 3.502 0 0 1-3.46-3h-.558c-.972 0-1.85-.399-2.482-1.042V17c0 1.654 1.346 3 3 3h.04c.244-1.693 1.7-3 3.46-3 1.93 0 3.5 1.57 3.5 3.5S13.43 24 11.5 24a3.502 3.502 0 0 1-3.46-3H8c-2.206 0-4-1.794-4-4V9.899A5.008 5.008 0 0 1 0 5c0-2.757 2.243-5 5-5s5 2.243 5 5a5.005 5.005 0 0 1-4.952 4.998A2.482 2.482 0 0 0 7.482 12h.558c.244-1.693 1.7-3 3.46-3a3.502 3.502 0 0 1 3.46 3h2.08a3.503 3.503 0 0 1 3.46-3c1.93 0 3.5 1.57 3.5 3.5zm-15 8c0 1.378 1.122 2.5 2.5 2.5s2.5-1.122 2.5-2.5-1.122-2.5-2.5-2.5S9 19.122 9 20.5zM5 9c2.206 0 4-1.794 4-4S7.206 1 5 1 1 2.794 1 5s1.794 4 4 4zm9 3.5c0-1.378-1.122-2.5-2.5-2.5S9 11.122 9 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm9 0c0-1.378-1.122-2.5-2.5-2.5S18 11.122 18 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm-13 8a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm12 0c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3.002c-.007.001-.013.005-.021.005l-.506.017h-.017a.5.5 0 0 1-.016-.999l.506-.017c.018-.002.035.006.052.007A3.503 3.503 0 0 1 20.5 17c1.93 0 3.5 1.57 3.5 3.5zm-1 0c0-1.378-1.122-2.5-2.5-2.5S18 19.122 18 20.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5z"/></svg>GitHub Actions</li></ul>
+</div>
+            
+<p>SSH Workbench is a terminal app that keeps the machines I work on in one list, each with its way to connect and its web dashboards. I pick a machine and press C, and my own OpenSSH client takes over the terminal. When the session ends, I'm back in the list with the same machine selected.</p>
+<p>It also shows whether each machine's SSH port is answering and walks through setting up key-based login. It runs on Windows 11 and Linux, and I've tested it against my Proxmox host, a Linux Mint laptop and two Windows PCs.</p>
+
+            <h2 id="why-i-wanted-it">Why I wanted it</h2>
+<p>I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. I did not want a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client I already use.</p>
+<h2 id="what-it-does">What it does</h2>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: What it does" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Key</th>
+<th role="columnheader">What happens</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">C</td>
+<td role="cell">Workbench suspends itself and runs <code>ssh</code> in the same terminal. Typing <code>exit</code> brings the list back.</td>
+</tr>
+<tr role="row">
+<td role="cell">R</td>
+<td role="cell">Checks every machine's SSH port again. Checks also run at startup and every 30 seconds.</td>
+</tr>
+<tr role="row">
+<td role="cell">O</td>
+<td role="cell">Opens one of the machine's web links, such as a Proxmox dashboard, in the default browser.</td>
+</tr>
+<tr role="row">
+<td role="cell">A, E</td>
+<td role="cell">Adds or edits a machine in a form that checks each field before saving.</td>
+</tr>
+<tr role="row">
+<td role="cell">X</td>
+<td role="cell">Deletes the selected machine after asking.</td>
+</tr>
+<tr role="row">
+<td role="cell">K</td>
+<td role="cell">Sets up key login: pick or create a key, install it on the machine, then test a key-only login.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Since 0.3.0 the header counts machines by status, and every status keeps its symbol and word, so nothing depends on color. The layout follows the terminal's size: under 60 columns the list sits above the details and the footer wraps onto two rows, and from 110 columns each row shows where the machine connects.</p>
+<p>A machine is either an alias from my SSH config or a direct entry with addresses, user, port and key. A direct machine can also be exported as an SSH alias, so <code>ssh &lt;id&gt;</code> works in any terminal and in scripts.</p>
+<h2 id="design-decisions">Design decisions</h2>
+<div class="narrative-list">
+<dl>
+<dt>OpenSSH does the connecting</dt>
+<dd><strong>Decision.</strong> Workbench checks every machine value against the same rules as its config file, then runs the system <code>ssh</code> with an argument list, no shell, and <code>--</code> before the destination.</dd>
+<dd><strong>Why.</strong> No value from the machine file can turn into an SSH option or a shell command. Passwords, keys, the SSH agent and host-key prompts stay with OpenSSH.</dd>
+<dt>Status checks never log in</dt>
+<dd><strong>Decision.</strong> A check opens a TCP connection to the SSH port and closes it without sending anything. For status, aliases are resolved with <code>ssh&nbsp;-G</code> only at startup and on R.</dd>
+<dd><strong>Why.</strong> A check every 30 seconds should not add login attempts to a server's auth log. <code>ssh&nbsp;-G</code> can run commands from the SSH config, so it never runs on a timer.</dd>
+<dt>Saves never leave a half-written file</dt>
+<dd><strong>Decision.</strong> Each save keeps a <code>.bak</code> copy and replaces the file in one step. If another program changed the file since it was loaded, Workbench reloads instead of overwriting.</dd>
+<dd><strong>Why.</strong> The machine file may be edited by hand or kept in a synced folder.</dd>
+<dt>Key setup never sees a secret</dt>
+<dd><strong>Decision.</strong> K reads only <code>.pub</code> files and runs two fixed commands on the machine, in the terminal it hands to SSH.</dd>
+<dd><strong>Why.</strong> SSH and <code>ssh-keygen</code> ask for passwords and passphrases themselves, so Workbench never handles a credential.</dd>
+</dl>
+</div>
+<h2 id="how-i-worked">How I worked</h2>
+<p>I developed SSH Workbench with AI coding agents in a test-first workflow. I set each task's goal and acceptance criteria, approved every pull request and release, and tested it on my own machines:</p>
+<ul>
+<li>One task per pull request, with written acceptance criteria in the roadmap.</li>
+<li>Tests first: each fix starts as a failing test.</li>
+<li>Every pull request, and every push to <code>main</code> or a version tag, runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.</li>
+<li>Real-machine checks use my own machines, and test keys are removed afterwards.</li>
+</ul>
+<p>I tested the terminal handoff in Windows Terminal and, on October 30, had it checked in Ghostty on Linux. The released version is installed as my own tool.</p>
+<h2 id="testing">Testing</h2>
+<p>The automated tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.</p>
+<p>Around the 0.2.0 release, checks on my own machines covered the parts tests can't:</p>
+<ul>
+<li>A new key installed and logged in alone on the Linux Mint laptop, and as administrator on both Windows PCs.</li>
+<li>Key setup on the Proxmox host, where the key file lives behind a cluster-filesystem link.</li>
+<li>A first connection that asked to trust a new host key. The fingerprint was compared before accepting.</li>
+</ul>
+<p>Real use then turned up five key-setup problems, fixed in 0.2.1. For example, a commented-out copy of a key counted as installed, and PowerShell progress output leaked into the result on Windows.</p>
+<p>Version 0.2.2 fixed three problems that reviews of earlier versions had set aside:</p>
+<ul>
+<li>Pressing Ctrl+C during key setup could still report "Key login works." and save the key. Now no later step runs after Ctrl+C.</li>
+<li>An RSA key too large for the Windows install command failed only after the password prompt. It is now refused before Workbench connects.</li>
+<li>A machine whose status check took over 30 seconds never left Checking, because each timer round replaced the check still running.</li>
+</ul>
+<p>Each fix started as a failing test, and the Ctrl+C handling was also checked in Windows Terminal. The same release moved development and CI to Python 3.14.8 and uv 0.13.4 for their security fixes.</p>
+<p>The 0.3.0 layout was checked in Windows Terminal at sizes from 47×16, the narrowest it allows, up to 199×46, including a resize with the edit form open. Before it replaced my installed copy, the release build was installed separately and checked at 80×24, 50×24, 120×30 and 80×18, and it quit cleanly.</p>
+<p>Versions 0.3.1 to 0.3.3, released October 23 and 24, fixed status and key-setup problems:</p>
+<ul>
+<li>Saving a machine while aliases were still being checked threw those checks away, and a <code>Match exec</code> command in the SSH config could draw over Workbench's screen. Version 0.3.1 fixed both, and each fix was compared side by side with 0.3.0 in Windows Terminal using a fictional SSH config.</li>
+<li>K could open an empty key list, and it silently left out keys the SSH config offers that have no valid <code>.pub</code> file. Since 0.3.2 it says when there is no key to offer and names those keys in a "Not listed" line under the list.</li>
+<li>An install error on a Windows machine printed as a block of PowerShell's CLIXML. Version 0.3.2 prints it as plain text. Version 0.3.3 keeps it on one line and, for an administrator account, says the key is installed only once the key file's permissions are set.</li>
+</ul>
+<p>For 0.3.2, a new script ran the POSIX key install command in bash, dash, zsh, fish and tcsh on a Linux Mint 22.3 machine, and all five passed. Key setup in 0.3.2 and 0.3.3 was checked against a Windows machine with an administrator account, where key login worked. The 0.3.1, 0.3.2 and 0.3.3 release builds each went through the same four-size check in Windows Terminal.</p>
+<p>On October 30 I had the terminal checks run on a Linux desktop for the first time: Ghostty 1.4.0 on Arch Linux under Wayland, with the repository's fixture scripts in place of real SSH and key commands. They covered the layout at 56, 59 and 111 columns and at 19 rows, the terminal handoff, key setup and quitting to a working shell. A machine's link opened example.com in the default browser. The run also caught a bug in the terminal fixture: on Linux it started its stand-in SSH under the system Python instead of the project's environment, so every connection failed until the fixture was fixed. The full suite, 1,124 tests by then, passed there with PowerShell 7 available for the Windows-script tests.</p>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>macOS is untested.</li>
+<li>On a Linux desktop, Workbench has been checked in one terminal, Ghostty on Arch Linux, with fixture scripts and no real SSH connection.</li>
+<li>Saving rewrites the machine file in Workbench's own format, so comments and hand formatting are dropped. It asks before the first such save.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<p>The repository has been public under the MIT license since October 24, 2026. This page draws on these files on <code>main</code> as of October 30, 2026, and on my project notes:</p>
+<ul>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/README.md">README</a>: features, platform support and install</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/docs/guide.md">User guide</a>: the machine file, every feature and troubleshooting</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/docs/architecture.md">Architecture notes</a>: how the code is organized and why</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/CHANGELOG.md">Changelog</a>: what changed in each release</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/docs/validation.md">Validation log</a>: checks in real terminals and on real machines, including the Linux desktop checks</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/blob/main/docs/testing.md">Testing guide</a>: the automated checks and the manual terminal checks</li>
+<li><a href="https://github.com/jkosber/ssh-workbench/actions">CI runs</a>: Ruff, tests, package build and installed-package check on Windows and Ubuntu</li>
+</ul>
+<p><a href="../">All projects</a> · <a href="../proxmox-virtualization/">Proxmox homelab</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Proxmox homelab | Jadon Kosberg</title>
+  <meta name="description" content="I built and maintain a Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network.">
+  
+  <link rel="canonical" href="https://jnkos.com/technical-labs/proxmox-virtualization/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fcb485258ac2">
+  <script src="../../javascripts/portfolio.js?v=635b55b9726f"></script>
+  
+  <meta property="og:title" content="Proxmox homelab | Jadon Kosberg">
+  <meta property="og:description" content="I built and maintain a Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/technical-labs/proxmox-virtualization/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../" aria-current="true"><span>Projects</span></a>
+        
+        
+        <a href="../../coursework/"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band page-head--shot"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../">Projects</a></li>
+            
+            <li aria-hidden="true">/</li><li><span aria-current="page">Proxmox homelab</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="proxmox-homelab">Proxmox homelab</h1>
+              <p class="dek">I built and maintain a Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network.</p>
+              
+              <dl class="strip">
+                <div><dt>Status</dt> <dd>Ongoing</dd></div>
+                <div><dt>Updated</dt> <dd>October 23, 2026</dd></div>
+                
+                
+                
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/JHomelab">JHomelab repository</a></dd></div>
+                
+              </dl>
+              
+            </div>
+            <p class="result head-result"><span class="result-label">Result</span> Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October I patched every host after a certificate authority compromise and set up monitoring that alerts me in Discord.</p>
+          </div>
+        </div></section>
+        
+        <div class="wrap lead-shot"><figure class="shot">
+          <a class="zoom" href="../../assets/evidence/homelab/homepage-dashboard-2026-10-23.webp" tabindex="-1"><img src="../../assets/evidence/homelab/homepage-dashboard-2026-10-23.webp" width="1232" height="944" alt="Homepage dashboard on October 23. Proxmox shows 1 of 10 VMs and 1 of 2 containers running; Portainer shows 7 containers running and none stopped; the host, VM 109 and CT 110 are up; Beszel reports 3 of 3 systems up; Uptime Kuma shows 7 sites up, 0 down and 100% uptime. Link lists for documentation and repositories sit below the panels." loading="eager"></a>
+          <figcaption>My homelab dashboard, October 23, 2026. <a href="../../assets/evidence/homelab/homepage-dashboard-2026-10-23.webp">Open full size</a></figcaption>
+        </figure></div>
+        
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#how-the-lab-fits-together">How the lab fits together</a><a href="#host-and-storage">Host and storage</a><a href="#linux-guests-and-container-services">Linux guests and container services</a><a href="#network-configuration">Network configuration</a><a href="#recorded-validation">Health check</a><a href="#october-maintenance">October maintenance</a><a href="#gpu-passthrough-preparation">GPU passthrough preparation</a><a href="#what-i-have-learned">What I have learned</a><a href="#limits">Limits</a><a href="#next-changes">Next changes</a><a href="#sources-and-artifacts">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            <div class="panel role-panel">
+  <span class="panel-title">My role</span>
+  <p>I built and run it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4.928 1.825c-1.09.553-1.09.64-.07 1.78 5.655 6.295 7.004 7.782 7.107 7.782.139.017 7.971-8.542 8.058-8.801.034-.07-.208-.312-.519-.536-.415-.312-.864-.433-1.712-.467-1.59-.104-2.144.242-4.115 2.455-.899 1.003-1.66 1.833-1.66 1.833-.017 0-.76-.813-1.642-1.798S8.473 2.1 8.127 1.91c-.796-.45-2.421-.484-3.2-.086zM1.297 4.367C.45 4.695 0 5.007 0 5.248c0 .121 1.331 1.678 2.94 3.459 1.625 1.78 2.939 3.268 2.939 3.302 0 .035-1.331 1.522-2.94 3.303C1.314 17.11.017 18.683.035 18.822c.086.467 1.504 1.055 2.541 1.055 1.678-.018 2.058-.312 5.603-4.202 1.78-1.954 3.233-3.614 3.233-3.666 0-.069-1.435-1.694-3.199-3.63-2.3-2.508-3.423-3.632-3.96-3.874-.812-.398-2.126-.467-2.956-.138zm18.467.12c-.502.26-1.764 1.505-3.943 3.891-1.763 1.937-3.199 3.562-3.199 3.631 0 .07 1.453 1.712 3.234 3.666 3.544 3.89 3.925 4.184 5.602 4.202 1.038 0 2.455-.588 2.542-1.055.017-.156-1.28-1.712-2.905-3.493-1.608-1.78-2.94-3.285-2.94-3.32 0-.034 1.332-1.539 2.94-3.32C22.72 6.91 24.017 5.352 24 5.214c-.087-.45-1.366-.968-2.473-1.038-.795-.034-1.21.035-1.763.312zM7.954 16.973c-2.144 2.369-3.908 4.374-3.943 4.46-.034.07.208.312.52.537.414.311.864.432 1.711.467 1.574.103 2.161-.26 4.15-2.508.864-.968 1.608-1.78 1.625-1.78s.761.812 1.643 1.798c2.023 2.248 2.559 2.576 4.132 2.49.848-.035 1.297-.156 1.712-.467.311-.225.553-.467.519-.536-.087-.26-7.92-8.819-8.058-8.801-.069 0-1.867 1.954-4.011 4.34z"/></svg>Proxmox VE 9</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M17.61.455a3.41 3.41 0 0 0-3.41 3.41 3.41 3.41 0 0 0 3.41 3.41 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41zM12.92.8C8.923.777 5.137 2.941 3.148 6.451a4.5 4.5 0 0 1 .26-.007 4.92 4.92 0 0 1 2.585.737A8.316 8.316 0 0 1 12.688 3.6 4.944 4.944 0 0 1 13.723.834 11.008 11.008 0 0 0 12.92.8zm9.226 4.994a4.915 4.915 0 0 1-1.918 2.246 8.36 8.36 0 0 1-.273 8.303 4.89 4.89 0 0 1 1.632 2.54 11.156 11.156 0 0 0 .559-13.089zM3.41 7.932A3.41 3.41 0 0 0 0 11.342a3.41 3.41 0 0 0 3.41 3.409 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41zm2.027 7.866a4.908 4.908 0 0 1-2.915.358 11.1 11.1 0 0 0 7.991 6.698 11.234 11.234 0 0 0 2.422.249 4.879 4.879 0 0 1-.999-2.85 8.484 8.484 0 0 1-.836-.136 8.304 8.304 0 0 1-5.663-4.32zm11.405.928a3.41 3.41 0 0 0-3.41 3.41 3.41 3.41 0 0 0 3.41 3.41 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41z"/></svg>Ubuntu Server</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M13.88 12.685c-.4 0 .08.2.601.28.14-.1.27-.22.39-.33a3.001 3.001 0 01-.99.05m2.14-.53c.23-.33.4-.69.47-1.06-.06.27-.2.5-.33.73-.75.47-.07-.27 0-.56-.8 1.01-.11.6-.14.89m.781-2.05c.05-.721-.14-.501-.2-.221.07.04.13.5.2.22M12.38.31c.2.04.45.07.42.12.23-.05.28-.1-.43-.12m.43.12l-.15.03.14-.01V.43m6.633 9.944c.02.64-.2.95-.38 1.5l-.35.181c-.28.54.03.35-.17.78-.44.39-1.34 1.22-1.62 1.301-.201 0 .14-.25.19-.34-.591.4-.481.6-1.371.85l-.03-.06c-2.221 1.04-5.303-1.02-5.253-3.842-.03.17-.07.13-.12.2a3.551 3.552 0 012.001-3.501 3.361 3.362 0 013.732.48 3.341 3.342 0 00-2.721-1.3c-1.18.01-2.281.76-2.651 1.57-.6.38-.67 1.47-.93 1.661-.361 2.601.66 3.722 2.38 5.042.27.19.08.21.12.35a4.702 4.702 0 01-1.53-1.16c.23.33.47.66.8.91-.55-.18-1.27-1.3-1.48-1.35.93 1.66 3.78 2.921 5.261 2.3a6.203 6.203 0 01-2.33-.28c-.33-.16-.77-.51-.7-.57a5.802 5.803 0 005.902-.84c.44-.35.93-.94 1.07-.95-.2.32.04.16-.12.44.44-.72-.2-.3.46-1.24l.24.33c-.09-.6.74-1.321.66-2.262.19-.3.2.3 0 .97.29-.74.08-.85.15-1.46.08.2.18.42.23.63-.18-.7.2-1.2.28-1.6-.09-.05-.28.3-.32-.53 0-.37.1-.2.14-.28-.08-.05-.26-.32-.38-.861.08-.13.22.33.34.34-.08-.42-.2-.75-.2-1.08-.34-.68-.12.1-.4-.3-.34-1.091.3-.25.34-.74.54.77.84 1.96.981 2.46-.1-.6-.28-1.2-.49-1.76.16.07-.26-1.241.21-.37A7.823 7.824 0 0017.702 1.6c.18.17.42.39.33.42-.75-.45-.62-.48-.73-.67-.61-.25-.65.02-1.06 0C15.082.73 14.862.8 13.8.4l.05.23c-.77-.25-.9.1-1.73 0-.05-.04.27-.14.53-.18-.741.1-.701-.14-1.431.03.17-.13.36-.21.55-.32-.6.04-1.44.35-1.18.07C9.6.68 7.847 1.3 6.867 2.22L6.838 2c-.45.54-1.96 1.611-2.08 2.311l-.131.03c-.23.4-.38.85-.57 1.261-.3.52-.45.2-.4.28-.6 1.22-.9 2.251-1.16 3.102.18.27 0 1.65.07 2.76-.3 5.463 3.84 10.776 8.363 12.006.67.23 1.65.23 2.49.25-.99-.28-1.12-.15-2.08-.49-.7-.32-.85-.7-1.34-1.13l.2.35c-.971-.34-.57-.42-1.361-.67l.21-.27c-.31-.03-.83-.53-.97-.81l-.34.01c-.41-.501-.63-.871-.61-1.161l-.111.2c-.13-.21-1.52-1.901-.8-1.511-.13-.12-.31-.2-.5-.55l.14-.17c-.35-.44-.64-1.02-.62-1.2.2.24.32.3.45.33-.88-2.172-.93-.12-1.601-2.202l.15-.02c-.1-.16-.18-.34-.26-.51l.06-.6c-.63-.74-.18-3.102-.09-4.402.07-.54.53-1.1.88-1.981l-.21-.04c.4-.71 2.341-2.872 3.241-2.761.43-.55-.09 0-.18-.14.96-.991 1.26-.7 1.901-.88.7-.401-.6.16-.27-.151 1.2-.3.85-.7 2.421-.85.16.1-.39.14-.52.26 1-.49 3.151-.37 4.562.27 1.63.77 3.461 3.011 3.531 5.132l.08.02c-.04.85.13 1.821-.17 2.711l.2-.42M9.54 13.236l-.05.28c.26.35.47.73.8 1.01-.24-.47-.42-.66-.75-1.3m.62-.02c-.14-.15-.22-.34-.31-.52.08.32.26.6.43.88l-.12-.36m10.945-2.382l-.07.15c-.1.76-.34 1.511-.69 2.212.4-.73.65-1.541.75-2.362M12.45.12c.27-.1.66-.05.95-.12-.37.03-.74.05-1.1.1l.15.02M3.006 5.142c.07.57-.43.8.11.42.3-.66-.11-.18-.1-.42m-.64 2.661c.12-.39.15-.62.2-.84-.35.44-.17.53-.2.83"/></svg>Debian LXC containers</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4.928 1.825c-1.09.553-1.09.64-.07 1.78 5.655 6.295 7.004 7.782 7.107 7.782.139.017 7.971-8.542 8.058-8.801.034-.07-.208-.312-.519-.536-.415-.312-.864-.433-1.712-.467-1.59-.104-2.144.242-4.115 2.455-.899 1.003-1.66 1.833-1.66 1.833-.017 0-.76-.813-1.642-1.798S8.473 2.1 8.127 1.91c-.796-.45-2.421-.484-3.2-.086zM1.297 4.367C.45 4.695 0 5.007 0 5.248c0 .121 1.331 1.678 2.94 3.459 1.625 1.78 2.939 3.268 2.939 3.302 0 .035-1.331 1.522-2.94 3.303C1.314 17.11.017 18.683.035 18.822c.086.467 1.504 1.055 2.541 1.055 1.678-.018 2.058-.312 5.603-4.202 1.78-1.954 3.233-3.614 3.233-3.666 0-.069-1.435-1.694-3.199-3.63-2.3-2.508-3.423-3.632-3.96-3.874-.812-.398-2.126-.467-2.956-.138zm18.467.12c-.502.26-1.764 1.505-3.943 3.891-1.763 1.937-3.199 3.562-3.199 3.631 0 .07 1.453 1.712 3.234 3.666 3.544 3.89 3.925 4.184 5.602 4.202 1.038 0 2.455-.588 2.542-1.055.017-.156-1.28-1.712-2.905-3.493-1.608-1.78-2.94-3.285-2.94-3.32 0-.034 1.332-1.539 2.94-3.32C22.72 6.91 24.017 5.352 24 5.214c-.087-.45-1.366-.968-2.473-1.038-.795-.034-1.21.035-1.763.312zM7.954 16.973c-2.144 2.369-3.908 4.374-3.943 4.46-.034.07.208.312.52.537.414.311.864.432 1.711.467 1.574.103 2.161-.26 4.15-2.508.864-.968 1.608-1.78 1.625-1.78s.761.812 1.643 1.798c2.023 2.248 2.559 2.576 4.132 2.49.848-.035 1.297-.156 1.712-.467.311-.225.553-.467.519-.536-.087-.26-7.92-8.819-8.058-8.801-.069 0-1.867 1.954-4.011 4.34z"/></svg>Proxmox SDN with dnsmasq</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M11.094.47c-.842 0-1.696.092-2.552.288a11.37 11.37 0 0 0-4.87 2.423 10.632 10.632 0 0 0-2.36 2.826A10.132 10.132 0 0 0 .305 8.582c-.398 1.62-.4 3.336-.043 5.048.085.405.183.809.31 1.212a11.85 11.85 0 0 0 1.662 3.729 3.273 3.273 0 0 0-.086.427 3.323 3.323 0 0 0 2.848 3.71 3.279 3.279 0 0 0 1.947-.346c1.045.51 2.17.864 3.339 1.04a11.66 11.66 0 0 0 4.285-.155 11.566 11.566 0 0 0 4.936-2.485 10.643 10.643 0 0 0 2.352-2.894 11.164 11.164 0 0 0 1.356-4.424 11.214 11.214 0 0 0-.498-4.335c.175-.077.338-.175.486-.293a.444.444 89.992 0 0 .001 0c.402-.322.693-.794.777-1.342a2.146 2.146 0 0 0-1.79-2.434 2.115 2.115 0 0 0-1.205.171c-.038-.043-.078-.086-.113-.13a11.693 11.693 0 0 0-3.476-2.93 13.348 13.348 0 0 0-1.76-.81 13.55 13.55 0 0 0-2.06-.613A12.121 12.121 0 0 0 11.093.47Zm.714.328c.345-.004.688.01 1.028.042a9.892 9.892 0 0 1 2.743.639c.984.39 1.89.958 2.707 1.632.803.662 1.502 1.45 2.091 2.328.026.039.048.08.07.12a2.12 2.12 0 0 0-.435 2.646c-.158.114-.97.692-1.634 1.183-.414.308-.733.557-.733.557l.581.68s.296-.276.665-.638c.572-.562 1.229-1.233 1.395-1.403a2.122 2.122 0 0 0 1.907.677 11.229 11.229 0 0 1-.013 4.046 11.41 11.41 0 0 1-1.475 3.897 12.343 12.343 0 0 1-2.079 2.587c-1.19 1.125-2.633 2.022-4.306 2.531a10.826 10.826 0 0 1-3.973.484 11.04 11.04 0 0 1-3.057-.652 3.304 3.304 0 0 0 1.417-2.294 3.275 3.275 0 0 0-.294-1.842c.18-.162.403-.363.656-.6 1.015-.955 2.353-2.303 2.353-2.303l-.47-.599s-1.63.972-2.801 1.728c-.307.198-.573.378-.777.517a3.273 3.273 0 0 0-1.516-.611c-1.507-.198-2.927.672-3.487 2.017a10.323 10.323 0 0 1-.695-1.078A10.92 10.92 0 0 1 .728 14.8a10.35 10.35 0 0 1-.2-1.212c-.164-1.653.103-3.258.629-4.754a12.95 12.95 0 0 1 1.087-2.288c.57-.968 1.248-1.872 2.069-2.656A11.013 11.013 0 0 1 11.808.797Zm-.147 3.257a3.838 3.838 0 0 0-3.82 3.82v2.36h-.94c-.751 0-1.377.625-1.377 1.377v3.8h1.46v-3.718h9.354v6.264H10.02v1.46h6.4c.751 0 1.377-.625 1.377-1.377v-6.43c0-.751-.626-1.377-1.377-1.377h-.94v-2.36a3.838 3.838 0 0 0-3.82-3.819zm0 1.46a2.371 2.371 0 0 1 2.36 2.36v2.36H9.3v-2.36a2.372 2.372 0 0 1 2.36-2.36zm10.141.392a1.253 1.253 0 0 1 1.296 1.434c-.049.319-.217.59-.453.78-.266.213-.61.318-.968.264a1.253 1.253 0 0 1-1.045-1.42 1.255 1.255 0 0 1 1.17-1.058zM5.384 17.425a2.02 2.02 0 0 1 1.917 1.298c.116.3.159.628.114.967a2.015 2.015 0 0 1-2.249 1.728 2.016 2.016 0 0 1-1.727-2.25 2.017 2.017 0 0 1 1.945-1.743z"/></svg>a Caddy reverse-proxy pilot</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M5.25 0v5.25h13.5v13.5H24V7.5L16.5 0Zm13.5 18.75H5.25V5.25H0V16.5L7.5 24h11.25Z"/></svg>OPNsense in progress</li></ul>
+</div>
+            
+<p>I built JHomelab on an old Alienware laptop so I could run a real hypervisor, Linux services and my own networks outside my everyday computer. It's where the Linux, virtualization and networking from my classes turned into something I keep running.</p>
+<p>Two service guests run all the time, and the other guests start only when I'm working on them. The apps on the service host are existing open-source projects; my work is the infrastructure under them and keeping it patched and watched.</p>
+
+            <h2 id="how-the-lab-fits-together">How the lab fits together</h2>
+<figure class="architecture">
+  <ol class="architecture-flow" role="list">
+    <li><strong>Physical connection</strong><span>Home router<br>Wireless bridge<br>Flat access network</span><small>Wired backhaul and VLANs planned</small></li>
+    <li><strong>Proxmox host</strong><span>Alienware 15 R3<br>16 GB physical RAM<br>SSD, guest-storage HDD and an unused NVMe</span><small>Virtual machines and two LXC containers</small></li>
+    <li><strong>Guest attachments</strong><span>vmbr0: Ubuntu service VM + Debian LXC<br>testnet: nine experimental VMs + Caddy pilot</span><small>Service migration to SDN planned</small></li>
+  </ol>
+  <figcaption>The lab as of October 23, 2026, with addresses left out.</figcaption>
+</figure>
+
+<p>A range extender with its SSID hidden bridges the lab to the home router. Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.</p>
+<h2 id="host-and-storage">Host and storage</h2>
+<p>The host runs <strong>Proxmox VE 9.2.21</strong> on kernel <strong>7.0.14-25-pve</strong>.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Host and storage" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Component</th>
+<th role="columnheader">Use in the lab</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Intel i7-7700HQ, four cores and eight threads</td>
+<td role="cell">Compute shared by the virtual machines</td>
+</tr>
+<tr role="row">
+<td role="cell">16 GB RAM</td>
+<td role="cell">Physical memory for the host and running guests</td>
+</tr>
+<tr role="row">
+<td role="cell">128 GB SSD</td>
+<td role="cell">Proxmox and the <code>local</code> / <code>local-lvm</code> pools. It's aging, so Beszel watches its SMART data</td>
+</tr>
+<tr role="row">
+<td role="cell">1 TB hard drive</td>
+<td role="cell"><code>vmdata</code> storage for guest disks today; it becomes the backup drive once the NVMe is in use</td>
+</tr>
+<tr role="row">
+<td role="cell">NVMe SSD left over from Windows</td>
+<td role="cell">Hidden from Proxmox by the BIOS's Intel RST RAID mode. Planned home for the guest disks</td>
+</tr>
+</tbody>
+</table></div>
+<p>The guests are assigned about 51.5 GB of memory in total, more than the laptop has. That's on purpose: only VM 109 and CT 110 start with the host.</p>
+<h2 id="linux-guests-and-container-services">Linux guests and container services</h2>
+<p>The lab has <strong>ten VMs and two LXC containers</strong>. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, so I can try a distribution without touching my daily computer, plus an OPNsense gateway I'm still building. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.</p>
+<p>The services run in a full VM and an unprivileged container:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 2: Linux guests and container services"><table>
+<thead>
+<tr>
+<th>Guest</th>
+<th>Allocation and network</th>
+<th>What it runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM 109, Ubuntu Server 26.04.1 LTS</td>
+<td>2 GB RAM, 32 GB disk; <code>vmbr0</code></td>
+<td>Docker host for the core services, deployed as a Portainer stack. Watchtower pulls new images for most of them once a day</td>
+</tr>
+<tr>
+<td>CT 110, Debian 13.7</td>
+<td>Unprivileged LXC; 2 cores, 4 GB RAM, 512 MiB swap, 24 GB disk; <code>vmbr0</code></td>
+<td>GoodMem server v1.0.331 with PostgreSQL 17.11 and pgvector, in Docker inside the container</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<h3 id="services-on-vm-109">Services on VM 109</h3>
+<p>VM 109 runs Docker Engine 29.1.3.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 3: Services on VM 109" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Service</th>
+<th role="columnheader">What it does</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Homepage 2.7.0</td>
+<td role="cell">My dashboard, with live Proxmox, Portainer, Beszel and Uptime Kuma panels</td>
+</tr>
+<tr role="row">
+<td role="cell">Uptime Kuma 2.5.7</td>
+<td role="cell">Service checks, a status page on my LAN and Discord alerts</td>
+</tr>
+<tr role="row">
+<td role="cell">Beszel 0.21.1</td>
+<td role="cell">Host and container health, drive SMART data and pending package updates</td>
+</tr>
+<tr role="row">
+<td role="cell">Portainer 2.45.3</td>
+<td role="cell">Container management</td>
+</tr>
+<tr role="row">
+<td role="cell">RustDesk Server 1.1.16</td>
+<td role="cell">Self-hosted remote support</td>
+</tr>
+<tr role="row">
+<td role="cell">Watchtower (maintained fork)</td>
+<td role="cell">Daily image updates for Homepage, Uptime Kuma, Beszel and RustDesk</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Proxmox guest inventory, September 22, 2026; scroll horizontally if needed">
+    <img src="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp" width="1050" height="525" alt="September 22 Proxmox inventory showing VM 109 and LXC 110 running, nine experimental VMs stopped, and three storage pools available." loading="lazy">
+  </div>
+  <figcaption>The Proxmox inventory on September 22, 2026, before CT 111 existed. <a href="../../assets/evidence/homelab/guest-inventory-2026-09-22.webp">Open full size</a>.</figcaption>
+</figure>
+
+<h2 id="network-configuration">Network configuration</h2>
+<p>I used Proxmox software-defined networking to build an experimental network next to the main LAN: zone <code>test</code> holds VNet <code>testnet</code>, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so I can match the Proxmox inventory against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on <code>vmbr0</code>.</p>
+<h3 id="firewall-policy-and-its-limits">Firewall policy</h3>
+<p>The datacenter firewall is on, with seven accept rules for lab traffic, DNS and DHCP, and management access (ICMP, SSH and the Proxmox web interface). <strong>Input defaults to DROP; output and forwarding default to ACCEPT.</strong></p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="Proxmox firewall defaults, September 22, 2026; scroll horizontally if needed">
+    <img src="../../assets/evidence/homelab/firewall-options-2026-09-22.png" width="900" height="240" alt="Proxmox firewall options with firewall enabled, input policy DROP, output policy ACCEPT and forward policy ACCEPT." loading="lazy">
+  </div>
+  <figcaption>Datacenter firewall defaults on September 22, 2026. <a href="../../assets/evidence/homelab/firewall-options-2026-09-22.png">Open full size</a>.</figcaption>
+</figure>
+
+<h2 id="recorded-validation">Health check</h2>
+<p>On September 22 I ran a read-only check of the host and services. It's the baseline I compare against:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 4: Health check" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Check</th>
+<th role="columnheader">Result</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Hypervisor</td>
+<td role="cell">Core services active, no failed systemd units, web interface answering</td>
+</tr>
+<tr role="row">
+<td role="cell">VM 109 endpoints</td>
+<td role="cell">Homepage and Uptime Kuma returned HTTP 200, Portainer HTTPS 200</td>
+</tr>
+<tr role="row">
+<td role="cell">GoodMem</td>
+<td role="cell">Docker health check healthy; the API answered</td>
+</tr>
+<tr role="row">
+<td role="cell">PostgreSQL with pgvector</td>
+<td role="cell">Container running</td>
+</tr>
+<tr role="row">
+<td role="cell">Storage</td>
+<td role="cell">All three pools active; the hard drive passed SMART with no reallocated, uncorrectable or CRC errors</td>
+</tr>
+</tbody>
+</table></div>
+<p>The check couldn't see inside VM 109, because its guest agent wasn't running and my SSH login was denied. I fixed both in October: SSH works, and <code>qemu-guest-agent</code> now freezes the filesystem before snapshots and backups.</p>
+<h2 id="october-maintenance">October maintenance</h2>
+<h3 id="a-certificate-authority-compromise">A certificate authority compromise</h3>
+<p>On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. I removed the <code>emSign ECC Root CA - G3</code> root from the trust store on the Proxmox host and every guest. On CT 110 I took a snapshot, then updated ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL. On VM 109 I took a snapshot, updated Portainer and redeployed every stack. Some vendors ship patched images late, so I wrote a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.</p>
+<h3 id="updates-on-every-host">Updates on every host</h3>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 5: Updates on every host" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Host</th>
+<th role="columnheader">What I did on October 23</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Proxmox host</td>
+<td role="cell">Removed leftover Proxmox 8 (bookworm) APT entries and a duplicate security list, installed pending updates, and removed an old kernel while keeping the running kernel and two fallbacks</td>
+</tr>
+<tr role="row">
+<td role="cell">VM 109</td>
+<td role="cell">Installed the available updates, updated Portainer, Homepage and Uptime Kuma, installed <code>qemu-guest-agent</code>, and grew the root volume to the whole disk while the VM was running</td>
+</tr>
+<tr role="row">
+<td role="cell">CT 110</td>
+<td role="cell">Installed every pending update, 33 of them security fixes, and rebooted so every service loaded the new libc and systemd. GoodMem answered again 26 seconds later</td>
+</tr>
+</tbody>
+</table></div>
+<p>The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because I had pinned an older API version. I replaced it with the maintained fork, which negotiates the API itself, so the pin is gone. Before each change I took a snapshot or backup, and I deleted them once everything checked out.</p>
+<h3 id="monitoring-and-alerts">Monitoring and alerts</h3>
+<p>Before October I had an Uptime Kuma install I'd never set up, and nothing watched the hardware. Now Beszel agents on the host, VM 109 and CT 110 track the machines, and Uptime Kuma checks the services from outside every minute. Both post to a private Discord channel.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 6: Monitoring and alerts"><table>
+<thead>
+<tr>
+<th>Alert</th>
+<th>From</th>
+<th>Fires when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine down</td>
+<td>Beszel</td>
+<td>A host or guest stops reporting for 2 minutes</td>
+</tr>
+<tr>
+<td>Resources</td>
+<td>Beszel</td>
+<td>CPU or memory stays above 90% for 10 minutes, or a disk passes 85%</td>
+</tr>
+<tr>
+<td>Drive health</td>
+<td>Beszel</td>
+<td>A drive's SMART state gets worse</td>
+</tr>
+<tr>
+<td>Services and containers</td>
+<td>Beszel</td>
+<td>A systemd service fails or a Docker health check goes unhealthy</td>
+</tr>
+<tr>
+<td>Heat</td>
+<td>Beszel</td>
+<td>The laptop runs above 85 °C for 5 minutes</td>
+</tr>
+<tr>
+<td>Service down</td>
+<td>Uptime Kuma</td>
+<td>Two failed checks in a row on Proxmox, GoodMem, Portainer, Beszel, RustDesk or this site</td>
+</tr>
+<tr>
+<td>Certificate</td>
+<td>Uptime Kuma</td>
+<td>This site's TLS certificate is close to expiring</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>Beszel also lists pending package updates and flags the security ones. The first time it ran, it showed 87 waiting on CT 110.</p>
+<h3 id="dashboard">Dashboard</h3>
+<p>Homepage was installed but never configured. Before setting it up I compared it with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools I run, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.</p>
+<p>Each panel has its own credential instead of my admin logins. The Proxmox panel uses an API token on a separate user with only the <code>PVEAuditor</code> role, and a write attempt with it got a 403. Portainer has an access token made for the dashboard, and Beszel has a separate superuser account, because Homepage's Beszel panel needs one. Homepage reads them from root-only files mounted read-only, so none of them sit in the dashboard config.</p>
+<h2 id="gpu-passthrough-preparation">GPU passthrough preparation</h2>
+<p>The laptop has a GTX 1070 Mobile next to its integrated graphics. I enabled IOMMU with <code>intel_iommu=on iommu=pt pcie_acs_override=downstream</code>, bound the NVIDIA GPU to <code>vfio-pci</code> and assigned it to VMs 100, 105, 107 and 108.</p>
+<h2 id="what-i-have-learned">What I have learned</h2>
+<ul>
+<li>Installed isn't the same as monitored. Uptime Kuma was on VM 109 well before it checked anything.</li>
+<li>Targeted fixes aren't patching. CT 110 only got the fixes I went looking for, and 87 updates piled up until Beszel showed them.</li>
+<li>Tools I depend on can quietly stop being maintained. Watchtower had been archived for ten months, and it only kept working because I'd pinned an older Docker API.</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>I haven't tested the firewall with live guest traffic: no guest DHCP, egress or blocked-traffic test yet. The diagram shows how things connect, not a tested security boundary.</li>
+<li>The September check didn't cover recovery, restoring a backup, database integrity or certificate trust (its HTTPS probes accepted self-signed certificates).</li>
+<li>I haven't tested the GPU inside a guest yet.</li>
+<li>Beszel and Uptime Kuma both run on VM 109, so nothing alerts me if the whole host goes down.</li>
+<li>I haven't tested Portainer actions or the Uptime Kuma interface beyond the monitors.</li>
+</ul>
+<h2 id="next-changes">Next changes</h2>
+<p>Storage comes first: switch the BIOS to AHCI, move the guest disks onto the NVMe and start scheduled backups to the 1 TB drive. Then an off-host alert for when the Proxmox host goes down, and moving the Tailscale subnet router from VM 100 to the always-on VM 109.</p>
+<p>The September check also turned up three firewall fixes before I expand the network: one rule's comment says internet access while its destination is the home LAN, the legacy firewall status reports pending changes while nftables is active, and global IPv4 forwarding is <code>0</code> while <code>vmbr0</code> and <code>testnet</code> have it on. After that I'll test the policy with real guest traffic.</p>
+<p>Further out: a Cat6 run to replace the wireless bridge, a managed switch with 802.1Q VLANs, SDN for the service guests, per-zone firewall rules, a reverse proxy for internal hostnames (Caddy on CT 111 first, before Nginx Proxy Manager), internal DNS, a NAS, Wazuh or Security Onion for SIEM and IDS, Jellyfin with GPU transcoding, and finishing the OPNsense gateway.</p>
+<h2 id="sources-and-artifacts">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/JHomelab/blob/b5a5608e6580e5420beb3672b65e67629953814a/README.md">Build journal and inventory, October 23 revision</a>: host, storage, guests, services, monitoring, SDN and roadmap</li>
+<li><a href="https://github.com/jkosber/JHomelab/blob/b5a5608e6580e5420beb3672b65e67629953814a/docs/maintenance-2026-10-23.md">October 2026 maintenance notes</a>: the certificate authority response, updates, monitoring, dashboard and the storage finding</li>
+<li><a href="https://github.com/jkosber/JHomelab/blob/b5a5608e6580e5420beb3672b65e67629953814a/docs/health-check-2026-09-22.md">Read-only health check, September 22</a>: results, access limits and storage warnings</li>
+<li><a href="https://github.com/jkosber/JHomelab/blob/b5a5608e6580e5420beb3672b65e67629953814a/screenshots/guest-inventory-2026-09-22.webp">Guest inventory</a> and <a href="https://github.com/jkosber/JHomelab/blob/b5a5608e6580e5420beb3672b65e67629953814a/screenshots/firewall-options-2026-09-22.png">firewall options</a> screenshots</li>
+</ul>
+<p>The repository holds documentation and screenshots. Sanitized configuration exports, firewall rules and Compose files go in once they stop changing every week.</p>
+<p><a href="../">All projects</a> · <a href="../ssh-workbench/">SSH Workbench</a> · <a href="../aws-linux-infrastructure/">AdventureWorks on AWS</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

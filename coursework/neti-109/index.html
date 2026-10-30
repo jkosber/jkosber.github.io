@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>NETI 109 Networking I | Jadon Kosberg</title>
+  <meta name="description" content="Cisco Networking Academy labs in Packet Tracer: addressing and VLSM, device setup, and troubleshooting client and gateway faults.">
+  
+  <link rel="canonical" href="https://jnkos.com/coursework/neti-109/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fcb485258ac2">
+  <script src="../../javascripts/portfolio.js?v=635b55b9726f"></script>
+  
+  <meta property="og:title" content="NETI 109 Networking I | Jadon Kosberg">
+  <meta property="og:description" content="Cisco Networking Academy labs in Packet Tracer: addressing and VLSM, device setup, and troubleshooting client and gateway faults.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/coursework/neti-109/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of his homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../../technical-labs/"><span>Projects</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../">Coursework</a></li>
+            
+            <li aria-hidden="true">/</li><li><span aria-current="page">NETI 109 Networking I</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="neti-109-networking-i">NETI 109 Networking I</h1>
+              <p class="dek">Cisco Networking Academy labs in Packet Tracer: addressing and VLSM, device setup, and troubleshooting client and gateway faults.</p>
+              
+              <dl class="strip">
+                
+                
+                <div><dt>Term</dt> <dd>Fall 2025</dd></div>
+                <div><dt>In the repo</dt> <dd>36 lab write-ups</dd></div>
+                
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/Networking-109">NETI 109 repository</a></dd></div>
+              </dl>
+              
+            </div>
+            <img class="head-art" src="../../assets/thumbnails/network.svg" width="240" height="160" alt="">
+            
+          </div>
+        </div></section>
+        
+        
+        <div class="wrap summary-pair">
+          <div class="panel role-panel">
+  <span class="panel-title">My role</span>
+  <p>I worked the Packet Tracer activities and labs and wrote up each one: addressing tables, subnet plans, and what was wrong on each device and how I fixed it.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M16.331 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.186 1.186 0 01-.806-.237 1.038 1.038 0 01-.352-.498 1.21 1.21 0 01-.023-.667c.052-.225.178-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.34 2.34 0 00-.903.206c-.287.132-.54.327-.739.571a2.221 2.221 0 00-.04 2.705c.295.378.709.645 1.175.756.491.12 1.006.102 1.487-.052l.082-.023M5.336 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.183 1.183 0 01-.806-.237 1.03 1.03 0 01-.351-.498 1.202 1.202 0 01-.024-.667c.052-.225.177-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.344 2.344 0 00-.903.206 2.08 2.08 0 00-.74.571 2.224 2.224 0 00-.041 2.705 2.11 2.11 0 001.176.756c.491.12 1.005.102 1.487-.052l.083-.023M9.26 17.249l-.004.957.07.012c.22.041.441.069.664.085.195.019.391.022.587.012.187-.014.372-.049.551-.104.21-.06.405-.163.571-.305a1.16 1.16 0 00.333-.478 1.31 1.31 0 00-.007-.96 1.068 1.068 0 00-.298-.414 1.261 1.261 0 00-.438-.255l-.722-.268a.388.388 0 01-.197-.188.245.245 0 01.008-.219.382.382 0 01.154-.142.798.798 0 01.257-.074c.153-.022.308-.021.46.005.18.02.358.051.533.096l.038.008v-.883l-.069-.015a4.749 4.749 0 00-.543-.097 2.844 2.844 0 00-.714-.003c-.3.027-.585.143-.821.33-.16.126-.281.293-.351.484-.104.29-.105.608 0 .899.054.145.14.274.252.381.097.093.207.173.327.236.157.084.324.149.497.195.057.017.114.035.17.054l.085.031.024.01c.084.03.162.078.226.14.045.042.08.094.101.151a.325.325 0 01.001.161.339.339 0 01-.166.198.856.856 0 01-.275.086 2.032 2.032 0 01-.427.021 5.208 5.208 0 01-.557-.074 9.195 9.195 0 01-.287-.067l-.033-.006zm-2.475.995h1.05v-4.167h-1.05v4.167zm12.162-2.936a1.095 1.095 0 011.541.158 1.094 1.094 0 01-.157 1.541l-.017.014a1.096 1.096 0 01-1.367-1.713m-1.525.854a2.193 2.193 0 002.666 2.107 2.139 2.139 0 00.701-3.937 2.207 2.207 0 00-3.367 1.83M22.961 10.728a.52.52 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M20.117 10.728a.522.522 0 001.041 0V8.139a.521.521 0 00-1.04 0v2.589M17.231 11.771a.521.521 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M14.393 10.728a.521.521 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M11.494 10.728a.522.522 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M8.624 10.728a.52.52 0 001.039 0V8.139a.52.52 0 00-1.039 0v2.589M5.737 11.771a.52.52 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M2.876 10.728a.522.522 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M0 10.728a.521.521 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155"/></svg>Cisco Packet Tracer</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M16.331 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.186 1.186 0 01-.806-.237 1.038 1.038 0 01-.352-.498 1.21 1.21 0 01-.023-.667c.052-.225.178-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.34 2.34 0 00-.903.206c-.287.132-.54.327-.739.571a2.221 2.221 0 00-.04 2.705c.295.378.709.645 1.175.756.491.12 1.006.102 1.487-.052l.082-.023M5.336 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.183 1.183 0 01-.806-.237 1.03 1.03 0 01-.351-.498 1.202 1.202 0 01-.024-.667c.052-.225.177-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.344 2.344 0 00-.903.206 2.08 2.08 0 00-.74.571 2.224 2.224 0 00-.041 2.705 2.11 2.11 0 001.176.756c.491.12 1.005.102 1.487-.052l.083-.023M9.26 17.249l-.004.957.07.012c.22.041.441.069.664.085.195.019.391.022.587.012.187-.014.372-.049.551-.104.21-.06.405-.163.571-.305a1.16 1.16 0 00.333-.478 1.31 1.31 0 00-.007-.96 1.068 1.068 0 00-.298-.414 1.261 1.261 0 00-.438-.255l-.722-.268a.388.388 0 01-.197-.188.245.245 0 01.008-.219.382.382 0 01.154-.142.798.798 0 01.257-.074c.153-.022.308-.021.46.005.18.02.358.051.533.096l.038.008v-.883l-.069-.015a4.749 4.749 0 00-.543-.097 2.844 2.844 0 00-.714-.003c-.3.027-.585.143-.821.33-.16.126-.281.293-.351.484-.104.29-.105.608 0 .899.054.145.14.274.252.381.097.093.207.173.327.236.157.084.324.149.497.195.057.017.114.035.17.054l.085.031.024.01c.084.03.162.078.226.14.045.042.08.094.101.151a.325.325 0 01.001.161.339.339 0 01-.166.198.856.856 0 01-.275.086 2.032 2.032 0 01-.427.021 5.208 5.208 0 01-.557-.074 9.195 9.195 0 01-.287-.067l-.033-.006zm-2.475.995h1.05v-4.167h-1.05v4.167zm12.162-2.936a1.095 1.095 0 011.541.158 1.094 1.094 0 01-.157 1.541l-.017.014a1.096 1.096 0 01-1.367-1.713m-1.525.854a2.193 2.193 0 002.666 2.107 2.139 2.139 0 00.701-3.937 2.207 2.207 0 00-3.367 1.83M22.961 10.728a.52.52 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M20.117 10.728a.522.522 0 001.041 0V8.139a.521.521 0 00-1.04 0v2.589M17.231 11.771a.521.521 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M14.393 10.728a.521.521 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M11.494 10.728a.522.522 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M8.624 10.728a.52.52 0 001.039 0V8.139a.52.52 0 00-1.039 0v2.589M5.737 11.771a.52.52 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M2.876 10.728a.522.522 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M0 10.728a.521.521 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155"/></svg>Cisco IOS</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="m2.95 0c-1.62 0-2.95 1.32-2.95 2.95v18.1c0 1.63 1.32 2.95 2.95 2.95h18.1c1.62 0 2.95-1.32 2.95-2.95v-18.1c-.00024-1.63-1.32-2.95-2.95-2.95zm0 1.09h18.1c1.04 0 1.85.818 1.85 1.86v14h-5.27c-.335-.796-2.57-6.47.283-10.9a.516.517 0 0 0-.443-.794c-5.24.0827-8.2 3.19-9.74 6.21-1.35 2.64-1.63 4.91-1.69 5.53h-4.95v-14c0-1.04.817-1.86 1.85-1.86zm13.6 5.24c-2.62 5.24.248 11.4.248 11.4a.516.517 0 0 0 .469.301h5.62v3.05c0 1.04-.817 1.86-1.85 1.86h-18.1c-1.04 0-1.85-.818-1.85-1.86v-3.05h5.39a.516.517 0 0 0 .514-.477s.226-2.8 1.66-5.62c1.34-2.62 3.67-5.17 7.91-5.57z"/></svg>Wireshark</li></ul>
+</div>
+          <div class="panel panel--result"><span class="panel-title">Result</span> <p>36 lab write-ups, from fixed-length subnetting to a full VLSM design, and two troubleshooting labs where I traced client faults to addresses, gateways, a router interface and DNS. I completed Cisco's Networking Basics and Introduction to Networks courses.</p></div>
+        </div>
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#what-the-course-provided">What the course provided and what I did</a><a href="#strongest-work">Strongest work</a><a href="#labs">Labs</a><a href="#skills">Skills</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            
+            
+<p>Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did the labs in Packet Tracer and turned in a write-up for each one.</p>
+
+            <h2 id="what-the-course-provided">What the course provided and what I did</h2>
+<p>The course provided the Cisco Networking Academy activities and lab sheets: the topologies, addressing tables, steps and sample output, and the starting device configurations. My part was working each activity and writing up the results:</p>
+<ul>
+<li>Filled in the addressing tables and subnet plans myself, including two VLSM designs</li>
+<li>Wrote what was wrong on each device in the troubleshooting labs and what I changed to fix it</li>
+<li>Answered the lab questions on IOS, switching, ARP, IPv6 and TCP and UDP from what I saw in Packet Tracer's simulation mode</li>
+<li>Ran my own Wireshark captures for the Ethernet and ICMP labs</li>
+</ul>
+<p>The device configurations are inside the Packet Tracer files, which GitHub can't display. This page is built from my written answers.</p>
+<h2 id="strongest-work">Strongest work</h2>
+<section class="work"><h3 id="addressing-a-small-network">Designing a VLSM plan (11.10.1)</h3>
+<p>The lab gave me two routers, four LANs that needed 32, 21, 19 and 8 host addresses, and a link between the routers. The plan had to be contiguous, largest subnet first, with the smallest possible subnet on the router link.</p>
+<p>I gave the largest LAN a /26, the next two a /27 each, the smallest a /28 and the router link a /30. A /27 only has 30 usable addresses, so it couldn't fit 32 hosts. Here's the plan moved onto the documentation range <code>192.0.2.0/24</code>, with the same sizes and order as my submission:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Designing a VLSM plan (11.10.1)"><table>
+<thead>
+<tr>
+<th>Segment</th>
+<th style="text-align: right;">Hosts needed</th>
+<th>Subnet</th>
+<th>Usable range</th>
+<th>Broadcast</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Largest LAN</td>
+<td style="text-align: right;">32</td>
+<td><code>192.0.2.0/26</code></td>
+<td><code>.1</code>–<code>.62</code></td>
+<td><code>.63</code></td>
+</tr>
+<tr>
+<td>Second LAN</td>
+<td style="text-align: right;">21</td>
+<td><code>192.0.2.64/27</code></td>
+<td><code>.65</code>–<code>.94</code></td>
+<td><code>.95</code></td>
+</tr>
+<tr>
+<td>Third LAN</td>
+<td style="text-align: right;">19</td>
+<td><code>192.0.2.96/27</code></td>
+<td><code>.97</code>–<code>.126</code></td>
+<td><code>.127</code></td>
+</tr>
+<tr>
+<td>Smallest LAN</td>
+<td style="text-align: right;">8</td>
+<td><code>192.0.2.128/28</code></td>
+<td><code>.129</code>–<code>.142</code></td>
+<td><code>.143</code></td>
+</tr>
+<tr>
+<td>Router link</td>
+<td style="text-align: right;">2</td>
+<td><code>192.0.2.144/30</code></td>
+<td><code>.145</code>–<code>.146</code></td>
+<td><code>.147</code></td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>In each LAN the router took the first usable address, the switch the second and the client the last, so the plan doubled as the device addressing table.</p>
+<p>One mistake I'd fix: I gave the largest LAN's client the address ending in <code>.63</code>. That's the /26's broadcast address, which my own subnet table lists correctly. The client should have been <code>.62</code>.</p></section>
+<section class="work"><h3 id="troubleshooting-access-to-a-web-server">Troubleshooting a web server outage (17.7.6)</h3>
+<p>Four clients couldn't reach a web server after a second DNS server was added. I could change the clients and the local router, but not the ISP cloud or the servers. I checked each client's settings in Packet Tracer's command prompt against the addressing table, then used ping and the browser to narrow it down:</p>
+<ul>
+<li><strong>PC-01</strong> had the wrong IP address. After I corrected it, it reached the gateway, the web server and PC-02.</li>
+<li><strong>PC-02</strong> had the wrong default gateway. Fixing it brought back web access.</li>
+<li><strong>PC-A</strong> could ping its neighbor but not its gateway or anything beyond it, which pointed at the router. R1's G0/1 address was wrong, and correcting it let the two LANs reach each other.</li>
+<li><strong>PC-B</strong> could reach the server by IP but not by name. I corrected its DNS setting and noted that DNS2 itself still had a problem the server's owner would need to fix.</li>
+</ul>
+<p>As I wrote in the lab: "PC-A can only access the local lan and not other networks so I corrected the G0/1 interface ip address."</p></section>
+<section class="work"><h3 id="fixing-default-gateway-faults-1035">Fixing default gateway faults (10.3.5)</h3>
+<p>Two LANs sat behind one router with four faults planted in them. I filled in the missing gateways in the addressing table, then found each problem from what could and couldn't ping:</p>
+<ul>
+<li>PC1 couldn't reach PC2 because its address didn't match the network it was wired to. I gave it the right address.</li>
+<li>Nothing could ping S2 because S2 had no IP address. I configured one with <code>ip address</code>.</li>
+<li>PC4 couldn't be reached because its default gateway was wrong. I set the correct gateway.</li>
+<li>Remote hosts couldn't ping S1 because it had no default gateway. I set it with <code>ip default-gateway</code>.</li>
+</ul>
+<p>The lab sheet's own test table at the end was left mostly blank, so there's no written retest.</p></section>
+<section class="work"><h3 id="following-ipv6-neighbor-discovery-934">Following IPv6 Neighbor Discovery (9.3.4)</h3>
+<p>In simulation mode I watched a PC find another PC's MAC address with Neighbor Discovery instead of ARP. I wrote down the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. In my words: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."</p></section>
+<h2 id="labs">Labs</h2>
+<details class="lab-module"><summary><h3 id="getting-started-ios-and-the-physical-layer">Getting started, IOS and the physical layer</h3> <span class="lab-count">12 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 2: Getting started, IOS and the physical layer"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">What I did</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">1.0.5 Logical and Physical Mode Exploration</td>
+<td role="cell">Tour Packet Tracer's physical mode and add a backup router</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Answered the device and rack questions</td>
+</tr>
+<tr role="row">
+<td role="cell">1.5.5 Network Representation</td>
+<td role="cell">Name device types and explain clients, servers, LANs and WANs</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Counted 15 end devices and 11 intermediary devices and explained LAN and WAN</td>
+</tr>
+<tr role="row">
+<td role="cell">1.9.3 Research IT and Networking Job Opportunities</td>
+<td role="cell">Look up networking jobs and the certifications they ask for</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Compared network administrator and engineer postings and their certifications</td>
+</tr>
+<tr role="row">
+<td role="cell">2.3.7 Navigate the IOS</td>
+<td role="cell">Move between IOS modes and use help</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Wrote down how the prompt changes in each mode and what the error messages mean</td>
+</tr>
+<tr role="row">
+<td role="cell">2.5.5 Configure Initial Switch Settings</td>
+<td role="cell">Set a hostname, passwords, a banner and save the config</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Explained why <code>login</code> is needed and why the secret shows as a hash, then saved to NVRAM</td>
+</tr>
+<tr role="row">
+<td role="cell">2.7.6 Implement Basic Connectivity</td>
+<td role="cell">Address two PCs and give two switches a management address</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Explained why a switch needs an IP address and what <code>no shutdown</code> does</td>
+</tr>
+<tr role="row">
+<td role="cell">3.4.4 Research Networking Standards</td>
+<td role="cell">Find what the IETF, IEEE, ITU and W3C each do</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Answered 23 questions and wrote why shared standards matter</td>
+</tr>
+<tr role="row">
+<td role="cell">3.5.5 Investigate the TCP/IP and OSI Models in Action</td>
+<td role="cell">Follow a web request layer by layer in simulation mode</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Listed the ports and the layer 2, 3, 4 and 7 fields at each step</td>
+</tr>
+<tr role="row">
+<td role="cell">3.7.10 Use Wireshark to View Network Traffic</td>
+<td role="cell">Capture pings to a local host and to remote sites</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Found that local pings carry the peer's MAC and remote pings carry the gateway's</td>
+</tr>
+<tr role="row">
+<td role="cell">4.6.5 Connect a Wired and Wireless LAN</td>
+<td role="cell">Pick the right cables and connect a small network</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Answered the media and physical-view questions</td>
+</tr>
+<tr role="row">
+<td role="cell">4.7.1 Physical Layer Exploration</td>
+<td role="cell">Trace a path from a home to a server across ISPs and an undersea cable</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Read the hop interfaces and cable landing points off the map</td>
+</tr>
+<tr role="row">
+<td role="cell">4.7.2 Connect the Physical Layer</td>
+<td role="cell">Identify router ports and modules and cable a network</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Identified the management ports, interface bandwidths and the added switch module</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="switching-and-address-resolution">Switching and address resolution</h3> <span class="lab-count">6 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 3: Switching and address resolution"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">What I did</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">7.1.6 Use Wireshark to Examine Ethernet Frames</td>
+<td role="cell">Read Ethernet II fields in a sample capture and in my own</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Explained the frame type, the preamble and which MAC a remote ping uses</td>
+</tr>
+<tr role="row">
+<td role="cell">7.2.7 View Network Device MAC Addresses</td>
+<td role="cell">Read MAC addresses with <code>show interfaces</code>, <code>show arp</code> and the MAC table</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Found the switch and PC MACs in my own run and explained what the broadcast MAC is for</td>
+</tr>
+<tr role="row">
+<td role="cell">7.3.7 View the Switch MAC Address Table</td>
+<td role="cell">Clear the MAC table and watch it fill again</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Watched four devices get relearned and wrote how ARP and MAC tables can be spoofed</td>
+</tr>
+<tr role="row">
+<td role="cell">9.1.3 Identify MAC and IP Addresses</td>
+<td role="cell">Note the addresses at each hop in simulation</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Filled four PDU tables and explained why the router rewrites MAC addresses</td>
+</tr>
+<tr role="row">
+<td role="cell">9.2.9 Examine the ARP Table</td>
+<td role="cell">Watch ARP requests and replies, including to a remote host</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Found that ARP for an off-subnet host asks for the gateway's address</td>
+</tr>
+<tr role="row">
+<td role="cell">9.3.4 IPv6 Neighbor Discovery</td>
+<td role="cell">Follow Neighbor Discovery on a local and a remote network</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Identified the ICMPv6 types and the solicited-node multicast addresses</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="routers-and-addressing">Routers and addressing</h3> <span class="lab-count">13 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 4: Routers and addressing"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">What I did</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">10.1.4 Configure Initial Router Settings</td>
+<td role="cell">Set up a router and look at flash</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Identified the IOS image in flash and why <code>enable secret</code> overrides <code>enable password</code></td>
+</tr>
+<tr role="row">
+<td role="cell">10.3.4 Connect a Router to a LAN</td>
+<td role="cell">Configure interfaces and read the routing table</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Counted connected and OSPF routes and explained what happens to unlisted destinations</td>
+</tr>
+<tr role="row">
+<td role="cell">10.3.5 Troubleshoot Default Gateway Issues</td>
+<td role="cell">Find and fix four addressing faults</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Found and fixed all four (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">10.4.3 Basic Device Configuration</td>
+<td role="cell">Configure one of three topology versions</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Did the work in Packet Tracer; the write-up only notes which version I had</td>
+</tr>
+<tr role="row">
+<td role="cell">11.5.5 Subnet an IPv4 Network</td>
+<td role="cell">Split a /24 for 50 and 40 hosts and address the devices</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Worked out four /26 subnets and filled the addressing table</td>
+</tr>
+<tr role="row">
+<td role="cell">11.6.6 Calculate IPv4 Subnets</td>
+<td role="cell">Six subnet calculations</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Got all 48 values right</td>
+</tr>
+<tr role="row">
+<td role="cell">11.7.5 Subnetting Scenario</td>
+<td role="cell">Split a /24 into /27s for five networks</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Filled the subnet and addressing tables</td>
+</tr>
+<tr role="row">
+<td role="cell">11.9.3 VLSM Design and Implementation Practice</td>
+<td role="cell">VLSM for four LANs and a router link</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Picked the masks and built the subnet and addressing tables</td>
+</tr>
+<tr role="row">
+<td role="cell">11.10.1 Design and Implement a VLSM Addressing Scheme</td>
+<td role="cell">VLSM for four LANs and a router link, largest first</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Designed the plan and the device addressing (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">12.4.5 Basic Device Configuration</td>
+<td role="cell">Configure IPv4 and IPv6 on a router, switch and hosts</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Filled the dual-stack addressing table</td>
+</tr>
+<tr role="row">
+<td role="cell">12.7.4 Identify IPv6 Addresses</td>
+<td role="cell">Classify, shorten and expand IPv6 addresses</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Matched all eight addresses to their types and wrote the short forms</td>
+</tr>
+<tr role="row">
+<td role="cell">12.9.1 Implement a Subnetted IPv6 Addressing Scheme</td>
+<td role="cell">Subnet an IPv6 /64 block and address two routers</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Worked out the five subnets and the interface addresses</td>
+</tr>
+<tr role="row">
+<td role="cell">13.2.6 Verify IPv4 and IPv6 Addressing</td>
+<td role="cell">Check a dual-stack network with ping and traceroute</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Checked every ping and mapped each traceroute hop to its interface</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="transport-applications-security-and-a-small-network">Transport, applications, security and a small network</h3> <span class="lab-count">5 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 5: Transport, applications, security and a small network"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">What I did</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">14.8.1 TCP and UDP Communications</td>
+<td role="cell">Compare HTTP, FTP, DNS and email at layer 4 in simulation</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Compared the ports, sequence numbers and flags for each and explained why DNS used UDP</td>
+</tr>
+<tr role="row">
+<td role="cell">15.4.8 Observe DNS Resolution</td>
+<td role="cell">Look up A, PTR and MX records</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Explained why browsing by IP can fail for a CDN site and how MX preference works</td>
+</tr>
+<tr role="row">
+<td role="cell">16.2.6 Research Network Security Threats</td>
+<td role="cell">Use SANS and CISA to research a current attack</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Wrote up a SYN flood case and how to defend against it</td>
+</tr>
+<tr role="row">
+<td role="cell">17.5.9 Interpret show Command Output</td>
+<td role="cell">Match <code>show</code> commands to questions about a router</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Answered which command shows the IOS version, flash, users, routes and interfaces</td>
+</tr>
+<tr role="row">
+<td role="cell">17.7.6 Troubleshoot Connectivity Issues</td>
+<td role="cell">Find why four clients can't reach a web server</td>
+<td role="cell"><span class="did-label" aria-hidden="true">What I did: </span>Traced each fault and flagged the one I wasn't allowed to fix (see above)</td>
+</tr>
+</tbody>
+</table></div></details>
+<h2 id="skills">Skills</h2>
+<ul>
+<li>IPv4 subnetting and VLSM design (11.5.5, 11.6.6, 11.7.5, 11.9.3, 11.10.1)</li>
+<li>Troubleshooting by narrowing down what can and can't be reached (10.3.5, 17.7.6)</li>
+<li>Cisco IOS basics: modes, passwords, banners, saving configs and <code>show</code> commands (2.3.7, 2.5.5, 10.1.4, 17.5.9)</li>
+<li>Switching, MAC tables and ARP (7.2.7, 7.3.7, 9.1.3, 9.2.9)</li>
+<li>IPv6 addressing and Neighbor Discovery (9.3.4, 12.7.4, 12.9.1, 13.2.6)</li>
+<li>TCP and UDP behavior, ports and DNS (14.8.1, 15.4.8)</li>
+<li>Packet captures in Wireshark (3.7.10, 7.1.6)</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>The device configurations live in the Packet Tracer files, which I haven't reproduced here. Several activities are Packet Tracer files only, with no write-up.</li>
+<li>All the device configuration was done in Packet Tracer, not on real equipment.</li>
+<li>A few answers have mistakes: the broadcast address above, a mask written as <code>244</code> instead of 224 in 11.7.5, and a "first usable" column filled with last usable addresses in 11.9.3.</li>
+<li>My Wireshark and DNS answers came from my home network, so I haven't reproduced their addresses here.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/Networking-109">NETI 109 repository</a>, with a write-up for every lab above</li>
+<li><a href="https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.docx">11.10.1 VLSM design write-up</a> and <a href="https://github.com/jkosber/Networking-109/blob/main/Module-11-IPv4Addressing/11.10.1%20Packet%20Tracer%20-%20Design%20and%20Implement%20a%20VLSM%20Addressing%20Scheme.Jadon.Kosberg.pka">Packet Tracer file</a></li>
+<li><a href="https://github.com/jkosber/Networking-109/blob/main/Module-17-BuildASmallNetwork/17.7.6%20Packet%20Tracer%20-%20Troubleshoot%20Connectivity%20Issues.Jadon.Kosberg.docx">17.7.6 troubleshooting write-up</a></li>
+<li><a href="https://github.com/jkosber/Networking-109/blob/main/Module-10-BasicRouterConfiguration/10.3.5%20Packet%20Tracer%20-%20Troubleshoot%20Default%20Gateway%20Issues.Jadon.Kosberg.docx">10.3.5 default gateway write-up</a></li>
+<li><a href="https://github.com/jkosber/Networking-109/blob/main/Module-09-AddressResolution/9.3.4%20Packet%20Tracer%20-%20IPv6%20Neighbor%20Discovery.Jadon.Kosberg.docx">9.3.4 Neighbor Discovery write-up</a></li>
+</ul>
+<p><a href="../">All coursework</a> · <a href="../csia-210/">CSIA 210 Network Protocol Analysis</a> · <a href="../csia-115/">CSIA 115 Cyber Ops</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>
