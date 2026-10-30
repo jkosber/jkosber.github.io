@@ -849,8 +849,41 @@ async (page) => {
   result.checks.typeScale = { 959: narrowName, 961: wideName };
   if (Math.abs(narrowName - wideName) > 4) fail(`typeScale: name is ${narrowName}px at 959 and ${wideName}px at 961`);
 
-  // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the name,
-  // the header strip, the My role panel, Result panels, the coursework table or stacked tables (code excepted).
+  // Words broken mid-word inside the blocks `selector` matches, outside code: how many blocks matched
+  // and the split words. A line break after a hyphen is normal; a break inside a word part is the defect.
+  const splitWords = (selector) => page.evaluate((blockSelector) => {
+    const blocks = document.querySelectorAll(blockSelector);
+    const split = [];
+    for (const block of blocks) {
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (node.parentElement.closest('code')) continue;
+        for (const match of node.data.matchAll(/[^\s-]+/g)) {
+          const range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          if (new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top))).size > 1) split.push(match[0]);
+        }
+      }
+    }
+    return { blocks: blocks.length, split };
+  }, selector);
+  // Page titles, the homepage name among them, keep every word whole at 200% text at 390 and 320 px,
+  // and the description under a title is never set larger than the title.
+  result.checks.titleWrap = { 390: 0, 320: 0 };
+  const titleWrap = async (route, width) => {
+    const titles = await splitWords('h1');
+    result.checks.titleWrap[width] += titles.blocks;
+    if (titles.split.length) fail(`titleWrap ${route} @${width}: title words broken mid-word at 200% text: ${[...new Set(titles.split)].join(', ')}`);
+    const sizes = await page.evaluate(() => {
+      const size = (element) => (element ? parseFloat(getComputedStyle(element).fontSize) : null);
+      return { title: size(document.querySelector('h1')), description: size(document.querySelector('.dek, .page-heading > p')) };
+    });
+    if (sizes.title && sizes.description > sizes.title) fail(`titleWrap ${route} @${width}: the description (${sizes.description}px) is larger than the title (${sizes.title}px) at 200% text`);
+  };
+
+  // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the
+  // header strip, the My role panel, Result panels, the coursework table or stacked tables (code excepted).
   await page.setViewportSize({ width: 390, height: 844 });
   result.checks.text200 = 0;
   for (const route of routes) {
@@ -858,33 +891,20 @@ async (page) => {
     const state = await page.evaluate(async () => {
       document.documentElement.style.fontSize = '200%';
       await new Promise((done) => setTimeout(done, 150));
-      const split = [];
-      for (const block of document.querySelectorAll('.hero h1, .strip, .role-panel, .result, .coursework-index, .table-scroll[data-columns="2"]')) {
-        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
-        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-          if (node.parentElement.closest('code')) continue;
-          // A line break after a hyphen is normal; a break inside a word part is the defect.
-          for (const match of node.data.matchAll(/[^\s-]+/g)) {
-            const range = document.createRange();
-            range.setStart(node, match.index);
-            range.setEnd(node, match.index + match[0].length);
-            if (new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top))).size > 1) split.push(match[0]);
-          }
-        }
-      }
       // Two-column tables stack instead of scrolling, and the hook marks them for that.
       const pairs = [...document.querySelectorAll('.table-scroll')].filter((region) => !region.querySelector('tr > :nth-child(3)'));
       const classTable = document.querySelector('.coursework-index .table-scroll');
       return {
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         classTableScroll: classTable ? classTable.scrollWidth - classTable.clientWidth : 0,
-        split,
         pairs: pairs.length,
         scrollingPairs: pairs.filter((region) => region.scrollWidth > region.clientWidth).length,
         unmarkedPairs: pairs.filter((region) => region.dataset.columns !== '2').length,
       };
     });
     result.checks.text200 += 1;
+    const words = await splitWords('.strip, .role-panel, .result, .coursework-index, .table-scroll[data-columns="2"]');
+    await titleWrap(route, 390);
     const enlarged = await regionState(page, true);
     result.checks.scrollRegions.text200 = addCounts(result.checks.scrollRegions.text200 || {}, regionCounts(enlarged));
     for (const problem of regionProblems(enlarged)) fail(`scrollRegions ${route} @390 at 200% text: ${problem}`);
@@ -893,10 +913,10 @@ async (page) => {
     if (state.unmarkedPairs) fail(`stackedPairs ${route}: ${state.unmarkedPairs} two-column table(s) lack data-columns="2"`);
     if (state.overflow > 0) fail(`text200 ${route}: ${state.overflow}px horizontal overflow`);
     if (state.classTableScroll > 0) fail(`text200 ${route}: the coursework table scrolls ${state.classTableScroll}px sideways`);
-    if (state.split.length) fail(`text200 ${route}: words broken mid-word: ${[...new Set(state.split)].join(', ')}`);
+    if (words.split.length) fail(`text200 ${route}: words broken mid-word: ${[...new Set(words.split)].join(', ')}`);
   }
 
-  // At the narrowest width, 200% text still never widens the page.
+  // At the narrowest width, 200% text still never widens the page or splits a title word.
   await page.setViewportSize({ width: 320, height: 800 });
   result.checks.text200narrow = 0;
   for (const route of routes) {
@@ -908,6 +928,7 @@ async (page) => {
     });
     result.checks.text200narrow += 1;
     if (overflow > 0) fail(`text200 ${route} @320: ${overflow}px horizontal overflow`);
+    await titleWrap(route, 320);
   }
 
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
