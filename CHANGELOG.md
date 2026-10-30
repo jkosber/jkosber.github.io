@@ -1,5 +1,13 @@
 # Portfolio change record
 
+## October 30, 2026 — checks on Linux
+
+- The command table, README and verification skill run every Python command through a uv-made `.venv` (`uv venv --python 3.14`, `uv pip sync requirements.txt`), since the system interpreter on some distributions has no `pip`; `.venv/` is ignored and the project allow-list matches the venv commands. CI is unchanged.
+- `run-check.js` launches Chromium from `PLAYWRIGHT_CHROMIUM_PATH` when set, so the Chromium run shares the system browser with the Playwright MCP and needs no browser download; `run-check.test.js` pins the launch options. WebKit runs on a machine with Playwright's WebKit build against the preview through an SSH reverse tunnel; the skill says how.
+- Result wells on screens 480px wide and narrower use `.9375rem` text, 15px instead of 16px at the default size. At 390px with 200% text, the CyberOps page's Result split "recommendations." mid-word in the Playwright MCP's headed Chromium, whose 15px classic scrollbar left the well 268px for a 277px word. Headless Chromium draws no scrollbar, so `run-check.js` had not reported it.
+
+Validation: 32 tests and the strict build passed, in this checkout and in a fresh clone set up with only `uv venv` and `uv pip sync`. The three `run-check.test.js` tests passed under `node --test`. On Linux, `run-check.js chromium` with the system Chromium exited 0 with `problems: []` across all 18 pages and the 404 page. In the Playwright MCP's headed Chromium, `check-site.js` reported no problems apart from the hover-lift check, which flaked once in three isolated re-runs and passed otherwise. WebKit: not yet run on 2026-10-30; the result will be added when it runs. A grep of `CLAUDE.md`, `README.md`, `.claude/` and this changelog for private host names and local paths found nothing. Screen readers, physical devices and Safari on iOS were not assessed.
+
 ## October 24, 2026 — visual upgrade
 
 - Four surface layers (page, band, panel, raised) with an inset for Result wells and code, one spacing scale and one type scale. Flat fills; amber is limited to buttons, Result labels and bars, the footer email, the current nav item and the contents rail's current-item bar.
