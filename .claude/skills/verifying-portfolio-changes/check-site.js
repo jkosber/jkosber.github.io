@@ -868,12 +868,18 @@ async (page) => {
     }
     return { blocks: blocks.length, split };
   }, selector);
-  // Page titles, the homepage name among them, keep every word whole at 200% text at 390 and 320 px.
+  // Page titles, the homepage name among them, keep every word whole at 200% text at 390 and 320 px,
+  // and the description under a title is never set larger than the title.
   result.checks.titleWrap = { 390: 0, 320: 0 };
   const titleWrap = async (route, width) => {
     const titles = await splitWords('h1');
     result.checks.titleWrap[width] += titles.blocks;
     if (titles.split.length) fail(`titleWrap ${route} @${width}: title words broken mid-word at 200% text: ${[...new Set(titles.split)].join(', ')}`);
+    const sizes = await page.evaluate(() => {
+      const size = (element) => (element ? parseFloat(getComputedStyle(element).fontSize) : null);
+      return { title: size(document.querySelector('h1')), description: size(document.querySelector('.dek, .page-heading > p')) };
+    });
+    if (sizes.title && sizes.description > sizes.title) fail(`titleWrap ${route} @${width}: the description (${sizes.description}px) is larger than the title (${sizes.title}px) at 200% text`);
   };
 
   // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the
