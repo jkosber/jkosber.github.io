@@ -13,14 +13,14 @@ A strict build proves links and anchors resolve. It does not prove a page render
 
 | Check | Command | Pass |
 |---|---|---|
-| Hook tests | `python -m unittest discover -s tests` | `OK` |
-| Strict build | `python -m mkdocs build --strict` (add `-d <temp folder>` when the check must not touch `site/`) | No `WARNING` or `ERROR` lines |
+| Hook tests | `.venv/bin/python -m unittest discover -s tests` | `OK` |
+| Strict build | `.venv/bin/python -m mkdocs build --strict` (add `-d <temp folder>` when the check must not touch `site/`) | No `WARNING` or `ERROR` lines |
 | Diff review | `git status --short` and `git diff` | Only intended files; no debug leftovers, no `.env`, nothing from the parent workspace |
 | Private data | Grep `docs/`, `overrides/` and `.claude/` for `artifact`, `192\.168\.\d+\.\d+`, `\b10\.\d+\.\d+\.\d+`, `\b172\.(1[6-9]\|2\d\|3[01])\.\d+\.\d+`, `\bf[cd][0-9a-f]{2}:`, `Users[/\\]`, and for the private terms listed in the workspace `CLAUDE.md` (search without printing them) | No hits in visible copy or tracked files. `192.0.2.x`, `198.51.100.x`, `2001:db8::`, `example.com` and what the public JHomelab repo publishes (its host name, addresses ending in `.X`) are allowed |
 
 ## Rendered checks
 
-1. Check port 8765 is free, then start the preview in the background: `python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict`.
+1. Check port 8765 is free, then start the preview in the background: `.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict`. The environment comes from the `CLAUDE.md` command table.
 2. Run `check-site.js` (next to this file) with the Playwright MCP tool `browser_run_code_unsafe`, passing its absolute path as `filename`. It reads the routes from `/sitemap.xml` and returns JSON covering:
    - every route plus a missing page at 320, 390, 768 and 1440 px: HTTP status, horizontal overflow, broken images, page errors, table words broken mid-word (outside code) and two-column tables that scroll sideways;
    - header icons, main nav, footer links, and the mobile menu opening and closing on Escape;
@@ -56,7 +56,7 @@ A strict build proves links and anchors resolve. It does not prove a page render
 | Tokens or raw colors | `tests/test_stylesheet.py` passes (listed tokens pinned, no raw hex outside `:root`, print and forced colors, `!important` only with an `anti-slop-allow:` reason) |
 | Tool names in `built_with` or `tools` | `tests/test_tool_icons.py` passes; a name with no logo shows as text, which is fine |
 | Shared CSS or JS before publishing | The `?v=` value in `site/index.html` differs from `git show main:docs/stylesheets/portfolio.css \| sha256sum \| cut -c1-12` (same for the JS), so returning visitors get the new files |
-| Performance or accessibility claims | `npx -y lighthouse@12 http://127.0.0.1:8765/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=<temp>/lh.json --quiet --chrome-flags="--headless=new"` (uses the installed Chrome); report scores as local lab results |
+| Performance or accessibility claims | `npx -y lighthouse@12 http://127.0.0.1:8765/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=<temp>/lh.json --quiet --chrome-flags="--headless=new"` (uses the installed Chrome or Chromium; set `CHROME_PATH` when neither is on `PATH`); report scores as local lab results |
 
 ## Report
 
