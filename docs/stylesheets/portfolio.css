@@ -66,7 +66,7 @@ button { font: inherit; }
 img, svg { max-width: 100%; height: auto; }
 .icon { display: block; flex: 0 0 auto; width: 20px; height: 20px; }
 h1, h2, h3 { color: var(--heading); font-family: var(--display); font-weight: 500; line-height: 1.15; letter-spacing: -.03em; text-wrap: balance; overflow-wrap: break-word; }
-/* Long title words hyphenate before they break; at 200% text on a phone they cannot fit whole. */
+/* Long title words hyphenate before they break; page titles also fit their column at enlarged text (.page-head h1). */
 h1 { font-size: clamp(2.25rem, 4vw, var(--t-h1)); margin: 0 0 1.75rem; hyphens: auto; }
 h2 { font-size: clamp(1.625rem, 2.6vw, var(--t-h2)); }
 h3 { font-size: 1.4rem; }
@@ -311,7 +311,11 @@ p { max-width: 35em; }
 .crumbs a { display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
 .crumbs [aria-current] { color: var(--heading); }
 .head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s4); }
-.page-head h1, .error-page h1 { margin: 0; font-size: clamp(2.25rem, 4.4vw, 3.5rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
+/* With enlarged text the title is capped to its column so no word splits: 12cqi fits the longest title
+   word, "AdventureWorks", about 8.2 em wide. The cap never goes below 72px - 2.25rem: the 36 px floor at
+   default text, so it never binds there, and 0 at 200%. */
+.head-text, .page-heading, .error-page { container-type: inline-size; }
+.page-head h1, .error-page h1 { margin: 0; font-size: min(clamp(2.25rem, 4.4vw, 3.5rem), max(12cqi, 72px - 2.25rem)); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
 .dek, .page-heading > p { max-width: 32em; margin: var(--s2) 0 0; color: var(--muted); font-size: clamp(1.125rem, 1.5vw, var(--t-lead)); line-height: 1.55; }
 /* break-word, not the body's anywhere: a strip item wraps whole words before it splits one. */
 .strip { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin: var(--s4) 0 0; overflow-wrap: break-word; }
