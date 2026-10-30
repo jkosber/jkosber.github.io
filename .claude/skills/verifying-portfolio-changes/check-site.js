@@ -167,8 +167,8 @@ async (page) => {
   }
 
   // After load the regions follow the layout: narrowing the window gives a table that starts to
-  // scroll its tab stop back, widening takes it away again, and a lab module opened at 200% text
-  // on a phone makes its table a region if it scrolls.
+  // scroll its tab stop back, widening takes it away again, larger text does the same as narrowing,
+  // and a lab module opened at 200% text on a phone makes its table a region if it scrolls.
   result.checks.scrollRegions.resized = [];
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/proxmox-virtualization/');
@@ -179,6 +179,15 @@ async (page) => {
     result.checks.scrollRegions.resized.push({ width, ...counts });
     for (const problem of regionProblems(regions)) fail(`scrollRegions /technical-labs/proxmox-virtualization/ resized to ${width}: ${problem}`);
     if (width === 320 && !counts.scrolling) fail('scrollRegions: no region scrolls on the Proxmox page after narrowing to 320, so the resize proves nothing');
+  }
+  // Doubling the text size at 1440 px widens tables past their column without resizing the window.
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  {
+    const regions = await regionState(page, true);
+    const counts = regionCounts(regions);
+    result.checks.scrollRegions.textSize = counts;
+    for (const problem of regionProblems(regions)) fail(`scrollRegions /technical-labs/proxmox-virtualization/ @1440 at 200% text: ${problem}`);
+    if (!counts.scrolling) fail('scrollRegions: no region scrolls on the Proxmox page at 1440 with 200% text, so the text size change proves nothing');
   }
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto(BASE + '/coursework/neti-109/');
