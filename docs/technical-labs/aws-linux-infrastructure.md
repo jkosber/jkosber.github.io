@@ -3,7 +3,6 @@ title: AdventureWorks on AWS
 description: I deployed the course's PHP app and SQL Server database on two EC2 servers, then searched the catalog and saved a review through it.
 kind: Completed coursework
 status: "May 2026"
-visual: assets/project-aws.svg
 tools: [AWS EC2, Ubuntu, Apache, SQL Server]
 detail: true
 class_page: coursework/svad-111/

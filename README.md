@@ -23,25 +23,26 @@ On Windows the interpreter is `.venv\Scripts\python`.
 | Path | Contents |
 |---|---|
 | `docs/` | Markdown pages, assets, `portfolio.css` and `portfolio.js` |
-| `docs/technical-labs/` | Project case studies |
+| `docs/technical-labs/` | Personal projects and the four coursework case studies |
+| `docs/coursework/` | Coursework index and one page per class |
 | `overrides/` | Page shell, homepage, 404 page and shared macros |
-| `hooks/` | Build hooks: asset cache-busting and accessible table/code regions |
-| `tests/` | Hook unit tests |
+| `hooks/` | Build hooks: asset cache-busting, tool logos, class page panels and lab modules, and accessible tables and code |
+| `tests/` | Unit tests for the hooks, the stylesheet's tokens and rules, class page order and copy vocabulary |
 | `.claude/` | Claude Code project settings and skills |
 | `CLAUDE.md` | Maintenance rules: content, privacy, design system, verification |
 
-Project cards, filters and the homepage feature list are built from page frontmatter and the `mkdocs.yml` nav order. [CLAUDE.md](CLAUDE.md) documents the fields.
+Project rows, the homepage feature panels, class tiles and the Coursework index are built from page frontmatter and the `mkdocs.yml` nav order. [CLAUDE.md](CLAUDE.md) documents the fields.
 
 ## How the site behaves
 
 | Area | Behavior |
 |---|---|
-| Without JavaScript | All content and navigation work. The script adds the mobile menu, project filters, hero scene controls, section highlighting and back-to-top |
-| Layout stability | The script loads in the head and marks the page before first paint; menu and filter space is reserved so nothing shifts |
+| Without JavaScript | All content and navigation work. The script adds the mobile menu, the "On this page" contents and section tracking, back-to-top, the screenshot lightbox and opening lab modules before printing, and keeps table and screenshot wrappers focusable only while they scroll |
+| Layout stability | The script loads in the head and marks the page before first paint; the menu button's space is reserved so nothing shifts |
 | Caching | `hooks/asset_versions.py` adds content hashes to the CSS and JS URLs, so a returning visitor never pairs new HTML with an old stylesheet |
-| Tables and code | `hooks/reading_accessibility.py` wraps them in keyboard-scrollable regions named after the preceding heading |
-| Motion | One finite hero entrance and interaction-driven changes, all off under `prefers-reduced-motion` |
-| Print | White background, compact type, author name, email and site on every page; decorative art and controls are hidden |
+| Tables and code | `hooks/reading_accessibility.py` makes them keyboard-scrollable and names them after the preceding heading |
+| Motion | A short rise on the homepage intro, a fade-up on homepage screenshots and project rows as they scroll in, a 2 px lift on hovered project rows and class tiles, and lightbox, menu and page transitions; nothing loops or runs past half a second, and `prefers-reduced-motion` turns it all off |
+| Print | White background, compact type, author name, email and site on every page; the header, footer, contents, buttons and the class page and role illustrations are hidden, and folded lab modules print open |
 | Assets | Fonts, artwork and scripts are local. No third-party requests |
 
 ## Privacy
@@ -50,7 +51,7 @@ Personal location, phone numbers, private host names, addresses and resumes stay
 
 ## Deployment
 
-A push to `main` runs `.github/workflows/deploy.yml`: it installs the pinned dependencies, runs the hook tests and publishes with `mkdocs gh-deploy --strict --force`. GitHub Pages serves the `gh-pages` branch. Changes are reviewed locally on a branch and published only with the owner's approval.
+A push to `main` runs `.github/workflows/deploy.yml`: it installs the pinned dependencies, runs the tests and publishes with `mkdocs gh-deploy --strict --force`. GitHub Pages serves the `gh-pages` branch. Changes are reviewed locally on a branch and published only with the owner's approval.
 
 ### Custom domain
 

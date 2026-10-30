@@ -1,4 +1,4 @@
-/* Navigation and filtering enhance an otherwise complete, static site. */
+/* Progressive enhancement for an otherwise complete, static site. */
 // Run this small file in the head so enhanced layout is reserved before paint.
 // If it cannot load, the ordinary navigation remains visible and usable.
 document.documentElement.classList.add('js');
