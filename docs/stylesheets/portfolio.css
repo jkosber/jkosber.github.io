@@ -365,8 +365,9 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
   .panel { padding: 1.25rem; }
 }
 @media (max-width: 480px) {
-  /* Fixed side padding: rem padding grows with enlarged text and leaves long words no room. */
-  .result { padding: .9rem 12px; }
+  /* Fixed side padding: rem padding grows with enlarged text and leaves long words no room.
+     The size a step under 1rem keeps a long word whole at 200% text beside a 15 px classic scrollbar. */
+  .result { padding: .9rem 12px; font-size: .9375rem; }
 }
 
 .prose { min-width: 0; font-size: 1.0625rem; }
