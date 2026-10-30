@@ -5,9 +5,11 @@
   },
   "permissions": {
     "allow": [
-      "Bash(python -m mkdocs build *)",
-      "Bash(python -m mkdocs serve *)",
-      "Bash(python -m unittest *)"
+      "Bash(uv venv *)",
+      "Bash(uv pip sync *)",
+      "Bash(.venv/bin/python -m mkdocs build *)",
+      "Bash(.venv/bin/python -m mkdocs serve *)",
+      "Bash(.venv/bin/python -m unittest *)"
     ]
   }
 }
