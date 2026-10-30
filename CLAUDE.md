@@ -29,11 +29,11 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `overrides/partials/components.html` | `icon`, `feature`, `minor_row`, `class_tile`, `role_card`, `role_panel`, `project_row` and `experience_entries` macros |
 | `overrides/partials/home.html` | Homepage: hero band with the facts panel, projects (feature panels for those with a `screenshot`, a minor row for the rest), the coursework band of class tiles, role cards |
 | `docs/stylesheets/portfolio.css` | All styles: tokens, components, breakpoints, motion, reduced motion, print. `tests/test_stylesheet.py` pins the tokens and forbids raw hex outside `:root`, print and forced colors |
-| `docs/javascripts/portfolio.js` | Mobile menu, the "On this page" contents and section tracking, back-to-top, the screenshot lightbox, opening lab modules before printing |
+| `docs/javascripts/portfolio.js` | Mobile menu, the "On this page" contents and section tracking, back-to-top, the screenshot lightbox, opening lab modules before printing, keeping table and screenshot wrappers focusable regions only while they scroll (a `ResizeObserver` restores `role`, `tabindex` and `aria-label`) |
 | `hooks/asset_versions.py` | Content-hash query strings on the CSS/JS URLs, so returning browsers never mix old CSS with new HTML |
 | `hooks/tool_icons.py`, `hooks/tool_icons.json` | `tool_icon(name)` Jinja global: matches a tool name to a Simple Icons logo (16.35.0, CC0) and inlines it as an 18 px SVG, or nothing when no logo matches |
 | `hooks/class_sections.py` | Class pages: wraps each Strongest work item in a panel (two adjacent one- or two-paragraph items sit side by side; the first is never brief) and folds each lab module under Labs into a closed `details.lab-module` |
-| `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions named from the preceding heading; gives two-column tables explicit table roles so they can stack on phones |
+| `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions named from the preceding heading (`portfolio.js` keeps a table's region only while it scrolls); gives two-column tables explicit table roles so they can stack on phones |
 | `tests/` | Hook tests, and the copy voice test that caps report vocabulary per page |
 | `.claude/skills/verifying-portfolio-changes/` | The verification skill, `check-site.js` (rendered checks) and `run-check.js` (runs them in Chromium or WebKit) |
 
@@ -85,14 +85,14 @@ The site is public and recruiters read it. These hold for every edit:
 | Summary pair | `.summary-pair` with the My role `role_panel` beside a `.panel--result` | Class pages, under the page head |
 | Contents | `details.contents`: a sticky right rail at 1100 px and up, an inline closed "On this page" below; it opens or closes when the window crosses 1100 px | Pages with h2 sections |
 | Strongest work panels | `section.work` per h3 item, `.work-pair` for two adjacent brief items; made by `hooks/class_sections.py`, so authors write plain Markdown | Class pages |
-| Lab modules | `details.lab-module` with `.lab-count` (left out when a module has no lab rows) and `.lab-table`; closed by default, printed open with or without JavaScript; stacks with a visible `.did-label` on phones | Class pages' Labs section |
+| Lab modules | `details.lab-module` with `.lab-count` (left out when a module has no lab rows; a space in the summary keeps it a separate word for screen readers) and `.lab-table`; closed by default, printed open with or without JavaScript; stacks with a visible `.did-label` on phones | Class pages' Labs section |
 | Lightbox | `a.zoom` (`tabindex="-1"`) around a template screenshot and the "Open full size" caption link of any figure, which is the screenshot's one keyboard stop; one `dialog.lightbox` in `main.html` | Enlarging a screenshot above 760 px; focus returns to the link that opened it. Below that, and without JavaScript, the link opens the image file |
 | Tool list | `ul.tools` (`role="list"`, `aria-label="Built with"`), each `li` a `tool_icon(name)` plus the visible name | Feature panels and My role panels |
 | Result | `.result` well with a 3 px amber bar; `.panel--result` on class pages | Every Result, styled the same |
 | Architecture flow | `<figure class="architecture">` with an `<ol class="architecture-flow">` | A simple left-to-right path. Use a table for branching topology |
-| Evidence figure | `<figure class="evidence-figure">` with a focusable `.evidence-scroll` region (`role="region"`, `tabindex="0"`, `aria-label`), a dated caption and a full-size link. The screenshot fits its column at every width | Screenshots |
+| Evidence figure | `<figure class="evidence-figure">` with a `.evidence-scroll` region (`role="region"`, `tabindex="0"`, `aria-label`, focusable only while it scrolls), a dated caption and a full-size link. The screenshot fits its column at every width | Screenshots |
 | Narrative list | A definition list inside `<div class="narrative-list" markdown>`, each term with `: **Label.** ...` definitions; add `narrative-list--pairs` for one definition per term | Paragraph-length comparisons |
-| Table | Plain Markdown after a descriptive heading; the hook names its scroll region from that heading. Two-column tables stack into label and value on phones | Inventories and numbers |
+| Table | Plain Markdown after a descriptive heading; the hook names its scroll region from that heading, a focusable region only while it scrolls. Two-column tables stack into label and value on phones | Inventories and numbers |
 | Terminal run | A `text` code block with the prompt shortened to `$` | A run whose screenshot carries a username or host name |
 
 ## Adding a project
