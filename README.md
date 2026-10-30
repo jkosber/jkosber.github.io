@@ -6,12 +6,15 @@ Source for [jnkos.com](https://jnkos.com/): professional IT experience, personal
 
 Python 3.14, with build dependencies pinned in `requirements.txt` (MkDocs 1.6.1, Material 9.7.7).
 
-```powershell
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests
-python -m mkdocs build --strict
-python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict
+```bash
+uv venv --python 3.14
+uv pip sync requirements.txt
+.venv/bin/python -m unittest discover -s tests
+.venv/bin/python -m mkdocs build --strict
+.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict
 ```
+
+On Windows the interpreter is `.venv\Scripts\python`.
 
 `site/` is generated and ignored. `requirements.in` lists the direct dependencies; regenerate the pins with `uv pip compile requirements.in --python-version 3.14 --universal --no-header --no-annotate --output-file requirements.txt`, then rerun the checks.
 

@@ -8,12 +8,12 @@ Jadon Kosberg's public portfolio at [jnkos.com](https://jnkos.com/), written for
 
 | Task | Command |
 |---|---|
-| Install pinned dependencies | `python -m pip install -r requirements.txt` |
-| Hook tests | `python -m unittest discover -s tests` |
-| Strict build (links and anchors must resolve) | `python -m mkdocs build --strict` |
-| Local preview | `python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict` |
+| Create the environment (once) | `uv venv --python 3.14`, then `uv pip sync requirements.txt` |
+| Hook tests | `.venv/bin/python -m unittest discover -s tests` |
+| Strict build (links and anchors must resolve) | `.venv/bin/python -m mkdocs build --strict` |
+| Local preview | `.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict` |
 
-Python 3.14. MkDocs 1.6.1 and Material 9.7.7 are pinned in `requirements.txt`; regenerate it with `uv pip compile requirements.in --python-version 3.14 --universal --no-header --no-annotate --output-file requirements.txt`. `site/` is generated and ignored.
+Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\python`); the system interpreter has no `pip` on some distributions, so every command names the venv's. MkDocs 1.6.1 and Material 9.7.7 are pinned in `requirements.txt`; regenerate it with `uv pip compile requirements.in --python-version 3.14 --universal --no-header --no-annotate --output-file requirements.txt`. CI installs the same pins with pip. `site/` and `.venv/` are generated and ignored.
 
 ## Where things live
 
