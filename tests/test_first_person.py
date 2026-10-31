@@ -102,8 +102,9 @@ class FirstPersonTests(unittest.TestCase):
             "{# My role panel:\n   atop the body. #}\n"
             '<span class="panel-title">Role</span>\n'
             "{% if page.meta %}<p>For my work, see {{ 'experience/' | url }}.</p>{% endif %}\n"
+            "{% set social_alt = 'Jadon beside my dashboard' %}{{ \"our page\" | e }}\n"
         )
-        self.assertEqual(template_first_person(template), [(4, "my")])
+        self.assertEqual(template_first_person(template), [(4, "my"), (5, "my"), (5, "our")])
 
 
 if __name__ == "__main__":
