@@ -57,7 +57,7 @@ A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. Th
 
 ## Tracking source-address changes
 
-Next came the Windows 10 host picking up public and temporary SLAAC addresses next to its DHCPv6 address:
+Next, the analysis followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address:
 
 | Point in the trace | Finding |
 |---|---|
