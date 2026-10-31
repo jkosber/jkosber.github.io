@@ -11,10 +11,10 @@ OVERRIDES = ROOT / "overrides"
 # First-person pronouns as whole words: "I" and its contractions as a capital, the rest in any case.
 FIRST_PERSON = re.compile(
     r"\bI(?:['’](?:m|ve|d|ll))?(?![\w'’])"
-    r"|\b(?i:me|my|mine|myself|we|we['’](?:re|ve|d|ll)|our|ours|ourselves)\b"
+    r"|\b(?i:me|my|mine|myself|we|we['’](?:re|ve|d|ll)|our|ours|ourselves|us|let['’]s)\b"
 )
-# Names that contain a capital I without meaning the writer.
-NAMES = re.compile(r"\bNetworking I\b|\bI/O\b")
+# Names that contain a first-person word without meaning the writer, such as a Cisco lab title.
+NAMES = re.compile(r"\bNetworking I\b|\bI/O\b|\bShows Us\b")
 # Attributes a reader or screen reader gets as text.
 TEXT_ATTRIBUTES = re.compile(r"""\b(?:alt|aria-label|title)\s*=\s*"([^"]*)\"""")
 
