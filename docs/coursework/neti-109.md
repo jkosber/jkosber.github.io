@@ -11,7 +11,7 @@ art: {src: assets/thumbnails/network.svg, width: 240, height: 160}
 summary:
   role: "Worked the Packet Tracer activities and labs and wrote up each one: addressing tables, subnet plans, and what was wrong on each device and how it was fixed."
   built_with: ["Cisco Packet Tracer", "Cisco IOS", "Wireshark"]
-  result: "36 lab write-ups, from fixed-length subnetting to a full VLSM design, and two troubleshooting labs that traced client faults to addresses, gateways, a router interface and DNS. Also completed Cisco's Networking Basics and Introduction to Networks courses."
+  result: "36 lab write-ups, from fixed-length subnetting to a full VLSM design, and two troubleshooting labs with client faults traced to addresses, gateways, a router interface and DNS. Cisco's Networking Basics and Introduction to Networks courses were completed too."
 ---
 
 # NETI 109 Networking I
@@ -47,7 +47,7 @@ The plan gave the largest LAN a /26, the next two a /27 each, the smallest a /28
 
 In each LAN the router took the first usable address, the switch the second and the client the last, so the plan doubled as the device addressing table.
 
-One mistake to fix: the largest LAN's client got the address ending in `.63`. That's the /26's broadcast address, which the submission's own subnet table lists correctly. The client should have been `.62`.
+One mistake in the submission: the largest LAN's client got the address ending in `.63`. That's the /26's broadcast address, which the submission's own subnet table lists correctly. The client should have been `.62`.
 
 ### Troubleshooting a web server outage (17.7.6) {#troubleshooting-access-to-a-web-server}
 
