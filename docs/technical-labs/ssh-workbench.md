@@ -5,7 +5,7 @@ kind: Personal software project
 status: Version 0.3.3
 tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
-  role: "Defined what Workbench does, planned each release as small tested tasks and tested it on real machines."
+  role: "Defined what Workbench does, planned each release as small tested tasks and tested it on personal machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
   result: "Eight tagged releases from October 20 to 24, 2026, after work began October 9. Version 0.3.3 passes 1,122 automated tests on Windows and Ubuntu."
   source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
@@ -67,7 +67,7 @@ Key setup never sees a secret
 
 ## How it was developed {#how-i-worked}
 
-SSH Workbench was developed with AI coding agents in a test-first workflow: each task had a written goal and acceptance criteria, every pull request and release was reviewed and approved, and it was tested on real machines.
+Jadon developed SSH Workbench with AI coding agents in a test-first workflow: he set each task's goal and acceptance criteria, approved every pull request and release, and tested it on his own machines.
 
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
@@ -80,7 +80,7 @@ The terminal handoff was tested in Windows Terminal and, on October 30, checked 
 
 The automated tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
 
-Around the 0.2.0 release, checks on real machines covered the parts tests can't:
+Around the 0.2.0 release, checks on personal machines covered the parts tests can't:
 
 - A new key installed and logged in alone on the Linux Mint laptop, and as administrator on both Windows PCs.
 - Key setup on the Proxmox host, where the key file lives behind a cluster-filesystem link.
