@@ -14,9 +14,9 @@ art: {src: assets/project-resume.svg, width: 600, height: 340}
 
 # Job scan and resume tailor
 
-Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything lands on a local review page, and nothing goes out until it has been reviewed.
+Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything lands on a local review page, and nothing goes out before a manual read-through.
 
-An AI agent does the reading and comparing. Python scripts do the repeatable part: building the Word and PDF files and checking them against rules that can fail the build. Every claim in the documents comes from the source resume.
+An AI agent does the reading and comparing. Python scripts do the repeatable part: building the Word and PDF files and checking them against rules that can fail the build. What the documents say about the candidate comes only from the source resume.
 
 ## From job posting to application documents {#from-job-posting-to-application}
 
@@ -24,7 +24,7 @@ An AI agent does the reading and comparing. Python scripts do the repeatable par
   <ol class="architecture-flow" role="list">
     <li><strong>Read and compare</strong><span>Source resume<br>Posting text and metadata<br>Agent applies the fit rubric</span><small>Profile + matches.json</small></li>
     <li><strong>Build and check</strong><span>Per-role content specification<br>DOCX generation and PDF conversion<br>Document and wording checks</span><small>Resumes + ranking report</small></li>
-    <li><strong>Review locally</strong><span>HTML page with sibling documents<br>Reasons, gaps and file warnings<br>Review before use</span><small>No automatic applications</small></li>
+    <li><strong>Review locally</strong><span>HTML page with sibling documents<br>Reasons, gaps and file warnings<br>Manual review before use</span><small>No automatic applications</small></li>
   </ol>
   <figcaption>Every match goes into the ranking report; the strongest also get a resume.</figcaption>
 </figure>
@@ -92,7 +92,7 @@ Also in July, long summaries and skills lists pushed first drafts onto two pages
 - Scores are the agent's reading of a posting. They compare it with the baseline profile; they don't predict interviews.
 - Collection depends on browser access and on job-site page structure, which changes.
 - The September 24 review didn't run the full builder, rewrite, ranking and viewer suites, LibreOffice conversion, a look at the finished documents, or a complete scan from start to finish.
-- Interview outcomes and time saved aren't measured.
+- Interview outcomes and time saved haven't been measured.
 
 ## Sources
 

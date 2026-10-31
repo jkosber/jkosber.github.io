@@ -1,6 +1,6 @@
 ---
 title: SSH Workbench
-description: A keyboard-driven terminal app for a list of SSH machines. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
+description: A keyboard-driven terminal app for machines reached over SSH. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
 status: Version 0.3.3
 tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]

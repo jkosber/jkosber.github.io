@@ -7,7 +7,7 @@ tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "Built and maintained it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October every host was patched after a certificate authority compromise, and monitoring now sends alerts to Discord."
+  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October a certificate authority compromise led to patches on every host, and new monitoring now sends alerts to Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
@@ -20,7 +20,7 @@ screenshot:
 
 # Proxmox homelab
 
-JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from an everyday computer. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
+JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from the daily-use computer. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
 
 Two service guests run all the time, and the other guests start only while they're being worked on. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
@@ -53,7 +53,7 @@ The guests are assigned about 51.5 GB of memory in total, more than the laptop h
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching the daily computer, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching the daily-use computer, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 
@@ -84,7 +84,7 @@ VM 109 runs Docker Engine 29.1.3.
 
 ## Network configuration
 
-An experimental network next to the main LAN is built with Proxmox software-defined networking: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so the Proxmox inventory can be matched against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
+Proxmox software-defined networking runs an experimental network next to the main LAN: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so the Proxmox inventory can be matched against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
 
 ### Firewall policy {#firewall-policy-and-its-limits}
 
@@ -115,7 +115,7 @@ The check couldn't see inside VM 109, because its guest agent wasn't running and
 
 ### A certificate authority compromise
 
-On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. The `emSign ECC Root CA - G3` root was removed from the trust store on the Proxmox host and every guest. CT 110 got a snapshot, then updates to ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL. VM 109 got a snapshot, a Portainer update and a redeploy of every stack. Some vendors ship patched images late, so a small read-only script, written for this, checks each host and reports OK, WAIT, ACT or FAIL for every fix.
+On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. The `emSign ECC Root CA - G3` root was removed from the trust store on the Proxmox host and every guest. On CT 110 a snapshot came first, then updates to ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL. On VM 109 a snapshot preceded a Portainer update and a redeploy of every stack. Some vendors ship patched images late, so the response also included writing a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.
 
 ### Updates on every host
 
@@ -125,7 +125,7 @@ On October 21 the eMudhra (emSign) certificate authority had a key compromise, a
 | VM 109 | Installed the available updates, updated Portainer, Homepage and Uptime Kuma, installed `qemu-guest-agent`, and grew the root volume to the whole disk while the VM was running |
 | CT 110 | Installed every pending update, 33 of them security fixes, and rebooted so every service loaded the new libc and systemd. GoodMem answered again 26 seconds later |
 
-The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because of a pinned older API version. The maintained fork replaced it; the fork negotiates the API itself, so the pin is gone. Every change had a snapshot or backup first, deleted once everything checked out.
+The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because of a pinned older API version. The maintained fork replaced it; the fork negotiates the API itself, so the pin is gone. A snapshot or backup preceded each change and was deleted once everything checked out.
 
 ### Monitoring and alerts
 
