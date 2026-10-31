@@ -98,9 +98,12 @@ class FirstPersonTests(unittest.TestCase):
             "## Lessons {#what-i-have-learned}\n"
             "We tested it on my laptop, and I'm sure I'd do it again.\n"
             '<img src="my.webp" alt="My dashboard" loading="lazy">\n'
+            "Let us check it, and let's go.\n"
+            "| 1.0.6 Top Hacker Shows Us How It Is Done | Research one hack |\n"
         )
         self.assertEqual(first_person(page), [
             (3, "I"), (8, "our"), (13, "We"), (13, "my"), (13, "I'm"), (13, "I'd"), (14, "My"),
+            (15, "us"), (15, "let's"),
         ])
         post = "---\ntitle: A post\nvoice: personal\n---\n\nI wrote this post about my homelab.\n"
         self.assertEqual(first_person(post), [])
