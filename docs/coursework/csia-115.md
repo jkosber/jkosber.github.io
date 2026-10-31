@@ -38,20 +38,20 @@ The full write-up is on [CyberOps & traffic investigation](../technical-labs/soc
 
 ### Rebuilding an exploit kit infection (27.2.15) {#rebuilding-an-exploit-kit-infection}
 
-The data came from a January 2017 infection. Kibana's first alert tied the traffic to the RIG exploit kit, and the Sguil and CapMe transcripts filled in what happened next:
+The data came from a January 2017 infection. The reconstruction started from Kibana's first alert, which tied the traffic to the RIG exploit kit, then used the Sguil and CapMe transcripts to rebuild what happened:
 
 1. A search took the user to a compromised home-improvement site.
 2. The site loaded a script from a redirector, which sent the browser to the exploit kit.
 3. The exploit kit served a Flash exploit.
 4. The later alerts named the payload as Cerber ransomware.
 
-The whole exploit took less than a minute, from 22:54:42 to 22:55:28. The saved page showed how its script avoided detection: "The javascript file avoids detection by splitting the iframe tag." Hashing the downloaded Flash file and looking it up on VirusTotal showed 33 of 62 engines flagging it. A second alert under a different file name carried the same hash: "Yes the two hashes match even though the filenames are different indicating the same malware."
+The whole exploit took less than a minute, from 22:54:42 to 22:55:28. From the saved page, the write-up explains how its script avoided detection: "The javascript file avoids detection by splitting the iframe tag." Hashing the downloaded Flash file and looking it up on VirusTotal showed 33 of 62 engines flagging it. A second alert under a different file name carried the same hash: "Yes the two hashes match even though the filenames are different indicating the same malware."
 
 ### Separating a misconfiguration from an attack (27.2.16) {#separating-a-misconfiguration-from-an-attack}
 
 A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. The write-up judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
 
-The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, encrypted traffic on port 2404 pointed to the Remcos remote-access trojan checking in, and a second download, `F4.exe`, to a trojan downloader. In Kibana, the normal Windows traffic mixed in with it was sorted out, such as the `ncsi.txt` connectivity check and a certificate revocation list.
+The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, the write-up identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. The normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list, was separated out in Kibana.
 
 ### Snort and a firewall rule (26.1.7)
 
