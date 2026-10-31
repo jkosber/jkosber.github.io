@@ -3,7 +3,6 @@ title: CyberOps & traffic investigation
 description: I traced a Pushdo malware infection in Security Onion from the alerts to one Windows host and three downloaded files, then wrote the after-action report.
 kind: Completed coursework
 status: "March 2026"
-visual: assets/project-security.svg
 tools: [Security Onion, Wireshark, NetworkMiner, VirusTotal]
 detail: true
 class_page: coursework/csia-115/

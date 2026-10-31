@@ -54,7 +54,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `roles` | Experience: `id`, `title`, `organization`, `dates`, `image`, `icon`, `summary`, `intro`, `bullets` |
 | `facts` | Homepage facts panel: `label`, `text` (the linked title), `detail` (the muted line beneath), optional `href` |
 
-`kind` and `visual` remain on some pages, but no template reads them.
+`kind` remains on some pages, but no template reads it.
 
 ## Content rules
 
