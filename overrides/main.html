@@ -79,7 +79,7 @@
             {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
           </ul>
           {% endfor %}
-          <p class="related-link">For my work in healthcare and retail IT, see <a href="{{ 'experience/' | url }}">my professional experience</a>.</p>
+          <p class="related-link">Healthcare and retail IT work is on the <a href="{{ 'experience/' | url }}">Professional experience</a> page.</p>
         </div>
       {% elif page and page.meta.layout == 'coursework' %}
         <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
@@ -108,7 +108,7 @@
         <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
           {{ experience_entries() }}
-          <p class="related-link">My homelab, software projects and coursework cover more Linux, networking and security work: see <a href="{{ 'technical-labs/' | url }}">Projects</a> and <a href="{{ 'coursework/' | url }}">Coursework</a>.</p>
+          <p class="related-link">The homelab, software projects and coursework cover more Linux, networking and security work: see <a href="{{ 'technical-labs/' | url }}">Projects</a> and <a href="{{ 'coursework/' | url }}">Coursework</a>.</p>
         </div>
       {% else %}
         {% set sections = namespace(items=[]) %}
@@ -117,8 +117,8 @@
         {% set parts = page.content.split('</h1>', 1) %}
         {% if parts | length == 2 %}
         {# Every reading page: a header band, then the body beside the contents. Case studies put the
-           Result in the band and My role atop the body; class pages, the ones with a course code, put
-           My role beside the Result under the band. A plain page such as About has neither, and shows
+           Result in the band and the Role panel atop the body; class pages, the ones with a course code, put
+           the Role panel beside the Result under the band. A plain page such as About has neither, and shows
            no description under its title. #}
         {% set framed = summary or page.meta.code %}
         {% set is_class = page.meta.code %}

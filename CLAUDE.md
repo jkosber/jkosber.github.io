@@ -34,7 +34,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `hooks/tool_icons.py`, `hooks/tool_icons.json` | `tool_icon(name)` Jinja global: matches a tool name to a Simple Icons logo (16.35.0, CC0) and inlines it as an 18 px SVG, or nothing when no logo matches |
 | `hooks/class_sections.py` | Class pages: wraps each Strongest work item in a panel (two adjacent one- or two-paragraph items sit side by side; the first is never brief) and folds each lab module under Labs into a closed `details.lab-module` |
 | `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions named from the preceding heading (`portfolio.js` keeps a table's region only while it scrolls); gives two-column tables explicit table roles so they can stack on phones |
-| `tests/` | Hook tests, and the copy voice test that caps report vocabulary per page |
+| `tests/` | Hook tests, the copy voice test that caps report vocabulary per page, and the first-person test |
 | `.claude/skills/verifying-portfolio-changes/` | The verification skill, `check-site.js` (rendered checks) and `run-check.js` (runs them in Chromium or WebKit) |
 
 ## Frontmatter
@@ -42,7 +42,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | Field | Effect |
 |---|---|
 | `title`, `description` | Page title, meta description, the line under a case study's title, row text |
-| `summary` | `role`, `built_with`, `result`, optional `source: {label, url}`. `result` shows in the page head; `role` and `built_with` in the My role panel; `source` in the strip |
+| `summary` | `role`, `built_with`, `result`, optional `source: {label, url}`. `result` shows in the page head; `role` and `built_with` in the Role panel; `source` in the strip |
 | `screenshot` | `src`, `width`, `height`, `alt`, `caption` (with its date). The lead capture on a case study and beside the project on the homepage |
 | `tools` | Up to four short names for the homepage feature panel's tool list; without it the first four `built_with` entries show |
 | `art` | `src`, `width`, `height`: an isometric illustration. Class pages (header art and tile) and the job-scan project (minor row) |
@@ -51,6 +51,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `class_page`, `class_name` | A case study's class, for the breadcrumb and the index |
 | `code`, `course`, `term`, `items`, `repo` | Class pages: the Coursework index table and the page head strip |
 | `layout` | `home`, `projects`, `coursework`, `experience` or `wide`; omitted means the reading layout |
+| `voice: personal` | A first-person page, such as a future post; exempt from the first-person test |
 | `roles` | Experience: `id`, `title`, `organization`, `dates`, `image`, `icon`, `summary`, `intro`, `bullets` |
 | `facts` | Homepage facts panel: `label`, `text` (the linked title), `detail` (the muted line beneath), optional `href` |
 
@@ -61,13 +62,13 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 The site is public and recruiters read it. These hold for every edit:
 
 - Every claim traces to a source: the project repositories, coursework submissions, Jadon's resume or his project notes. Never invent work, tests, outcomes or habits. Label coursework as coursework.
-- First person, plain and specific. Lead with what was built and what happened; keep real limits in one short Limits section instead of hedging each sentence.
-- Case studies and class pages keep their summary in frontmatter; the template renders it in the page head and the My role panel. Don't repeat the summary in the body.
+- Third person, plain and specific: the work is the subject, and Jadon is named only where an actor is needed (the homepage hero, About's background, metadata). No first person except on pages marked `voice: personal`; `tests/test_first_person.py` enforces it. Lead with what was built and what happened; keep real limits in one short Limits section instead of hedging each sentence.
+- Case studies and class pages keep their summary in frontmatter; the template renders it in the page head and the Role panel. Don't repeat the summary in the body.
 - A class page says what the course provided and what Jadon did, puts strongest work first, then lists every lab with work of his in tables (one closed module per `###` heading), then skills, limits and sources linking files on `main`. Leave blank or empty files out and say so in Limits.
 - Report vocabulary (evidence, recorded, supplied, historical, established) stays at three or fewer per page; `tests/test_copy_voice.py` enforces it.
-- AI coding agents are credited only in SSH Workbench's "How I worked"; a product that runs an agent, like the job-scan tool, can say so.
+- AI coding agents are credited only in SSH Workbench's "How it was developed"; a product that runs an agent, like the job-scan tool, can say so.
 - Dates are local time, not UTC, in copy, filenames and the changelog.
-- Describe Jadon's role with verbs that are true for the work: defined, planned, configured, tested, shipped.
+- Role lines (`summary.role`, experience summaries and bullets) read like a resume: no subject, and a past-tense verb that is true for the work: defined, planned, configured, tested, shipped, wrote, documented, investigated.
 - Never publish personal location, phone numbers, private host names, IP addresses, paths, credentials or resumes. Use documentation ranges (`192.0.2.0/24`) and `example.com` in examples. `mkdocs.yml` excludes five raw assets as a guard; keep them out.
 - Exception: anything the public [JHomelab](https://github.com/jkosber/JHomelab) repository publishes may appear as it appears there, including its host name, local addresses with the last octet shown as `X` and its screenshots. Full addresses stay out.
 - Don't use the word "artifacts" in visible copy.
@@ -82,12 +83,12 @@ The site is public and recruiters read it. These hold for every edit:
 | Class tiles | `class_tile` macro: `li > a.tile.lift` with art, code, name and term | Homepage coursework band. Compact rows under 760 px |
 | Role cards | `role_card` macro: `article.role-card` with art, h3, organization, dates, summary | Homepage experience |
 | Page head | `.page-head` band in `main.html`: `nav.crumbs`, h1, `.dek`, `dl.strip` (Status, Updated, Source or Class), `.head-result`; `.page-head--shot` overlaps the lead screenshot, `.head-art` holds a class illustration | Case studies and class pages. Needs `summary` |
-| Summary pair | `.summary-pair` with the My role `role_panel` beside a `.panel--result` | Class pages, under the page head |
+| Summary pair | `.summary-pair` with the Role `role_panel` beside a `.panel--result` | Class pages, under the page head |
 | Contents | `details.contents`: a sticky right rail at 1100 px and up, an inline closed "On this page" below; it opens or closes when the window crosses 1100 px | Pages with h2 sections |
 | Strongest work panels | `section.work` per h3 item, `.work-pair` for two adjacent brief items; made by `hooks/class_sections.py`, so authors write plain Markdown | Class pages |
 | Lab modules | `details.lab-module` with `.lab-count` (left out when a module has no lab rows; a space in the summary keeps it a separate word for screen readers) and `.lab-table`; closed by default, printed open with or without JavaScript; stacks with a visible `.did-label` on phones | Class pages' Labs section |
 | Lightbox | `a.zoom` (`tabindex="-1"`) around a template screenshot and the "Open full size" caption link of any figure, which is the screenshot's one keyboard stop; one `dialog.lightbox` in `main.html` | Enlarging a screenshot above 760 px; focus returns to the link that opened it. Below that, and without JavaScript, the link opens the image file |
-| Tool list | `ul.tools` (`role="list"`, `aria-label="Built with"`), each `li` a `tool_icon(name)` plus the visible name | Feature panels and My role panels |
+| Tool list | `ul.tools` (`role="list"`, `aria-label="Built with"`), each `li` a `tool_icon(name)` plus the visible name | Feature panels and Role panels |
 | Result | `.result` well with a 3 px amber bar; `.panel--result` on class pages | Every Result, styled the same |
 | Architecture flow | `<figure class="architecture">` with an `<ol class="architecture-flow">` | A simple left-to-right path. Use a table for branching topology |
 | Evidence figure | `<figure class="evidence-figure">` with a `.evidence-scroll` region (`role="region"`, `tabindex="0"`, `aria-label`, focusable only while it scrolls), a dated caption and a full-size link. The screenshot fits its column at every width | Screenshots |
