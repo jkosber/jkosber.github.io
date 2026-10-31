@@ -77,7 +77,7 @@ Following TCP stream 0 in Wireshark showed an HTTP GET, a 200 response with a `C
 
 ## Limits {#limits-and-source-material}
 
-- The Snort signature and the firewall command came with the lab; neither is original work, and the signature's detection and false-positive rates went unmeasured.
+- The Snort signature and the firewall command came with the lab, and the signature's detection and false-positive rates weren't measured.
 - There's no screenshot of the blocked retest, and the captured listing shows the rule's counters at zero, so the block rests on the written answer.
 - The lab covered one HTTP request path. Encrypted traffic and whether the rule survives a restart weren't tested.
 - The exercise checked the exported file's size, not its hash, and never ran it.

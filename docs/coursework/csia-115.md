@@ -125,7 +125,7 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 | 25.3.10 Explore a NetFlow Implementation | Read NetFlow data in Packet Tracer | Filled in the flow fields for a request and its response |
 | 25.3.11 Logging from Multiple Sources | Syslog, AAA and NetFlow in Packet Tracer | Read the routing syslog messages, the AAA login entries and the NetFlow data |
 | 26.1.7 Snort and Firewall Rules | Trigger a Snort alert, then block the server with iptables | Ran the lab's Snort rule and firewall command and read the results (see above) |
-| 27.1.5 Convert Data into a Universal Format | Normalize log timestamps with `awk` | Fixed a first Apache conversion that turned every date into 1970, and summarized five security tools |
+| 27.1.5 Convert Data into a Universal Format | Normalize log timestamps with `awk` | Fixed the first attempt at the Apache conversion, which turned every date into 1970, and summarized five security tools |
 | 27.2.9 Regular Expression Tutorial | Learn regular expressions for searching logs | Filled in the metacharacter table and searched a log with a regular expression in `less` |
 | 27.2.10 Extract an Executable from a PCAP | Export a file from a capture | Followed the HTTP stream and exported the 345,088-byte executable |
 | 27.2.12 Interpret HTTP and DNS Data to Isolate Threat Actor | Find a SQL injection and DNS exfiltration in Kibana | Found the injected request and the data it returned, then decoded the DNS queries back into the stolen file |

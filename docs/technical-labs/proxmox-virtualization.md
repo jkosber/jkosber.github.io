@@ -151,7 +151,7 @@ Each panel has its own credential instead of the admin logins. The Proxmox panel
 
 ## GPU passthrough preparation
 
-The laptop has a GTX 1070 Mobile next to its integrated graphics. IOMMU is enabled with `intel_iommu=on iommu=pt pcie_acs_override=downstream`, and the NVIDIA GPU is bound to `vfio-pci` and assigned to VMs 100, 105, 107 and 108.
+The laptop has a GTX 1070 Mobile next to its integrated graphics. IOMMU was enabled with `intel_iommu=on iommu=pt pcie_acs_override=downstream`, and the NVIDIA GPU was bound to `vfio-pci` and assigned to VMs 100, 105, 107 and 108.
 
 ## Lessons learned {#what-i-have-learned}
 

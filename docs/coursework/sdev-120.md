@@ -129,7 +129,7 @@ What to fix: typing a word for hours crashes it, because `float()` runs before t
 
 - Most of this class is design work: pseudocode and diagrams that never ran. The only run output is the two IDLE screenshots for Modules 6 and 7.
 - The pay calculator is the team's file, and the repository has no final project write-up. It wasn't run for this page; it needs pandas and an Excel writer.
-- Debugging exercises 2 to 4 are the program listings only, without any submitted changes.
+- Debugging exercises 2 to 4 are the program listings only, without the changes made to them.
 - A few answers have mistakes: two spaces coded as "NULL" instead of 32 in the ASCII sheet, a NAND truth table filled in with NOR's values, and a UML diagram that draws Log In and Process Payment as extensions of Checkout where include fits better.
 - The Module 6 flowchart is a Lucidchart link, not a file in the repository.
 

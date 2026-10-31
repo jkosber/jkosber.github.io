@@ -112,7 +112,7 @@ Simulation mode showed a PC finding another PC's MAC address with Neighbor Disco
 | 10.1.4 Configure Initial Router Settings | Set up a router and look at flash | Identified the IOS image in flash and why `enable secret` overrides `enable password` |
 | 10.3.4 Connect a Router to a LAN | Configure interfaces and read the routing table | Counted connected and OSPF routes and explained what happens to unlisted destinations |
 | 10.3.5 Troubleshoot Default Gateway Issues | Find and fix four addressing faults | Found and fixed all four (see above) |
-| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer; the write-up only notes which version was assigned |
+| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer; the write-up only notes which version was used |
 | 11.5.5 Subnet an IPv4 Network | Split a /24 for 50 and 40 hosts and address the devices | Worked out four /26 subnets and filled the addressing table |
 | 11.6.6 Calculate IPv4 Subnets | Six subnet calculations | Got all 48 values right |
 | 11.7.5 Subnetting Scenario | Split a /24 into /27s for five networks | Filled the subnet and addressing tables |

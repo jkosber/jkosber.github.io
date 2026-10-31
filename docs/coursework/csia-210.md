@@ -9,7 +9,7 @@ items: 16 submissions
 repo: https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis
 art: {src: assets/thumbnails/proxmox.svg, width: 240, height: 160}
 summary:
-  role: "Made a first capture on his own computer, then filtered and read the course's trace files and wrote the answers and lab summaries. Building or repairing the capstone networks was not part of the work."
+  role: "Made a first live capture, then filtered and read the course's trace files and wrote the answers and lab summaries. Building or repairing the capstone networks was not part of the work."
   built_with: ["Wireshark", "Display and capture filters", "Windows network commands"]
   result: "14 chapters of hands-on projects and two capstones: DHCP and DHCPv6 leases, TCP and UDP headers, scan traffic, IPv6 transition traces, and a final capstone that traced a lost IPv6 gateway to a router advertisement."
 ---

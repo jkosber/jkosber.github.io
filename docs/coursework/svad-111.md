@@ -72,7 +72,7 @@ The checks quote their variables, but none of the four scripts uses `set -euo pi
 
 ### A wallpaper script that checks before it acts (M06P1A)
 
-The assignment asked for a script that takes an image URL and a new name, then downloads the image, scans it for viruses, converts it to JPEG and renames it with its resolution. The course gave hints for the hardest pieces: the URL-to-filename pipeline, the `curl` status check, the `clamscan` call and the resolution regex. `dl_wallpaper.sh` puts them together, with every check before any real work:
+The assignment asked for a script that takes an image URL and a new name, then downloads the image, scans it for viruses, converts it to JPEG and renames it with its resolution. The course gave hints for the hardest pieces: the URL-to-filename pipeline, the `curl` status check, the `clamscan` call and the resolution regex. The submitted `dl_wallpaper.sh` puts them together, with every check before any real work:
 
 | Check | How the script handles it |
 |---|---|
