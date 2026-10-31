@@ -22,7 +22,7 @@ Cyber Ops followed Cisco's CyberOps Associate course: how a security operations 
 
 The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. The submitted work:
 
-- Ran every lab in VirtualBox on a personal computer and answered its questions in original wording
+- Ran every lab in VirtualBox on his own computer and answered its questions in his own words
 - Worked the Security Onion investigations from alert to host to file with Sguil, Kibana, Wireshark, NetworkMiner and VirusTotal
 - Wrote the after-action report for the final skills assessment
 
@@ -38,7 +38,7 @@ The full write-up is on [CyberOps & traffic investigation](../technical-labs/soc
 
 ### Rebuilding an exploit kit infection (27.2.15) {#rebuilding-an-exploit-kit-infection}
 
-The data came from a January 2017 infection. The investigation started in Kibana with the first alert, which tied the traffic to the RIG exploit kit, then moved to the Sguil and CapMe transcripts to rebuild what happened:
+The data came from a January 2017 infection. Kibana's first alert tied the traffic to the RIG exploit kit, and the Sguil and CapMe transcripts filled in what happened next:
 
 1. A search took the user to a compromised home-improvement site.
 2. The site loaded a script from a redirector, which sent the browser to the exploit kit.
@@ -51,7 +51,7 @@ The whole exploit took less than a minute, from 22:54:42 to 22:55:28. The saved 
 
 A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. The write-up judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
 
-The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there the analysis identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. Kibana filtering then set aside the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
+The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, encrypted traffic on port 2404 pointed to the Remcos remote-access trojan checking in, and a second download, `F4.exe`, to a trojan downloader. In Kibana, the normal Windows traffic mixed in with it was sorted out, such as the `ncsi.txt` connectivity check and a certificate revocation list.
 
 ### Snort and a firewall rule (26.1.7)
 
@@ -157,7 +157,7 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 - 28.4.13 Incident Handling is in the repository but blank, so it isn't listed.
 - The captures and alert data came from the course and aren't in the repository, so the times and file details can't be rechecked from it alone.
 - The Pushdo report says the downloaded files ran on the host, which the alerts don't show, and it calls the OpenDNS lookup service malicious when it's a legitimate service the malware used. The containment steps are recommendations; they weren't carried out.
-- Some labs captured traffic on a home network, so this page leaves out their addresses.
+- Some labs captured traffic on his home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
 

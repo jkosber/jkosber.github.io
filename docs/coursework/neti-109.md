@@ -20,12 +20,12 @@ Networking I was the first course in Cisco's CCNA sequence: how devices address 
 
 ## What the course provided and what was submitted {#what-the-course-provided}
 
-The course provided the Cisco Networking Academy activities and lab sheets: the topologies, addressing tables, steps and sample output, and the starting device configurations. The submitted work covered each activity and its write-up:
+The course provided the Cisco Networking Academy activities and lab sheets: the topologies, addressing tables, steps and sample output, and the starting device configurations. The submitted work, one write-up per activity:
 
 - Filled in the addressing tables and subnet plans, including two VLSM designs
 - Wrote what was wrong on each device in the troubleshooting labs and the change that fixed it
 - Answered the lab questions on IOS, switching, ARP, IPv6 and TCP and UDP from what Packet Tracer's simulation mode showed
-- Ran first-hand Wireshark captures for the Ethernet and ICMP labs
+- Ran live Wireshark captures for the Ethernet and ICMP labs
 
 The device configurations are inside the Packet Tracer files, which GitHub can't display. This page is built from the written answers.
 
@@ -51,29 +51,29 @@ One mistake to fix: the largest LAN's client got the address ending in `.63`. Th
 
 ### Troubleshooting a web server outage (17.7.6) {#troubleshooting-access-to-a-web-server}
 
-Four clients couldn't reach a web server after a second DNS server was added. The lab allowed changes to the clients and the local router, but not the ISP cloud or the servers. The troubleshooting checked each client's settings in Packet Tracer's command prompt against the addressing table, then used ping and the browser to narrow it down:
+Four clients couldn't reach a web server after a second DNS server was added. The lab allowed changes to the clients and the local router, but not the ISP cloud or the servers. Troubleshooting started with each client's settings in Packet Tracer's command prompt, checked against the addressing table, then moved to ping and the browser:
 
-- **PC-01** had the wrong IP address. Once corrected, it reached the gateway, the web server and PC-02.
+- **PC-01** had the wrong IP address. Once its address was corrected, it reached the gateway, the web server and PC-02.
 - **PC-02** had the wrong default gateway. Fixing it brought back web access.
 - **PC-A** could ping its neighbor but not its gateway or anything beyond it, which pointed at the router. R1's G0/1 address was wrong, and correcting it let the two LANs reach each other.
-- **PC-B** could reach the server by IP but not by name. Its DNS setting was corrected, with a note that DNS2 itself still had a problem the server's owner would need to fix.
+- **PC-B** could reach the server by IP but not by name. Its DNS setting was corrected, and the write-up notes that DNS2 itself still had a problem the server's owner would need to fix.
 
 From the lab write-up: "PC-A can only access the local lan and not other networks so I corrected the G0/1 interface ip address."
 
 ### Fixing default gateway faults (10.3.5)
 
-Two LANs sat behind one router with four faults planted in them. The write-up filled in the missing gateways in the addressing table, then found each problem from what could and couldn't ping:
+Two LANs sat behind one router with four faults planted in them. After the missing gateways went into the addressing table, what could and couldn't ping located each fault:
 
-- PC1 couldn't reach PC2 because its address didn't match the network it was wired to. Giving it the right address fixed it.
-- Nothing could ping S2 because S2 had no IP address. `ip address` configured one.
-- PC4 couldn't be reached because its default gateway was wrong. Setting the correct gateway fixed it.
-- Remote hosts couldn't ping S1 because it had no default gateway. `ip default-gateway` set one.
+- PC1 couldn't reach PC2 because its address didn't match the network it was wired to. Fix: the right address.
+- Nothing could ping S2 because S2 had no IP address. Fix: an address, set with `ip address`.
+- PC4 couldn't be reached because its default gateway was wrong. Fix: the correct gateway.
+- Remote hosts couldn't ping S1 because it had no default gateway. Fix: a gateway, set with `ip default-gateway`.
 
 The lab sheet's own test table at the end was left mostly blank, so there's no written retest.
 
 ### Following IPv6 Neighbor Discovery (9.3.4)
 
-Simulation mode showed a PC finding another PC's MAC address with Neighbor Discovery instead of ARP. The write-up lists the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and explains why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. In the write-up's words: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."
+Simulation mode showed a PC finding another PC's MAC address with Neighbor Discovery instead of ARP. The write-up lists the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and explains why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. On multicast: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."
 
 ## Labs {#labs}
 
@@ -148,7 +148,7 @@ Simulation mode showed a PC finding another PC's MAC address with Neighbor Disco
 - The device configurations live in the Packet Tracer files, which this page doesn't reproduce. Several activities are Packet Tracer files only, with no write-up.
 - All the device configuration was done in Packet Tracer, not on real equipment.
 - A few answers have mistakes: the broadcast address above, a mask written as `244` instead of 224 in 11.7.5, and a "first usable" column filled with last usable addresses in 11.9.3.
-- The Wireshark and DNS answers came from a home network, so this page leaves out their addresses.
+- The Wireshark and DNS answers came from his home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
 

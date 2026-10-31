@@ -9,28 +9,28 @@ items: 25 assignments
 repo: https://github.com/jkosber/IntroToCybersecurity-105
 art: {src: assets/project-terminal.svg, width: 600, height: 340}
 summary:
-  role: "Ran the textbook's hands-on projects in a Windows VM and on a personal computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
+  role: "Ran the textbook's hands-on projects in a Windows VM and on a physical computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
   built_with: ["Windows 10 in VirtualBox", "Qualys SSL Labs", "OpenPuff", "netsh", "NVD and CVE", "Directory Snoop"]
   result: "25 assignments across cryptography, endpoint security, wireless, vulnerability research and forensics, including TLS grades for three sites and a hide-and-recover steganography round trip."
 ---
 
 # CSIA 105 Introduction to Cyber Security
 
-Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. The [Security+ certification](../credentials/index.md#certifications) followed in May 2026.
+Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. The [Security+ exam](../credentials/index.md#certifications) was passed in May 2026.
 
 ## What the course provided and what was submitted {#what-the-course-provided}
 
 The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. The submitted work:
 
-- Ran the tools in the VM, or on a personal computer when a project needed real hardware such as a wireless adapter
-- Answered each project's questions in original wording, with screenshots
+- Ran the tools in the VM, or on a physical computer when a project needed real hardware such as a wireless adapter
+- Answered each project's questions in his own words, with screenshots
 - Wrote the case projects: comparisons of fuzzers and password managers, a presentation on encryption options, and short papers on policy, cyber insurance and the field
 
 ## Strongest work {#strongest-work}
 
 ### Grading TLS on servers and browsers (4-1) {#grading-tls}
 
-Qualys SSL Labs graded three sites, with an explanation of each grade:
+Three sites went through Qualys SSL Labs, and the answers explain each grade:
 
 - **Dropbox's API server:** A+, with TLS 1.3 and 1.2, a trusted 2048-bit RSA certificate and scores of 100, 100, 90 and 90 for certificate, protocol, key exchange and cipher strength. The only marks against it were a few weak TLS 1.2 cipher suites. "It received an A+ because it supports TLS 1.3, It has a secure and trusted certificate."
 - **A site from SSL Labs' list of recent worst grades:** F, for insecure protocols, weak cipher suites and the POODLE vulnerability.
@@ -40,7 +40,7 @@ For Dropbox the write-up suggested dropping TLS 1.2 and putting `TLS_AES_256_GCM
 
 ### Hiding a file in an image (3-1) {#hiding-a-file-in-an-image}
 
-OpenPuff hid a small zip file inside a JPEG, protected by three passwords, and the unhide step got it back. The task report shows the recovered `Message.zip` at 144 bytes, and the zip still held its text file. The image looked the same afterward: "Nothing is different from the appearance of the photo, but the file size of the carrier file is slightly different the original is 106,246 bytes and the carrier is 106,238 bytes."
+A small zip file went into a JPEG with OpenPuff, behind three passwords, and came back out with the unhide step. The task report shows the recovered `Message.zip` at 144 bytes, and the zip still held its text file. The image looked the same afterward: "Nothing is different from the appearance of the photo, but the file size of the carrier file is slightly different the original is 106,246 bytes and the carrier is 106,238 bytes."
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="OpenPuff unhide result; scroll horizontally if needed">
@@ -51,17 +51,17 @@ OpenPuff hid a small zip file inside a JPEG, protected by three passwords, and t
 
 ### Controlling Wi-Fi from the command line (10-4)
 
-This project needed a real wireless adapter, so it ran in an administrator PowerShell window on a personal computer. The textbook gave the `netsh wlan` commands, and the answers cover what each showed:
+This project needed a real wireless adapter, so it ran in an administrator PowerShell window on a physical computer. The textbook gave the `netsh wlan` commands, and the answers cover what each showed:
 
 - `show drivers` reported an 802.11ax adapter that supports both WPA2-Personal and WPA3-Personal.
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.
 - `show wlanreport` built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."
 
-The screenshots show personal and nearby networks, so this page leaves them out.
+The screenshots show his own and nearby networks, so this page leaves them out.
 
 ### Finding deleted data in slack space (13-3)
 
-Directory Snoop's NTFS module browsed the drive's master file table and read a document's raw text; a search of slack space for the word "country" then got three hits in deleted entries. The write-up explains that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.
+Directory Snoop's NTFS module showed the drive's master file table and a document's raw text; a slack-space search for the word "country" then found three hits in deleted entries. The write-up explains that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.
 
 ## Labs {#labs}
 
@@ -108,7 +108,7 @@ Directory Snoop's NTFS module browsed the drive's master file table and read a d
 | 15-2 Journaling | Set up sync and real-time backup | Set up sync and real-time protection in iDrive and answered the questions |
 | Additional readings | Summarize ethics principles and change control | Summarized eight ethics principles and six benefits of change control |
 | 15-11 Cybersecurity Insurance for Users | Weigh personal cyber insurance | Listed four pros and four cons and made a recommendation |
-| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what was surprising, and personal goals in the field |
+| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, the topics that came as a surprise, and career goals in the field |
 
 ## Skills {#skills}
 
