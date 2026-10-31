@@ -18,7 +18,7 @@ summary:
 
 This SVAD 111 project deployed the course's AdventureWorks product-review app on two Ubuntu servers in an AWS Academy lab: Apache and PHP on one, Microsoft SQL Server with the AdventureWorks catalog on the other. By the end the site searched the catalog, opened product pages and saved reviews to the database.
 
-The course provided the app, the data, the two-server design and the install commands for each milestone. The project work itself was launching the servers, running the installs, importing the data, connecting the two tiers, testing the app and writing the final report.
+The course provided the app, the data, the two-server design and the install commands for each milestone. The submitted work covered launching the servers, running the installs, importing the data, connecting the two tiers, testing the app and writing the final report.
 
 ## Architecture and connection paths
 
@@ -64,7 +64,7 @@ They returned **504 products** and **19,972 people**.
 
 ### Connecting PHP to SQL Server
 
-The setup enabled the `sqlsrv` and `pdo_sqlsrv` extensions, set Apache to the prefork module with the PHP module, and loaded `test.php`, which showed PHP 8.1.2 running under Apache. Then it copied the app into `/var/www/html`, set the database address and login in `config.php`, and removed Apache's default `index.html` so the app's page loads first. Credentials and addresses are left out here.
+Next, the `sqlsrv` and `pdo_sqlsrv` extensions were enabled, Apache was set to the prefork module with the PHP module, and `test.php` showed PHP 8.1.2 under Apache. The app then went into `/var/www/html`, `config.php` got the database address and login, and Apache's default `index.html` was removed so the app's page loads first. Credentials and addresses are left out here.
 
 ## Troubleshooting
 
