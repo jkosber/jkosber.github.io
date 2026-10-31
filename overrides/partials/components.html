@@ -131,3 +131,8 @@
 </div>
 {% endfor %}
 {%- endmacro %}
+
+{# A title's longest word, in characters: --title-chars on the heading's band, from which the CSS caps the title to its column. #}
+{% macro title_chars(title) -%}
+{{ title.split() | map('length') | max }}
+{%- endmacro %}
