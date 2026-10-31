@@ -9,7 +9,7 @@ items: 7 modules
 repo: https://github.com/jkosber/SDEV-120
 art: {src: assets/thumbnails/terminal.svg, width: 240, height: 160}
 summary:
-  role: "Wrote the pseudocode, drew the flowcharts and the UML diagram, filled in the workbooks and wrote the Python scripts. Led the team project, responsible for employee data management and for security and compliance."
+  role: "Wrote the pseudocode, drew the flowcharts and the UML diagram, filled in the workbooks and wrote the Python scripts. Served as team leader on the team project, responsible for employee data management and for security and compliance."
   built_with: ["Python 3.14 and IDLE", "Lucidchart", "Excel", "Pseudocode"]
   result: "Seven modules of program design and Python: modular pseudocode with hierarchy charts and flowcharts, a UML use-case diagram, loop and decision scripts with their IDLE output, and a team pay-calculator script."
 ---
@@ -72,7 +72,7 @@ A five-person team built a payroll script in Python. Jadon was team leader, resp
 - **Payroll:** 40 regular hours, overtime at 1.5 times the rate, flat 5.6 percent state and 7.9 percent federal tax, and net pay
 - **Export:** collects ten employees and writes them to `Payroll.xlsx` with pandas
 
-What to fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of the team-leader role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
+Still to fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of the team-leader role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
 
 ## Labs {#labs}
 
