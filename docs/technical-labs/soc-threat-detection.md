@@ -22,7 +22,7 @@ The [Snort and firewall lab](snort-firewall-lab.md) from the same class has its 
 
 ## Investigating Pushdo alerts {#investigating-a-pushdo-infection}
 
-Sguil came first, narrowing the alerts to the window where the downloads and the Pushdo signatures clustered, and to the internal host they had in common. That kept them apart from the other training events loaded in the same VM.
+The investigation started in Sguil, narrowing the alerts to the window where the downloads and the Pushdo signatures clustered, and to the internal host they had in common. That kept them apart from the other training events loaded in the same VM.
 
 ### Building the timeline {#establishing-the-timeline}
 
