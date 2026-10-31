@@ -1,13 +1,13 @@
 ---
 title: Proxmox homelab
-description: A Proxmox homelab with Linux guests, Docker services, monitoring and an experimental virtual network, built and maintained as a personal project.
+description: "Built and maintained as a personal project: Linux guests, Docker services, monitoring and an experimental virtual network on Proxmox."
 kind: Personal homelab
 status: Ongoing
 tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "Built and maintained it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October a certificate authority compromise led to patches on every host, and new monitoring now sends alerts to Discord."
+  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October every host was patched after a certificate authority compromise, and monitoring was set up to send alerts to Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
@@ -20,7 +20,7 @@ screenshot:
 
 # Proxmox homelab
 
-JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from the daily-use computer. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
+JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from his everyday computer. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
 
 Two service guests run all the time, and the other guests start only while they're being worked on. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
@@ -53,7 +53,7 @@ The guests are assigned about 51.5 GB of memory in total, more than the laptop h
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching the daily-use computer, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching his everyday computer, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 
@@ -115,7 +115,7 @@ The check couldn't see inside VM 109, because its guest agent wasn't running and
 
 ### A certificate authority compromise
 
-On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. The `emSign ECC Root CA - G3` root was removed from the trust store on the Proxmox host and every guest. On CT 110 a snapshot came first, then updates to ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL. On VM 109 a snapshot preceded a Portainer update and a redeploy of every stack. Some vendors ship patched images late, so the response also included writing a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.
+On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. The `emSign ECC Root CA - G3` root was removed from the trust store on the Proxmox host and every guest. CT 110 was snapshotted, then ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL were updated. VM 109 was snapshotted before Portainer was updated and every stack redeployed. Some vendors ship patched images late, so a small read-only script was written to check each host and report OK, WAIT, ACT or FAIL for every fix.
 
 ### Updates on every host
 
@@ -125,7 +125,7 @@ On October 21 the eMudhra (emSign) certificate authority had a key compromise, a
 | VM 109 | Installed the available updates, updated Portainer, Homepage and Uptime Kuma, installed `qemu-guest-agent`, and grew the root volume to the whole disk while the VM was running |
 | CT 110 | Installed every pending update, 33 of them security fixes, and rebooted so every service loaded the new libc and systemd. GoodMem answered again 26 seconds later |
 
-The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because of a pinned older API version. The maintained fork replaced it; the fork negotiates the API itself, so the pin is gone. A snapshot or backup preceded each change and was deleted once everything checked out.
+The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because of a pinned older API version. Watchtower was replaced with the maintained fork, which negotiates the API itself, so the pin is gone. A snapshot or backup preceded each change and was deleted once everything checked out.
 
 ### Monitoring and alerts
 
@@ -145,7 +145,7 @@ Beszel also lists pending package updates and flags the security ones. The first
 
 ### Dashboard
 
-Homepage was installed but never configured. Before setup, it was compared with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
+Homepage was installed but never configured. Before it was set up, Homepage was compared with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
 
 Each panel has its own credential instead of the admin logins. The Proxmox panel uses an API token on a separate user with only the `PVEAuditor` role, and a write attempt with it got a 403. Portainer has an access token made for the dashboard, and Beszel has a separate superuser account, because Homepage's Beszel panel needs one. Homepage reads them from root-only files mounted read-only, so none of them sit in the dashboard config.
 
