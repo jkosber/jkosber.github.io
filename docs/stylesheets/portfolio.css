@@ -333,7 +333,7 @@ p { max-width: 35em; }
 .head-art { width: 100%; max-width: 22rem; height: auto; justify-self: end; }
 .lead-shot { margin-top: calc(var(--s7) * -1); }
 .lead-shot .shot img { border: 0; box-shadow: var(--shadow-lift); }
-/* Class pages: My role beside the Result, overlapping the band's lower edge. */
+/* Class pages: the Role panel beside the Result, overlapping the band's lower edge. */
 .summary-pair { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: calc((var(--s5) - var(--s2)) * -1); }
 .panel .tools { margin-top: var(--s2); }
 .article { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; padding-block: var(--s5) var(--s6); }
