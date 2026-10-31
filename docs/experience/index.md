@@ -9,8 +9,8 @@ roles:
     dates: July 2026 to October 2026
     image: assets/roles/retail-conversions.svg
     icon: network
-    summary: "I supported Verizon store conversions: printer setup, network checks in Cisco Meraki and remote work with field technicians."
-    intro: "I supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. The job was getting every device working for go-live, onsite and with field technicians remotely, then supporting the stores after they reopened."
+    summary: "Supported Verizon store conversions: printer setup, network checks in Cisco Meraki and remote work with field technicians."
+    intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. The job was getting every device working for go-live, onsite and with field technicians remotely, then supporting the stores after they reopened."
     bullets:
       - Installed and configured printers with static IP addresses and checked that they reached the network
       - Connected devices to the firewall ports, checked their network access and troubleshot connection problems
@@ -23,14 +23,14 @@ roles:
     dates: November 2025 to May 2026
     image: assets/roles/dental-it.svg
     icon: support
-    summary: "I supported 12 dental offices and 100+ staff: help desk tickets, 30+ new workstations, clinical software and cabling."
-    intro: "I was the IT intern for 12 dental offices and more than 100 clinical and front-desk staff. Most of my week was help desk tickets, plus hardware and cabling work in the offices."
+    summary: "Supported 12 dental offices and 100+ staff: help desk tickets, 30+ new workstations, clinical software and cabling."
+    intro: "Worked as the IT intern for 12 dental offices and more than 100 clinical and front-desk staff. Most of each week went to help desk tickets, plus hardware and cabling work in the offices."
     bullets:
       - "Handled 20+ tickets a week: workstations, printers, peripherals, network problems and the clinical software, through Level RMM or onsite"
-      - "Wrote up each ticket in ClickUp: symptoms, what I tried, the fix and any follow-up"
+      - "Wrote up each ticket in ClickUp: symptoms, steps tried, the fix and any follow-up"
       - Set up 30+ new workstations, from hardware setup, software installs and network configuration to domain join
       - "Retired 50+ workstations that couldn't run Windows 11, so every office stayed on a supported OS: wiped, degaussed or crushed the drives under HIPAA-aligned procedures and kept a chain-of-custody record"
-      - Ran HDMI to 7 operatory rooms to replace VGA, building the keystone outlets myself
+      - Ran HDMI to 7 operatory rooms to replace VGA and built the keystone outlets
       - Pulled, terminated and tested an Ethernet run between switches in two offices, extending an existing fiber uplink
       - Fixed a dead wall jack by toning it back to the patch panel and repunching the keystone
       - Set up accounts and roles in the clinical software and installed it on workstations
@@ -39,4 +39,4 @@ roles:
 
 # Professional experience
 
-I've supported dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting.
+IT support for dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting.
