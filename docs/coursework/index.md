@@ -6,4 +6,4 @@ layout: coursework
 
 # Coursework
 
-Labs and projects from six classes at Ivy Tech in 2025 and 2026. Each class page lists the labs, separates what the course provided from the submitted work, and covers the strongest work in more detail.
+Labs and projects from six classes Jadon took at Ivy Tech in 2025 and 2026. Each class page lists the labs, separates what the course provided from the submitted work, and covers the strongest work in more detail.
