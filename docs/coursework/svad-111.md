@@ -82,7 +82,7 @@ The assignment asked for a script that takes an image URL and a new name, then d
 | Infected download | Deletes the file and exits 1 before converting it |
 | Not already a JPEG | Converts it with ImageMagick |
 
-The submitted run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. What to change: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
+The submitted run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. Still to fix: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
 
 ## Labs {#labs}
 
