@@ -55,10 +55,17 @@ def first_person(markdown):
     return hits(frontmatter + body)
 
 
+def jinja_literals(match):
+    """Keep only a Jinja block's quoted strings, such as a fallback description or alt text."""
+    found = re.findall(r"'([^'\n]*)'|\"([^\"\n]*)\"", match.group(0))
+    return keep_lines(match, " " + " ".join(single or double for single, double in found) + " ")
+
+
 def template_first_person(html):
-    """(line, word) for each first-person pronoun in a template's text, outside Jinja comments and code."""
+    """(line, word) for each first-person pronoun in a template's text and Jinja string literals,
+    outside Jinja comments."""
     html = re.sub(r"\{#.*?#\}", keep_lines, html, flags=re.DOTALL)
-    html = re.sub(r"\{%.*?%\}|\{\{.*?\}\}", keep_lines, html, flags=re.DOTALL)
+    html = re.sub(r"\{%.*?%\}|\{\{.*?\}\}", jinja_literals, html, flags=re.DOTALL)
     return hits(tags_to_text(html))
 
 
