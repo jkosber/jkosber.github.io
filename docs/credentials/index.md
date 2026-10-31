@@ -42,7 +42,7 @@ B.S., Indiana University. 2022.
 
 ## Cisco Networking Academy
 
-Completed the **Introduction to Networks** and **Networking Basics** courses ([Networking Basics on Credly](https://www.credly.com/badges/7ebfed9b-9618-47c9-b220-be2c9bc54856/public_url)). These are course-completion credentials, separate from the CCNA certification.
+The **Introduction to Networks** and **Networking Basics** courses are both complete ([Networking Basics on Credly](https://www.credly.com/badges/7ebfed9b-9618-47c9-b220-be2c9bc54856/public_url)). These are course-completion credentials, separate from the CCNA certification.
 
 The [NETI 109 class page](../coursework/neti-109.md) covers the related Packet Tracer labs.
 
