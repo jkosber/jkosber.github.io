@@ -18,7 +18,7 @@ summary:
 
 This SVAD 111 project deployed the course's AdventureWorks product-review app on two Ubuntu servers in an AWS Academy lab: Apache and PHP on one, Microsoft SQL Server with the AdventureWorks catalog on the other. By the end the site searched the catalog, opened product pages and saved reviews to the database.
 
-The course provided the app, the data, the two-server design and the install commands for each milestone. The submitted work covered launching the servers, running the installs, importing the data, connecting the two tiers, testing the app and writing the final report.
+The course provided the app, the data, the two-server design and the install commands for each milestone. The project work itself was launching the servers, running the installs, importing the data, connecting the two tiers, testing the app and writing the final report.
 
 ## Architecture and connection paths
 
@@ -35,7 +35,7 @@ The browser only talks to the web server. PHP connects to SQL Server through the
 
 ## Server setup
 
-PuTTY handled the shells and WinSCP moved the course's archives onto the servers. The database server got Microsoft's signing key and package repository, SQL Server 2022 and the `sqlcmd` client, then a test query with Jadon's name. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
+PuTTY handled the shells and WinSCP moved the course's archives onto the servers. The database server got Microsoft's signing key and package repository, SQL Server 2022 and the `sqlcmd` client, and a test query with Jadon's name ran against it. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
 
 Each layer was checked before the next was built on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
 
@@ -64,7 +64,7 @@ They returned **504 products** and **19,972 people**.
 
 ### Connecting PHP to SQL Server
 
-The setup enabled the `sqlsrv` and `pdo_sqlsrv` extensions, set Apache to the prefork module with the PHP module, and loaded `test.php`, which showed PHP 8.1.2 running under Apache. Then the app was copied into `/var/www/html`, the database address and login were set in `config.php`, and Apache's default `index.html` was removed so the app's page loads first. Credentials and addresses are left out here.
+The setup enabled the `sqlsrv` and `pdo_sqlsrv` extensions, set Apache to the prefork module with the PHP module, and loaded `test.php`, which showed PHP 8.1.2 running under Apache. Then it copied the app into `/var/www/html`, set the database address and login in `config.php`, and removed Apache's default `index.html` so the app's page loads first. Credentials and addresses are left out here.
 
 ## Troubleshooting
 
@@ -95,13 +95,13 @@ The final report lists four problems and what fixed them:
 
 ## Limits and what to change {#scope-and-follow-up-ideas}
 
-- Testing covered the import counts and the app actions above, not database integrity, whether reviews survive a restart, load or recovery.
+- Testing covered the import counts and the app actions above. Database integrity, load, recovery and whether reviews survive a restart weren't tested.
 - The site ran on HTTP. The report recommended HTTPS, user accounts for reviewers and photo uploads; none of them were built.
 - The milestone's instructions opened SSH and HTTP to any address and added rules for ports 1433 and 3306, and the last screenshot shows those four. The app only used SQL Server.
 - The app connected as SQL Server's `SA` account, and the milestones trusted the database certificate for lab setup, so there's no least-privilege login or verified database TLS.
 - `test.php` showed PHP's configuration, and the submitted files don't show it being removed.
 
-A real deployment would restrict administration and database access first, give the app its own database login, remove the test page, add HTTPS and test recovery.
+A real deployment should restrict administration and database access first, give the app its own database login, remove the test page, add HTTPS and test recovery.
 
 ## Sources {#source-material}
 

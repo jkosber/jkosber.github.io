@@ -17,7 +17,7 @@ summary:
 
 A Windows host can have an IPv6 address and still fail to reach another network. The CSIA 210 final capstone was about finding out why from the packets: which reply assigned an address, which hosts shared a duplicate, which source address a host picked, and what made a gateway disappear.
 
-The course provided the traces, the network diagrams and the hosts' `ipconfig` output. The work: filtering the traffic, finding the frames that explained each symptom, comparing them with the host output and writing up the conclusions.
+The course provided the traces, the network diagrams and the hosts' `ipconfig` output. From those, the capstone filtered the traffic, found the frames that explained each symptom, compared them with the host output and wrote up the conclusions.
 
 ## Environment and analysis method
 
@@ -32,7 +32,7 @@ The traces came from a network with Windows hosts, DHCPv6 and a layer 3 device s
 
 ## Finding the DHCPv6 address assignment
 
-The first question was which reply gave the Windows 10 host its address. A filter for DHCPv6 replies and a check of their IA Address options answered it. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
+The first question was which reply gave the Windows 10 host its address. Filtering for DHCPv6 replies and checking their IA Address options answered it. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
@@ -53,11 +53,11 @@ The first question was which reply gave the Windows 10 host its address. A filte
 
 In the second trace two Windows hosts were using the same address, ending in `::117`. The analysis compared their source MAC addresses in the neighbor discovery traffic with the Windows output, which marked the address as a duplicate.
 
-A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. From the submitted summary: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
+A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. The summary put it this way: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
 
 ## Tracking source-address changes
 
-Next, the analysis followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address:
+Next came the Windows 10 host picking up public and temporary SLAAC addresses next to its DHCPv6 address:
 
 | Point in the trace | Finding |
 |---|---|
@@ -81,7 +81,7 @@ In the last trace the Windows host kept a preferred IPv6 address but lost its IP
 | Frame 9887 | A new advertisement brought the 270-second lifetime back |
 | Frame 9991 | The first ping of the later group, with connectivity restored |
 
-A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back ([RFC 4861, section 6.3.4](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4)). The DHCPv6 lease never supplied the gateway, which is why the address survived. The submitted summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
+A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back ([RFC 4861, section 6.3.4](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4)). The DHCPv6 lease never supplied the gateway, which is why the address survived. The capstone's conclusion: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
 
 ## What remained visible in encrypted traffic
 
@@ -91,7 +91,7 @@ The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902
 
 - The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the last trace; the other frame numbers come from the written answers.
 - The submission doesn't include the host output the `::108` match was compared against.
-- The duplicate address was diagnosed but not fixed or retested.
+- The capstone diagnosed the duplicate address but didn't fix it or retest.
 - The SLAAC explanation above corrects what the submission said.
 
 ## Sources {#sources-and-scope}
