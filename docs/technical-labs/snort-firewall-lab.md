@@ -1,21 +1,21 @@
 ---
 title: Snort, firewall rules & HTTP recovery
-description: I watched a Snort alert fire on a simulated malware download, blocked the server with a firewall rule, and exported a file from a separate capture.
+description: A Snort alert on a simulated malware download, a firewall rule that blocked the server, and a file exported from a separate capture.
 kind: Completed coursework
 status: "March 2026"
 detail: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops
 summary:
-  role: "I ran the course's Mininet lab, watched Snort on its router, fixed my bad requests, applied the lab's firewall rule and wrote up the results. The lab provided the topology, scripts, Snort signature and firewall command."
+  role: "Ran the course's Mininet lab, watched Snort on its router, fixed the bad requests, applied the lab's firewall rule and wrote up the results. The lab provided the topology, scripts, Snort signature and firewall command."
   built_with: ["Mininet", "Snort 2.9", "iptables", "tcpdump", "Wireshark"]
-  result: "The lab's Snort signature fired on the download, a corrected file name returned HTTP 200, and after the DROP rule my written retest says the download failed. In a second exercise I exported a 345,088-byte file from a capture."
+  result: "The lab's Snort signature fired on the download, a corrected file name returned HTTP 200, and after the DROP rule the written retest says the download failed. A second exercise exported a 345,088-byte file from a capture."
   source: {label: "CSIA 115 repository", url: "https://github.com/jkosber/CyberOps-115"}
 ---
 
 # Snort, firewall rules & HTTP recovery
 
-This CSIA 115 lab tied an alert to a fix: watch Snort flag a download from a simulated malicious server, then block that server on the router. I ran the course's Mininet network, fixed my own request mistakes along the way, captured the traffic and added the firewall rule. A second exercise had me pull a file out of a capture with Wireshark.
+This CSIA 115 lab tied an alert to a fix: watch Snort flag a download from a simulated malicious server, then block that server on the router. The work for the lab: running the course's Mininet network, fixing request mistakes along the way, capturing the traffic and adding the firewall rule. A second exercise pulled a file out of a capture with Wireshark.
 
 The course provided the topology, the start scripts, the Snort signature and the firewall command.
 
@@ -30,17 +30,17 @@ Everything ran in Mininet on the CyberOps Workstation VM. H5, the client, reache
 | R4 | Upstream router toward the server |
 | H10 | Simulated malicious server, nginx on TCP 6666 |
 
-My first Mininet launch failed because it needs root, and it started with `sudo`. Snort 2.9.15.1 then came up on `R1-eth0`. The commands below use `198.51.100.133`, a documentation address, in place of the lab's server address.
+The first Mininet launch failed because it needs root, and it started with `sudo`. Snort 2.9.15.1 then came up on `R1-eth0`. The commands below use `198.51.100.133`, a documentation address, in place of the lab's server address.
 
 ## Distinguishing a bad request from a blocked connection
 
-I watched R1's alert log while H5 requested the file:
+With R1's alert log open, H5 requested the file:
 
 ```bash
 tail -f /var/log/snort/alert
 ```
 
-My first requests had the file name's spelling or capitalization wrong and got HTTP 404, which told me the server was up and answering. With the name corrected, it returned HTTP 200 and `wget` saved all 475,448 bytes:
+The first requests had the file name's spelling or capitalization wrong and got HTTP 404, which showed the server was up and answering. With the name corrected, it returned HTTP 200 and `wget` saved all 475,448 bytes:
 
 ```bash
 wget http://198.51.100.133:6666/W32.Nimda.Amm.exe
@@ -50,7 +50,7 @@ Snort logged **Malicious Server Hit!** (signature `1:1000003:0`) for the failed 
 
 ## Capturing the transaction
 
-On H5 I captured the traffic to a file:
+On H5, `tcpdump` captured the traffic to a file:
 
 ```bash
 tcpdump -i H5-eth0 -w nimda.download.pcap
@@ -60,32 +60,32 @@ It caught 93 packets with none dropped.
 
 ## Applying the routed firewall rule
 
-The traffic passes through R1 on its way to H10, so the rule belongs in the FORWARD chain; INPUT covers traffic addressed to R1 itself and OUTPUT covers traffic R1 sends. I inserted the lab's rule and listed it:
+The traffic passes through R1 on its way to H10, so the rule belongs in the FORWARD chain; INPUT covers traffic addressed to R1 itself and OUTPUT covers traffic R1 sends. The lab's rule was inserted and listed:
 
 ```bash
 iptables -I FORWARD -p tcp -d 198.51.100.133 --dport 6666 -j DROP
 iptables -L -v
 ```
 
-It drops TCP traffic to that server's port 6666 and nothing else. The listing showed the rule in place, with its counters still at zero. When I repeated the request, the download failed; my written answer puts that down to the firewall.
+It drops TCP traffic to that server's port 6666 and nothing else. The listing showed the rule in place, with its counters still at zero. When the request was repeated, the download failed; the written answer puts that down to the firewall.
 
 ## Recovering an HTTP object from a capture {#recovering-the-supplied-http-object}
 
-The next exercise used a capture the course provided, `nimda.download.pcap`, rather than mine. The file inside is a harmless executable the course renamed `W32.Nimda.Amm.exe` for the exercise.
+The next exercise used a capture the course provided, `nimda.download.pcap`, rather than the one from the Mininet lab. The file inside is a harmless executable the course renamed `W32.Nimda.Amm.exe` for the exercise.
 
-In Wireshark I followed TCP stream 0: an HTTP GET, a 200 response with a `Content-Length` of 345,088, and binary data starting with the `MZ` and `PE` markers of a Windows executable. I exported it with **File → Export Objects → HTTP** and saved it as <code>Wireshark.<wbr>W32.Nimda.Amm.exe</code>, because the original name was already taken. The saved file is 345,088 bytes, matching the response. It's a different file from the 475,448-byte download in the Mininet lab, despite the shared name.
+Following TCP stream 0 in Wireshark showed an HTTP GET, a 200 response with a `Content-Length` of 345,088, and binary data starting with the `MZ` and `PE` markers of a Windows executable. It was exported with **File → Export Objects → HTTP** and saved as <code>Wireshark.<wbr>W32.Nimda.Amm.exe</code>, because the original name was already taken. The saved file is 345,088 bytes, matching the response. It's a different file from the 475,448-byte download in the Mininet lab, despite the shared name.
 
 ## Limits {#limits-and-source-material}
 
-- The Snort signature and the firewall command came with the lab. I didn't write either, or measure the signature's detection or false-positive rate.
-- I didn't screenshot the blocked retest, and the listing I captured shows the rule's counters at zero, so the block rests on my written answer.
+- The Snort signature and the firewall command came with the lab. Neither was written as part of the work, and the signature's detection or false-positive rate wasn't measured.
+- There's no screenshot of the blocked retest, and the captured listing shows the rule's counters at zero, so the block rests on the written answer.
 - The lab covered one HTTP request path. Encrypted traffic and whether the rule survives a restart weren't tested.
-- I didn't hash the exported file or run it.
+- The exported file wasn't hashed or run.
 - The repository doesn't include either capture, so neither exercise can be replayed from it.
 
 ## Sources
 
-- [26.1.7 Snort and Firewall Rules](https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx): topology, screenshots and my answers
+- [26.1.7 Snort and Firewall Rules](https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx): topology, screenshots and written answers
 - [27.2.10 Extract an Executable from a PCAP](https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.10%20Lab%20-%20Extract%20an%20Executable%20from%20a%20PCAP%20-%20Jadon%20Kosberg.docx): the followed stream and the saved file listing
 
 [CSIA 115 class page](../coursework/csia-115.md) · [CyberOps & traffic investigation](soc-threat-detection.md) · [All coursework](../coursework/index.md)
