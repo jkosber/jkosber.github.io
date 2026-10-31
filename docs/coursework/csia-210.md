@@ -9,7 +9,7 @@ items: 16 submissions
 repo: https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis
 art: {src: assets/thumbnails/proxmox.svg, width: 240, height: 160}
 summary:
-  role: "Made a first live capture, then filtered and read the course's trace files and wrote the answers and lab summaries. Building or repairing the capstone networks was not part of the work."
+  role: "Made the first capture on a personal computer, then filtered and read the course's trace files and wrote the answers and lab summaries. Building or repairing the capstone networks was not part of the work."
   built_with: ["Wireshark", "Display and capture filters", "Windows network commands"]
   result: "14 chapters of hands-on projects and two capstones: DHCP and DHCPv6 leases, TCP and UDP headers, scan traffic, IPv6 transition traces, and a final capstone that traced a lost IPv6 gateway to a router advertisement."
 ---
@@ -73,8 +73,8 @@ In one trace a client tried to renew its lease with a unicast request and got no
 
 | Lab | What it asked | Work done |
 |---|---|---|
-| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured live traffic and picked out the capturing computer's address and the broadcast address |
-| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found the host's own IPv6 link-local address and watched an ARP entry return after a ping |
+| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured live traffic and picked out his computer's address and the broadcast address |
+| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found his computer's IPv6 link-local address and watched an ARP entry return after a ping |
 | Chapter 3 | Read IPv4, IPv6 and UDP header fields | Read each field, including the IPv6 traffic class split into DSCP and ECN |
 | Chapter 4 | ARP, routes and routing-protocol packets | Captured the ARP cache and route table and expanded RIP, OSPF and EIGRP packets |
 | Chapter 5 | ICMP packets and filters | Expanded ICMP packets and filtered ICMPv4 and ICMPv6 out of a trace |
@@ -85,7 +85,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 | Lab | What it asked | Work done |
 |---|---|---|
 | Chapter 7 | DHCP and DHCPv6 exchanges | Matched a client identifier to its hardware address, listed the request's options and followed a lease renewal that failed (see above) |
-| Chapter 8 | Host DNS settings and DNS queries | Captured the host's DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
+| Chapter 8 | Host DNS settings and DNS queries | Captured his computer's DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
 | Midterm capstone | Nine labs on DHCP, DHCPv6, OSPF, device identification, IPv6 next headers, Packet Too Big and AAAA queries | Worked all nine (see above); one screenshot answer in Lab 2.2 is missing |
 
 ### Transport and IPv6 transition
@@ -94,7 +94,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 |---|---|---|
 | Chapter 9 | UDP and TCP headers and the three-way handshake | Explained the ports, header lengths, acknowledgment numbers, and the MSS and window options in the handshake |
 | Chapter 10 | ISATAP, 6to4 and Teredo traces | Expanded the transition headers in each trace and identified the ISATAP gateway and client |
-| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on his own computer |
+| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on his computer |
 
 ### Security, troubleshooting and IPv6 in practice
 
