@@ -4,7 +4,7 @@ from pathlib import Path
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 
-# Words that make a page read like an audit report instead of first-person writing.
+# Words that make a page read like an audit report instead of plain, work-led writing.
 AUDIT_WORDS = re.compile(
     r"\brecord(s|ed)?\b|\bhistorical\b|\bestablish(es|ed)?\b|\bsupplied\b|\bevidence\b",
     re.IGNORECASE,
