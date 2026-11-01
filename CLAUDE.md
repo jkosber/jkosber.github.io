@@ -34,7 +34,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `hooks/tool_icons.py`, `hooks/tool_icons.json` | `tool_icon(name)` Jinja global: matches a tool name to a Simple Icons logo (16.35.0, CC0) and inlines it as an 18 px SVG, or nothing when no logo matches |
 | `hooks/class_sections.py` | Class pages: wraps each Strongest work item in a panel (two adjacent one- or two-paragraph items sit side by side; the first is never brief) and folds each lab module under Labs into a closed `details.lab-module` |
 | `hooks/reading_accessibility.py` | Wraps tables and code in named, keyboard-scrollable regions named from the preceding heading (`portfolio.js` keeps a table's region only while it scrolls); gives two-column tables explicit table roles so they can stack on phones |
-| `tests/` | Hook tests, the copy voice test that caps report vocabulary per page, and the first-person test |
+| `tests/` | Hook tests, the copy voice test that caps report vocabulary per page, and the personal-pronoun test (`test_first_person.py`) |
 | `.claude/skills/verifying-portfolio-changes/` | The verification skill, `check-site.js` (rendered checks) and `run-check.js` (runs them in Chromium or WebKit) |
 
 ## Frontmatter
@@ -51,7 +51,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 | `class_page`, `class_name` | A case study's class, for the breadcrumb and the index |
 | `code`, `course`, `term`, `items`, `repo` | Class pages: the Coursework index table and the page head strip |
 | `layout` | `home`, `projects`, `coursework`, `experience` or `wide`; omitted means the reading layout |
-| `voice: personal` | A first-person page, such as a future post; exempt from the first-person test |
+| `voice: personal` | A first-person page, such as a future post; exempt from the personal-pronoun test |
 | `roles` | Experience: `id`, `title`, `organization`, `dates`, `image`, `icon`, `summary`, `intro`, `bullets` |
 | `facts` | Homepage facts panel: `label`, `text` (the linked title), `detail` (the muted line beneath), optional `href` |
 
@@ -62,7 +62,7 @@ Python 3.14 in a uv-made `.venv` (on Windows the interpreter is `.venv\Scripts\p
 The site is public and recruiters read it. These hold for every edit:
 
 - Every claim traces to a source: the project repositories, coursework submissions, Jadon's resume or his project notes. Never invent work, tests, outcomes or habits. Label coursework as coursework.
-- Third person, plain and specific: the work is the subject. Jadon is named, or called he, only where an actor is needed: the homepage hero, About's background, metadata, and body lines whose fact is about him (his name in output, an exam he passed, classes he took, his role on a team or alongside AI coding agents, his own computer, network or words). Role lines stay free of pronouns. No first person except on pages marked `voice: personal`; `tests/test_first_person.py` enforces it. Lead with what was built and what happened; keep real limits in one short Limits section instead of hedging each sentence.
+- No personal pronouns: no I, my or we, and no he, his or him, because third person reads like someone else describing Jadon. The work is the subject, plain and specific. Where an actor is needed, write a subjectless resume line ("Developed SSH Workbench with AI coding agents...", "Led the five-person team...") or name the thing instead of the owner (a personal computer, a home network, original answers). The homepage intro and About's background read like a resume summary. Jadon's name appears only as a fact: the homepage title, metadata and JSON-LD, the header and footer, and his name in output (the AdventureWorks query and review); never as a sentence subject and never followed by he. Pages marked `voice: personal` are exempt; `tests/test_first_person.py` enforces the rest. Lead with what was built and what happened; keep real limits in one short Limits section instead of hedging each sentence.
 - Case studies and class pages keep their summary in frontmatter; the template renders it in the page head and the Role panel. Don't repeat the summary in the body.
 - A class page says what the course provided and what Jadon did, puts strongest work first, then lists every lab with work of his in tables (one closed module per `###` heading), then skills, limits and sources linking files on `main`. Leave blank or empty files out and say so in Limits.
 - Report vocabulary (evidence, recorded, supplied, historical, established) stays at three or fewer per page; `tests/test_copy_voice.py` enforces it.
