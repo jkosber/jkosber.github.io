@@ -15,7 +15,7 @@ facts:
 IT support technician focused on infrastructure, networking and security.
 { .role-line .enter .enter-2 }
 
-Supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Runs a Proxmox homelab outside work. Created SSH Workbench, a terminal app for the homelab's Proxmox host, a Linux Mint laptop and two Windows PCs: it shows which are online and connects to each through OpenSSH. Seeking infrastructure, networking and security roles.
+Supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Runs a Proxmox homelab outside work. Created SSH Workbench, a terminal app that checks and connects to the homelab's Proxmox host, a Linux laptop and Windows PCs. Seeking infrastructure, networking and security roles.
 { .intro .enter .enter-2 }
 
 </div>
