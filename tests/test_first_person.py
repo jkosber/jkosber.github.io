@@ -47,28 +47,61 @@ def blank(text):
     return "\n" * text.count("\n")
 
 
-def prose(body):
-    """Body text without code, tags (alt, aria-label and title text kept), link targets,
-    attribute lists and double-quoted words."""
+def strip_code(body):
     body = re.sub(r"```.*?```", keep_lines, body, flags=re.DOTALL)
-    body = re.sub(r"`[^`\n]*`", " ", body)
-    body = tags_to_text(body)
+    return re.sub(r"`[^`\n]*`", " ", body)
+
+
+def strip_markup(body):
+    """Drop link targets, attribute lists and double-quoted words."""
     body = re.sub(r"\]\([^)\n]*\)", "]", body)
     body = re.sub(r"\{[^}\n]*\}", " ", body)
     return re.sub(r"\"[^\"\n]*\"|“[^”\n]*”", " ", body)
 
 
+def prose(body):
+    """Body text without code, tags (alt, aria-label and title text kept), link targets,
+    attribute lists and double-quoted words."""
+    return strip_markup(tags_to_text(strip_code(body)))
+
+
+def split_attributes(body):
+    """(body with its tags dropped, the alt, aria-label and title text alone), both keeping line numbers."""
+    text, attributes, last = "", "", 0
+    for match in re.finditer(r"<[^>]+>", body):
+        between = body[last:match.start()]
+        text += between + keep_lines(match, " ")
+        attributes += blank(between) + keep_lines(match, " " + " ".join(TEXT_ATTRIBUTES.findall(match.group(0))) + " ")
+        last = match.end()
+    return text + body[last:], attributes + blank(body[last:])
+
+
+def summary_page_pronouns(frontmatter, body):
+    """A case study or class page: first person is allowed in body prose and headings, where Jadon
+    is the actor, but not in frontmatter, table rows or alt, aria-label and title text."""
+    text, attributes = split_attributes(strip_code(body))
+    lines = strip_markup(text).split("\n")
+    tables = "\n".join(line if line.lstrip().startswith("|") else "" for line in lines)
+    rest = "\n".join("" if line.lstrip().startswith("|") else line for line in lines)
+    return (hits(frontmatter + tables) + hits(blank(frontmatter) + attributes)
+            + hits(blank(frontmatter) + rest, THIRD_PERSON))
+
+
 def personal_pronouns(markdown):
     """(line, word) for each personal pronoun a reader sees on a page: frontmatter values whole,
-    then body prose. First person is allowed on a page whose frontmatter sets `voice: personal`
-    and inside a passage marked `<!-- voice: personal -->` ... `<!-- /voice -->`; third person
-    is allowed nowhere."""
-    frontmatter, body = "", markdown
+    then body prose. First person is allowed on a page whose frontmatter sets `voice: personal`,
+    in the body prose and headings of a page with `summary` frontmatter (a case study or class
+    page), and inside a passage marked `<!-- voice: personal -->` ... `<!-- /voice -->`; third
+    person is allowed nowhere."""
+    frontmatter, body, meta = "", markdown, {}
     if markdown.startswith("---\n"):
         end = markdown.index("\n---", 3)
         frontmatter, body = markdown[:end], markdown[end:]
-        if (yaml.safe_load(frontmatter[4:]) or {}).get("voice") == "personal":
-            return hits(frontmatter + prose(body), THIRD_PERSON)
+        meta = yaml.safe_load(frontmatter[4:]) or {}
+    if meta.get("voice") == "personal":
+        return hits(frontmatter + prose(body), THIRD_PERSON)
+    if "summary" in meta:
+        return sorted(summary_page_pronouns(frontmatter, body), key=lambda hit: hit[0])
     outside = PERSONAL_PASSAGE.sub(keep_lines, body)
     inside, last = "", 0
     for match in PERSONAL_PASSAGE.finditer(body):
@@ -112,7 +145,7 @@ class PersonalPronounTests(unittest.TestCase):
         page = (
             "---\n"
             "title: NETI 109 Networking I\n"
-            'summary: {role: "I built it."}\n'
+            'description: "I built it."\n'
             "---\n"
             "# NETI 109 Networking I\n"
             "The host runs. I/O graphs and `my-tool` stay out.\n"
@@ -185,6 +218,26 @@ class PersonalPronounTests(unittest.TestCase):
         self.assertEqual(personal_pronouns(page), [
             (9, "he"), (9, "her"), (12, "We"), (12, "my"), (13, "I'd"), (15, "I"),
         ])
+
+
+    def test_summary_pages_allow_first_person_in_body_prose_only(self):
+        page = (
+            "---\n"
+            "title: Proxmox homelab\n"
+            'summary: {role: "I built it.", result: "Ten VMs."}\n'
+            "---\n"
+            "# Proxmox homelab\n"
+            "## Why I wanted it {#why-i-wanted-it}\n"
+            "In October I patched every host, and my checks passed.\n"
+            "| Host | What I did |\n"
+            "|---|---|\n"
+            "| CT 110 | I installed the updates |\n"
+            '<img src="a.webp" alt="My dashboard"><figcaption>From my notes</figcaption>\n'
+            "He checked it too.\n"
+        )
+        self.assertEqual(personal_pronouns(page), [(3, "I"), (8, "I"), (10, "I"), (11, "My"), (12, "He")])
+        home = "---\ntitle: Jadon Kosberg\nlayout: home\n---\n\nI supported 100+ staff.\n"
+        self.assertEqual(personal_pronouns(home), [(6, "I")])
 
 
 if __name__ == "__main__":
