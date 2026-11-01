@@ -2,7 +2,7 @@
 title: IPv6 packet investigations
 description: A CSIA 210 final capstone that matched Windows hosts' IPv6 behavior to DHCPv6 replies and router advertisements, including a lost gateway traced to one advertisement.
 kind: Completed coursework
-status: "May 2026"
+status: "Completed May 2026"
 detail: true
 class_page: coursework/csia-210/
 class_name: CSIA 210 Network Protocol Analysis
@@ -32,7 +32,7 @@ The traces came from a network with Windows hosts, DHCPv6 and a layer 3 device s
 
 ## Finding the DHCPv6 address assignment
 
-The first question was which reply gave the Windows 10 host its address. Filtering for DHCPv6 replies and checking their IA Address options answered it. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
+The first trace asked which reply gave the Windows 10 host its address. Filtering for DHCPv6 replies and checking their IA Address options answered it. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
@@ -51,13 +51,13 @@ The first question was which reply gave the Windows 10 host its address. Filteri
 
 ## Separating a duplicate address from general connectivity
 
-In the second trace two Windows hosts were using the same address, ending in `::117`. The analysis compared their source MAC addresses in the neighbor discovery traffic with the Windows output, which marked the address as a duplicate.
+In the second trace a Windows 7 host had been set by hand to `::117`, the address the Windows 10 host already held. I compared their source MAC addresses in the neighbor discovery traffic with the Windows 7 host's `ipconfig` output, which marked the address as a duplicate.
 
 A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. The summary put it this way: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
 
 ## Tracking source-address changes
 
-Next, the analysis followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address:
+Later in the same trace I followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address, `::117`:
 
 | Point in the trace | Finding |
 |---|---|
@@ -66,11 +66,11 @@ Next, the analysis followed the Windows 10 host as it picked up public and tempo
 | Frame 7512 | A later advertisement with the autonomous flag off |
 | Host output after that | Both SLAAC addresses deprecated; a later packet used the DHCPv6 address ending in `::117` |
 
-The submission said the autonomous flag turning off deprecated the SLAAC addresses. That overstates it: an unset autonomous flag makes the host ignore that prefix information, and an address is deprecated when its preferred lifetime runs out ([RFC 4862, section 5.5.3](https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3)). Pinning down the timing would take the full lifetime sequence from the trace.
+My submission said the autonomous flag turning off deprecated the SLAAC addresses. That overstates it: an unset autonomous flag makes the host ignore that prefix information, and an address is deprecated when its preferred lifetime runs out ([RFC 4862, section 5.5.3](https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3)). Pinning down the timing would take the full lifetime sequence from the trace.
 
 ## Losing the gateway while retaining the address
 
-In the last trace the Windows host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. Filtering router advertisements and lining up their router lifetimes with what the host did gave this sequence:
+Near the end of that trace the Windows 10 host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. Filtering router advertisements and lining up their router lifetimes with what the host did gave this sequence:
 
 | Point in the trace | What happened |
 |---|---|
@@ -89,7 +89,7 @@ The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902
 
 ## Limits
 
-- The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the last trace; the other frame numbers come from the written answers.
+- The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the second trace; the other frame numbers come from the written answers.
 - The submission doesn't include the host output I compared the `::108` match against.
 - I diagnosed the duplicate address but didn't fix it or retest.
 - The SLAAC explanation above corrects what the submission said.

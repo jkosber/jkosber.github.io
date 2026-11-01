@@ -7,7 +7,7 @@ tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "Built and maintained the lab: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. Every host patched in October after a certificate authority compromise, and monitoring that sends alerts to Discord."
+  result: "Built ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. Patched every host in October after a certificate authority compromise and set up monitoring that sends alerts to Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
@@ -20,7 +20,7 @@ screenshot:
 
 # Proxmox homelab
 
-I built JHomelab on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from my everyday computer. It's where the Linux, virtualization and networking from coursework turned into something I keep running.
+I built JHomelab on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from my everyday computer. It turned the Linux, virtualization and networking from coursework into services I keep running.
 
 Two service guests run all the time, and the other guests start only when I'm working on them. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
@@ -49,11 +49,11 @@ The host runs **Proxmox VE 9.2.21** on kernel **7.0.14-25-pve**.
 | 1 TB hard drive | `vmdata` storage for guest disks today; it becomes the backup drive once the NVMe is in use |
 | NVMe SSD left over from Windows | Hidden from Proxmox by the BIOS's Intel RST RAID mode. Planned home for the guest disks |
 
-The guests are assigned about 51.5 GB of memory in total, more than the laptop has. That's on purpose: only VM 109 and CT 110 start with the host.
+The guests are assigned about 51.5 GB of memory in total, more than the laptop has. The overcommit is deliberate: only VM 109 and CT 110 start with the host.
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway that isn't finished yet. The Linux VMs are for trying a distribution without touching my everyday computer. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway that isn't finished yet. The Linux VMs are for trying a distribution without touching my everyday computer. Ubuntu Desktop, VM 100, is also the current Tailscale node. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 
@@ -129,7 +129,7 @@ The original Watchtower project was archived in December 2025, and it only worke
 
 ### Monitoring and alerts
 
-Before October I had Uptime Kuma installed but not set up, and nothing watched the hardware. Now Beszel agents on the host, VM 109 and CT 110 track the machines, and Uptime Kuma checks the services from outside every minute. Both post to a private Discord channel.
+Before October I had Uptime Kuma installed but not set up, and nothing watched the hardware. Now Beszel agents on the host, VM 109 and CT 110 track the machines, and Uptime Kuma checks the services over the network every minute. Both post to a private Discord channel.
 
 | Alert | From | Fires when |
 |---|---|---|
@@ -145,7 +145,7 @@ Beszel also lists pending package updates and flags the security ones. The first
 
 ### Dashboard
 
-I had installed Homepage but never configured it. Before setting it up, I compared it with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
+I had installed Homepage but never configured it. Before setting it up, I compared it with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. I chose Homepage because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
 
 Each panel has its own credential instead of the admin logins. The Proxmox panel uses an API token on a separate user with only the `PVEAuditor` role, and a write attempt with it got a 403. Portainer has an access token made for the dashboard, and Beszel has a separate superuser account, because Homepage's Beszel panel needs one. Homepage reads them from root-only files mounted read-only, so none of them sit in the dashboard config.
 
@@ -156,7 +156,7 @@ The laptop has a GTX 1070 Mobile next to its integrated graphics. I enabled IOMM
 ## Lessons learned {#what-i-have-learned}
 
 - Installed isn't the same as monitored. Uptime Kuma was on VM 109 well before it checked anything.
-- Targeted fixes aren't patching. CT 110 got only hand-picked fixes, and 87 updates piled up until Beszel showed them.
+- Targeted fixes aren't patching. I had applied only hand-picked fixes to CT 110, and 87 updates waited until Beszel listed them.
 - Tools the lab depends on can quietly stop being maintained. Watchtower had been archived for ten months, and it only kept working because I'd pinned an older Docker API.
 
 ## Limits

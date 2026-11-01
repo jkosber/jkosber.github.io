@@ -11,7 +11,7 @@ art: {src: assets/thumbnails/security.svg, width: 240, height: 160}
 summary:
   role: "Ran the Cisco labs in VirtualBox, worked each investigation from the alerts and captures, and wrote the answers and the final after-action report. The course provided the virtual machines, the captures and the alert data."
   built_with: ["Security Onion", "Sguil and Kibana", "Wireshark", "NetworkMiner", "VirusTotal", "Linux and Windows tools"]
-  result: "47 labs and a skills assessment, ending with Security Onion investigations of an exploit kit infection, a compromised Windows host, a root shell traced across three tools, and a Pushdo infection written up as an after-action report."
+  result: "Completed 47 labs and a skills assessment, ending with Security Onion investigations of an exploit kit infection, a compromised Windows host, a root shell traced across three tools, and a Pushdo infection written up as an after-action report."
 ---
 
 # CSIA 115 Cyber Ops
@@ -32,13 +32,13 @@ The Snort lab's detection rule and firewall command came with the lab; I ran the
 
 ### A Pushdo infection and its after-action report {#pushdo-after-action-report}
 
-The final assessment provided Security Onion alerts from a 2017 Pushdo infection. The investigation narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. The after-action report that followed recommended that the host be isolated, the three domains blocked, the network segmented and users trained. The assessment answer reads: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
+The final assessment provided Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. The after-action report that followed recommended that the host be isolated, the three domains blocked, the network segmented and users trained. The assessment answer reads: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
 
-The full write-up is on [CyberOps & traffic investigation](../technical-labs/soc-threat-detection.md).
+The full write-up is on [Pushdo malware investigation in Security Onion](../technical-labs/soc-threat-detection.md).
 
 ### Rebuilding an exploit kit infection (27.2.15) {#rebuilding-an-exploit-kit-infection}
 
-The data came from a January 2017 infection. The reconstruction started from Kibana's first alert, which tied the traffic to the RIG exploit kit, then used the Sguil and CapMe transcripts to rebuild what happened:
+The data came from a January 2017 infection. I started in Kibana with the first alert, which tied the traffic to the RIG exploit kit, then moved to the Sguil and CapMe transcripts to rebuild what happened:
 
 1. A search took the user to a compromised home-improvement site.
 2. The site loaded a script from a redirector, which sent the browser to the exploit kit.
@@ -55,7 +55,7 @@ The next alert was the attack. The host downloaded an executable that Cisco Talo
 
 ### Snort and a firewall rule (26.1.7)
 
-In a Mininet network, Snort ran on the router while a host requested a file from the lab's malicious server. The first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. The written retest says the download failed, but there's no screenshot of it.
+In a Mininet network, Snort ran on the router while a host requested a file from the lab's malicious server. The first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. My written retest says the download failed, but I didn't take a screenshot of it.
 
 The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-labs/snort-firewall-lab.md).
 
@@ -156,7 +156,7 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 
 - 28.4.13 Incident Handling is in the repository but blank, so it isn't listed.
 - The captures and alert data came from the course and aren't in the repository, so the times and file details can't be rechecked from it alone.
-- The Pushdo report says the downloaded files ran on the host, which the alerts don't show, and it calls the OpenDNS lookup service malicious when it's a legitimate service the malware used. The containment steps are recommendations; they weren't carried out.
+- My Pushdo report says the downloaded files ran on the host, which the alerts don't show, and it calls the OpenDNS lookup service malicious when it's a legitimate service the malware used. The containment steps are recommendations; they weren't carried out.
 - Some labs captured traffic on a home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
@@ -167,4 +167,4 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 - [27.2.16 Investigating an Attack on a Windows Host](https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.16%20Lab%20-%20Investigating%20an%20Attack%20on%20a%20Windows%20Host%20-%20Jadon%20Kosberg.docx)
 - [26.1.7 Snort and Firewall Rules](https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx)
 
-[All coursework](index.md) · [CyberOps & traffic investigation](../technical-labs/soc-threat-detection.md) · [CSIA 210 Network Protocol Analysis](csia-210.md)
+[All coursework](index.md) · [Pushdo malware investigation in Security Onion](../technical-labs/soc-threat-detection.md) · [CSIA 210 Network Protocol Analysis](csia-210.md)
