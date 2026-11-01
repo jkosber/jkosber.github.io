@@ -1,6 +1,6 @@
 ---
 title: Proxmox homelab
-description: "A Proxmox homelab, built and maintained as a personal project, with Linux guests, Docker services, monitoring and an experimental virtual network."
+description: "Linux guests, Docker services, monitoring and an experimental virtual network on Proxmox, built and maintained as a personal project."
 kind: Personal homelab
 status: Ongoing
 tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
