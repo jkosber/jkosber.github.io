@@ -62,7 +62,7 @@
     {% if art %}<img class="minor-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
     {% if notes %}<div>
       {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
-      {% if project.meta.status %}<p class="minor-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}.</p>{% endif %}
+      {% if project.meta.status %}<p class="minor-status">{{ project.meta.status }}</p>{% endif %}
     </div>{% endif %}
   </div>
   {% endif %}
@@ -106,7 +106,7 @@
 <li class="project-row lift reveal">
   <h{{ heading }} class="project-row-title"><a href="{{ project.url | url }}">{{ project.meta.title or project.title }}</a></h{{ heading }}>
   <p>{{ project.meta.description }}</p>
-  <span class="project-status">{{ 'Complete' if project.meta.status == 'Complete, maintained as needed' else project.meta.status }}</span>
+  <span class="project-status">{{ project.meta.status }}</span>
 </li>
 {%- endmacro %}
 
