@@ -88,7 +88,7 @@
           <div class="prose coursework-index">
             <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
               <table role="table">
-                <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Class</th><th scope="col" role="columnheader">Term</th><th scope="col" role="columnheader">In the repo</th><th scope="col" role="columnheader">In depth</th></tr></thead>
+                <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Class</th><th scope="col" role="columnheader">Term</th><th scope="col" role="columnheader">Covered</th><th scope="col" role="columnheader">In depth</th></tr></thead>
                 <tbody role="rowgroup">
                   {% for class in section.children if class.meta.code %}
                   <tr role="row">
@@ -141,7 +141,7 @@
                 {% if page.meta.status %}<div><dt>Status</dt> <dd>{{ page.meta.status }}</dd></div>{% endif %}
                 {% if page.meta.updated %}<div><dt>Updated</dt> <dd>{{ page.meta.updated }}</dd></div>{% endif %}
                 {% if page.meta.term %}<div><dt>Term</dt> <dd>{{ page.meta.term }}</dd></div>{% endif %}
-                {% if page.meta.get('items') %}<div><dt>In the repo</dt> <dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
+                {% if page.meta.get('items') %}<div><dt>Covered</dt> <dd>{{ page.meta.get('items') }}</dd></div>{% endif %}
                 {% if page.meta.class_page %}<div><dt>Class</dt> <dd><a href="{{ page.meta.class_page | url }}">{{ page.meta.class_name }}</a></dd></div>{% endif %}
                 {% if summary.source %}<div><dt>Source</dt> <dd><a href="{{ summary.source.url }}">{{ summary.source.label }}</a></dd></div>
                 {% elif page.meta.repo %}<div><dt>Source</dt> <dd><a href="{{ page.meta.repo }}">{{ page.meta.code }} repository</a></dd></div>{% endif %}

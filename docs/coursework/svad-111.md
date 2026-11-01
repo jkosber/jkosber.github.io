@@ -11,7 +11,7 @@ art: {src: assets/thumbnails/aws.svg, width: 240, height: 160}
 summary:
   role: "Built the VirtualBox VMs and the two AWS servers, worked the Linux labs, wrote the Bash scripts and wrote the final project report. The course provided the worksheets, the install commands, the application and its data."
   built_with: ["VirtualBox", "Linux Mint and Fedora", "Bash", "AWS EC2", "Ubuntu 22.04", "SQL Server and Apache"]
-  result: "25 assignments and 5 scripts: Linux administration labs, Bash scripts that reject bad input and exit with an error, and a two-server AdventureWorks deployment on AWS that served the catalog and saved a review."
+  result: "Completed 25 assignments and wrote 5 scripts: Linux administration labs, Bash scripts that reject bad input and exit with an error, and a two-server AdventureWorks deployment on AWS that served the catalog and saved a review."
 ---
 
 # SVAD 111 Linux and Virtualization Technologies
@@ -124,7 +124,7 @@ The run in the write-up shows the usage message with no arguments, then each pro
 | Lab | What it asked | Work done |
 |---|---|---|
 | Milestone 1 AWS Environment Build | Launch a web server and a database server in EC2 | Launched both Ubuntu instances in the AWS Academy lab |
-| Milestone 2A Database Server Setup | Install SQL Server and `sqlcmd` | Installed and configured SQL Server 2022, checked the service and ran a test query with Jadon's name |
+| Milestone 2A Database Server Setup | Install SQL Server and `sqlcmd` | Installed and configured SQL Server 2022, checked the service and ran a test query |
 | Milestone 2B Database Server Setup | Convert and import the AdventureWorks data | Imported the data and checked the counts: 504 products and 19,972 people |
 | Milestone 3A Web Server Setup | Open the application ports in the security group | Added rules for ports 80, 1433 and 3306 next to SSH |
 | Milestone 3B Web Server Setup | Install Apache, PHP 8.1 and the SQL Server drivers | Brought up a `test.php` page showing PHP 8.1.2 under Apache |

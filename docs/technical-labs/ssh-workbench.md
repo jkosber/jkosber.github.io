@@ -7,7 +7,7 @@ tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "Defined what Workbench does, planned each release as small tested tasks and tested it on personal machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
-  result: "Nine tagged releases from October 20 to 31, 2026, after work began October 9. Version 0.3.4 passes 1,141 automated tests on Windows and Ubuntu."
+  result: "Shipped nine tagged releases from October 20 to 31, 2026, after work began October 9, ending with version 0.3.4, which passes 1,141 automated tests on Windows and Ubuntu."
   source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
 updated: "October 31, 2026"
 screenshot:
@@ -82,7 +82,7 @@ The automated tests use fictional machines and a fake status checker. They never
 
 Around the 0.2.0 release, checks on my own machines covered the parts tests can't:
 
-- A new key installed and logged in alone on the Linux Mint laptop, and as administrator on both Windows PCs.
+- On the Linux Mint laptop, and as administrator on both Windows PCs, Workbench installed a new key and a key-only login worked.
 - Key setup on the Proxmox host, where the key file lives behind a cluster-filesystem link.
 - A first connection that asked to trust a new host key. The fingerprint was compared before accepting.
 

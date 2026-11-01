@@ -55,8 +55,8 @@ nav:
       - CSIA 105 Introduction to Cyber Security: coursework/csia-105.md
       - SDEV 120 Computing Logic: coursework/sdev-120.md
       - AdventureWorks on AWS: technical-labs/aws-linux-infrastructure.md
-      - CyberOps & traffic investigation: technical-labs/soc-threat-detection.md
-      - Snort and firewall lab: technical-labs/snort-firewall-lab.md
+      - Pushdo malware investigation in Security Onion: technical-labs/soc-threat-detection.md
+      - Snort, firewall rules & HTTP recovery: technical-labs/snort-firewall-lab.md
       - IPv6 packet investigations: technical-labs/ipv6-packet-investigations.md
   - Experience: experience/index.md
   - About: credentials/index.md

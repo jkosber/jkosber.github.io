@@ -2,7 +2,7 @@
 title: AdventureWorks on AWS
 description: A deployment of the course's PHP app and SQL Server database on two EC2 servers, tested by searching the catalog and saving a review through it.
 kind: Completed coursework
-status: "May 2026"
+status: "Completed May 2026"
 tools: [AWS EC2, Ubuntu, Apache, SQL Server]
 detail: true
 class_page: coursework/svad-111/
@@ -10,7 +10,7 @@ class_name: SVAD 111 Linux and Virtualization Technologies
 summary:
   role: "Launched both servers, installed and configured the database and web tiers, fixed the connection between them and tested the result. The course provided the app, the data and the two-server design."
   built_with: ["AWS EC2", "Ubuntu 22.04", "Apache", "PHP 8.1", "Microsoft SQL Server and sqlcmd", "PuTTY and WinSCP"]
-  result: "A working two-server deployment: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app."
+  result: "Deployed a working two-server app: a blank search returned 304 products, a product page loaded and a submitted review appeared in the app."
   source: {label: "SVAD 111 repository", url: "https://github.com/jkosber/SVAD-111-Linux-Virtualization"}
 ---
 
@@ -35,7 +35,7 @@ The browser only talks to the web server. PHP connects to SQL Server through the
 
 ## Server setup
 
-PuTTY handled the shells and WinSCP moved the course's archives onto the servers. On the database server I added Microsoft's signing key and package repository, installed SQL Server 2022 and the `sqlcmd` client, and ran a test query with my name. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
+PuTTY handled the shells and WinSCP moved the course's archives onto the servers. On the database server I added Microsoft's signing key and package repository, installed SQL Server 2022 and the `sqlcmd` client, and ran a test query with my name. On the web server I installed Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
 
 I checked each layer before building on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
 
@@ -70,7 +70,7 @@ Next I enabled the `sqlsrv` and `pdo_sqlsrv` extensions and set Apache to the pr
 
 The final report lists four problems and what fixed them:
 
-- **The web server timed out reaching the database.** The security group didn't allow SQL Server traffic; after I added a rule for port 1433 from the web server, the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
+- **The web server timed out reaching the database.** The security group's first rules didn't let the web server reach SQL Server; after I added a rule for port 1433 from the web server, the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
 - **The SQL login failed** even with the right password. Enabling SQL Authentication in the SQL Server setup fixed it.
 - **Microsoft's packages weren't found.** Adding Microsoft's signing key and repository let the installs go through.
 - **PuTTY couldn't reach EC2.** The network in use blocked outbound SSH, so I switched to a hotspot.
@@ -84,7 +84,7 @@ The final report lists four problems and what fixed them:
 | Search with no term | 304 catalog results |
 | Search for Mountain-300 | Four products, 785 to 788 |
 | Open product 787 | Mountain-300 Black, 44, with its picture |
-| Submit a review | The review appeared in the app with Jadon's name, a rating of 3 and "This is a good bike." |
+| Submit a review | The review appeared in the app with the entered name, a rating of 3 and "This is a good bike." |
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="AdventureWorks search results; scroll horizontally if needed">

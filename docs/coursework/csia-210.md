@@ -9,9 +9,9 @@ items: 16 submissions
 repo: https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis
 art: {src: assets/thumbnails/proxmox.svg, width: 240, height: 160}
 summary:
-  role: "Made the first capture on a personal computer, then filtered and read the course's trace files and wrote the answers and lab summaries. Building or repairing the capstone networks was not part of the work."
+  role: "Made the first capture on a personal computer, then filtered and read the course's trace files and wrote the answers and lab summaries."
   built_with: ["Wireshark", "Display and capture filters", "Windows network commands"]
-  result: "14 chapters of hands-on projects and two capstones: DHCP and DHCPv6 leases, TCP and UDP headers, scan traffic, IPv6 transition traces, and a final capstone that traced a lost IPv6 gateway to a router advertisement."
+  result: "Completed 14 chapters of hands-on projects and two capstones: DHCP and DHCPv6 leases, TCP and UDP headers, scan traffic, IPv6 transition traces, and a final capstone that traced a lost IPv6 gateway to a router advertisement."
 ---
 
 # CSIA 210 Network Protocol Analysis
@@ -31,7 +31,7 @@ The course provided the textbook's hands-on project steps, the trace files for e
 
 ### Final capstone: a lost IPv6 gateway {#final-capstone}
 
-The final provided traces from a network with Windows hosts, DHCPv6 and a router sending router advertisements. The analysis matched a host's DHCPv6 address to the reply that assigned it, read the advertisement flags against the switch configuration, checked what stays readable in SSH and HTTPS (only banners and algorithm names), and followed one host through a duplicate address and a router lifetime that dropped from 270 seconds to 0 and back. The submitted summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
+The final provided two traces from a network with Windows hosts, DHCPv6 and a router sending router advertisements. I matched a host's DHCPv6 address to the reply that assigned it, read the advertisement flags against the switch configuration, checked what stays readable in SSH and HTTPS (only banners and algorithm names), and in the second trace followed the Windows 10 host through two problems: a Windows 7 host set by hand to its address, and a router lifetime that dropped from 270 seconds to 0 and back. My summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
 
 The full write-up is on [IPv6 packet investigations](../technical-labs/ipv6-packet-investigations.md).
 
@@ -123,7 +123,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 - The trace files came from the course and aren't in the repository, so frame numbers can't be rechecked from it. Only the first capture is there.
 - Chapters 4, 5, 6, 8, 10, 11, 13 and 14 are screenshots of the requested fields without written analysis.
 - The work was reading the capstone networks' traffic, not building or repairing them.
-- A few answers have mistakes: one final-capstone answer says a router advertisement's L flag is 0 while the next answer and the screenshot show it set, and the midterm explanation of the Packet Too Big addresses is muddled.
+- A few answers have mistakes: one final-capstone answer says a router advertisement's L flag is 0 while the next answer and the screenshot show it set, and the midterm explanation of the Packet Too Big addresses is unclear.
 - Several chapters used a home network, so this page leaves out their addresses.
 
 ## Sources {#sources}

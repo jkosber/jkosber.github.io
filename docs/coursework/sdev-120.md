@@ -11,7 +11,7 @@ art: {src: assets/thumbnails/terminal.svg, width: 240, height: 160}
 summary:
   role: "Wrote the pseudocode, drew the flowcharts and the UML diagram, filled in the workbooks and wrote the Python scripts. Served as team leader on the team project, responsible for employee data management and for security and compliance."
   built_with: ["Python 3.14 and IDLE", "Lucidchart", "Excel", "Pseudocode"]
-  result: "Seven modules of program design and Python: modular pseudocode with hierarchy charts and flowcharts, a UML use-case diagram, loop and decision scripts with their IDLE output, and a team pay-calculator script."
+  result: "Completed seven modules of program design and Python: modular pseudocode with hierarchy charts and flowcharts, a UML use-case diagram, loop and decision scripts with their IDLE output, and a team pay-calculator script."
 ---
 
 # SDEV 120 Computing Logic

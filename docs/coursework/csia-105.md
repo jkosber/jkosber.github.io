@@ -11,7 +11,7 @@ art: {src: assets/project-terminal.svg, width: 600, height: 340}
 summary:
   role: "Ran the textbook's hands-on projects in a Windows VM and on a physical computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
   built_with: ["Windows 10 in VirtualBox", "Qualys SSL Labs", "OpenPuff", "netsh", "NVD and CVE", "Directory Snoop"]
-  result: "25 assignments across cryptography, endpoint security, wireless, vulnerability research and forensics, including TLS grades for three sites and a hide-and-recover steganography round trip."
+  result: "Completed 25 assignments across cryptography, endpoint security, wireless, vulnerability research and forensics, including TLS grades for three sites and a hide-and-recover steganography round trip."
 ---
 
 # CSIA 105 Introduction to Cyber Security
@@ -136,4 +136,4 @@ Directory Snoop's NTFS module showed the drive's master file table and a documen
 - [10-4 Using Microsoft Windows Netsh Commands](https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module5/Security_Plus_8e_Hands_On_Project_10-4%20-%20Jadon%20Kosberg.docx)
 - [13-3 Viewing Windows Hidden Data](https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module7/Module%2007%20-%20Part%201%20-%20Hands-On%20Project%2013-3%20-%20Viewing%20Windows%20Hidden%20Data%20-%20Jadon%20Kosberg.docx)
 
-[All coursework](index.md) · [CSIA 115 Cyber Ops](csia-115.md) · [Credentials](../credentials/index.md)
+[All coursework](index.md) · [CSIA 115 Cyber Ops](csia-115.md) · [About](../credentials/index.md)

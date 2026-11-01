@@ -8,7 +8,7 @@ kind: Background
 
 <!-- voice: personal -->
 
-I'm an IT support technician with an informatics degree and a cybersecurity certificate. I've supported dental offices and retail stores, helping staff and working on the equipment they rely on.
+I'm an IT support technician with an informatics degree and a Cyber Security certificate. I've supported dental offices and retail stores, handling help desk tickets, workstation setups, printers and network checks.
 
 Outside work I run a [Proxmox homelab](../technical-labs/proxmox-virtualization.md): a place to try configurations, track down failures and keep Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from completed classes.
 
@@ -37,7 +37,7 @@ Earned May 2026
 ### Cyber Security & Information Assurance
 Technical Certificate, Ivy Tech Community College. May 2026.
 
-Coursework included IT support, networking, CyberOps, network protocol analysis, Linux and virtualization, and CompTIA A+ and Security+ preparation. The [Coursework](../coursework/index.md) pages cover six of those classes.
+Coursework included IT support, networking, Cyber Ops, network protocol analysis, Linux and virtualization, and CompTIA A+ and Security+ preparation. The [Coursework](../coursework/index.md) pages cover six of those classes.
 </div>
 <div class="education-entry" markdown>
 ### Informatics
