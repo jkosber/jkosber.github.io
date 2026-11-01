@@ -1,6 +1,6 @@
 ---
 title: Snort, firewall rules & HTTP recovery
-description: A CSIA 115 lab where a Snort alert fired on a simulated malware download, a firewall rule blocked the server, and a file was exported from a separate capture.
+description: A CSIA 115 lab where a Snort alert fired on a simulated malware download, a firewall rule blocked the server, and Wireshark exported a file from a separate capture.
 kind: Completed coursework
 status: "March 2026"
 detail: true

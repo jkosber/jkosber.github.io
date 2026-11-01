@@ -90,7 +90,7 @@ The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902
 ## Limits
 
 - The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the last trace; the other frame numbers come from the written answers.
-- The submission doesn't include the host output the `::108` match was compared against.
+- The submission doesn't include the host output I compared the `::108` match against.
 - The submission diagnosed the duplicate address but didn't fix it or retest.
 - The SLAAC explanation above corrects what the submission said.
 

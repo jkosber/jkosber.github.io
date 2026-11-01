@@ -18,7 +18,7 @@ summary:
 
 Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. The labs ran in VirtualBox, with answers and screenshots turned in for each one.
 
-## What the course provided and what was submitted {#what-the-course-provided}
+## What the course provided and what I did {#what-the-course-provided}
 
 The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. The submitted work:
 
@@ -51,7 +51,7 @@ The whole exploit took less than a minute, from 22:54:42 to 22:55:28. From the s
 
 A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. The write-up judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
 
-The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, the write-up identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. The normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list, was separated out in Kibana.
+The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, the write-up identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
 
 ### Snort and a firewall rule (26.1.7)
 

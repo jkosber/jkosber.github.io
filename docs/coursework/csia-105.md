@@ -18,7 +18,7 @@ summary:
 
 Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. Passed the [Security+ exam](../credentials/index.md#certifications) in May 2026.
 
-## What the course provided and what was submitted {#what-the-course-provided}
+## What the course provided and what I did {#what-the-course-provided}
 
 The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. The submitted work:
 

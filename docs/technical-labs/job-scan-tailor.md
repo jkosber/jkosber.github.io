@@ -14,7 +14,7 @@ art: {src: assets/project-resume.svg, width: 600, height: 340}
 
 # Job scan and resume tailor
 
-Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything lands on a local review page, and nothing goes out before a manual read-through.
+Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything lands on a local review page, and nothing goes out until I've read it.
 
 An AI agent does the reading and comparing. Python scripts do the repeatable part: building the Word and PDF files and checking them against rules that can fail the build. What the documents say about the candidate comes only from the source resume.
 
@@ -29,7 +29,7 @@ An AI agent does the reading and comparing. Python scripts do the repeatable par
   <figcaption>Every match goes into the ranking report; the strongest also get a resume.</figcaption>
 </figure>
 
-The agent reads postings in a signed-in browser, saves each full description and drops duplicates. Logins and verification prompts stay manual, and pasted or saved descriptions work when the browser isn't available.
+The agent reads postings in a signed-in browser, saves each full description and drops duplicates. I handle logins and verification prompts myself, and pasted or saved descriptions work when the browser isn't available.
 
 It scores each posting with a written rubric: skills 35%, seniority 20%, certifications and education 15%, location 15% and role alignment 15%, minus penalties for screening risks. Scores of 70 and up are the strongest band, and up to 12 of those normally get a tailored resume. The scripts show and sort the agent's scores without recalculating them.
 
@@ -61,7 +61,7 @@ Two cases only warn: page fill below the target, and a missing wording scanner, 
 
 ## Reviewing the output
 
-The ranking report lists every posting with its reasons, gaps and tailoring notes. The review page puts each resume next to its comparison, escapes everything it displays, and shows a warning instead of an empty frame when a PDF is missing. The workflow never applies or sends messages; the wording, the fit and the documents are checked by hand.
+The ranking report lists every posting with its reasons, gaps and tailoring notes. The review page puts each resume next to its comparison, escapes everything it displays, and shows a warning instead of an empty frame when a PDF is missing. The workflow never applies or sends messages; I check the wording, the fit and the documents myself.
 
 ## Tests and maintenance
 
@@ -92,7 +92,7 @@ Also in July, long summaries and skills lists pushed first drafts onto two pages
 - Scores are the agent's reading of a posting. They compare it with the baseline profile; they don't predict interviews.
 - Collection depends on browser access and on job-site page structure, which changes.
 - The September 24 review didn't run the full builder, rewrite, ranking and viewer suites, LibreOffice conversion, a look at the finished documents, or a complete scan from start to finish.
-- Interview outcomes and time saved haven't been measured.
+- I haven't measured interview outcomes or time saved.
 
 ## Sources
 

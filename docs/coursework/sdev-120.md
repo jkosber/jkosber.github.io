@@ -18,7 +18,7 @@ summary:
 
 Computing Logic was a programming foundations class: planning a program in pseudocode, flowcharts and UML before writing it, then writing small Python programs in IDLE. It ran as an eight-week late-start section.
 
-## What the course provided and what was submitted {#what-the-course-provided}
+## What the course provided and what I did {#what-the-course-provided}
 
 The course provided the assignment prompts and scenarios, the Excel templates for Modules 1 and 3, Lucidchart for the diagrams, and the team project brief. The submitted work:
 
@@ -72,7 +72,7 @@ Led the five-person team that built a payroll script in Python. The file doesn't
 - **Payroll:** 40 regular hours, overtime at 1.5 times the rate, flat 5.6 percent state and 7.9 percent federal tax, and net pay
 - **Export:** collects ten employees and writes them to `Payroll.xlsx` with pandas
 
-Still to fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of the team-leader role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
+What I'd fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of the team-leader role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
 
 ## Labs {#labs}
 

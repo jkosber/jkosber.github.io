@@ -35,9 +35,9 @@ The browser only talks to the web server. PHP connects to SQL Server through the
 
 ## Server setup
 
-PuTTY handled the shells and WinSCP moved the course's archives onto the servers. The database server got Microsoft's signing key and package repository, SQL Server 2022 and the `sqlcmd` client, and a test query with Jadon's name ran against it. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
+PuTTY handled the shells and WinSCP moved the course's archives onto the servers. The database server got Microsoft's signing key and package repository, SQL Server 2022 and the `sqlcmd` client, and I ran a test query with my name against it. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
 
-Each layer was checked before the next was built on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
+I checked each layer before building on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
 
 ## Database and application configuration
 
@@ -64,13 +64,13 @@ They returned **504 products** and **19,972 people**.
 
 ### Connecting PHP to SQL Server
 
-Next, the `sqlsrv` and `pdo_sqlsrv` extensions were enabled, Apache was set to the prefork module with the PHP module, and `test.php` showed PHP 8.1.2 under Apache. The app then went into `/var/www/html`, `config.php` got the database address and login, and Apache's default `index.html` was removed so the app's page loads first. Credentials and addresses are left out here.
+Next I enabled the `sqlsrv` and `pdo_sqlsrv` extensions and set Apache to the prefork module with the PHP module, and `test.php` showed PHP 8.1.2 under Apache. The app then went into `/var/www/html`, `config.php` got the database address and login, and removing Apache's default `index.html` let the app's page load first. Credentials and addresses are left out here.
 
 ## Troubleshooting
 
 The final report lists four problems and what fixed them:
 
-- **The web server timed out reaching the database.** The security group didn't allow SQL Server traffic; after a rule for port 1433 from the web server was added, the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
+- **The web server timed out reaching the database.** The security group didn't allow SQL Server traffic; after I added a rule for port 1433 from the web server, the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
 - **The SQL login failed** even with the right password. Enabling SQL Authentication in the SQL Server setup fixed it.
 - **Microsoft's packages weren't found.** Adding Microsoft's signing key and repository let the installs go through.
 - **PuTTY couldn't reach EC2.** The network in use blocked outbound SSH, so the connection moved to a hotspot.

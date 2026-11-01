@@ -22,11 +22,11 @@ screenshot:
 
 SSH Workbench is a terminal app that keeps a set of machines in one list, each with its way to connect and its web dashboards. Pressing C on a machine hands the terminal to the system's own OpenSSH client. When the session ends, the list comes back with the same machine selected.
 
-It also shows whether each machine's SSH port is answering and walks through setting up key-based login. It runs on Windows 11 and Linux, and has been tested against the homelab's Proxmox host, a Linux Mint laptop and two Windows PCs.
+It also shows whether each machine's SSH port is answering and walks through setting up key-based login. It runs on Windows 11 and Linux, and I've tested it against the homelab's Proxmox host, a Linux Mint laptop and two Windows PCs.
 
-## Why it was built {#why-i-wanted-it}
+## Why I wanted it {#why-i-wanted-it}
 
-The goal was one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. It was not meant to replace OpenSSH or store passwords. Authentication, keys and host-key checks should stay with the SSH client already in use.
+I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options, not a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client already in use.
 
 ## What it does
 
@@ -65,28 +65,26 @@ Key setup never sees a secret
 
 </div>
 
-## How it was developed {#how-i-worked}
+## How I worked {#how-i-worked}
 
-<!-- voice: personal -->
 I developed SSH Workbench with AI coding agents in a test-first workflow, setting each task's goal and acceptance criteria, approving every pull request and release, and testing the app on my own machines.
-<!-- /voice -->
 
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
 - Every pull request, and every push to `main` or a version tag, runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.
-- Real-machine checks use personal machines, and test keys are removed afterwards.
+- Real-machine checks use my own machines, and I remove test keys afterwards.
 
-The terminal handoff was tested in Windows Terminal and, on October 30, checked in Ghostty on Linux. The released version is installed for personal use.
+I tested the terminal handoff in Windows Terminal and, on October 30, had it checked in Ghostty on Linux. I run the released version as an installed tool.
 
 ## Testing
 
 The automated tests use fictional machines and a fake status checker. They never touch a real SSH config, key or network.
 
-Around the 0.2.0 release, checks on personal machines covered the parts tests can't:
+Around the 0.2.0 release, checks on my own machines covered the parts tests can't:
 
 - A new key installed and logged in alone on the Linux Mint laptop, and as administrator on both Windows PCs.
 - Key setup on the Proxmox host, where the key file lives behind a cluster-filesystem link.
-- A first connection that asked to trust a new host key. The fingerprint was compared before accepting.
+- A first connection that asked to trust a new host key. I compared the fingerprint before accepting it.
 
 Real use then turned up five key-setup problems, fixed in 0.2.1. For example, a commented-out copy of a key counted as installed, and PowerShell progress output leaked into the result on Windows.
 
@@ -98,15 +96,15 @@ Version 0.2.2 fixed three problems that reviews of earlier versions had set asid
 
 Each fix started as a failing test, and the Ctrl+C handling was also checked in Windows Terminal. The same release moved development and CI to Python 3.14.8 and uv 0.13.4 for their security fixes.
 
-The 0.3.0 layout was checked in Windows Terminal at sizes from 47×16, the narrowest it allows, up to 199×46, including a resize with the edit form open. Before it replaced the installed copy, the release build was installed separately and checked at 80×24, 50×24, 120×30 and 80×18, and it quit cleanly.
+Checks of the 0.3.0 layout in Windows Terminal covered sizes from 47×16, the narrowest it allows, up to 199×46, including a resize with the edit form open. Before it replaced my installed copy, the release build went through a separate install and checks at 80×24, 50×24, 120×30 and 80×18, and it quit cleanly.
 
 Versions 0.3.1 to 0.3.3, released October 23 and 24, fixed status and key-setup problems:
 
-- Saving a machine while aliases were still being checked threw those checks away, and a `Match exec` command in the SSH config could draw over Workbench's screen. Version 0.3.1 fixed both, and each fix was compared side by side with 0.3.0 in Windows Terminal using a fictional SSH config.
+- Saving a machine while aliases were still being checked threw those checks away, and a `Match exec` command in the SSH config could draw over Workbench's screen. Version 0.3.1 fixed both, and a side-by-side comparison with 0.3.0 in Windows Terminal, using a fictional SSH config, checked each fix.
 - K could open an empty key list, and it silently left out keys the SSH config offers that have no valid `.pub` file. Since 0.3.2 it says when there is no key to offer and names those keys in a "Not listed" line under the list.
 - An install error on a Windows machine printed as a block of PowerShell's CLIXML. Version 0.3.2 prints it as plain text. Version 0.3.3 keeps it on one line and, for an administrator account, says the key is installed only once the key file's permissions are set.
 
-For 0.3.2, a new script ran the POSIX key install command in bash, dash, zsh, fish and tcsh on a Linux Mint 22.3 machine, and all five passed. Key setup in 0.3.2 and 0.3.3 was checked against a Windows machine with an administrator account, where key login worked. The 0.3.1, 0.3.2 and 0.3.3 release builds each went through the same four-size check in Windows Terminal.
+For 0.3.2, a new script ran the POSIX key install command in bash, dash, zsh, fish and tcsh on a Linux Mint 22.3 machine, and all five passed. In 0.3.2 and 0.3.3, key setup against a Windows machine with an administrator account ended in a working key login. The 0.3.1, 0.3.2 and 0.3.3 release builds each went through the same four-size check in Windows Terminal.
 
 On October 30 the terminal checks ran on a Linux desktop for the first time: Ghostty 1.4.0 on Arch Linux under Wayland, with the repository's fixture scripts in place of real SSH and key commands. They covered the layout at 56, 59 and 111 columns and at 19 rows, the terminal handoff, key setup and quitting to a working shell. A machine's link opened example.com in the default browser. The run also caught a bug in the terminal fixture: on Linux it started its stand-in SSH under the system Python instead of the project's environment, so every connection failed until the fixture was fixed. The full suite, 1,124 tests by then, passed there with PowerShell 7 available for the Windows-script tests.
 
@@ -118,7 +116,7 @@ On October 30 the terminal checks ran on a Linux desktop for the first time: Gho
 
 ## Sources
 
-The repository has been public under the MIT license since October 24, 2026. This page draws on these files on `main` as of October 30, 2026, and on the project notes:
+The repository has been public under the MIT license since October 24, 2026. This page draws on these files on `main` as of October 30, 2026, and on my project notes:
 
 - [README](https://github.com/jkosber/ssh-workbench/blob/main/README.md): features, platform support and install
 - [User guide](https://github.com/jkosber/ssh-workbench/blob/main/docs/guide.md): the machine file, every feature and troubleshooting

@@ -7,7 +7,7 @@ tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "Built and maintained it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. In October every host was patched after a certificate authority compromise, and monitoring was set up to send alerts to Discord."
+  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. A patch round on every host in October after a certificate authority compromise, and monitoring that sends alerts to Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
@@ -20,9 +20,9 @@ screenshot:
 
 # Proxmox homelab
 
-JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from daily-use computers. It's where the Linux, virtualization and networking from coursework turned into something that is kept running.
+I built JHomelab on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from my everyday computer. It's where the Linux, virtualization and networking from coursework turned into something I keep running.
 
-Two service guests run all the time, and the other guests start only while they're being worked on. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
+Two service guests run all the time, and the other guests start only when I'm working on them. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
 ## How the lab fits together
 
@@ -53,7 +53,7 @@ The guests are assigned about 51.5 GB of memory in total, more than the laptop h
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway still being built. The Linux VMs are for trying a distribution without touching a daily-use computer. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway I'm still building. The Linux VMs are for trying a distribution without touching my everyday computer. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 
@@ -84,7 +84,7 @@ VM 109 runs Docker Engine 29.1.3.
 
 ## Network configuration
 
-Proxmox software-defined networking runs an experimental network next to the main LAN: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so the Proxmox inventory can be matched against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
+Proxmox software-defined networking runs an experimental network next to the main LAN: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so I can match the Proxmox inventory against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
 
 ### Firewall policy {#firewall-policy-and-its-limits}
 
@@ -99,7 +99,7 @@ The datacenter firewall is on, with seven accept rules for lab traffic, DNS and 
 
 ## Health check {#recorded-validation}
 
-On September 22 a read-only check covered the host and services. It's the baseline later changes are compared against:
+On September 22 I ran a read-only check of the host and services. It's the baseline I compare later changes against:
 
 | Check | Result |
 |---|---|
@@ -109,13 +109,13 @@ On September 22 a read-only check covered the host and services. It's the baseli
 | PostgreSQL with pgvector | Container running |
 | Storage | All three pools active; the hard drive passed SMART with no reallocated, uncorrectable or CRC errors |
 
-The check couldn't see inside VM 109, because its guest agent wasn't running and the SSH login was denied. Both were fixed in October: SSH works, and `qemu-guest-agent` now freezes the filesystem before snapshots and backups.
+The check couldn't see inside VM 109, because its guest agent wasn't running and my SSH login was denied. I fixed both in October: SSH works, and `qemu-guest-agent` now freezes the filesystem before snapshots and backups.
 
 ## October maintenance
 
 ### A certificate authority compromise
 
-On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. The `emSign ECC Root CA - G3` root was removed from the trust store on the Proxmox host and every guest. CT 110 was snapshotted, then ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL were updated. VM 109 was snapshotted before Portainer was updated and every stack redeployed. Some vendors ship patched images late, so a small read-only script was written to check each host and report OK, WAIT, ACT or FAIL for every fix.
+On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. I removed the `emSign ECC Root CA - G3` root from the trust store on the Proxmox host and every guest. On CT 110 a snapshot came first, then updates to ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL; on VM 109 a snapshot, a Portainer update and a redeploy of every stack. Some vendors ship patched images late, so I wrote a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.
 
 ### Updates on every host
 
@@ -125,11 +125,11 @@ On October 21 the eMudhra (emSign) certificate authority had a key compromise, a
 | VM 109 | Installed the available updates, updated Portainer, Homepage and Uptime Kuma, installed `qemu-guest-agent`, and grew the root volume to the whole disk while the VM was running |
 | CT 110 | Installed every pending update, 33 of them security fixes, and rebooted so every service loaded the new libc and systemd. GoodMem answered again 26 seconds later |
 
-The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because of a pinned older API version. Watchtower was replaced with the maintained fork, which negotiates the API itself, so the pin is gone. A snapshot or backup preceded each change and was deleted once everything checked out.
+The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because I had pinned an older API version. I replaced it with the maintained fork, which negotiates the API itself, so the pin is gone. A snapshot or backup came before each change, and I deleted each one once everything checked out.
 
 ### Monitoring and alerts
 
-Before October, Uptime Kuma was installed but never set up, and nothing watched the hardware. Now Beszel agents on the host, VM 109 and CT 110 track the machines, and Uptime Kuma checks the services from outside every minute. Both post to a private Discord channel.
+Before October I had Uptime Kuma installed but not set up, and nothing watched the hardware. Now Beszel agents on the host, VM 109 and CT 110 track the machines, and Uptime Kuma checks the services from outside every minute. Both post to a private Discord channel.
 
 | Alert | From | Fires when |
 |---|---|---|
@@ -145,25 +145,25 @@ Beszel also lists pending package updates and flags the security ones. The first
 
 ### Dashboard
 
-Homepage was installed but never configured. Before it was set up, Homepage was compared with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
+I had installed Homepage but never configured it. Before setting it up, I compared it with Homarr, Dashy, Glance, Homer, Heimdall and four Proxmox-specific dashboards. Homepage won because it pulls live data from all four tools in the lab, it's widely used, and its current image runs a patched Node version. Homarr came close but can't show Portainer.
 
 Each panel has its own credential instead of the admin logins. The Proxmox panel uses an API token on a separate user with only the `PVEAuditor` role, and a write attempt with it got a 403. Portainer has an access token made for the dashboard, and Beszel has a separate superuser account, because Homepage's Beszel panel needs one. Homepage reads them from root-only files mounted read-only, so none of them sit in the dashboard config.
 
 ## GPU passthrough preparation
 
-The laptop has a GTX 1070 Mobile next to its integrated graphics. IOMMU was enabled with `intel_iommu=on iommu=pt pcie_acs_override=downstream`, and the NVIDIA GPU was bound to `vfio-pci` and assigned to VMs 100, 105, 107 and 108.
+The laptop has a GTX 1070 Mobile next to its integrated graphics. I enabled IOMMU with `intel_iommu=on iommu=pt pcie_acs_override=downstream`, bound the NVIDIA GPU to `vfio-pci` and assigned it to VMs 100, 105, 107 and 108.
 
 ## Lessons learned {#what-i-have-learned}
 
 - Installed isn't the same as monitored. Uptime Kuma was on VM 109 well before it checked anything.
 - Targeted fixes aren't patching. CT 110 got only hand-picked fixes, and 87 updates piled up until Beszel showed them.
-- Tools the lab depends on can quietly stop being maintained. Watchtower had been archived for ten months, and it only kept working because of a pinned older Docker API.
+- Tools the lab depends on can quietly stop being maintained. Watchtower had been archived for ten months, and it only kept working because I'd pinned an older Docker API.
 
 ## Limits
 
-- The firewall is untested with live guest traffic: no guest DHCP, egress or blocked-traffic test yet. The diagram shows how things connect, not a tested security boundary.
+- I haven't tested the firewall with live guest traffic: no guest DHCP, egress or blocked-traffic test yet. The diagram shows how things connect, not a tested security boundary.
 - The September check didn't cover recovery, restoring a backup, database integrity or certificate trust (its HTTPS probes accepted self-signed certificates).
-- The GPU hasn't been tested inside a guest yet.
+- I haven't tested the GPU inside a guest yet.
 - Beszel and Uptime Kuma both run on VM 109, so nothing sends an alert if the whole host goes down.
 - Portainer actions and the Uptime Kuma interface are untested beyond the monitors.
 
@@ -171,7 +171,7 @@ The laptop has a GTX 1070 Mobile next to its integrated graphics. IOMMU was enab
 
 Storage comes first: switch the BIOS to AHCI, move the guest disks onto the NVMe and start scheduled backups to the 1 TB drive. Then an off-host alert for when the Proxmox host goes down, and moving the Tailscale subnet router from VM 100 to the always-on VM 109.
 
-The September check also turned up three firewall fixes due before the network expands: one rule's comment says internet access while its destination is the home LAN, the legacy firewall status reports pending changes while nftables is active, and global IPv4 forwarding is `0` while `vmbr0` and `testnet` have it on. After that comes a test of the policy with real guest traffic.
+The September check also turned up three firewall fixes due before I expand the network: one rule's comment says internet access while its destination is the home LAN, the legacy firewall status reports pending changes while nftables is active, and global IPv4 forwarding is `0` while `vmbr0` and `testnet` have it on. After that I'll test the policy with real guest traffic.
 
 Further out: a Cat6 run to replace the wireless bridge, a managed switch with 802.1Q VLANs, SDN for the service guests, per-zone firewall rules, a reverse proxy for internal hostnames (Caddy on CT 111 first, before Nginx Proxy Manager), internal DNS, a NAS, Wazuh or Security Onion for SIEM and IDS, Jellyfin with GPU transcoding, and finishing the OPNsense gateway.
 

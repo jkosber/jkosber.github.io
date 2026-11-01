@@ -18,7 +18,7 @@ summary:
 
 Linux and Virtualization Technologies covered running Linux in VirtualBox and on AWS, managing it from the command line and scripting it in Bash. The course project was a two-server deployment of the AdventureWorks sample app, built in milestones across the term.
 
-## What the course provided and what was submitted {#what-the-course-provided}
+## What the course provided and what I did {#what-the-course-provided}
 
 The course provided the worksheets and their questions, an AWS Academy lab account, the install commands for each project milestone, the application and database archives, and the requirements for each script, including a few one-line hints. The submitted work:
 
@@ -31,7 +31,7 @@ The course provided the worksheets and their questions, an AWS Academy lab accou
 
 ### AdventureWorks on two AWS servers
 
-The course's two-tier design ran on two Ubuntu EC2 instances: SQL Server on one, Apache and PHP on the other. The finished app returned 304 products on a blank search, opened product pages and saved a review with Jadon's name. The report lists the four problems that came up and how each was fixed. The first was "Connection Timed Out: The web server could not talk to the database," fixed by adding a security-group rule for port 1433 from the web server.
+The course's two-tier design ran on two Ubuntu EC2 instances: SQL Server on one, Apache and PHP on the other. The finished app returned 304 products on a blank search, opened product pages and saved a review with my name. The report lists the four problems that came up and how I fixed each one. The first was "Connection Timed Out: The web server could not talk to the database," fixed by adding a security-group rule for port 1433 from the web server.
 
 The full write-up is on [AdventureWorks on AWS](../technical-labs/aws-linux-infrastructure.md).
 
@@ -82,7 +82,7 @@ The assignment asked for a script that takes an image URL and a new name, then d
 | Infected download | Deletes the file and exits 1 before converting it |
 | Not already a JPEG | Converts it with ImageMagick |
 
-The submitted run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. Still to fix: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
+The submitted run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. What I'd change: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
 
 ## Labs {#labs}
 
@@ -90,7 +90,7 @@ The submitted run shows the usage message with no arguments, then each progress 
 
 | Lab | What it asked | Work done |
 |---|---|---|
-| M01 Building Virtual Machines | Install two Linux VMs in a Type 2 hypervisor | Built Linux Mint 22.3 and Fedora VMs in VirtualBox; Fedora kept booting the installer until the ISO was ejected by hand |
+| M01 Building Virtual Machines | Install two Linux VMs in a Type 2 hypervisor | Built Linux Mint 22.3 and Fedora VMs in VirtualBox; ejected the ISO by hand when Fedora kept booting the installer |
 | M01 Pros and Cons to Virtualization | Argue for or against virtualization | Wrote a one-page case covering hardware use, snapshots and the risk of one host failing |
 | M03 Presentation: Cloud Computing | Present cloud service models | Built a 12-slide deck on IaaS, PaaS and SaaS, moving to the cloud, its risks and vendors |
 
@@ -104,7 +104,7 @@ The submitted run shows the usage message with no arguments, then each progress 
 | M04P2A Hardware Exploration | Inspect the CPU, buses and disks | Captured `uname`, `lscpu`, `lspci`, `lsusb`, `lsblk` and `df` output |
 | M04P2B Working with Files | Create, move, delete and link files | Explained why a hard link still opens after the original file is deleted while a soft link breaks |
 | M05P1A File Editing | Edit files in vi and nano | Answered the textbook quiz inside vi |
-| M05P1B Archiving | `grep`, `find`, regular expressions, redirection, pipes and `tar` | Worked all 12 steps and noted that the worksheet never created the folder it unpacked into, so cleanup was done by hand |
+| M05P1B Archiving | `grep`, `find`, regular expressions, redirection, pipes and `tar` | Worked all 12 steps, noted that the worksheet never created the folder it unpacked into, and cleaned up by hand |
 | M05P1C Processes | Package tools, `ps`, `pstree` and `top` | Installed a package with apt and inspected the running processes on Ubuntu |
 | M05P2A Scripting | Variables, input, math and `if` | Ran the five practice scripts and explained the difference between single and double quotes |
 | M05P2B Secure Scripting Basics | Add input checks to a game and take its range from arguments | Wrote four scripts (see above) |

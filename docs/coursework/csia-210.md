@@ -18,7 +18,7 @@ summary:
 
 Network Protocol Analysis was a term of reading traffic in Wireshark, chapter by chapter through a protocol-analysis textbook: addressing and headers, ICMP and IPv6 Neighbor Discovery, DHCP and DNS, TCP and UDP, IPv6 transition, scans and troubleshooting. A midterm and a final capstone tied it together.
 
-## What the course provided and what was submitted {#what-the-course-provided}
+## What the course provided and what I did {#what-the-course-provided}
 
 The course provided the textbook's hands-on project steps, the trace files for every chapter after the first and for both capstones, the submission templates, and the capstone network diagrams. The submitted work:
 
