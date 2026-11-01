@@ -16,7 +16,7 @@ summary:
 
 # CSIA 105 Introduction to Cyber Security
 
-Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. The [Security+ certification](../credentials/index.md#certifications) was earned in May 2026.
+Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. Passed the [Security+ exam](../credentials/index.md#certifications) in May 2026.
 
 ## What the course provided and what was submitted {#what-the-course-provided}
 
