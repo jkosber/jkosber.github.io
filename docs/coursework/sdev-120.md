@@ -20,7 +20,7 @@ Computing Logic was a programming foundations class: planning a program in pseud
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The course provided the assignment prompts and scenarios, the Excel templates for Modules 1 and 3, Lucidchart for the diagrams, and the team project brief. The submitted work:
+The course provided the assignment prompts and scenarios, the Excel templates for Modules 1 and 3, Lucidchart for the diagrams, and the team project brief. My part:
 
 - Wrote the pseudocode and drew the flowcharts, hierarchy charts and UML diagram
 - Filled in the number-system, memory and logic-gate workbooks
@@ -31,7 +31,7 @@ The course provided the assignment prompts and scenarios, the Excel templates fo
 
 ### Breaking a program into modules (Module 2) {#breaking-a-program-into-modules}
 
-The scenario was a cleaning service that charges a base fee plus a rate per bathroom and per other room. A hierarchy chart came first, then the pseudocode as three modules: housekeeping asks for a customer's last name, the detail loop takes the room counts and shows the charge, and end-of-job closes the program. The rates are named constants, and typing `ZZZZ` as the name ends the loop:
+The scenario was a cleaning service that charges a base fee plus a rate per bathroom and per other room. I drew a hierarchy chart first, then wrote the pseudocode as three modules: housekeeping asks for a customer's last name, the detail loop takes the room counts and shows the charge, and end-of-job closes the program. The rates are named constants, and typing `ZZZZ` as the name ends the loop:
 
 ```text
 Constants:
@@ -52,7 +52,7 @@ The flowchart matches it, with module-call symbols and a Yes/No loop on the sent
 
 ### Planning a quiz game (Module 5) {#planning-a-quiz-game}
 
-The rules came first: each question can be answered only once, a right answer adds points, a wrong one leaves the score alone, and the game has to handle invalid input. Then the rules became steps and the steps a flowchart. It loops while questions are left, sends an invalid choice back to the prompt, and branches on the answer before marking the question as answered.
+I wrote the rules first: each question can be answered only once, a right answer adds points, a wrong one leaves the score alone, and the game has to handle invalid input. Then the rules became steps and the steps a flowchart. It loops while questions are left, sends an invalid choice back to the prompt, and branches on the answer before marking the question as answered.
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="Quiz game flowchart; scroll horizontally if needed">
@@ -65,14 +65,14 @@ One step didn't make it from the plan into the chart: the plan ends by announcin
 
 ### The team pay calculator {#the-team-pay-calculator}
 
-Led the five-person team that built a payroll script in Python. The file doesn't mark who wrote which section, so this describes the team's code:
+I led the five-person team that built a payroll script in Python. The file doesn't mark who wrote which section, so this describes the team's code:
 
 - **Employee data:** a table of ten employee IDs and hourly rates, and a loop that asks for an ID until it matches one
 - **Time tracking:** a loop that rejects hours outside 0 to 80
 - **Payroll:** 40 regular hours, overtime at 1.5 times the rate, flat 5.6 percent state and 7.9 percent federal tax, and net pay
 - **Export:** collects ten employees and writes them to `Payroll.xlsx` with pandas
 
-What I'd fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of the team-leader role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
+What I'd fix: typing a word for hours crashes it, because `float()` runs before the range check; the number of dependents is collected but never used; and the security side of my role doesn't show up in the code, which has no login and overwrites the spreadsheet without asking.
 
 ## Labs {#labs}
 
@@ -128,8 +128,8 @@ What I'd fix: typing a word for hours crashes it, because `float()` runs before 
 ## Limits {#limits}
 
 - Most of this class is design work: pseudocode and diagrams that never ran. The only run output is the two IDLE screenshots for Modules 6 and 7.
-- The pay calculator is the team's file, and the repository has no final project write-up. It wasn't run for this page; it needs pandas and an Excel writer.
-- Debugging exercises 2 to 4 are the program listings only, without the changes made to them.
+- The pay calculator is the team's file, and the repository has no final project write-up. I haven't run it for this page; it needs pandas and an Excel writer.
+- Debugging exercises 2 to 4 are the program listings only, without my changes.
 - A few answers have mistakes: two spaces coded as "NULL" instead of 32 in the ASCII sheet, a NAND truth table filled in with NOR's values, and a UML diagram that draws Log In and Process Payment as extensions of Checkout where include fits better.
 - The Module 6 flowchart is a Lucidchart link, not a file in the repository.
 

@@ -20,7 +20,7 @@ Network Protocol Analysis was a term of reading traffic in Wireshark, chapter by
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The course provided the textbook's hands-on project steps, the trace files for every chapter after the first and for both capstones, the submission templates, and the capstone network diagrams. The submitted work:
+The course provided the textbook's hands-on project steps, the trace files for every chapter after the first and for both capstones, the submission templates, and the capstone network diagrams. My part:
 
 - Installed Wireshark and made the first capture on a personal computer
 - Ran Windows network commands such as `arp`, `netsh` and `ping` for the early chapters
@@ -37,7 +37,7 @@ The full write-up is on [IPv6 packet investigations](../technical-labs/ipv6-pack
 
 ### Midterm capstone: OSPF, Packet Too Big and DHCPv6 {#midterm-capstone}
 
-The midterm traces came from a network running IPv4 and IPv6 side by side. Work across the nine labs:
+The midterm traces came from a network running IPv4 and IPv6 side by side. Across the nine labs I:
 
 - Built a combined filter for DHCP Discover messages from hosts that had no address yet (`0.0.0.0`)
 - Found the OSPF hello packets and showed that IPv4 used OSPF version 2 and IPv6 used version 3
@@ -61,7 +61,7 @@ The chapter's three traces each held a different scan:
 
 - **ARP scan:** one host sent broadcast "who has" requests across the subnet. The answer names the scanner and lists the ten hosts that replied.
 - **Port scan:** "The port scan is obvious. If you look at every packet in the capture its SYN scanning multiple ports in a row starting at port 1." The target answered most probes with RST and ACK, and two ports were open: 2306 and 2310.
-- **OS scan:** Statistics showed the top talkers, and decoding the reverse-DNS (PTR) queries gave back the addresses they asked about. The host that sent the queries was the likely attacker, and the address being looked up, `2001:db8:1ab:ba5e::109` in the IPv6 trace, was the likely target.
+- **OS scan:** Statistics showed the top talkers, and I decoded the reverse-DNS (PTR) queries back to the addresses they asked about. The host that sent the queries was the likely attacker, and the address being looked up, `2001:db8:1ab:ba5e::109` in the IPv6 trace, was the likely target.
 
 ### A DHCP lease that ran out (Chapter 7)
 

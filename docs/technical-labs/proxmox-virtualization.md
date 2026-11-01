@@ -1,13 +1,13 @@
 ---
 title: Proxmox homelab
-description: "Built and maintained as a personal project: Linux guests, Docker services, monitoring and an experimental virtual network on Proxmox."
+description: "A Proxmox homelab, built and maintained as a personal project, with Linux guests, Docker services, monitoring and an experimental virtual network."
 kind: Personal homelab
 status: Ongoing
 tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
-  role: "Built and maintained it: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
+  role: "Built and maintained the lab: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. A patch round on every host in October after a certificate authority compromise, and monitoring that sends alerts to Discord."
+  result: "Ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. Every host patched in October after a certificate authority compromise, and monitoring that sends alerts to Discord."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
@@ -53,7 +53,7 @@ The guests are assigned about 51.5 GB of memory in total, more than the laptop h
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway I'm still building. The Linux VMs are for trying a distribution without touching my everyday computer. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, plus an OPNsense gateway that isn't finished yet. The Linux VMs are for trying a distribution without touching my everyday computer. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 
@@ -84,7 +84,7 @@ VM 109 runs Docker Engine 29.1.3.
 
 ## Network configuration
 
-Proxmox software-defined networking runs an experimental network next to the main LAN: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so I can match the Proxmox inventory against packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
+Proxmox software-defined networking runs an experimental network next to the main LAN: zone `test` holds VNet `testnet`, and the lab guests attach to the VNet. VMs 100 to 108 and the CT 111 pilot are on it. Proxmox IPAM maps each VM to an address, dnsmasq handles DNS and DHCP, and a source-NAT rule on the host gives the network a way out. Each lab VM's address ends in its VMID, so the Proxmox inventory lines up with packet captures and firewall logs at a glance. VM 109 and CT 110 are still on `vmbr0`.
 
 ### Firewall policy {#firewall-policy-and-its-limits}
 
@@ -99,7 +99,7 @@ The datacenter firewall is on, with seven accept rules for lab traffic, DNS and 
 
 ## Health check {#recorded-validation}
 
-On September 22 I ran a read-only check of the host and services. It's the baseline I compare later changes against:
+On September 22 I ran a read-only check of the host and services. It's the baseline for later changes:
 
 | Check | Result |
 |---|---|
@@ -115,7 +115,7 @@ The check couldn't see inside VM 109, because its guest agent wasn't running and
 
 ### A certificate authority compromise
 
-On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. I removed the `emSign ECC Root CA - G3` root from the trust store on the Proxmox host and every guest. On CT 110 a snapshot came first, then updates to ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL; on VM 109 a snapshot, a Portainer update and a redeploy of every stack. Some vendors ship patched images late, so I wrote a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.
+On October 21 the eMudhra (emSign) certificate authority had a key compromise, and Node.js, Python and uv shipped fixes. I removed the `emSign ECC Root CA - G3` root from the trust store on the Proxmox host and every guest. On CT 110 I took a snapshot, then updated ca-certificates, OpenSSL, Docker, GoodMem and PostgreSQL. On VM 109 I took a snapshot, updated Portainer and redeployed every stack. Some vendors ship patched images late, so I wrote a small read-only script that checks each host and reports OK, WAIT, ACT or FAIL for every fix.
 
 ### Updates on every host
 
@@ -125,7 +125,7 @@ On October 21 the eMudhra (emSign) certificate authority had a key compromise, a
 | VM 109 | Installed the available updates, updated Portainer, Homepage and Uptime Kuma, installed `qemu-guest-agent`, and grew the root volume to the whole disk while the VM was running |
 | CT 110 | Installed every pending update, 33 of them security fixes, and rebooted so every service loaded the new libc and systemd. GoodMem answered again 26 seconds later |
 
-The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because I had pinned an older API version. I replaced it with the maintained fork, which negotiates the API itself, so the pin is gone. A snapshot or backup came before each change, and I deleted each one once everything checked out.
+The original Watchtower project was archived in December 2025, and it only worked on Docker 29 because I had pinned an older API version. I replaced it with the maintained fork, which negotiates the API itself, so the pin is gone. Before each change I took a snapshot or backup, then deleted each one once everything checked out.
 
 ### Monitoring and alerts
 
@@ -171,7 +171,7 @@ The laptop has a GTX 1070 Mobile next to its integrated graphics. I enabled IOMM
 
 Storage comes first: switch the BIOS to AHCI, move the guest disks onto the NVMe and start scheduled backups to the 1 TB drive. Then an off-host alert for when the Proxmox host goes down, and moving the Tailscale subnet router from VM 100 to the always-on VM 109.
 
-The September check also turned up three firewall fixes due before I expand the network: one rule's comment says internet access while its destination is the home LAN, the legacy firewall status reports pending changes while nftables is active, and global IPv4 forwarding is `0` while `vmbr0` and `testnet` have it on. After that I'll test the policy with real guest traffic.
+The September check also turned up three firewall fixes due before the network expands: one rule's comment says internet access while its destination is the home LAN, the legacy firewall status reports pending changes while nftables is active, and global IPv4 forwarding is `0` while `vmbr0` and `testnet` have it on. After that I'll test the policy with real guest traffic.
 
 Further out: a Cat6 run to replace the wireless bridge, a managed switch with 802.1Q VLANs, SDN for the service guests, per-zone firewall rules, a reverse proxy for internal hostnames (Caddy on CT 111 first, before Nginx Proxy Manager), internal DNS, a NAS, Wazuh or Security Onion for SIEM and IDS, Jellyfin with GPU transcoding, and finishing the OPNsense gateway.
 

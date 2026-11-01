@@ -17,7 +17,7 @@ summary:
 
 A Windows host can have an IPv6 address and still fail to reach another network. The CSIA 210 final capstone was about finding out why from the packets: which reply assigned an address, which hosts shared a duplicate, which source address a host picked, and what made a gateway disappear.
 
-The course provided the traces, the network diagrams and the hosts' `ipconfig` output. From those, the submitted analysis filtered the traffic, found the frames that explained each symptom, compared them with the host output and wrote up the conclusions.
+The course provided the traces, the network diagrams and the hosts' `ipconfig` output. From those, I filtered the traffic, found the frames that explained each symptom, compared them with the host output and wrote up the conclusions.
 
 ## Environment and analysis method
 
@@ -85,13 +85,13 @@ A router lifetime of 0 removes that router as a default gateway, and a later adv
 
 ## What remained visible in encrypted traffic
 
-The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902 and 29910). Only the banners and algorithm names were readable; the application data wasn't. Neither session was decrypted.
+The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902 and 29910). Only the banners and algorithm names were readable; the application data wasn't. I didn't decrypt either session.
 
 ## Limits
 
 - The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the last trace; the other frame numbers come from the written answers.
 - The submission doesn't include the host output I compared the `::108` match against.
-- The submission diagnosed the duplicate address but didn't fix it or retest.
+- I diagnosed the duplicate address but didn't fix it or retest.
 - The SLAAC explanation above corrects what the submission said.
 
 ## Sources {#sources-and-scope}

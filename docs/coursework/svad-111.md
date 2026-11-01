@@ -20,7 +20,7 @@ Linux and Virtualization Technologies covered running Linux in VirtualBox and on
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The course provided the worksheets and their questions, an AWS Academy lab account, the install commands for each project milestone, the application and database archives, and the requirements for each script, including a few one-line hints. The submitted work:
+The course provided the worksheets and their questions, an AWS Academy lab account, the install commands for each project milestone, the application and database archives, and the requirements for each script, including a few one-line hints. My part:
 
 - Built Linux Mint and Fedora VMs in VirtualBox and did the Linux labs on them and on the AWS servers
 - Launched the two EC2 servers, ran the database and web installs, imported the data and tested the app
@@ -82,7 +82,7 @@ The assignment asked for a script that takes an image URL and a new name, then d
 | Infected download | Deletes the file and exits 1 before converting it |
 | Not already a JPEG | Converts it with ImageMagick |
 
-The submitted run shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. What I'd change: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
+The run in the write-up shows the usage message with no arguments, then each progress step and a finished `poptart_2560x1440.jpg` from the course's sample image. What I'd change: `$1`, `$filename` and `$newname` are unquoted throughout, and the filename comes straight from the URL into an unquoted `rm`, so a URL ending in `*` could make it delete other files in the folder.
 
 ## Labs {#labs}
 

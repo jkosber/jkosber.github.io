@@ -26,7 +26,7 @@ It also shows whether each machine's SSH port is answering and walks through set
 
 ## Why I wanted it {#why-i-wanted-it}
 
-I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options, not a tool that replaces OpenSSH or stores passwords. Authentication, keys and host-key checks should stay with the SSH client already in use.
+I wanted one place to see each machine, how to reach it and its web dashboards, and to connect without retyping SSH options. The tool shouldn't replace OpenSSH or store passwords: authentication, keys and host-key checks stay with the SSH client already in use.
 
 ## What it does
 
@@ -72,7 +72,7 @@ I developed SSH Workbench with AI coding agents in a test-first workflow, settin
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
 - Every pull request, and every push to `main` or a version tag, runs Ruff, the full test suite, a package build and an installed-package check, on Windows and Ubuntu.
-- Real-machine checks use my own machines, and I remove test keys afterwards.
+- Real-machine checks use my own machines, and test keys are removed afterwards.
 
 I tested the terminal handoff in Windows Terminal and, on October 30, had it checked in Ghostty on Linux. I run the released version as an installed tool.
 
@@ -84,7 +84,7 @@ Around the 0.2.0 release, checks on my own machines covered the parts tests can'
 
 - A new key installed and logged in alone on the Linux Mint laptop, and as administrator on both Windows PCs.
 - Key setup on the Proxmox host, where the key file lives behind a cluster-filesystem link.
-- A first connection that asked to trust a new host key. I compared the fingerprint before accepting it.
+- A first connection that asked to trust a new host key. The fingerprint was compared before accepting.
 
 Real use then turned up five key-setup problems, fixed in 0.2.1. For example, a commented-out copy of a key counted as installed, and PowerShell progress output leaked into the result on Windows.
 

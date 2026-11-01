@@ -15,7 +15,7 @@ summary:
 
 # Snort, firewall rules & HTTP recovery
 
-This CSIA 115 lab tied an alert to a fix: watch Snort flag a download from a simulated malicious server, then block that server on the router. That meant running the course's Mininet network, correcting mistyped file names in the requests along the way, capturing the traffic and adding the firewall rule. A second exercise pulled a file out of a capture with Wireshark.
+This CSIA 115 lab tied an alert to a fix: watch Snort flag a download from a simulated malicious server, then block that server on the router. I ran the course's Mininet network, corrected mistyped file names in the requests along the way, captured the traffic and added the firewall rule. A second exercise pulled a file out of a capture with Wireshark.
 
 The course provided the topology, the start scripts, the Snort signature and the firewall command.
 

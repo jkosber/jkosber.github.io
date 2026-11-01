@@ -16,17 +16,17 @@ summary:
 
 # CSIA 115 Cyber Ops
 
-Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. The labs ran in VirtualBox, with answers and screenshots turned in for each one.
+Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. I ran the labs in VirtualBox and turned in answers and screenshots for each one.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. The submitted work:
+The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. My part:
 
 - Ran every lab in VirtualBox on a personal computer and wrote original answers to its questions
 - Worked the Security Onion investigations from alert to host to file with Sguil, Kibana, Wireshark, NetworkMiner and VirusTotal
 - Wrote the after-action report for the final skills assessment
 
-The Snort lab's detection rule and firewall command came with the lab; the work was running them and reading the results.
+The Snort lab's detection rule and firewall command came with the lab; I ran them and read the results.
 
 ## Strongest work {#strongest-work}
 
@@ -49,13 +49,13 @@ The whole exploit took less than a minute, from 22:54:42 to 22:55:28. From the s
 
 ### Separating a misconfiguration from an attack (27.2.16) {#separating-a-misconfiguration-from-an-attack}
 
-A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. The write-up judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
+A Windows host's alerts spanned about three hours, but most fired within four minutes. The first one flagged a DNS update as coming from outside the network. I judged it a likely misconfiguration: "This IDS alert could have been a misconfiguration because the DNS request was a Dynamic DNS update from an internal host on the internal network."
 
-The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there, the write-up identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
+The next alert was the attack. The host downloaded an executable that Cisco Talos recognized as a trojan by its hash. From there I identified encrypted traffic on port 2404 as the Remcos remote-access trojan checking in, and a second download, `F4.exe`, as a trojan downloader. In Kibana I sorted out the normal Windows traffic mixed in with it, such as the `ncsi.txt` connectivity check and a certificate revocation list.
 
 ### Snort and a firewall rule (26.1.7)
 
-In a Mininet network, Snort ran on the router while a host requested a file from the lab's malicious server. The first two requests returned 404 because of a wrong file name, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Next came the lab's iptables rule, dropping traffic to that server. The written retest says the download failed, but there's no screenshot of it.
+In a Mininet network, Snort ran on the router while a host requested a file from the lab's malicious server. The first two requests returned 404 because I had the file name wrong, and the corrected one returned 200. The lab's signature fired on all three, so the 200 and the finished transfer, not the alert, showed the file had come down. Then I inserted the lab's iptables rule to drop traffic to that server. The written retest says the download failed, but there's no screenshot of it.
 
 The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-labs/snort-firewall-lab.md).
 

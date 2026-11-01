@@ -16,11 +16,11 @@ summary:
 
 # NETI 109 Networking I
 
-Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. The labs ran in Packet Tracer, with a write-up turned in for each one.
+Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did the labs in Packet Tracer and turned in a write-up for each one.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The course provided the Cisco Networking Academy activities and lab sheets: the topologies, addressing tables, steps and sample output, and the starting device configurations. The submitted work, one write-up per activity:
+The course provided the Cisco Networking Academy activities and lab sheets: the topologies, addressing tables, steps and sample output, and the starting device configurations. My part:
 
 - Filled in the addressing tables and subnet plans, including two VLSM designs
 - Wrote what was wrong on each device in the troubleshooting labs and the change that fixed it
@@ -73,7 +73,7 @@ The lab sheet's own test table at the end was left mostly blank, so there's no w
 
 ### Following IPv6 Neighbor Discovery (9.3.4)
 
-Simulation mode showed a PC finding another PC's MAC address with Neighbor Discovery instead of ARP. The write-up lists the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and explains why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. On multicast: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."
+Simulation mode showed a PC finding another PC's MAC address with Neighbor Discovery instead of ARP. The write-up lists the ICMPv6 message types (128 and 129), the solicited-node multicast destination and its matching Ethernet address, and explains why a second ping needed no discovery at all. For a host on another network, the PC used the router's MAC instead. The write-up explains the multicast choice: "A multicast address is used so only selected addresses would be listening to an ND message unlike a broadcast."
 
 ## Labs {#labs}
 

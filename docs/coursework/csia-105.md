@@ -16,11 +16,11 @@ summary:
 
 # CSIA 105 Introduction to Cyber Security
 
-Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. Passed the [Security+ exam](../credentials/index.md#certifications) in May 2026.
+Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. I passed the [Security+ exam](../credentials/index.md#certifications) in May 2026.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
-The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. The submitted work:
+The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. My part:
 
 - Ran the tools in the VM, or on a physical computer when a project needed real hardware such as a wireless adapter
 - Wrote original answers to each project's questions, with screenshots
@@ -30,7 +30,7 @@ The textbook provided each hands-on and case project: the numbered steps, the qu
 
 ### Grading TLS on servers and browsers (4-1) {#grading-tls}
 
-Three sites went through Qualys SSL Labs, and the answers explain each grade:
+I ran Qualys SSL Labs against three sites and explained each grade:
 
 - **Dropbox's API server:** A+, with TLS 1.3 and 1.2, a trusted 2048-bit RSA certificate and scores of 100, 100, 90 and 90 for certificate, protocol, key exchange and cipher strength. The only marks against it were a few weak TLS 1.2 cipher suites. "It received an A+ because it supports TLS 1.3, It has a secure and trusted certificate."
 - **A site from SSL Labs' list of recent worst grades:** F, for insecure protocols, weak cipher suites and the POODLE vulnerability.
@@ -40,7 +40,7 @@ For Dropbox the write-up suggested dropping TLS 1.2 and putting `TLS_AES_256_GCM
 
 ### Hiding a file in an image (3-1) {#hiding-a-file-in-an-image}
 
-A small zip file went into a JPEG with OpenPuff, behind three passwords, and came back out with the unhide step. The task report shows the recovered `Message.zip` at 144 bytes, and the zip still held its text file. The image looked the same afterward: "Nothing is different from the appearance of the photo, but the file size of the carrier file is slightly different the original is 106,246 bytes and the carrier is 106,238 bytes."
+In OpenPuff I hid a small zip file inside a JPEG, protected by three passwords, then ran the unhide step to get it back. The task report shows the recovered `Message.zip` at 144 bytes, and the zip still held its text file. The image looked the same afterward: "Nothing is different from the appearance of the photo, but the file size of the carrier file is slightly different the original is 106,246 bytes and the carrier is 106,238 bytes."
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="OpenPuff unhide result; scroll horizontally if needed">
@@ -51,7 +51,7 @@ A small zip file went into a JPEG with OpenPuff, behind three passwords, and cam
 
 ### Controlling Wi-Fi from the command line (10-4)
 
-This project needed a real wireless adapter, so it ran in an administrator PowerShell window on a physical computer. The textbook gave the `netsh wlan` commands, and the answers cover what each showed:
+This project needed a real wireless adapter, so I ran it in an administrator PowerShell window on my own computer. The textbook gave the `netsh wlan` commands, and the answers cover what each showed:
 
 - `show drivers` reported an 802.11ax adapter that supports both WPA2-Personal and WPA3-Personal.
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.

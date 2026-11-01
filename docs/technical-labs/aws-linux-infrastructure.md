@@ -18,7 +18,7 @@ summary:
 
 This SVAD 111 project deployed the course's AdventureWorks product-review app on two Ubuntu servers in an AWS Academy lab: Apache and PHP on one, Microsoft SQL Server with the AdventureWorks catalog on the other. By the end the site searched the catalog, opened product pages and saved reviews to the database.
 
-The course provided the app, the data, the two-server design and the install commands for each milestone. The submitted work covered launching the servers, running the installs, importing the data, connecting the two tiers, testing the app and writing the final report.
+The course provided the app, the data, the two-server design and the install commands for each milestone. I launched the servers, ran the installs, imported the data, connected the two tiers, tested the app and wrote the final report.
 
 ## Architecture and connection paths
 
@@ -35,7 +35,7 @@ The browser only talks to the web server. PHP connects to SQL Server through the
 
 ## Server setup
 
-PuTTY handled the shells and WinSCP moved the course's archives onto the servers. The database server got Microsoft's signing key and package repository, SQL Server 2022 and the `sqlcmd` client, and I ran a test query with my name against it. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
+PuTTY handled the shells and WinSCP moved the course's archives onto the servers. On the database server I added Microsoft's signing key and package repository, installed SQL Server 2022 and the `sqlcmd` client, and ran a test query with my name. The web server got Apache, PHP 8.1 and Microsoft's ODBC driver and PHP extensions.
 
 I checked each layer before building on it: row counts for the import, a `test.php` page for PHP, then the app's pages for the connection between the servers.
 
@@ -64,7 +64,7 @@ They returned **504 products** and **19,972 people**.
 
 ### Connecting PHP to SQL Server
 
-Next I enabled the `sqlsrv` and `pdo_sqlsrv` extensions and set Apache to the prefork module with the PHP module, and `test.php` showed PHP 8.1.2 under Apache. The app then went into `/var/www/html`, `config.php` got the database address and login, and removing Apache's default `index.html` let the app's page load first. Credentials and addresses are left out here.
+Next I enabled the `sqlsrv` and `pdo_sqlsrv` extensions and set Apache to the prefork module with the PHP module, and `test.php` showed PHP 8.1.2 under Apache. Then I copied the app into `/var/www/html`, set the database address and login in `config.php`, and removed Apache's default `index.html` so the app's page loads first. Credentials and addresses are left out here.
 
 ## Troubleshooting
 
@@ -73,7 +73,7 @@ The final report lists four problems and what fixed them:
 - **The web server timed out reaching the database.** The security group didn't allow SQL Server traffic; after I added a rule for port 1433 from the web server, the catalog loaded. In the report: "Connection Timed Out: The web server could not talk to the database."
 - **The SQL login failed** even with the right password. Enabling SQL Authentication in the SQL Server setup fixed it.
 - **Microsoft's packages weren't found.** Adding Microsoft's signing key and repository let the installs go through.
-- **PuTTY couldn't reach EC2.** The network in use blocked outbound SSH, so the connection moved to a hotspot.
+- **PuTTY couldn't reach EC2.** The network in use blocked outbound SSH, so I switched to a hotspot.
 
 ## Testing the result
 
@@ -95,7 +95,7 @@ The final report lists four problems and what fixed them:
 
 ## Limits and what to change {#scope-and-follow-up-ideas}
 
-- Testing covered the import counts and the app actions above. Database integrity, load, recovery and whether reviews survive a restart weren't tested.
+- I tested the import counts and the app actions above, not database integrity, load, recovery or whether reviews survive a restart.
 - The site ran on HTTP. The report recommended HTTPS, user accounts for reviewers and photo uploads; none of them were built.
 - The milestone's instructions opened SSH and HTTP to any address and added rules for ports 1433 and 3306, and the last screenshot shows those four. The app only used SQL Server.
 - The app connected as SQL Server's `SA` account, and the milestones trusted the database certificate for lab setup, so there's no least-privilege login or verified database TLS.

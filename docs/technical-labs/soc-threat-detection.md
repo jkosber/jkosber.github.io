@@ -16,7 +16,7 @@ summary:
 
 # CyberOps & traffic investigation
 
-The final skills assessment in CSIA 115 provided a Security Onion VM loaded with alerts from a 2017 Pushdo infection, an exercise Cisco credits to malware-traffic-analysis.net. The investigation narrowed the alerts to one time window and one internal host, matched that host to three downloaded files, looked the files up by hash and ended in an after-action report.
+The final skills assessment in CSIA 115 provided a Security Onion VM loaded with alerts from a 2017 Pushdo infection, an exercise Cisco credits to malware-traffic-analysis.net. I narrowed the alerts to one time window and one internal host, matched that host to three downloaded files, looked the files up by hash and ended in an after-action report.
 
 The [Snort and firewall lab](snort-firewall-lab.md) from the same class has its own page.
 
