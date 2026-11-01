@@ -9,12 +9,16 @@ DOCS = ROOT / "docs"
 OVERRIDES = ROOT / "overrides"
 
 # Personal pronouns as whole words. First person: "I" and its contractions as a capital, the rest in any case.
-# Third person singular for a person (he, she and their other forms): any case.
-PRONOUNS = re.compile(
+FIRST_PERSON = (
     r"\bI(?:['’](?:m|ve|d|ll))?(?![\w'’])"
     r"|\b(?i:me|my|mine|myself|we|we['’](?:re|ve|d|ll)|our|ours|ourselves|us|let['’]s)\b"
-    r"|\b(?i:he|him|his|himself|she|her|hers|herself)\b"
 )
+# Third person singular for a person (he, she and their other forms): any case, forbidden everywhere.
+THIRD_PERSON = re.compile(r"\b(?i:he|him|his|himself|she|her|hers|herself)\b")
+PRONOUNS = re.compile(FIRST_PERSON + "|" + THIRD_PERSON.pattern)
+# A passage written in the first person, such as a bio: <!-- voice: personal --> ... <!-- /voice -->.
+# The markers are HTML comments, so the page shows nothing; an unclosed marker exempts nothing.
+PERSONAL_PASSAGE = re.compile(r"<!--\s*voice:\s*personal\s*-->(.*?)<!--\s*/voice\s*-->", re.DOTALL)
 # Names that contain a pronoun without meaning a person, such as a Cisco lab title.
 NAMES = re.compile(r"\bNetworking I\b|\bI/O\b|\bShows Us\b")
 # Attributes a reader or screen reader gets as text.
@@ -31,30 +35,48 @@ def tags_to_text(source):
     return re.sub(r"<[^>]+>", lambda match: keep_lines(match, " " + " ".join(TEXT_ATTRIBUTES.findall(match.group(0))) + " "), source)
 
 
-def hits(text):
+def hits(text, pattern=PRONOUNS):
     found = []
     for number, line in enumerate(text.split("\n"), start=1):
-        found += [(number, match.group(0)) for match in PRONOUNS.finditer(NAMES.sub(" ", line))]
+        found += [(number, match.group(0)) for match in pattern.finditer(NAMES.sub(" ", line))]
     return found
 
 
-def personal_pronouns(markdown):
-    """(line, word) for each personal pronoun a reader sees on a page: frontmatter values whole,
-    then body prose without code, double-quoted words, link targets and attribute lists.
-    A page whose frontmatter sets `voice: personal` is exempt."""
-    frontmatter, body = "", markdown
-    if markdown.startswith("---\n"):
-        end = markdown.index("\n---", 3)
-        frontmatter, body = markdown[:end], markdown[end:]
-        if (yaml.safe_load(frontmatter[4:]) or {}).get("voice") == "personal":
-            return []
+def blank(text):
+    """Only the newlines of text, so later line numbers stay right."""
+    return "\n" * text.count("\n")
+
+
+def prose(body):
+    """Body text without code, tags (alt, aria-label and title text kept), link targets,
+    attribute lists and double-quoted words."""
     body = re.sub(r"```.*?```", keep_lines, body, flags=re.DOTALL)
     body = re.sub(r"`[^`\n]*`", " ", body)
     body = tags_to_text(body)
     body = re.sub(r"\]\([^)\n]*\)", "]", body)
     body = re.sub(r"\{[^}\n]*\}", " ", body)
-    body = re.sub(r"\"[^\"\n]*\"|“[^”\n]*”", " ", body)
-    return hits(frontmatter + body)
+    return re.sub(r"\"[^\"\n]*\"|“[^”\n]*”", " ", body)
+
+
+def personal_pronouns(markdown):
+    """(line, word) for each personal pronoun a reader sees on a page: frontmatter values whole,
+    then body prose. First person is allowed on a page whose frontmatter sets `voice: personal`
+    and inside a passage marked `<!-- voice: personal -->` ... `<!-- /voice -->`; third person
+    is allowed nowhere."""
+    frontmatter, body = "", markdown
+    if markdown.startswith("---\n"):
+        end = markdown.index("\n---", 3)
+        frontmatter, body = markdown[:end], markdown[end:]
+        if (yaml.safe_load(frontmatter[4:]) or {}).get("voice") == "personal":
+            return hits(frontmatter + prose(body), THIRD_PERSON)
+    outside = PERSONAL_PASSAGE.sub(keep_lines, body)
+    inside, last = "", 0
+    for match in PERSONAL_PASSAGE.finditer(body):
+        inside += blank(body[last:match.start(1)]) + match.group(1)
+        last = match.end(1)
+    inside += blank(body[last:])
+    found = hits(frontmatter + prose(outside)) + hits(blank(frontmatter) + prose(inside), THIRD_PERSON)
+    return sorted(found, key=lambda hit: hit[0])
 
 
 def jinja_literals(match):
@@ -132,14 +154,37 @@ class PersonalPronounTests(unittest.TestCase):
             (2, "He"), (4, "he"), (4, "his"), (5, "She"), (5, "hers"), (5, "her"), (5, "herself"),
             (6, "He"), (6, "himself"), (6, "HIM"),
         ])
-        post = "---\ntitle: A post\nvoice: personal\n---\n\nHe wrote this post about his homelab.\n"
-        self.assertEqual(personal_pronouns(post), [])
-        self.assertEqual(personal_pronouns(post.replace("voice: personal\n", "")), [(5, "He"), (5, "his")])
+        post = "---\ntitle: A post\nvoice: personal\n---\n\nI wrote this post after he showed me his homelab.\n"
+        self.assertEqual(personal_pronouns(post), [(6, "he"), (6, "his")])
+        self.assertEqual(personal_pronouns(post.replace("voice: personal\n", "")),
+                         [(5, "I"), (5, "he"), (5, "me"), (5, "his")])
         template = (
             "{# His role panel. #}\n"
             "{% set social_alt = 'Jadon beside his dashboard' %}<p>She checks it.</p>\n"
         )
         self.assertEqual(template_pronouns(template), [(2, "his"), (2, "She")])
+
+    def test_scan_allows_first_person_only_inside_a_marked_passage(self):
+        page = (
+            "---\n"
+            "title: About\n"
+            "---\n"
+            "# About\n"
+            "<!-- voice: personal -->\n"
+            "\n"
+            "I'm an IT support technician, and my homelab runs Proxmox.\n"
+            "\n"
+            "Outside work I run it; he helps, and her notes are in it.\n"
+            "<!-- /voice -->\n"
+            "\n"
+            "We tested it on my laptop.\n"
+            "<!--voice: personal-->Our first line. <!-- /voice --> I'd add this.\n"
+            "<!-- voice: personal -->\n"
+            "An unclosed marker exempts nothing, so I count.\n"
+        )
+        self.assertEqual(personal_pronouns(page), [
+            (9, "he"), (9, "her"), (12, "We"), (12, "my"), (13, "I'd"), (15, "I"),
+        ])
 
 
 if __name__ == "__main__":
