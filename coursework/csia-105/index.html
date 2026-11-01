@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>CSIA 105 Introduction to Cyber Security | Jadon Kosberg</title>
+  <meta name="description" content="Security+ projects: TLS and certificate checks, steganography, Windows wireless commands, vulnerability research and hidden-data recovery.">
+  
+  <link rel="canonical" href="https://jnkos.com/coursework/csia-105/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fb9bf98b0965">
+  <script src="../../javascripts/portfolio.js?v=1d8c525da71c"></script>
+  
+  <meta property="og:title" content="CSIA 105 Introduction to Cyber Security | Jadon Kosberg">
+  <meta property="og:description" content="Security+ projects: TLS and certificate checks, steganography, Windows wireless commands, vulnerability research and hidden-data recovery.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/coursework/csia-105/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../../technical-labs/"><span>Projects</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band" style="--title-chars: 12"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../">Coursework</a></li>
+            
+            <li aria-hidden="true">/</li><li><span aria-current="page">CSIA 105 Introduction to Cyber Security</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="csia-105-introduction-to-cyber-security">CSIA 105 Introduction to Cyber Security</h1>
+              <p class="dek">Security+ projects: TLS and certificate checks, steganography, Windows wireless commands, vulnerability research and hidden-data recovery.</p>
+              
+              <dl class="strip">
+                
+                
+                <div><dt>Term</dt> <dd>Spring 2026</dd></div>
+                <div><dt>Covered</dt> <dd>25 assignments</dd></div>
+                
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/IntroToCybersecurity-105">CSIA 105 repository</a></dd></div>
+              </dl>
+              
+            </div>
+            <img class="head-art" src="../../assets/project-terminal.svg" width="600" height="340" alt="">
+            
+          </div>
+        </div></section>
+        
+        
+        <div class="wrap summary-pair">
+          <div class="panel role-panel">
+  <span class="panel-title">Role</span>
+  <p>Ran the textbook's hands-on projects in a Windows VM and on a physical computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M0 1.758 5.182 20c.129.455.25.691.421.945.063.092.13.179.202.264.173.204.37.378.59.525.243.163.49.286.763.371.324.1.61.137.99.137h4.327l1.918-6.615h6.798v3.699a.11.11 0 0 1-.109.11h-4.88l-.813 2.806h5.654a2.92 2.92 0 0 0 1.95-.725A2.903 2.903 0 0 0 24 19.285v-6.47H12.28l-1.919 6.614H7.937L3.715 4.564h2.922l1.546 5.444H11.1l-2.343-8.25zm15.496 0-2.4 8.25H24v-5.29a2.962 2.962 0 0 0-1.825-2.741 3.044 3.044 0 0 0-1.129-.22zm2.11 2.806h3.476a.11.11 0 0 1 .11.112V7.2h-4.354z"/></svg>Windows 10 in VirtualBox</li><li>Qualys SSL Labs</li><li>OpenPuff</li><li>netsh</li><li>NVD and CVE</li><li>Directory Snoop</li></ul>
+</div>
+          <div class="panel panel--result"><span class="panel-title">Result</span> <p>Completed 25 assignments across cryptography, endpoint security, wireless, vulnerability research and forensics, including TLS grades for three sites and a hide-and-recover steganography round trip.</p></div>
+        </div>
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#what-the-course-provided">What the course provided and what I did</a><a href="#strongest-work">Strongest work</a><a href="#labs">Labs</a><a href="#skills">Skills</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            
+            
+<p>Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. I passed the <a href="../../credentials/#certifications">Security+ exam</a> in May 2026.</p>
+
+            <h2 id="what-the-course-provided">What the course provided and what I did</h2>
+<p>The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. My part:</p>
+<ul>
+<li>Ran the tools in the VM, or on a physical computer when a project needed real hardware such as a wireless adapter</li>
+<li>Wrote original answers to each project's questions, with screenshots</li>
+<li>Wrote the case projects: comparisons of fuzzers and password managers, a presentation on encryption options, and short papers on policy, cyber insurance and the field</li>
+</ul>
+<h2 id="strongest-work">Strongest work</h2>
+<section class="work"><h3 id="grading-tls">Grading TLS on servers and browsers (4-1)</h3>
+<p>I ran Qualys SSL Labs against three sites and explained each grade:</p>
+<ul>
+<li><strong>Dropbox's API server:</strong> A+, with TLS 1.3 and 1.2, a trusted 2048-bit RSA certificate and scores of 100, 100, 90 and 90 for certificate, protocol, key exchange and cipher strength. The only marks against it were a few weak TLS 1.2 cipher suites. "It received an A+ because it supports TLS 1.3, It has a secure and trusted certificate."</li>
+<li><strong>A site from SSL Labs' list of recent worst grades:</strong> F, for insecure protocols, weak cipher suites and the POODLE vulnerability.</li>
+<li><strong>The college's website:</strong> A+, with TLS 1.3, HSTS and secure cipher suites.</li>
+</ul>
+<p>For Dropbox the write-up suggested dropping TLS 1.2 and putting <code>TLS_AES_256_GCM_SHA384</code> first in the suite order. In the browser test, Edge and Brave scored the same. The screenshots of Edge show TLS 1.2 and 1.3 only, no CurveBall, Logjam, FREAK or POODLE vulnerability, and a few weak cipher suites still offered.</p></section>
+<section class="work"><h3 id="hiding-a-file-in-an-image">Hiding a file in an image (3-1)</h3>
+<p>In OpenPuff I hid a small zip file inside a JPEG, protected by three passwords, then ran the unhide step to get it back. The task report shows the recovered <code>Message.zip</code> at 144 bytes, and the zip still held its text file. The image looked the same afterward: "Nothing is different from the appearance of the photo, but the file size of the carrier file is slightly different the original is 106,246 bytes and the carrier is 106,238 bytes."</p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="OpenPuff unhide result; scroll horizontally if needed">
+    <img src="../../assets/evidence/csia-105/openpuff-unhide-2026-01-25.webp" width="880" height="415" alt="OpenPuff 4.01 Data Unhiding window with three masked passwords, a passing passwords check and one carrier, OpenPuff_Screenshot.jpg, with 304 bytes of hiding capacity. A Task Report window on top lists the hidden file: name Message.zip, size 144 bytes, and its CRC32." loading="lazy">
+  </div>
+  <figcaption>From the 3-1 submission, January 25, 2026, cropped to the OpenPuff windows. The Bytes column is the carrier's hiding capacity, not its file size. <a href="../../assets/evidence/csia-105/openpuff-unhide-2026-01-25.webp">Open full size</a>.</figcaption>
+</figure></section>
+
+<section class="work"><h3 id="controlling-wi-fi-from-the-command-line-10-4">Controlling Wi-Fi from the command line (10-4)</h3>
+<p>This project needed a real wireless adapter, so I ran it in an administrator PowerShell window on my own computer. The textbook gave the <code>netsh wlan</code> commands, and the answers cover what each showed:</p>
+<ul>
+<li><code>show drivers</code> reported an 802.11ax adapter that supports both WPA2-Personal and WPA3-Personal.</li>
+<li>After <code>add filter permission=block</code> for a nearby network, it disappeared from <code>show networks</code>. With <code>set blockednetworks display=show</code> it came back in the list with an X in the system tray, and <code>delete filter</code> removed the block.</li>
+<li><code>show wlanreport</code> built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."</li>
+</ul>
+<p>The screenshots show real network names, including nearby ones, so this page leaves them out.</p></section>
+<section class="work"><h3 id="finding-deleted-data-in-slack-space-13-3">Finding deleted data in slack space (13-3)</h3>
+<p>Directory Snoop's NTFS module showed the drive's master file table and a document's raw text; a slack-space search for the word "country" then found three hits in deleted entries. The write-up explains that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.</p></section>
+<h2 id="labs">Labs</h2>
+<details class="lab-module"><summary><h3 id="cryptography-and-certificates">Cryptography and certificates</h3> <span class="lab-count">5 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 1: Cryptography and certificates"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">3-1 Using OpenPuff Steganography</td>
+<td role="cell">Hide a file inside an image and recover it</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Hid a zip file in a JPEG behind three passwords, recovered it and compared the file sizes (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">3-8 Software Data Encryption</td>
+<td role="cell">Present encryption options to a fictional firm</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Built a 10-slide deck on encryption software, full-disk encryption, self-encrypting drives, HSMs and TPMs</td>
+</tr>
+<tr role="row">
+<td role="cell">4-1 Trending Cyber</td>
+<td role="cell">Suggest precautions against losing encryption keys</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Recommended a password manager, regular password changes and MFA with a hardware token</td>
+</tr>
+<tr role="row">
+<td role="cell">4-1 SSL Server and Browser Tests</td>
+<td role="cell">Grade servers and browsers with Qualys SSL Labs</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Graded three sites and two browsers and explained each grade (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">4-3 Viewing CRLs and Untrusted Certificates</td>
+<td role="cell">Inspect trusted roots, a revocation list and untrusted certificates</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Read a certificate revocation list and the untrusted store in the Certificates snap-in</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="endpoints-and-mobile">Endpoints and mobile</h3> <span class="lab-count">6 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 2: Endpoints and mobile"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">5-1 Microsoft Safety Scanner</td>
+<td role="cell">Run a quick malware scan</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Ran the scan, which found no threats</td>
+</tr>
+<tr role="row">
+<td role="cell">5-3 Configuring Microsoft Windows Security</td>
+<td role="cell">Compare Defender protection presets</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Compared what the Default, High and Max presets change</td>
+</tr>
+<tr role="row">
+<td role="cell">5-7 Using a Software Keylogger</td>
+<td role="cell">See what a keylogger captures</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Ran a keylogger trial offline in the VM and explained how an attacker would use its log of the session's typing and browsing</td>
+</tr>
+<tr role="row">
+<td role="cell">6-1 Creating and Using QR Codes</td>
+<td role="cell">Show how QR codes can be abused</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Made and decoded QR codes and described Wi-Fi, payment and file-download abuse</td>
+</tr>
+<tr role="row">
+<td role="cell">6-3 Installing NoxPlayer Android Emulator</td>
+<td role="cell">Run an Android emulator</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Installed the emulator and changed its resolution</td>
+</tr>
+<tr role="row">
+<td role="cell">6-4 Fuzzers</td>
+<td role="cell">Compare three fuzzers</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Compared Burp Suite, OWASP ZAP and Wfuzz in a table and recommended ZAP</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="identity-and-wireless">Identity and wireless</h3> <span class="lab-count">6 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 3: Identity and wireless"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Virtual machine setup</td>
+<td role="cell">Set up the class's Windows VM</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Set up the Windows 10 VM in VirtualBox</td>
+</tr>
+<tr role="row">
+<td role="cell">7-1 Trending Cyber</td>
+<td role="cell">Take a position on digital-legacy contacts</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote a policy position covering identity checks and how the feature could be abused</td>
+</tr>
+<tr role="row">
+<td role="cell">7-9 Password Managers</td>
+<td role="cell">Compare four password managers</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Compared Google Password Manager, LastPass, KeePass and Bitwarden on nine points and ranked them</td>
+</tr>
+<tr role="row">
+<td role="cell">8-3 MAC Spoofing</td>
+<td role="cell">Change a network adapter's MAC address</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Opened a MAC address changer on the VM's adapter and explained the OUI and how attackers use spoofing</td>
+</tr>
+<tr role="row">
+<td role="cell">10-1 Using a Wireless Monitor Tool</td>
+<td role="cell">Inspect nearby Wi-Fi networks</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Answered questions on hidden SSIDs, channel overlap, WPS and security settings</td>
+</tr>
+<tr role="row">
+<td role="cell">10-4 Using Microsoft Windows Netsh Commands</td>
+<td role="cell">Query and control Wi-Fi from the command line</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Read the adapter's capabilities, blocked and unblocked a network and generated a wireless report (see above)</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="vulnerabilities-forensics-and-policy">Vulnerabilities, forensics and policy</h3> <span class="lab-count">8 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 4: Vulnerabilities, forensics and policy"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">12-1 Exploring CVE</td>
+<td role="cell">Search the CVE list</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Searched cve.org for "passwords" (2,847 results) and answered the questions</td>
+</tr>
+<tr role="row">
+<td role="cell">12-2 Exploring the NVD</td>
+<td role="cell">Compare CVE with NVD and explore NVD's data</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Explained how CVE and NVD differ, read the score distribution and searched by keyword</td>
+</tr>
+<tr role="row">
+<td role="cell">13-3 Viewing Windows Hidden Data</td>
+<td role="cell">Find deleted and slack-space data</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Searched slack space with Directory Snoop and found three hits in deleted entries (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">15-1 Backups</td>
+<td role="cell">Schedule a cloud backup</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Scheduled a backup with iDrive; the first run had no files selected</td>
+</tr>
+<tr role="row">
+<td role="cell">15-2 Journaling</td>
+<td role="cell">Set up sync and real-time backup</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Set up sync and real-time protection in iDrive and answered the questions</td>
+</tr>
+<tr role="row">
+<td role="cell">Additional readings</td>
+<td role="cell">Summarize ethics principles and change control</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Summarized eight ethics principles and six benefits of change control</td>
+</tr>
+<tr role="row">
+<td role="cell">15-11 Cybersecurity Insurance for Users</td>
+<td role="cell">Weigh personal cyber insurance</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Listed four pros and four cons and made a recommendation</td>
+</tr>
+<tr role="row">
+<td role="cell">15-13 Overview of Information Security</td>
+<td role="cell">Reflect on the field</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote about the CIA triad and AAA, what was surprising and career goals in the field</td>
+</tr>
+</tbody>
+</table></div></details>
+<h2 id="skills">Skills</h2>
+<ul>
+<li>TLS configuration and certificate trust: protocols, cipher suites, grades and revocation lists (4-1, 4-3)</li>
+<li>Steganography (3-1)</li>
+<li>Endpoint protection: Defender presets, malware scans and keylogger behavior (5-1, 5-3, 5-7)</li>
+<li>Wireless analysis and Wi-Fi control with <code>netsh</code> (10-1, 10-4)</li>
+<li>Vulnerability research in CVE and NVD (12-1, 12-2)</li>
+<li>Forensics basics: deleted files and slack space (13-3)</li>
+<li>Comparing tools and writing recommendations (3-8, 6-4, 7-9, 15-11)</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>The course's cyber-range labs and quizzes ran on the course site and aren't in the repository, so this page doesn't cover them.</li>
+<li>14-12, a presentation on AI in a security operations center, is a title slide only, so it isn't listed.</li>
+<li>The 15-1 backup ran with no files selected, and 8-3 shows the MAC changer open on the adapter rather than a changed address.</li>
+<li>The 3-1 and 13-3 files keep only some of the steps.</li>
+<li>The SSL Labs server grades are in the written answers; the screenshots cover only the browser test.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/IntroToCybersecurity-105">CSIA 105 repository</a>, with every assignment above</li>
+<li><a href="https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module2/Module%2002%20-%20Part%202%20-%20Hands-On%20Project%204-1%20-%20SSL%20Server%20and%20Browser%20Tests%20-%20Jadon%20Kosberg.docx">4-1 SSL Server and Browser Tests</a></li>
+<li><a href="https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module2/Module%2002%20-%20Part%201%20Hands-On%20Project%203-1%20Using%20OpenPuff%20Steganography%20-%20Jadon%20Kosberg.docx">3-1 Using OpenPuff Steganography</a></li>
+<li><a href="https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module5/Security_Plus_8e_Hands_On_Project_10-4%20-%20Jadon%20Kosberg.docx">10-4 Using Microsoft Windows Netsh Commands</a></li>
+<li><a href="https://github.com/jkosber/IntroToCybersecurity-105/blob/main/Module7/Module%2007%20-%20Part%201%20-%20Hands-On%20Project%2013-3%20-%20Viewing%20Windows%20Hidden%20Data%20-%20Jadon%20Kosberg.docx">13-3 Viewing Windows Hidden Data</a></li>
+</ul>
+<p><a href="../">All coursework</a> · <a href="../csia-115/">CSIA 115 Cyber Ops</a> · <a href="../../credentials/">About</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

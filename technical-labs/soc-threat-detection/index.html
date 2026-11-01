@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Pushdo malware investigation in Security Onion | Jadon Kosberg</title>
+  <meta name="description" content="A Pushdo malware infection traced in Security Onion from the alerts to one Windows host and three downloaded files, then written up as an after-action report.">
+  
+  <link rel="canonical" href="https://jnkos.com/technical-labs/soc-threat-detection/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fb9bf98b0965">
+  <script src="../../javascripts/portfolio.js?v=1d8c525da71c"></script>
+  
+  <meta property="og:title" content="Pushdo malware investigation in Security Onion | Jadon Kosberg">
+  <meta property="og:description" content="A Pushdo malware infection traced in Security Onion from the alerts to one Windows host and three downloaded files, then written up as an after-action report.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/technical-labs/soc-threat-detection/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../"><span>Projects</span></a>
+        
+        
+        <a href="../../coursework/" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band" style="--title-chars: 13"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/">Coursework</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/csia-115/">CSIA 115 Cyber Ops</a></li>
+            <li aria-hidden="true">/</li><li><span aria-current="page">Pushdo malware investigation in Security Onion</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="cyberops-traffic-investigation">Pushdo malware investigation in Security Onion</h1>
+              <p class="dek">A Pushdo malware infection traced in Security Onion from the alerts to one Windows host and three downloaded files, then written up as an after-action report.</p>
+              
+              <dl class="strip">
+                <div><dt>Status</dt> <dd>Completed March 2026</dd></div>
+                
+                
+                
+                <div><dt>Class</dt> <dd><a href="../../coursework/csia-115/">CSIA 115 Cyber Ops</a></dd></div>
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/CyberOps-115">CSIA 115 repository</a></dd></div>
+                
+              </dl>
+              
+            </div>
+            <p class="result head-result"><span class="result-label">Result</span> Tied a 2017 Pushdo infection to one Windows host and three downloaded malware files by hash, and wrote an after-action report with containment recommendations.</p>
+          </div>
+        </div></section>
+        
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#investigating-a-pushdo-infection">Investigating Pushdo alerts</a><a href="#separating-alert-interpretation-from-proof">Limits</a><a href="#course-repository">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            <div class="panel role-panel">
+  <span class="panel-title">Role</span>
+  <p>Worked the alerts from timeline to host to files, looked up the file hashes and wrote the after-action report. The course provided the Security Onion VM and the alert data.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li>Security Onion</li><li>Sguil</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="m2.95 0c-1.62 0-2.95 1.32-2.95 2.95v18.1c0 1.63 1.32 2.95 2.95 2.95h18.1c1.62 0 2.95-1.32 2.95-2.95v-18.1c-.00024-1.63-1.32-2.95-2.95-2.95zm0 1.09h18.1c1.04 0 1.85.818 1.85 1.86v14h-5.27c-.335-.796-2.57-6.47.283-10.9a.516.517 0 0 0-.443-.794c-5.24.0827-8.2 3.19-9.74 6.21-1.35 2.64-1.63 4.91-1.69 5.53h-4.95v-14c0-1.04.817-1.86 1.85-1.86zm13.6 5.24c-2.62 5.24.248 11.4.248 11.4a.516.517 0 0 0 .469.301h5.62v3.05c0 1.04-.817 1.86-1.85 1.86h-18.1c-1.04 0-1.85-.818-1.85-1.86v-3.05h5.39a.516.517 0 0 0 .514-.477s.226-2.8 1.66-5.62c1.34-2.62 3.67-5.17 7.91-5.57z"/></svg>Wireshark</li><li>NetworkMiner</li><li>VirusTotal</li></ul>
+</div>
+            
+<p>The final skills assessment in CSIA 115 provided a Security Onion VM loaded with alerts from a 2017 Pushdo infection, an exercise Cisco credits to malware-traffic-analysis.net. I narrowed the alerts to one time window and one internal host, matched that host to three downloaded files, looked the files up by hash and ended in an after-action report.</p>
+<p><a href="../snort-firewall-lab/">Snort, firewall rules &amp; HTTP recovery</a>, a lab from the same class, has its own page.</p>
+
+            <h2 id="investigating-a-pushdo-infection">Investigating Pushdo alerts</h2>
+<p>I started in Sguil, narrowing the alerts to the window where the downloads and the Pushdo signatures clustered, and to the internal host they had in common. That kept them apart from the other training events loaded in the same VM.</p>
+<h3 id="establishing-the-timeline">Building the timeline</h3>
+<p>Times are UTC on June 27, 2017; the numbers are Sguil alert IDs.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Building the timeline"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Alert IDs</th>
+<th>Alert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13:38:34</td>
+<td>5.410, 5.415</td>
+<td>Executable download through WinHttpRequest, and a PE executable or DLL download over HTTP</td>
+</tr>
+<tr>
+<td>13:43:52</td>
+<td>5.420</td>
+<td>Another PE executable or DLL download</td>
+</tr>
+<tr>
+<td>13:43:54</td>
+<td>5.421, 5.422</td>
+<td>A terse executable downloader and another PE download</td>
+</tr>
+<tr>
+<td>13:44:01</td>
+<td>5.428, 5.429</td>
+<td>A public-IP lookup and a Pushdo check-in</td>
+</tr>
+<tr>
+<td>13:44:04</td>
+<td>5.431</td>
+<td>A Pushdo command-and-control response</td>
+</tr>
+<tr>
+<td>13:44:32</td>
+<td>5.438</td>
+<td>Possible Tor SSL traffic</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>Downloads first, then a Pushdo check-in within minutes: that order is what pointed to an infection. The alerts don't show how the first download started.</p>
+<h3 id="connecting-the-host-to-downloaded-files">Connecting the host to downloaded files</h3>
+<p>NetworkMiner identified the internal host as a Windows machine and showed its MAC address and a Dell network card. Its Files view rebuilt the three downloaded objects with their SHA-256 hashes, and a VirusTotal lookup on each hash gave these results:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 2: Connecting the host to downloaded files"><table>
+<thead>
+<tr>
+<th>Object</th>
+<th style="text-align: right;">Size in bytes</th>
+<th style="text-align: right;">VirusTotal detections then</th>
+<th>Names VirusTotal listed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gerv.gun</code></td>
+<td style="text-align: right;">241,664</td>
+<td style="text-align: right;">58 of 70</td>
+<td>Shiotob, Jaik</td>
+</tr>
+<tr>
+<td><code>trow.exe</code></td>
+<td style="text-align: right;">330,752</td>
+<td style="text-align: right;">65 of 72</td>
+<td>Cutwail, Wigon</td>
+</tr>
+<tr>
+<td><code>wp.exe</code></td>
+<td style="text-align: right;">307,712</td>
+<td style="text-align: right;">61 of 72</td>
+<td>Ursnif, Nymaim</td>
+</tr>
+</tbody>
+</table></div><p class="table-hint">Scroll horizontally to read the full table on a narrow screen.</p>
+<p>The sizes are in the NetworkMiner screenshots and the detection counts in the written answers; today's VirusTotal results may differ. The assessment answer reads: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."</p>
+<h3 id="response-recommendations">Recommendations</h3>
+<p>The report recommended isolating the host, updating its endpoint protection, blocking the three domains the files came from, segmenting the network and training users.</p>
+<h2 id="separating-alert-interpretation-from-proof">Limits</h2>
+<ul>
+<li>My report says the downloaded files ran on the host. The alerts show downloads and network traffic, not execution; that would take endpoint logs.</li>
+<li>It also calls the OpenDNS lookup malicious and suggests the lookup started the infection. The lookup came after the first downloads, and OpenDNS is a legitimate service the malware used to find its public address.</li>
+<li>"Possible Tor" is how one signature labels the traffic, not a confirmed Tor connection.</li>
+<li>The recommendations weren't carried out; the exercise ended with the report.</li>
+<li>The repository holds the report and screenshots, not the capture or the Security Onion data, so the sequence can't be replayed from it.</li>
+</ul>
+<h2 id="course-repository">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/CA%20v1.0%20Skills%20Assessment%20-%20Jadon%20Kosberg.docx">Skills assessment</a>: the Sguil timeline, NetworkMiner screenshots and written answers</li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module08/SkillsExamReportTemplate%20-%20Jadon%20Kosberg.docx">After-action report</a>: the host, files, hashes and recommendations</li>
+<li><a href="https://github.com/jkosber/CyberOps-115">CSIA 115 repository</a>, with the rest of the class's labs</li>
+</ul>
+<p><a href="../../coursework/csia-115/">CSIA 115 class page</a> · <a href="../snort-firewall-lab/">Snort, firewall rules &amp; HTTP recovery</a> · <a href="../../coursework/">All coursework</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

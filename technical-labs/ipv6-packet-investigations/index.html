@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>IPv6 packet investigations | Jadon Kosberg</title>
+  <meta name="description" content="A CSIA 210 final capstone that matched Windows hosts&#39; IPv6 behavior to DHCPv6 replies and router advertisements, including a lost gateway traced to one advertisement.">
+  
+  <link rel="canonical" href="https://jnkos.com/technical-labs/ipv6-packet-investigations/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fb9bf98b0965">
+  <script src="../../javascripts/portfolio.js?v=1d8c525da71c"></script>
+  
+  <meta property="og:title" content="IPv6 packet investigations | Jadon Kosberg">
+  <meta property="og:description" content="A CSIA 210 final capstone that matched Windows hosts&#39; IPv6 behavior to DHCPv6 replies and router advertisements, including a lost gateway traced to one advertisement.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/technical-labs/ipv6-packet-investigations/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../"><span>Projects</span></a>
+        
+        
+        <a href="../../coursework/" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band" style="--title-chars: 14"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/">Coursework</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/csia-210/">CSIA 210 Network Protocol Analysis</a></li>
+            <li aria-hidden="true">/</li><li><span aria-current="page">IPv6 packet investigations</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="ipv6-packet-investigations">IPv6 packet investigations</h1>
+              <p class="dek">A CSIA 210 final capstone that matched Windows hosts' IPv6 behavior to DHCPv6 replies and router advertisements, including a lost gateway traced to one advertisement.</p>
+              
+              <dl class="strip">
+                <div><dt>Status</dt> <dd>Completed May 2026</dd></div>
+                
+                
+                
+                <div><dt>Class</dt> <dd><a href="../../coursework/csia-210/">CSIA 210 Network Protocol Analysis</a></dd></div>
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis">CSIA 210 repository</a></dd></div>
+                
+              </dl>
+              
+            </div>
+            <p class="result head-result"><span class="result-label">Result</span> Matched a Windows host's DHCPv6 address to the reply in frame 9306, separated a duplicate address from general connectivity, and traced a lost IPv6 gateway to a Router Advertisement.</p>
+          </div>
+        </div></section>
+        
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#environment-and-analysis-method">Environment and analysis method</a><a href="#finding-the-dhcpv6-address-assignment">Finding the DHCPv6 address assignment</a><a href="#separating-a-duplicate-address-from-general-connectivity">Separating a duplicate address from general connectivity</a><a href="#tracking-source-address-changes">Tracking source-address changes</a><a href="#losing-the-gateway-while-retaining-the-address">Losing the gateway while retaining the address</a><a href="#what-remained-visible-in-encrypted-traffic">What remained visible in encrypted traffic</a><a href="#limits">Limits</a><a href="#sources-and-scope">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            <div class="panel role-panel">
+  <span class="panel-title">Role</span>
+  <p>Filtered the course's capstone traces, found the frames behind each host's behavior, compared them with the host output and wrote up the conclusions. Building or repairing the network was not part of the work.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="m2.95 0c-1.62 0-2.95 1.32-2.95 2.95v18.1c0 1.63 1.32 2.95 2.95 2.95h18.1c1.62 0 2.95-1.32 2.95-2.95v-18.1c-.00024-1.63-1.32-2.95-2.95-2.95zm0 1.09h18.1c1.04 0 1.85.818 1.85 1.86v14h-5.27c-.335-.796-2.57-6.47.283-10.9a.516.517 0 0 0-.443-.794c-5.24.0827-8.2 3.19-9.74 6.21-1.35 2.64-1.63 4.91-1.69 5.53h-4.95v-14c0-1.04.817-1.86 1.85-1.86zm13.6 5.24c-2.62 5.24.248 11.4.248 11.4a.516.517 0 0 0 .469.301h5.62v3.05c0 1.04-.817 1.86-1.85 1.86h-18.1c-1.04 0-1.85-.818-1.85-1.86v-3.05h5.39a.516.517 0 0 0 .514-.477s.226-2.8 1.66-5.62c1.34-2.62 3.67-5.17 7.91-5.57z"/></svg>Wireshark</li><li>DHCPv6 and ICMPv6 display filters</li><li>Windows ipconfig output from the course</li></ul>
+</div>
+            
+<p>A Windows host can have an IPv6 address and still fail to reach another network. The CSIA 210 final capstone was about finding out why from the packets: which reply assigned an address, which hosts shared a duplicate, which source address a host picked, and what made a gateway disappear.</p>
+<p>The course provided the traces, the network diagrams and the hosts' <code>ipconfig</code> output. From those, I filtered the traffic, found the frames that explained each symptom, compared them with the host output and wrote up the conclusions.</p>
+
+            <h2 id="environment-and-analysis-method">Environment and analysis method</h2>
+<p>The traces came from a network with Windows hosts, DHCPv6 and a layer 3 device sending router advertisements, with IPv4 running alongside. Every IPv6 address here uses the <code>2001:db8::/32</code> documentation prefix. These four filters did most of the work:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: Environment and analysis method" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Filter</th>
+<th role="columnheader">What it shows</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell"><code>dhcpv6.msgtype == 7</code></td>
+<td role="cell">DHCPv6 Reply messages, to find the one that assigned an address</td>
+</tr>
+<tr role="row">
+<td role="cell"><code>dhcpv6.iaaddr.ip == 2001:db8:1ab:1001::108</code></td>
+<td role="cell">Replies carrying the address the Windows host reported</td>
+</tr>
+<tr role="row">
+<td role="cell"><code>icmpv6.type == 134</code></td>
+<td role="cell">Router advertisements, with their flags, prefixes and router lifetime</td>
+</tr>
+<tr role="row">
+<td role="cell"><code>ipv6</code></td>
+<td role="cell">The wider IPv6 sequence, including address changes and neighbor discovery</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="finding-the-dhcpv6-address-assignment">Finding the DHCPv6 address assignment</h2>
+<p>In the first trace, the question was which reply gave the Windows 10 host its address. I filtered for DHCPv6 replies and checked their IA Address options. Frame 9306 was the first reply carrying the host's address, ending in <code>::108</code>. Earlier replies carried <code>::109</code>, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.</p>
+<figure class="evidence-figure">
+  <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
+    <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="465" height="140" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
+  </div>
+  <figcaption>Frame 9306's IA Address option in the May 12, 2026 submission, cropped to the address and its lifetimes. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open full size</a>.</figcaption>
+</figure>
+
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 2: Finding the DHCPv6 address assignment" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Frame 9306 field</th>
+<th role="columnheader">Value</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Message type</td>
+<td role="cell">Reply (7)</td>
+</tr>
+<tr role="row">
+<td role="cell">UDP ports</td>
+<td role="cell">547 to 546, server to client</td>
+</tr>
+<tr role="row">
+<td role="cell">Option</td>
+<td role="cell">IA Address (5)</td>
+</tr>
+<tr role="row">
+<td role="cell">Address</td>
+<td role="cell"><code>2001:db8:1ab:1001::108</code></td>
+</tr>
+<tr role="row">
+<td role="cell">Preferred and valid lifetime</td>
+<td role="cell">120 and 180 seconds</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="separating-a-duplicate-address-from-general-connectivity">Separating a duplicate address from general connectivity</h2>
+<p>In the second trace a Windows 7 host had been set by hand to <code>::117</code>, the address the Windows 10 host already held. I compared their source MAC addresses in the neighbor discovery traffic with the Windows 7 host's <code>ipconfig</code> output, which marked the address as a duplicate.</p>
+<p>A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. My summary put it this way: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."</p>
+<h2 id="tracking-source-address-changes">Tracking source-address changes</h2>
+<p>Later in the same trace I followed the Windows 10 host as it picked up public and temporary SLAAC addresses next to its DHCPv6 address, <code>::117</code>:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 3: Tracking source-address changes" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Point in the trace</th>
+<th role="columnheader">Finding</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Router advertisement</td>
+<td role="cell">Managed flag set; on-link and autonomous prefix flags set</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 6913</td>
+<td role="cell">The host used its temporary SLAAC address as the source</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 7512</td>
+<td role="cell">A later advertisement with the autonomous flag off</td>
+</tr>
+<tr role="row">
+<td role="cell">Host output after that</td>
+<td role="cell">Both SLAAC addresses deprecated; a later packet used the DHCPv6 address ending in <code>::117</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>My submission said the autonomous flag turning off deprecated the SLAAC addresses. That overstates it: an unset autonomous flag makes the host ignore that prefix information, and an address is deprecated when its preferred lifetime runs out (<a href="https://www.rfc-editor.org/rfc/rfc4862.html#section-5.5.3">RFC 4862, section 5.5.3</a>). Pinning down the timing would take the full lifetime sequence from the trace.</p>
+<h2 id="losing-the-gateway-while-retaining-the-address">Losing the gateway while retaining the address</h2>
+<p>Later in that trace the Windows 10 host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. I filtered the router advertisements and lined up their router lifetimes with what the host did:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 4: Losing the gateway while retaining the address" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Point in the trace</th>
+<th role="columnheader">What happened</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Frame 1</td>
+<td role="cell">A router advertisement with a 270-second router lifetime</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 9660</td>
+<td role="cell">The first of an earlier group of four pings</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 9725</td>
+<td role="cell">A router advertisement with lifetime 0; the host dropped its IPv6 default gateway</td>
+</tr>
+<tr role="row">
+<td role="cell">Host output</td>
+<td role="cell">The IPv6 address stayed preferred; only the IPv4 gateway was listed</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 9887</td>
+<td role="cell">A new advertisement brought the 270-second lifetime back</td>
+</tr>
+<tr role="row">
+<td role="cell">Frame 9991</td>
+<td role="cell">The first ping of the later group, with connectivity restored</td>
+</tr>
+</tbody>
+</table></div>
+<p>A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back (<a href="https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4">RFC 4861, section 6.3.4</a>). The DHCPv6 lease never supplied the gateway, which is why the address survived. My conclusion in the capstone: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."</p>
+<h2 id="what-remained-visible-in-encrypted-traffic">What remained visible in encrypted traffic</h2>
+<p>The same capstone looked at SSH (frames 27218 and 27364) and HTTPS (frames 27902 and 29910). Only the banners and algorithm names were readable; the application data wasn't. I didn't decrypt either session.</p>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>The traces aren't in the repository, so the frame numbers can't be rechecked from it. The screenshots show frame 9306, the router advertisement flags, the SSH frames and the first advertisement in the second trace; the other frame numbers come from the written answers.</li>
+<li>The submission doesn't include the host output I compared the <code>::108</code> match against.</li>
+<li>I diagnosed the duplicate address but didn't fix it or retest.</li>
+<li>The SLAAC explanation above corrects what the submission said.</li>
+</ul>
+<h2 id="sources-and-scope">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis/blob/main/Module08/CSIA%20210%20Finals%20Capstone%20submission%20file%20-%20Jadon%20Kosberg.docx">Final capstone submission</a>: the answers and screenshots for Capstone Labs 3 and 4</li>
+<li><a href="https://github.com/jkosber/CSIA-210-Network-Protocol-Analysis">CSIA 210 repository</a>, with the rest of the class's submissions</li>
+</ul>
+<p><a href="../../coursework/csia-210/">CSIA 210 class page</a> · <a href="../../coursework/">All coursework</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

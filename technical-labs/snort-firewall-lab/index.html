@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>Snort, firewall rules &amp; HTTP recovery | Jadon Kosberg</title>
+  <meta name="description" content="A CSIA 115 lab where a Snort alert fired on a simulated malware download, a firewall rule blocked the server, and Wireshark exported a file from a separate capture.">
+  
+  <link rel="canonical" href="https://jnkos.com/technical-labs/snort-firewall-lab/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fb9bf98b0965">
+  <script src="../../javascripts/portfolio.js?v=1d8c525da71c"></script>
+  
+  <meta property="og:title" content="Snort, firewall rules &amp; HTTP recovery | Jadon Kosberg">
+  <meta property="og:description" content="A CSIA 115 lab where a Snort alert fired on a simulated malware download, a firewall rule blocked the server, and Wireshark exported a file from a separate capture.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/technical-labs/snort-firewall-lab/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../"><span>Projects</span></a>
+        
+        
+        <a href="../../coursework/" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band" style="--title-chars: 8"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/">Coursework</a></li>
+            <li aria-hidden="true">/</li><li><a href="../../coursework/csia-115/">CSIA 115 Cyber Ops</a></li>
+            <li aria-hidden="true">/</li><li><span aria-current="page">Snort, firewall rules & HTTP recovery</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="snort-firewall-rules-http-recovery">Snort, firewall rules &amp; HTTP recovery</h1>
+              <p class="dek">A CSIA 115 lab where a Snort alert fired on a simulated malware download, a firewall rule blocked the server, and Wireshark exported a file from a separate capture.</p>
+              
+              <dl class="strip">
+                <div><dt>Status</dt> <dd>Completed March 2026</dd></div>
+                
+                
+                
+                <div><dt>Class</dt> <dd><a href="../../coursework/csia-115/">CSIA 115 Cyber Ops</a></dd></div>
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/CyberOps-115">CSIA 115 repository</a></dd></div>
+                
+              </dl>
+              
+            </div>
+            <p class="result head-result"><span class="result-label">Result</span> Triggered the lab's Snort signature with the download, got HTTP 200 with a corrected file name and, after the DROP rule, wrote in the retest that the download failed. Exported a 345,088-byte file from a capture in a second exercise.</p>
+          </div>
+        </div></section>
+        
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#the-simulated-traffic-path">The simulated traffic path</a><a href="#distinguishing-a-bad-request-from-a-blocked-connection">Distinguishing a bad request from a blocked connection</a><a href="#capturing-the-transaction">Capturing the transaction</a><a href="#applying-the-routed-firewall-rule">Applying the routed firewall rule</a><a href="#recovering-the-supplied-http-object">Recovering an HTTP object from a capture</a><a href="#limits-and-source-material">Limits</a><a href="#sources">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            <div class="panel role-panel">
+  <span class="panel-title">Role</span>
+  <p>Ran the course's Mininet lab, watched Snort on its router, fixed mistyped file requests, applied the lab's firewall rule and wrote up the results. The lab provided the topology, scripts, Snort signature and firewall command.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li>Mininet</li><li>Snort 2.9</li><li>iptables</li><li>tcpdump</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="m2.95 0c-1.62 0-2.95 1.32-2.95 2.95v18.1c0 1.63 1.32 2.95 2.95 2.95h18.1c1.62 0 2.95-1.32 2.95-2.95v-18.1c-.00024-1.63-1.32-2.95-2.95-2.95zm0 1.09h18.1c1.04 0 1.85.818 1.85 1.86v14h-5.27c-.335-.796-2.57-6.47.283-10.9a.516.517 0 0 0-.443-.794c-5.24.0827-8.2 3.19-9.74 6.21-1.35 2.64-1.63 4.91-1.69 5.53h-4.95v-14c0-1.04.817-1.86 1.85-1.86zm13.6 5.24c-2.62 5.24.248 11.4.248 11.4a.516.517 0 0 0 .469.301h5.62v3.05c0 1.04-.817 1.86-1.85 1.86h-18.1c-1.04 0-1.85-.818-1.85-1.86v-3.05h5.39a.516.517 0 0 0 .514-.477s.226-2.8 1.66-5.62c1.34-2.62 3.67-5.17 7.91-5.57z"/></svg>Wireshark</li></ul>
+</div>
+            
+<p>This CSIA 115 lab tied an alert to a fix: watch Snort flag a download from a simulated malicious server, then block that server on the router. I ran the course's Mininet network, corrected mistyped file names in the requests along the way, captured the traffic and added the firewall rule. A second exercise pulled a file out of a capture with Wireshark.</p>
+<p>The course provided the topology, the start scripts, the Snort signature and the firewall command.</p>
+
+            <h2 id="the-simulated-traffic-path">The simulated traffic path</h2>
+<p>Everything ran in Mininet on the CyberOps Workstation VM. H5, the client, reached H10, a server running nginx on TCP port 6666, through switch s5 and routers R1 and R4. R1 also ran Snort and <code>iptables</code>.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: The simulated traffic path" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Device</th>
+<th role="columnheader">Role</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">H5</td>
+<td role="cell">Client and capture point</td>
+</tr>
+<tr role="row">
+<td role="cell">R1</td>
+<td role="cell">Router, Snort sensor and firewall</td>
+</tr>
+<tr role="row">
+<td role="cell">R4</td>
+<td role="cell">Upstream router toward the server</td>
+</tr>
+<tr role="row">
+<td role="cell">H10</td>
+<td role="cell">Simulated malicious server, nginx on TCP 6666</td>
+</tr>
+</tbody>
+</table></div>
+<p>The first Mininet launch failed without root; I relaunched it with <code>sudo</code>. Snort 2.9.15.1 then came up on <code>R1-eth0</code>. The commands below use <code>198.51.100.133</code>, a documentation address, in place of the lab's server address.</p>
+<h2 id="distinguishing-a-bad-request-from-a-blocked-connection">Distinguishing a bad request from a blocked connection</h2>
+<p>While <code>tail -f</code> followed R1's alert log, H5 requested the file:</p>
+<pre role="group" tabindex="0" aria-label="Code example 1: Distinguishing a bad request from a blocked connection"><code class="language-bash">tail -f /var/log/snort/alert
+</code></pre>
+<p>My first requests had the file name's spelling or capitalization wrong and got HTTP 404, which showed the server was up and answering. With the name corrected, it returned HTTP 200 and <code>wget</code> saved all 475,448 bytes:</p>
+<pre role="group" tabindex="0" aria-label="Code example 2: Distinguishing a bad request from a blocked connection"><code class="language-bash">wget http://198.51.100.133:6666/W32.Nimda.Amm.exe
+</code></pre>
+<p>Snort logged <strong>Malicious Server Hit!</strong> (signature <code>1:1000003:0</code>) for the failed attempts as well as the successful one. So the alert alone didn't mean a file had come down; the 200 and the completed transfer did.</p>
+<h2 id="capturing-the-transaction">Capturing the transaction</h2>
+<p>On H5, <code>tcpdump</code> captured the traffic to a file:</p>
+<pre role="group" tabindex="0" aria-label="Code example 3: Capturing the transaction"><code class="language-bash">tcpdump -i H5-eth0 -w nimda.download.pcap
+</code></pre>
+<p>It caught 93 packets with none dropped.</p>
+<h2 id="applying-the-routed-firewall-rule">Applying the routed firewall rule</h2>
+<p>The traffic passes through R1 on its way to H10, so the rule belongs in the FORWARD chain; INPUT covers traffic addressed to R1 itself and OUTPUT covers traffic R1 sends. These commands insert the lab's rule and list it:</p>
+<pre role="group" tabindex="0" aria-label="Code example 4: Applying the routed firewall rule"><code class="language-bash">iptables -I FORWARD -p tcp -d 198.51.100.133 --dport 6666 -j DROP
+iptables -L -v
+</code></pre>
+<p>It drops TCP traffic to that server's port 6666 and nothing else. The listing showed the rule in place, with its counters still at zero. When I reran the request, the download failed; my written answer puts that down to the firewall.</p>
+<h2 id="recovering-the-supplied-http-object">Recovering an HTTP object from a capture</h2>
+<p>The next exercise used a capture the course provided, <code>nimda.download.pcap</code>, rather than the one from the Mininet lab. The file inside is a harmless executable the course renamed <code>W32.Nimda.Amm.exe</code> for the exercise.</p>
+<p>Following TCP stream 0 in Wireshark showed an HTTP GET, a 200 response with a <code>Content-Length</code> of 345,088, and binary data starting with the <code>MZ</code> and <code>PE</code> markers of a Windows executable. <strong>File → Export Objects → HTTP</strong> saved the executable as <code>Wireshark.<wbr>W32.Nimda.Amm.exe</code>, because the original name was already taken. The saved file is 345,088 bytes, matching the response. It's a different file from the 475,448-byte download in the Mininet lab, despite the shared name.</p>
+<h2 id="limits-and-source-material">Limits</h2>
+<ul>
+<li>The Snort signature and the firewall command came with the lab, and the signature's detection and false-positive rates weren't measured.</li>
+<li>There's no screenshot of the blocked retest, and the captured listing shows the rule's counters at zero, so the block rests on the written answer.</li>
+<li>The lab covered one HTTP request path. Encrypted traffic and whether the rule survives a restart weren't tested.</li>
+<li>The exercise checked the exported file's size, not its hash, and never ran it.</li>
+<li>The repository doesn't include either capture, so neither exercise can be replayed from it.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/26.1.7%20Lab%20-%20Snort%20and%20Firewall%20Rules%20-%20Jadon%20Kosberg.docx">26.1.7 Snort and Firewall Rules</a>: topology, screenshots and written answers</li>
+<li><a href="https://github.com/jkosber/CyberOps-115/blob/main/Module07/27.2.10%20Lab%20-%20Extract%20an%20Executable%20from%20a%20PCAP%20-%20Jadon%20Kosberg.docx">27.2.10 Extract an Executable from a PCAP</a>: the followed stream and the saved file listing</li>
+</ul>
+<p><a href="../../coursework/csia-115/">CSIA 115 class page</a> · <a href="../soc-threat-detection/">Pushdo malware investigation in Security Onion</a> · <a href="../../coursework/">All coursework</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>

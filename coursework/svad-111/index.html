@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#091827">
+  <title>SVAD 111 Linux and Virtualization Technologies | Jadon Kosberg</title>
+  <meta name="description" content="Linux administration labs in VirtualBox, Bash scripts with input checks, and a two-server AdventureWorks deployment on AWS.">
+  
+  <link rel="canonical" href="https://jnkos.com/coursework/svad-111/">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../assets/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="preload" href="../../assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../stylesheets/portfolio.css?v=fb9bf98b0965">
+  <script src="../../javascripts/portfolio.js?v=1d8c525da71c"></script>
+  
+  <meta property="og:title" content="SVAD 111 Linux and Virtualization Technologies | Jadon Kosberg">
+  <meta property="og:description" content="Linux administration labs in VirtualBox, Bash scripts with input checks, and a two-server AdventureWorks deployment on AWS.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jadon Kosberg">
+  <meta property="og:url" content="https://jnkos.com/coursework/svad-111/">
+  <meta property="og:image" content="https://jnkos.com/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.">
+  
+  
+</head>
+<body>
+  
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <a class="brand" href="../..">
+        <img src="../../assets/favicon.svg" width="40" height="40" alt="">
+        <span>Jadon Kosberg</span>
+      </a>
+      <a class="social" href="https://github.com/jkosber" aria-label="GitHub profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path transform="scale(1.5)" fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+
+</svg></a>
+      <a class="social" href="https://www.linkedin.com/in/jadon-kosberg" aria-label="LinkedIn profile"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path fill="currentColor" stroke="none" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+
+</svg></a>
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M4 6h16M4 12h16M4 18h16"/>
+
+</svg><span>Menu</span></button>
+    </div>
+    <div class="site-menu" id="site-menu">
+      <nav class="main-nav" aria-label="Main navigation">
+        
+        
+        <a href="../../technical-labs/"><span>Projects</span></a>
+        
+        
+        <a href="../" aria-current="true"><span>Coursework</span></a>
+        
+        
+        <a href="../../experience/"><span>Experience</span></a>
+        
+        
+        <a href="../../credentials/"><span>About</span></a>
+        
+      </nav>
+    </div>
+  </header>
+  <div class="site-body">
+    <div class="print-identity"><strong>Jadon Kosberg</strong><span>IT portfolio · Jadon@jnkos.com</span><span>jnkos.com</span></div>
+    <main id="main" tabindex="-1" class="page-shell">
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="page-head band" style="--title-chars: 14"><div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><ol role="list">
+            <li><a href="../..">Home</a></li>
+            <li aria-hidden="true">/</li><li><a href="../">Coursework</a></li>
+            
+            <li aria-hidden="true">/</li><li><span aria-current="page">SVAD 111 Linux and Virtualization Technologies</span></li>
+          </ol></nav>
+          <div class="head-grid">
+            <div class="head-text">
+              <h1 id="svad-111-linux-and-virtualization-technologies">SVAD 111 Linux and Virtualization Technologies</h1>
+              <p class="dek">Linux administration labs in VirtualBox, Bash scripts with input checks, and a two-server AdventureWorks deployment on AWS.</p>
+              
+              <dl class="strip">
+                
+                
+                <div><dt>Term</dt> <dd>Spring 2026</dd></div>
+                <div><dt>Covered</dt> <dd>25 assignments and 5 scripts</dd></div>
+                
+                <div><dt>Source</dt> <dd><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization">SVAD 111 repository</a></dd></div>
+              </dl>
+              
+            </div>
+            <img class="head-art" src="../../assets/thumbnails/aws.svg" width="240" height="160" alt="">
+            
+          </div>
+        </div></section>
+        
+        
+        <div class="wrap summary-pair">
+          <div class="panel role-panel">
+  <span class="panel-title">Role</span>
+  <p>Built the VirtualBox VMs and the two AWS servers, worked the Linux labs, wrote the Bash scripts and wrote the final project report. The course provided the worksheets, the install commands, the application and its data.</p>
+  <ul class="tools" role="list" aria-label="Built with"><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M0 1.758 5.182 20c.129.455.25.691.421.945.063.092.13.179.202.264.173.204.37.378.59.525.243.163.49.286.763.371.324.1.61.137.99.137h4.327l1.918-6.615h6.798v3.699a.11.11 0 0 1-.109.11h-4.88l-.813 2.806h5.654a2.92 2.92 0 0 0 1.95-.725A2.903 2.903 0 0 0 24 19.285v-6.47H12.28l-1.919 6.614H7.937L3.715 4.564h2.922l1.546 5.444H11.1l-2.343-8.25zm15.496 0-2.4 8.25H24v-5.29a2.962 2.962 0 0 0-1.825-2.741 3.044 3.044 0 0 0-1.129-.22zm2.11 2.806h3.476a.11.11 0 0 1 .11.112V7.2h-4.354z"/></svg>VirtualBox</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"/></svg>Linux Mint and Fedora</li><li>Bash</li><li>AWS EC2</li><li><svg class="tool-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M17.61.455a3.41 3.41 0 0 0-3.41 3.41 3.41 3.41 0 0 0 3.41 3.41 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41zM12.92.8C8.923.777 5.137 2.941 3.148 6.451a4.5 4.5 0 0 1 .26-.007 4.92 4.92 0 0 1 2.585.737A8.316 8.316 0 0 1 12.688 3.6 4.944 4.944 0 0 1 13.723.834 11.008 11.008 0 0 0 12.92.8zm9.226 4.994a4.915 4.915 0 0 1-1.918 2.246 8.36 8.36 0 0 1-.273 8.303 4.89 4.89 0 0 1 1.632 2.54 11.156 11.156 0 0 0 .559-13.089zM3.41 7.932A3.41 3.41 0 0 0 0 11.342a3.41 3.41 0 0 0 3.41 3.409 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41zm2.027 7.866a4.908 4.908 0 0 1-2.915.358 11.1 11.1 0 0 0 7.991 6.698 11.234 11.234 0 0 0 2.422.249 4.879 4.879 0 0 1-.999-2.85 8.484 8.484 0 0 1-.836-.136 8.304 8.304 0 0 1-5.663-4.32zm11.405.928a3.41 3.41 0 0 0-3.41 3.41 3.41 3.41 0 0 0 3.41 3.41 3.41 3.41 0 0 0 3.41-3.41 3.41 3.41 0 0 0-3.41-3.41z"/></svg>Ubuntu 22.04</li><li>SQL Server and Apache</li></ul>
+</div>
+          <div class="panel panel--result"><span class="panel-title">Result</span> <p>Completed 25 assignments and wrote 5 scripts: Linux administration labs, Bash scripts that reject bad input and exit with an error, and a two-server AdventureWorks deployment on AWS that served the catalog and saved a review.</p></div>
+        </div>
+        
+        
+        
+        <div class="wrap article">
+          
+          <details class="contents" open>
+            <summary>On this page</summary>
+            <nav aria-label="On this page"><a href="#what-the-course-provided">What the course provided and what I did</a><a href="#strongest-work">Strongest work</a><a href="#labs">Labs</a><a href="#skills">Skills</a><a href="#limits">Limits</a><a href="#sources">Sources</a></nav>
+          </details>
+          
+          <div class="body prose">
+            
+            
+<p>Linux and Virtualization Technologies covered running Linux in VirtualBox and on AWS, managing it from the command line and scripting it in Bash. The course project was a two-server deployment of the AdventureWorks sample app, built in milestones across the term.</p>
+
+            <h2 id="what-the-course-provided">What the course provided and what I did</h2>
+<p>The course provided the worksheets and their questions, an AWS Academy lab account, the install commands for each project milestone, the application and database archives, and the requirements for each script, including a few one-line hints. My part:</p>
+<ul>
+<li>Built Linux Mint and Fedora VMs in VirtualBox and did the Linux labs on them and on the AWS servers</li>
+<li>Launched the two EC2 servers, ran the database and web installs, imported the data and tested the app</li>
+<li>Wrote the input-checked scripts and the wallpaper downloader in Bash and ran each one</li>
+<li>Wrote the final project report and original answers to the worksheet questions</li>
+</ul>
+<h2 id="strongest-work">Strongest work</h2>
+<section class="work"><h3 id="adventureworks-on-two-aws-servers">AdventureWorks on two AWS servers</h3>
+<p>The course's two-tier design ran on two Ubuntu EC2 instances: SQL Server on one, Apache and PHP on the other. The finished app returned 304 products on a blank search, opened product pages and saved a review with my name. The report lists the four problems that came up and how I fixed each one. The first was "Connection Timed Out: The web server could not talk to the database," fixed by adding a security-group rule for port 1433 from the web server.</p>
+<p>The full write-up is on <a href="../../technical-labs/aws-linux-infrastructure/">AdventureWorks on AWS</a>.</p></section>
+<section class="work"><h3 id="rejecting-bad-input">Rejecting bad input in a Bash game (M05P2B)</h3>
+<p>The course provided a number-guessing game that crashed on text or an empty answer, plus a one-line test for "is this an integer." The submitted scripts wrap the game in that check, and <code>ex4.sh</code> takes the range from two arguments. It has three checks before the game starts, each with its own message and <code>exit 1</code>:</p>
+<ul>
+<li>Both arguments present</li>
+<li>Both arguments whole numbers, tested with <code>[[ "$min_arg" =~ ^[0-9]+$ ]]</code></li>
+<li>The maximum greater than the minimum</li>
+</ul>
+<p>The worksheet listed seven runs to try. This run covers all seven, from the screenshot in the write-up, with the prompt shortened:</p>
+<pre role="group" tabindex="0" aria-label="Code example 1: Rejecting bad input in a Bash game (M05P2B)"><code class="language-text">$ ./ex4.sh 1 50
+Guess a number between 1 and 50: 45
+My number is 14. You guessed 45.
+Sorry, better luck next time!
+$ ./ex4.sh 50 40
+The second number (40) must be greater than the first (50).
+$ ./ex4.sh 20 20
+The second number (20) must be greater than the first (20).
+$ ./ex4.sh 10
+Incorrect input detected!!
+Please provide a minimum and maximum number
+Example: 1 10
+$ ./ex4.sh zzz 10
+Both arguments must be integers.
+$ ./ex4.sh 10 zzz
+Both arguments must be integers.
+$ ./ex4.sh
+Incorrect input detected!!
+Please provide a minimum and maximum number
+Example: 1 10
+</code></pre>
+<p>The checks quote their variables, but none of the four scripts uses <code>set -euo pipefail</code>, and the two that read input don't use <code>read -r</code>.</p></section>
+<section class="work"><h3 id="a-wallpaper-script-that-checks-before-it-acts-m06p1a">A wallpaper script that checks before it acts (M06P1A)</h3>
+<p>The assignment asked for a script that takes an image URL and a new name, then downloads the image, scans it for viruses, converts it to JPEG and renames it with its resolution. The course gave hints for the hardest pieces: the URL-to-filename pipeline, the <code>curl</code> status check, the <code>clamscan</code> call and the resolution regex. The submitted <code>dl_wallpaper.sh</code> puts them together, with every check before any real work:</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table 1: A wallpaper script that checks before it acts (M06P1A)" data-columns="2"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Check</th>
+<th role="columnheader">How the script handles it</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Wrong number of arguments</td>
+<td role="cell">Prints usage to stderr and exits 1</td>
+</tr>
+<tr role="row">
+<td role="cell">URL can't be reached</td>
+<td role="cell">Prints an error to stderr and exits 1</td>
+</tr>
+<tr role="row">
+<td role="cell">Any status other than 200</td>
+<td role="cell">Prints the status to stderr and exits 1, so redirects are rejected too</td>
+</tr>
+<tr role="row">
+<td role="cell">Infected download</td>
+<td role="cell">Deletes the file and exits 1 before converting it</td>
+</tr>
+<tr role="row">
+<td role="cell">Not already a JPEG</td>
+<td role="cell">Converts it with ImageMagick</td>
+</tr>
+</tbody>
+</table></div>
+<p>The run in the write-up shows the usage message with no arguments, then each progress step and a finished <code>poptart_2560x1440.jpg</code> from the course's sample image. What I'd change: <code>$1</code>, <code>$filename</code> and <code>$newname</code> are unquoted throughout, and the filename comes straight from the URL into an unquoted <code>rm</code>, so a URL ending in <code>*</code> could make it delete other files in the folder.</p></section>
+<h2 id="labs">Labs</h2>
+<details class="lab-module"><summary><h3 id="virtualization-and-the-cloud">Virtualization and the cloud</h3> <span class="lab-count">3 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 2: Virtualization and the cloud"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">M01 Building Virtual Machines</td>
+<td role="cell">Install two Linux VMs in a Type 2 hypervisor</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Built Linux Mint 22.3 and Fedora VMs in VirtualBox; ejected the ISO by hand when Fedora kept booting the installer</td>
+</tr>
+<tr role="row">
+<td role="cell">M01 Pros and Cons to Virtualization</td>
+<td role="cell">Argue for or against virtualization</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote a one-page case covering hardware use, snapshots and the risk of one host failing</td>
+</tr>
+<tr role="row">
+<td role="cell">M03 Presentation: Cloud Computing</td>
+<td role="cell">Present cloud service models</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Built a 12-slide deck on IaaS, PaaS and SaaS, moving to the cloud, its risks and vendors</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="command-line-files-and-processes">Command line, files and processes</h3> <span class="lab-count">10 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 3: Command line, files and processes"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">M04 Part 1 Using Linux Programs</td>
+<td role="cell">Compare the default apps on two distributions; research LAMP, Apache and NGINX, and deb and rpm packages</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Filled the app and version table for Mint and Fedora, installing Evolution where Fedora had no mail client, and answered 12 research questions</td>
+</tr>
+<tr role="row">
+<td role="cell">M04 Reflection: Repositories</td>
+<td role="cell">Compare Linux and Windows software installs, and rolling and point releases</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote four answers and compared package repositories with installing software on Windows with Winget</td>
+</tr>
+<tr role="row">
+<td role="cell">M04P1B Command Line Exercises</td>
+<td role="cell">Shell history, tab completion, shortcuts and man page sections</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Predicted what <code>!ech</code> would rerun, confirmed it, and wrote why history expansion can run the wrong command</td>
+</tr>
+<tr role="row">
+<td role="cell">M04P2A Hardware Exploration</td>
+<td role="cell">Inspect the CPU, buses and disks</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Captured <code>uname</code>, <code>lscpu</code>, <code>lspci</code>, <code>lsusb</code>, <code>lsblk</code> and <code>df</code> output</td>
+</tr>
+<tr role="row">
+<td role="cell">M04P2B Working with Files</td>
+<td role="cell">Create, move, delete and link files</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Explained why a hard link still opens after the original file is deleted while a soft link breaks</td>
+</tr>
+<tr role="row">
+<td role="cell">M05P1A File Editing</td>
+<td role="cell">Edit files in vi and nano</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Answered the textbook quiz inside vi</td>
+</tr>
+<tr role="row">
+<td role="cell">M05P1B Archiving</td>
+<td role="cell"><code>grep</code>, <code>find</code>, regular expressions, redirection, pipes and <code>tar</code></td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Worked all 12 steps, noted that the worksheet never created the folder it unpacked into, and cleaned up by hand</td>
+</tr>
+<tr role="row">
+<td role="cell">M05P1C Processes</td>
+<td role="cell">Package tools, <code>ps</code>, <code>pstree</code> and <code>top</code></td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Installed a package with apt and inspected the running processes on Ubuntu</td>
+</tr>
+<tr role="row">
+<td role="cell">M05P2A Scripting</td>
+<td role="cell">Variables, input, math and <code>if</code></td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Ran the five practice scripts and explained the difference between single and double quotes</td>
+</tr>
+<tr role="row">
+<td role="cell">M05P2B Secure Scripting Basics</td>
+<td role="cell">Add input checks to a game and take its range from arguments</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote four scripts (see above)</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="security-users-and-networking">Security, users and networking</h3> <span class="lab-count">5 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 4: Security, users and networking"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">M06P1A Secure Scripting Advanced</td>
+<td role="cell">Write a script that downloads, scans, converts and renames a wallpaper</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote <code>dl_wallpaper.sh</code> (see above)</td>
+</tr>
+<tr role="row">
+<td role="cell">M06P2A Linux Security</td>
+<td role="cell">Read account data in passwd and shadow and check who is logged in</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Answered 18 questions on account fields, password aging, <code>id</code>, <code>who</code> and <code>w</code></td>
+</tr>
+<tr role="row">
+<td role="cell">M06P2B Users and Groups</td>
+<td role="cell">Add, change and delete users and groups</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Added a user, set its comment field, put it in a new group, then deleted it</td>
+</tr>
+<tr role="row">
+<td role="cell">M06P2C Permissions</td>
+<td role="cell">Change owners and modes and test what can still be deleted</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Made a file read-only with <code>chmod 444</code> and explained why it could still be deleted from a folder the user owns</td>
+</tr>
+<tr role="row">
+<td role="cell">M07P1 Networking</td>
+<td role="cell"><code>ip</code>, <code>nmcli</code>, <code>ping</code>, <code>traceroute</code> and <code>dig</code></td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Answered 12 questions, compared VirtualBox NAT with a bridged adapter, and looked up MX, NS, TXT and SOA records</td>
+</tr>
+</tbody>
+</table></div></details>
+<details class="lab-module"><summary><h3 id="adventureworks-project">AdventureWorks project</h3> <span class="lab-count">7 labs</span></summary>
+<div class="table-scroll lab-table" role="region" tabindex="0" aria-label="Table 5: AdventureWorks project"><table role="table">
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader">Lab</th>
+<th role="columnheader">What it asked</th>
+<th role="columnheader">Work done</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<td role="cell">Milestone 1 AWS Environment Build</td>
+<td role="cell">Launch a web server and a database server in EC2</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Launched both Ubuntu instances in the AWS Academy lab</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 2A Database Server Setup</td>
+<td role="cell">Install SQL Server and <code>sqlcmd</code></td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Installed and configured SQL Server 2022, checked the service and ran a test query</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 2B Database Server Setup</td>
+<td role="cell">Convert and import the AdventureWorks data</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Imported the data and checked the counts: 504 products and 19,972 people</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 3A Web Server Setup</td>
+<td role="cell">Open the application ports in the security group</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Added rules for ports 80, 1433 and 3306 next to SSH</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 3B Web Server Setup</td>
+<td role="cell">Install Apache, PHP 8.1 and the SQL Server drivers</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Brought up a <code>test.php</code> page showing PHP 8.1.2 under Apache</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 3C Web Server Setup</td>
+<td role="cell">Deploy the app and test it</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Searched the catalog, opened product 787 and saved a review</td>
+</tr>
+<tr role="row">
+<td role="cell">Milestone 4 Final report</td>
+<td role="cell">Write up the build</td>
+<td role="cell"><span class="did-label" aria-hidden="true">Work done: </span>Wrote the summary, the build steps, a table of four problems and their fixes, and three recommendations</td>
+</tr>
+</tbody>
+</table></div></details>
+<h2 id="skills">Skills</h2>
+<ul>
+<li>Building and running Linux VMs in VirtualBox, on two distributions (M01, M04 Part 1)</li>
+<li>Launching EC2 servers and opening security-group ports between tiers (Milestones 1 and 3A)</li>
+<li>Installing SQL Server on Linux, importing data and checking it with <code>sqlcmd</code> (Milestones 2A and 2B)</li>
+<li>Setting up Apache and PHP with database drivers and deploying a PHP app (Milestones 3B and 3C)</li>
+<li>Bash scripting with input checks, error messages on stderr and exit codes (M05P2B, M06P1A)</li>
+<li>Command-line work with files, links, archives, processes and packages (M04, M05P1A to M05P1C)</li>
+<li>Users, groups, ownership and permissions (M06P2A to M06P2C)</li>
+<li>Network and DNS diagnostics with <code>ip</code>, <code>nmcli</code>, <code>traceroute</code> and <code>dig</code> (M07P1)</li>
+<li>Writing up a build with its problems and fixes (final report)</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>The AdventureWorks install commands came from the course. For most install steps the submitted files show the finished result, not each command.</li>
+<li>The <code>dl_wallpaper.sh</code> in the repository is 24 bytes shorter than the copy listed in the run screenshot, so it's a slightly different version of the one that ran.</li>
+<li>The M05P2A practice scripts appear only in screenshots; they aren't in the repository.</li>
+<li>Two Module 1 files in the repository are empty, so they aren't listed here.</li>
+<li>The worksheets offered Ubuntu and Fedora versions of some steps. The submissions follow the Ubuntu ones.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization">SVAD 111 repository</a>, with every assignment above</li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/AdventureWorks%20Project%20-%20Jadon%20Kosberg.docx">AdventureWorks final report</a></li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/Module05/M05P2B%20-%20Secure%20Scripting%20-%20Basics%20-%20Jadon%20Kosberg.docx">M05P2B write-up</a> and <a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/m05p2b/ex4.sh"><code>ex4.sh</code></a></li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/Module06/M06P1A%20-%20Secure%20Scripting%20Advanced%20-%20Jadon%20Kosberg.docx">M06P1A write-up</a> and <a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/VM_Share/dl_wallpaper.sh"><code>dl_wallpaper.sh</code></a></li>
+<li><a href="https://github.com/jkosber/SVAD-111-Linux-Virtualization/blob/main/Module04/M04P2B%20-%20Linux%20Working%20with%20Files%20-%20Jadon%20Kosberg.docx">M04P2B write-up on links</a></li>
+</ul>
+<p><a href="../">All coursework</a> · <a href="../../technical-labs/aws-linux-infrastructure/">AdventureWorks on AWS</a> · <a href="../../technical-labs/proxmox-virtualization/">Proxmox homelab</a></p>
+          </div>
+        </div>
+        
+      
+      
+    </main>
+    <footer class="site-footer" id="contact">
+      <div class="wrap footer-inner">
+        <div class="footer-contact"><h2>Contact</h2><a class="footer-email" href="mailto:Jadon@jnkos.com">Jadon@jnkos.com</a></div>
+        <div class="footer-links"><a href="https://www.linkedin.com/in/jadon-kosberg">LinkedIn</a><a href="https://github.com/jkosber">GitHub</a></div>
+        <div class="footer-bottom">
+          <a class="footer-name" href="../..">Jadon Kosberg</a>
+          <p class="footer-built">Built with MkDocs and Material for MkDocs. <a href="https://github.com/jkosber/jkosber.github.io">Site source on GitHub</a>.</p>
+          <a class="back-to-top" href="#main" aria-label="Back to top" hidden><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="m5 11 7-7 7 7M12 4v16"/>
+
+</svg><span>Back to top</span></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <dialog class="lightbox" aria-label="Screenshot, full size"><button class="lightbox-close" type="button">Close</button></dialog>
+</body>
+</html>
