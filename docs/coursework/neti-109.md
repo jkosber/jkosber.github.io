@@ -62,7 +62,7 @@ From the lab write-up: "PC-A can only access the local lan and not other network
 
 ### Fixing default gateway faults (10.3.5)
 
-Two LANs sat behind one router with four faults planted in them. After the missing gateways went into the addressing table, what could and couldn't ping located each fault:
+Two LANs sat behind one router with four faults planted in them. After the missing gateways went into the addressing table, ping tests between devices located each fault:
 
 - PC1 couldn't reach PC2 because its address didn't match the network it was wired to. Fix: the right address.
 - Nothing could ping S2 because S2 had no IP address. Fix: an address, set with `ip address`.

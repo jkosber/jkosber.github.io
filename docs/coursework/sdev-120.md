@@ -104,7 +104,7 @@ Still to fix: typing a word for hours crashes it, because `float()` runs before 
 | Module 4 Debugging exercise 1 | Review and debug a pseudocode program | Wrote how the review would go (logic and formatting first, then a peer review) and how flowcharts, indentation and comments prevent errors |
 | Module 4 Number-guess flowchart | Use selection and loop structures | Drew a guess loop with "too high" and "too low" branches back to the input |
 | Module 4 Dictionary-search flowchart | The same structures for a real-world task | Drew a search that flips forward or backward until it finds the word |
-| Module 4 Group project check-in | Report the team's status | Reported the team's meeting schedule and the five roles, and served as team leader |
+| Module 4 Group project check-in | Report the team's status | Reported the team's meeting schedule and the five roles |
 
 ### Python
 

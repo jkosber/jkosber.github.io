@@ -39,4 +39,4 @@ roles:
 
 # Professional experience
 
-Two IT support roles, for dental offices and retail stores, from help desk requests and workstation replacements to printer setup and network troubleshooting.
+Two IT support roles, for dental offices and retail stores: help desk requests, workstation replacements, printer setup and network troubleshooting.

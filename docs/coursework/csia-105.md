@@ -57,7 +57,7 @@ This project needed a real wireless adapter, so it ran in an administrator Power
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.
 - `show wlanreport` built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."
 
-The screenshots show the computer's own networks and nearby ones, so this page leaves them out.
+The screenshots show real network names, including nearby ones, so this page leaves them out.
 
 ### Finding deleted data in slack space (13-3)
 
@@ -108,7 +108,7 @@ Directory Snoop's NTFS module showed the drive's master file table and a documen
 | 15-2 Journaling | Set up sync and real-time backup | Set up sync and real-time protection in iDrive and answered the questions |
 | Additional readings | Summarize ethics principles and change control | Summarized eight ethics principles and six benefits of change control |
 | 15-11 Cybersecurity Insurance for Users | Weigh personal cyber insurance | Listed four pros and four cons and made a recommendation |
-| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, the topics that came as a surprise, and career goals in the field |
+| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what was surprising and career goals in the field |
 
 ## Skills {#skills}
 
