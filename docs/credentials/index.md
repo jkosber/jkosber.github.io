@@ -6,9 +6,9 @@ kind: Background
 
 # About
 
-Jadon Kosberg works in IT support, with an informatics degree and a cybersecurity certificate behind it. He has supported dental offices and retail stores, helping staff and working on the equipment they rely on.
+IT support technician with an informatics degree and a cybersecurity certificate. Supported dental offices and retail stores, helping staff and working on the equipment they rely on.
 
-Outside work he runs a [Proxmox homelab](../technical-labs/proxmox-virtualization.md) for trying configurations, tracking down failures and keeping Linux services up. His [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from his classes.
+Outside work, a [Proxmox homelab](../technical-labs/proxmox-virtualization.md) is used for trying configurations, tracking down failures and keeping Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from six classes taken at Ivy Tech.
 
 ## Certifications
 

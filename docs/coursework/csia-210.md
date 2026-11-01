@@ -22,7 +22,7 @@ Network Protocol Analysis was a term of reading traffic in Wireshark, chapter by
 
 The course provided the textbook's hands-on project steps, the trace files for every chapter after the first and for both capstones, the submission templates, and the capstone network diagrams. The submitted work:
 
-- Installed Wireshark and made the first capture on his own computer
+- Installed Wireshark and made the first capture on a personal computer
 - Ran Windows network commands such as `arp`, `netsh` and `ping` for the early chapters
 - Filtered the course's traces, expanded the packets each question asked about and wrote the answers
 - Wrote a summary for each capstone lab
@@ -73,8 +73,8 @@ In one trace a client tried to renew its lease with a unicast request and got no
 
 | Lab | What it asked | Work done |
 |---|---|---|
-| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured live traffic and picked out his computer's address and the broadcast address |
-| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found his computer's IPv6 link-local address and watched an ARP entry return after a ping |
+| Chapter 1 | Install Wireshark, capture traffic and use filters | Captured live traffic on a personal computer and picked out its address and the broadcast address |
+| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found the same computer's IPv6 link-local address and watched an ARP entry return after a ping |
 | Chapter 3 | Read IPv4, IPv6 and UDP header fields | Read each field, including the IPv6 traffic class split into DSCP and ECN |
 | Chapter 4 | ARP, routes and routing-protocol packets | Captured the ARP cache and route table and expanded RIP, OSPF and EIGRP packets |
 | Chapter 5 | ICMP packets and filters | Expanded ICMP packets and filtered ICMPv4 and ICMPv6 out of a trace |
@@ -85,7 +85,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 | Lab | What it asked | Work done |
 |---|---|---|
 | Chapter 7 | DHCP and DHCPv6 exchanges | Matched a client identifier to its hardware address, listed the request's options and followed a lease renewal that failed (see above) |
-| Chapter 8 | Host DNS settings and DNS queries | Captured his computer's DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
+| Chapter 8 | Host DNS settings and DNS queries | Captured a personal computer's DNS settings, converted an IPv6 address to its literal form and expanded a DNS query |
 | Midterm capstone | Nine labs on DHCP, DHCPv6, OSPF, device identification, IPv6 next headers, Packet Too Big and AAAA queries | Worked all nine (see above); one screenshot answer in Lab 2.2 is missing |
 
 ### Transport and IPv6 transition
@@ -94,7 +94,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 |---|---|---|
 | Chapter 9 | UDP and TCP headers and the three-way handshake | Explained the ports, header lengths, acknowledgment numbers, and the MSS and window options in the handshake |
 | Chapter 10 | ISATAP, 6to4 and Teredo traces | Expanded the transition headers in each trace and identified the ISATAP gateway and client |
-| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on his computer |
+| Chapter 11 | BGP looking glass and Windows transition interfaces | Queried a public BGP route server and listed the IPv6 transition interfaces on a personal computer |
 
 ### Security, troubleshooting and IPv6 in practice
 
@@ -124,7 +124,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 - Chapters 4, 5, 6, 8, 10, 11, 13 and 14 are screenshots of the requested fields without written analysis.
 - The work was reading the capstone networks' traffic, not building or repairing them.
 - A few answers have mistakes: one final-capstone answer says a router advertisement's L flag is 0 while the next answer and the screenshot show it set, and the midterm explanation of the Packet Too Big addresses is muddled.
-- Several chapters used his home network, so this page leaves out their addresses.
+- Several chapters used a home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
 

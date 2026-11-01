@@ -15,7 +15,7 @@ facts:
 IT support technician focused on infrastructure, networking and security.
 { .role-line .enter .enter-2 }
 
-Jadon has supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Outside work, he runs a Proxmox homelab and created SSH Workbench, a terminal app for connecting to and checking his machines. He is pursuing infrastructure, networking and security roles.
+Supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Outside work, built a Proxmox homelab that stays running and created SSH Workbench, a terminal app for connecting to and checking machines. Seeking infrastructure, networking and security roles.
 { .intro .enter .enter-2 }
 
 </div>

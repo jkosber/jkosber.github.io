@@ -25,7 +25,7 @@ The course provided the worksheets and their questions, an AWS Academy lab accou
 - Built Linux Mint and Fedora VMs in VirtualBox and did the Linux labs on them and on the AWS servers
 - Launched the two EC2 servers, ran the database and web installs, imported the data and tested the app
 - Wrote the input-checked scripts and the wallpaper downloader in Bash and ran each one
-- Answered the worksheet questions in his own words and wrote the final project report
+- Wrote the final project report and original answers to the worksheet questions
 
 ## Strongest work {#strongest-work}
 

@@ -148,7 +148,7 @@ Simulation mode showed a PC finding another PC's MAC address with Neighbor Disco
 - The device configurations live in the Packet Tracer files, which this page doesn't reproduce. Several activities are Packet Tracer files only, with no write-up.
 - All the device configuration was done in Packet Tracer, not on real equipment.
 - A few answers have mistakes: the broadcast address above, a mask written as `244` instead of 224 in 11.7.5, and a "first usable" column filled with last usable addresses in 11.9.3.
-- The Wireshark and DNS answers came from his home network, so this page leaves out their addresses.
+- The Wireshark and DNS answers came from a home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
 

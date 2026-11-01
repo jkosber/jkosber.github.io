@@ -67,7 +67,7 @@ Key setup never sees a secret
 
 ## How it was developed {#how-i-worked}
 
-Jadon developed SSH Workbench with AI coding agents in a test-first workflow: he set each task's goal and acceptance criteria, approved every pull request and release, and tested it on his own machines.
+Developed SSH Workbench with AI coding agents in a test-first workflow: set each task's goal and acceptance criteria, approved every pull request and release, and tested it on personal machines.
 
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.

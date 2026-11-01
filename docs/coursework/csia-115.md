@@ -22,7 +22,7 @@ Cyber Ops followed Cisco's CyberOps Associate course: how a security operations 
 
 The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. The submitted work:
 
-- Ran every lab in VirtualBox on his own computer and answered its questions in his own words
+- Ran every lab in VirtualBox on a personal computer and wrote original answers to its questions
 - Worked the Security Onion investigations from alert to host to file with Sguil, Kibana, Wireshark, NetworkMiner and VirusTotal
 - Wrote the after-action report for the final skills assessment
 
@@ -157,7 +157,7 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 - 28.4.13 Incident Handling is in the repository but blank, so it isn't listed.
 - The captures and alert data came from the course and aren't in the repository, so the times and file details can't be rechecked from it alone.
 - The Pushdo report says the downloaded files ran on the host, which the alerts don't show, and it calls the OpenDNS lookup service malicious when it's a legitimate service the malware used. The containment steps are recommendations; they weren't carried out.
-- Some labs captured traffic on his home network, so this page leaves out their addresses.
+- Some labs captured traffic on a home network, so this page leaves out their addresses.
 
 ## Sources {#sources}
 

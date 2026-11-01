@@ -16,14 +16,14 @@ summary:
 
 # CSIA 105 Introduction to Cyber Security
 
-Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. Jadon passed the [Security+ exam](../credentials/index.md#certifications) in May 2026.
+Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: cryptography and certificates, endpoint and mobile security, identity, wireless, vulnerability management, forensics and policy. The [Security+ certification](../credentials/index.md#certifications) was earned in May 2026.
 
 ## What the course provided and what was submitted {#what-the-course-provided}
 
 The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. The submitted work:
 
 - Ran the tools in the VM, or on a physical computer when a project needed real hardware such as a wireless adapter
-- Answered each project's questions in his own words, with screenshots
+- Wrote original answers to each project's questions, with screenshots
 - Wrote the case projects: comparisons of fuzzers and password managers, a presentation on encryption options, and short papers on policy, cyber insurance and the field
 
 ## Strongest work {#strongest-work}
@@ -57,7 +57,7 @@ This project needed a real wireless adapter, so it ran in an administrator Power
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.
 - `show wlanreport` built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."
 
-The screenshots show his own and nearby networks, so this page leaves them out.
+The screenshots show personal and nearby networks, so this page leaves them out.
 
 ### Finding deleted data in slack space (13-3)
 
