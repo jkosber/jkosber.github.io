@@ -414,7 +414,7 @@ async (page) => {
   })));
   result.checks.courseworkIndex = classes.map((row) => row.name);
   if (classes.map((row) => row.name.slice(0, 8)).join('|') !== expectedClasses.join('|')) fail(`courseworkIndex: rows ${classes.map((row) => row.name).join(', ')}`);
-  const expectedDepth = { 'SVAD 111': ['AdventureWorks on AWS'], 'CSIA 115': ['CyberOps & traffic investigation', 'Snort and firewall lab'], 'CSIA 210': ['IPv6 packet investigations'] };
+  const expectedDepth = { 'SVAD 111': ['AdventureWorks on AWS'], 'CSIA 115': ['Pushdo malware investigation in Security Onion', 'Snort, firewall rules & HTTP recovery'], 'CSIA 210': ['IPv6 packet investigations'] };
   for (const row of classes) {
     if (!row.href) { fail(`courseworkIndex: ${row.name} has no link`); continue; }
     const status = (await page.request.get(BASE + row.href)).status();
