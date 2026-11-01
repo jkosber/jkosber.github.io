@@ -67,7 +67,9 @@ Key setup never sees a secret
 
 ## How it was developed {#how-i-worked}
 
-Developed SSH Workbench with AI coding agents in a test-first workflow, setting each task's goal and acceptance criteria, approving every pull request and release, and testing the app on personal machines.
+<!-- voice: personal -->
+I developed SSH Workbench with AI coding agents in a test-first workflow, setting each task's goal and acceptance criteria, approving every pull request and release, and testing the app on my own machines.
+<!-- /voice -->
 
 - One task per pull request, with written acceptance criteria in the roadmap.
 - Tests first: each fix starts as a failing test.
