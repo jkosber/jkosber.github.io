@@ -57,7 +57,7 @@ This project needed a real wireless adapter, so it ran in an administrator Power
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.
 - `show wlanreport` built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."
 
-The screenshots show personal and nearby networks, so this page leaves them out.
+The screenshots show the computer's own networks and nearby ones, so this page leaves them out.
 
 ### Finding deleted data in slack space (13-3)
 

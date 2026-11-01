@@ -20,7 +20,7 @@ screenshot:
 
 # Proxmox homelab
 
-JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from the everyday computer. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
+JHomelab was built on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from the computer in daily use. It's where the Linux, virtualization and networking from coursework turned into something that stays running.
 
 Two service guests run all the time, and the other guests start only while they're being worked on. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
@@ -53,7 +53,7 @@ The guests are assigned about 51.5 GB of memory in total, more than the laptop h
 
 ## Linux guests and container services
 
-The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching the everyday computer, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
+The lab has **ten VMs and two LXC containers**. The experimental VMs are Ubuntu Desktop, Kali, openSUSE, Fedora, Zorin OS, Manjaro, Linux Mint and Pop!_OS, for trying a distribution without touching the computer in daily use, plus an OPNsense gateway still being built. CT 111, added in October, is a Caddy reverse-proxy pilot with internal HTTPS; Homepage was its first backend.
 
 The services run in a full VM and an unprivileged container:
 

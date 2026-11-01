@@ -8,7 +8,7 @@ kind: Background
 
 IT support technician with an informatics degree and a cybersecurity certificate. Supported dental offices and retail stores, helping staff and working on the equipment they rely on.
 
-Outside work, a [Proxmox homelab](../technical-labs/proxmox-virtualization.md) is used for trying configurations, tracking down failures and keeping Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from six classes taken at Ivy Tech.
+Outside work, runs a [Proxmox homelab](../technical-labs/proxmox-virtualization.md) for trying configurations, tracking down failures and keeping Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from completed classes.
 
 ## Certifications
 

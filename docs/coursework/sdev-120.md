@@ -65,7 +65,7 @@ One step didn't make it from the plan into the chart: the plan ends by announcin
 
 ### The team pay calculator {#the-team-pay-calculator}
 
-Led the five-person team that built a payroll script in Python, with responsibility for employee data management and for security and compliance. The file doesn't mark who wrote which section, so this describes the team's code:
+Led the five-person team that built a payroll script in Python. The file doesn't mark who wrote which section, so this describes the team's code:
 
 - **Employee data:** a table of ten employee IDs and hourly rates, and a loop that asks for an ID until it matches one
 - **Time tracking:** a loop that rejects hours outside 0 to 80
@@ -80,7 +80,7 @@ Still to fix: typing a word for hours crashes it, because `float()` runs before 
 
 | Lab | What it asked | Work done |
 |---|---|---|
-| Module 1 Rules of Pseudocode | State five pseudocode conventions | Wrote five rules in original wording: one statement per line, capitalized keywords, indentation, standard keywords and plain English |
+| Module 1 Rules of Pseudocode | State five pseudocode conventions | Paraphrased five rules: one statement per line, capitalized keywords, indentation, standard keywords and plain English |
 | Module 1 Program development workbook | Order the development stages, name flowchart symbols and write pseudocode for weekly and yearly work hours | Put the seven stages in order, named the symbols and wrote the hours pseudocode |
 | Module 1 Pseudocode and flowcharts | Plan three everyday tasks in pseudocode and Lucidchart | Planned miles per gallon, daily rent and making breakfast, each as pseudocode and a flowchart |
 | Module 2 Cleaning-service charge | Hierarchy chart, pseudocode and flowchart for a service-charge program | Split it into housekeeping, detail loop and end-of-job modules with named constants and a `ZZZZ` sentinel (see above) |

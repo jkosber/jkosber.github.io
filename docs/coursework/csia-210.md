@@ -74,7 +74,7 @@ In one trace a client tried to renew its lease with a unicast request and got no
 | Lab | What it asked | Work done |
 |---|---|---|
 | Chapter 1 | Install Wireshark, capture traffic and use filters | Captured live traffic on a personal computer and picked out its address and the broadcast address |
-| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found the same computer's IPv6 link-local address and watched an ARP entry return after a ping |
+| Chapter 2 | Subnetting, IPv6 RFCs and the ARP table | Split a network into four /26 subnets of 62 hosts each, found a personal computer's IPv6 link-local address and watched an ARP entry return after a ping |
 | Chapter 3 | Read IPv4, IPv6 and UDP header fields | Read each field, including the IPv6 traffic class split into DSCP and ECN |
 | Chapter 4 | ARP, routes and routing-protocol packets | Captured the ARP cache and route table and expanded RIP, OSPF and EIGRP packets |
 | Chapter 5 | ICMP packets and filters | Expanded ICMP packets and filtered ICMPv4 and ICMPv6 out of a trace |
