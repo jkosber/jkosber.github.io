@@ -11,7 +11,7 @@ art: {src: assets/thumbnails/network.svg, width: 240, height: 160}
 summary:
   role: "Worked the Packet Tracer activities and labs and wrote up each one: addressing tables, subnet plans, and each device's fault and fix."
   built_with: ["Cisco Packet Tracer", "Cisco IOS", "Wireshark"]
-  result: "Turned in 36 lab write-ups, from fixed-length subnetting to a full VLSM design, and traced client faults in two troubleshooting labs to addresses, gateways, a router interface and DNS. Also completed Cisco's Networking Basics and Introduction to Networks courses."
+  result: "Wrote up 36 labs, from fixed-length subnetting to a full VLSM design, and traced client faults in two troubleshooting labs to addresses, gateways, a router interface and DNS. Also completed Cisco's Networking Basics and Introduction to Networks courses."
 ---
 
 # NETI 109 Networking I
@@ -35,7 +35,7 @@ The device configurations are inside the Packet Tracer files, which GitHub can't
 
 The lab provided two routers, four LANs that needed 32, 21, 19 and 8 host addresses, and a link between the routers. The plan had to be contiguous, largest subnet first, with the smallest possible subnet on the router link.
 
-The plan gave the largest LAN a /26, the next two a /27 each, the smallest a /28 and the router link a /30. A /27 only has 30 usable addresses, so it couldn't fit 32 hosts. The table moves the plan onto the documentation range `192.0.2.0/24`, with the same sizes and order as the submission:
+The plan gave the largest LAN a /26, the next two a /27 each, the smallest a /28 and the router link a /30. A /27 only has 30 usable addresses, so it couldn't fit 32 hosts. The table shows the plan on the documentation range `192.0.2.0/24`, with the same sizes and order as the submission:
 
 | Segment | Hosts needed | Subnet | Usable range | Broadcast |
 |---|---:|---|---|---|

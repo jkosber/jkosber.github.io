@@ -10,7 +10,7 @@ roles:
     image: assets/roles/retail-conversions.svg
     icon: network
     summary: "Supported Verizon store conversions: printer setup, network checks in Cisco Meraki and remote work with field technicians."
-    intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Got every device working for go-live, onsite and remotely with field technicians, then supported the stores after they reopened."
+    intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Prepared store devices for go-live, onsite and remotely with field technicians, then supported the stores after they reopened."
     bullets:
       - Installed and configured printers with static IP addresses and checked that they reached the network
       - Connected devices to the firewall ports, checked their network access and troubleshot connection problems

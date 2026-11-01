@@ -20,7 +20,7 @@ screenshot:
 
 # Proxmox homelab
 
-I built JHomelab on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from my everyday computer. It turned the Linux, virtualization and networking from coursework into services I keep running.
+I built JHomelab on an old Alienware laptop to run a real hypervisor, Linux services and its own networks away from my everyday computer. There the Linux, virtualization and networking from coursework became services I keep running.
 
 Two service guests run all the time, and the other guests start only when I'm working on them. The apps on the service host are existing open-source projects; the work here is the infrastructure under them and keeping it patched and watched.
 
@@ -49,7 +49,7 @@ The host runs **Proxmox VE 9.2.21** on kernel **7.0.14-25-pve**.
 | 1 TB hard drive | `vmdata` storage for guest disks today; it becomes the backup drive once the NVMe is in use |
 | NVMe SSD left over from Windows | Hidden from Proxmox by the BIOS's Intel RST RAID mode. Planned home for the guest disks |
 
-The guests are assigned about 51.5 GB of memory in total, more than the laptop has. The overcommit is deliberate: only VM 109 and CT 110 start with the host.
+I assigned the guests about 51.5 GB of memory in total, more than the laptop has. The overcommit is deliberate: only VM 109 and CT 110 start with the host.
 
 ## Linux guests and container services
 
@@ -156,7 +156,7 @@ The laptop has a GTX 1070 Mobile next to its integrated graphics. I enabled IOMM
 ## Lessons learned {#what-i-have-learned}
 
 - Installed isn't the same as monitored. Uptime Kuma was on VM 109 well before it checked anything.
-- Targeted fixes aren't patching. I had applied only hand-picked fixes to CT 110, and 87 updates waited until Beszel listed them.
+- Targeted fixes aren't patching. I had applied only hand-picked fixes to CT 110, and 87 pending updates had accumulated before Beszel listed them.
 - Tools the lab depends on can quietly stop being maintained. Watchtower had been archived for ten months, and it only kept working because I'd pinned an older Docker API.
 
 ## Limits

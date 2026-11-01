@@ -9,7 +9,7 @@ class_name: CSIA 115 Cyber Ops
 summary:
   role: "Ran the course's Mininet lab, watched Snort on its router, fixed mistyped file requests, applied the lab's firewall rule and wrote up the results. The lab provided the topology, scripts, Snort signature and firewall command."
   built_with: ["Mininet", "Snort 2.9", "iptables", "tcpdump", "Wireshark"]
-  result: "Watched the lab's Snort signature fire on the download, got HTTP 200 with a corrected file name, and noted a failed download after the DROP rule (written answer only, no screenshot). Exported a 345,088-byte file from a capture in a second exercise."
+  result: "Triggered the lab's Snort signature with the download, got HTTP 200 with a corrected file name and, after the DROP rule, wrote in the retest that the download failed. Exported a 345,088-byte file from a capture in a second exercise."
   source: {label: "CSIA 115 repository", url: "https://github.com/jkosber/CyberOps-115"}
 ---
 

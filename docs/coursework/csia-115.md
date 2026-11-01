@@ -32,7 +32,7 @@ The Snort lab's detection rule and firewall command came with the lab; I ran the
 
 ### A Pushdo infection and its after-action report {#pushdo-after-action-report}
 
-The final assessment provided Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. The after-action report that followed recommended that the host be isolated, the three domains blocked, the network segmented and users trained. The assessment answer reads: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
+The final assessment provided Security Onion alerts from a 2017 Pushdo infection. I narrowed them in Sguil to a six-minute window, identified the infected Windows host and its network card's vendor in NetworkMiner, found the three files it downloaded in NetworkMiner's reconstructed objects and looked up their hashes on VirusTotal. My after-action report recommended isolating the host, blocking the three domains, segmenting the network and training users. The assessment answer reads: "Pushdo is a downloader trojan so its true purpose is to download and install additional malicious contents."
 
 The full write-up is on [Pushdo malware investigation in Security Onion](../technical-labs/soc-threat-detection.md).
 

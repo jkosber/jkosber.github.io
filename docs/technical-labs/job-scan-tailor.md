@@ -7,14 +7,14 @@ tools: [Python, python-docx, LibreOffice, Playwright]
 summary:
   role: "Specified the workflow for a personal job search; an AI agent compares postings with the source resume, and Python scripts build and check the documents."
   built_with: ["Python", "python-docx", "headless LibreOffice for PDF conversion", "pypdf", "an AI agent", "browser automation"]
-  result: "Produced a ranked report of every posting, tailored one-page resumes for the strongest matches and a local review page; a build fails on missing required details, listed banned terms or a second page."
+  result: "Produced a ranked report of every posting, tailored one-page resumes for the strongest matches and a local review page, with builds that fail on missing required details, listed banned terms or a second page."
 updated: "September 24, 2026"
 art: {src: assets/project-resume.svg, width: 600, height: 340}
 ---
 
 # Job scan and resume tailor
 
-Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything goes to a local review page, and nothing is sent until I've read it.
+Built for a personal job search, the tool reads job postings, compares each one with a source resume, ranks them, and builds a tailored one-page resume for the best matches. Everything appears on a local review page, and nothing goes out until I've read it.
 
 An AI agent does the reading and comparing. Python scripts do the repeatable part: building the Word and PDF files and checking them against rules that can fail the build. My resume is the only source for what the documents say about me.
 

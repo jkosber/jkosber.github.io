@@ -32,7 +32,7 @@ The traces came from a network with Windows hosts, DHCPv6 and a layer 3 device s
 
 ## Finding the DHCPv6 address assignment
 
-The first trace asked which reply gave the Windows 10 host its address. Filtering for DHCPv6 replies and checking their IA Address options answered it. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
+In the first trace, the question was which reply gave the Windows 10 host its address. I filtered for DHCPv6 replies and checked their IA Address options. Frame 9306 was the first reply carrying the host's address, ending in `::108`. Earlier replies carried `::109`, so the message type alone wasn't enough; the IA Address field is what tied the reply to the host.
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
@@ -53,7 +53,7 @@ The first trace asked which reply gave the Windows 10 host its address. Filterin
 
 In the second trace a Windows 7 host had been set by hand to `::117`, the address the Windows 10 host already held. I compared their source MAC addresses in the neighbor discovery traffic with the Windows 7 host's `ipconfig` output, which marked the address as a duplicate.
 
-A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. The summary put it this way: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
+A normal ping still worked, over IPv4, with two replies. Forcing IPv6 failed. That forced attempt also showed a name-resolution error, so the duplicate flag and the neighbor discovery comparison are what point to the conflict, not the failed ping alone. My summary put it this way: "With dual stack setup it fell back to IPv4 which worked but when you tried to force IPv6 pings it failed outright."
 
 ## Tracking source-address changes
 
@@ -70,7 +70,7 @@ My submission said the autonomous flag turning off deprecated the SLAAC addresse
 
 ## Losing the gateway while retaining the address
 
-Near the end of that trace the Windows 10 host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. Filtering router advertisements and lining up their router lifetimes with what the host did gave this sequence:
+Later in that trace the Windows 10 host kept a preferred IPv6 address but lost its IPv6 gateway, and traffic to an off-link destination failed. I filtered the router advertisements and lined up their router lifetimes with what the host did:
 
 | Point in the trace | What happened |
 |---|---|
@@ -81,7 +81,7 @@ Near the end of that trace the Windows 10 host kept a preferred IPv6 address but
 | Frame 9887 | A new advertisement brought the 270-second lifetime back |
 | Frame 9991 | The first ping of the later group, with connectivity restored |
 
-A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back ([RFC 4861, section 6.3.4](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4)). The DHCPv6 lease never supplied the gateway, which is why the address survived. The capstone's conclusion: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
+A router lifetime of 0 removes that router as a default gateway, and a later advertisement with a nonzero lifetime adds it back ([RFC 4861, section 6.3.4](https://www.rfc-editor.org/rfc/rfc4861.html#section-6.3.4)). The DHCPv6 lease never supplied the gateway, which is why the address survived. My conclusion in the capstone: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
 
 ## What remained visible in encrypted traffic
 

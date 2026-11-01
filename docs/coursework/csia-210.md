@@ -31,7 +31,7 @@ The course provided the textbook's hands-on project steps, the trace files for e
 
 ### Final capstone: a lost IPv6 gateway {#final-capstone}
 
-The final provided two traces from a network with Windows hosts, DHCPv6 and a router sending router advertisements. I matched a host's DHCPv6 address to the reply that assigned it, read the advertisement flags against the switch configuration, checked what stays readable in SSH and HTTPS (only banners and algorithm names), and in the second trace followed the Windows 10 host through an address it shared with a Windows 7 host and a router lifetime that dropped from 270 seconds to 0 and back. My summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
+The final provided two traces from a network with Windows hosts, DHCPv6 and a router sending router advertisements. I matched a host's DHCPv6 address to the reply that assigned it, read the advertisement flags against the switch configuration, checked what stays readable in SSH and HTTPS (only banners and algorithm names), and in the second trace followed the Windows 10 host through two problems: a Windows 7 host set by hand to its address, and a router lifetime that dropped from 270 seconds to 0 and back. My summary: "This lab showed that IPv6 address state and IPv6 default gateway state are independent and a single RA can break IPv6 connectivity."
 
 The full write-up is on [IPv6 packet investigations](../technical-labs/ipv6-packet-investigations.md).
 
