@@ -2,14 +2,14 @@
 title: SSH Workbench
 description: A keyboard-driven terminal app for machines reached over SSH. Pick a machine, connect through OpenSSH, see whether it is reachable and set up key login.
 kind: Personal software project
-status: Version 0.3.3
+status: Version 0.3.4
 tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "Defined what Workbench does, planned each release as small tested tasks and tested it on personal machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
-  result: "Eight tagged releases from October 20 to 24, 2026, after work began October 9. Version 0.3.3 passes 1,122 automated tests on Windows and Ubuntu."
+  result: "Nine tagged releases from October 20 to 31, 2026, after work began October 9. Version 0.3.4 passes 1,141 automated tests on Windows and Ubuntu."
   source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
-updated: "October 30, 2026"
+updated: "October 31, 2026"
 screenshot:
   src: assets/evidence/ssh-workbench/workbench-main-2026-10-22.webp
   width: 900
@@ -108,20 +108,24 @@ For 0.3.2, a new script ran the POSIX key install command in bash, dash, zsh, fi
 
 On October 30 the terminal checks ran on a Linux desktop for the first time: Ghostty 1.4.0 on Arch Linux under Wayland, with the repository's fixture scripts in place of real SSH and key commands. They covered the layout at 56, 59 and 111 columns and at 19 rows, the terminal handoff, key setup and quitting to a working shell. A machine's link opened example.com in the default browser. The run also caught a bug in the terminal fixture: on Linux it started its stand-in SSH under the system Python instead of the project's environment, so every connection failed until the fixture was fixed. The full suite, 1,124 tests by then, passed there with PowerShell 7 available for the Windows-script tests.
 
+Version 0.3.4, released October 31, fixed two problems. Letter keys now work with Caps Lock on or typed as capitals, each doing what its lowercase key does, and a newly selected machine shows its details from the top in its first frame, where before they could appear scrolled down as the previous machine's were. The release build passed the four-size check in Ghostty on Arch Linux, and in Windows Terminal, with Caps Lock on, C handed the terminal to the fixture's stand-in SSH and Q quit. Since this release the manual terminal checks cover Ghostty on Linux as well as Windows Terminal, and the terminal check script runs on Linux.
+
 ## Limits
 
 - macOS is untested.
 - On a Linux desktop, Workbench has been checked in one terminal, Ghostty on Arch Linux, with fixture scripts and no real SSH connection.
 - Saving rewrites the machine file in Workbench's own format, so comments and hand formatting are dropped. It asks before the first such save.
+- The Caps Lock fix was checked with simulated key presses, not a physical Caps Lock key.
 
 ## Sources
 
-The repository has been public under the MIT license since October 24, 2026. This page draws on these files on `main` as of October 30, 2026, and on my project notes:
+The repository has been public under the MIT license since October 24, 2026. This page draws on these files on `main` as of October 31, 2026, and on my project notes:
 
 - [README](https://github.com/jkosber/ssh-workbench/blob/main/README.md): features, platform support and install
 - [User guide](https://github.com/jkosber/ssh-workbench/blob/main/docs/guide.md): the machine file, every feature and troubleshooting
 - [Architecture notes](https://github.com/jkosber/ssh-workbench/blob/main/docs/architecture.md): how the code is organized and why
 - [Changelog](https://github.com/jkosber/ssh-workbench/blob/main/CHANGELOG.md): what changed in each release
+- [Release 0.3.4](https://github.com/jkosber/ssh-workbench/releases/tag/v0.3.4): the release notes and install command
 - [Validation log](https://github.com/jkosber/ssh-workbench/blob/main/docs/validation.md): checks in real terminals and on real machines, including the Linux desktop checks
 - [Testing guide](https://github.com/jkosber/ssh-workbench/blob/main/docs/testing.md): the automated checks and the manual terminal checks
 - [CI runs](https://github.com/jkosber/ssh-workbench/actions): Ruff, tests, package build and installed-package check on Windows and Ubuntu
