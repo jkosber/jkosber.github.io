@@ -9,7 +9,7 @@ items: 25 assignments
 repo: https://github.com/jkosber/IntroToCybersecurity-105
 art: {src: assets/project-terminal.svg, width: 600, height: 340}
 summary:
-  role: "I ran the textbook's hands-on projects in a Windows VM and on my own computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
+  role: "Ran the textbook's hands-on projects in a Windows VM and on a physical computer, wrote the answers and wrote the case projects. The textbook provided the steps and questions."
   built_with: ["Windows 10 in VirtualBox", "Qualys SSL Labs", "OpenPuff", "netsh", "NVD and CVE", "Directory Snoop"]
   result: "25 assignments across cryptography, endpoint security, wireless, vulnerability research and forensics, including TLS grades for three sites and a hide-and-recover steganography round trip."
 ---
@@ -22,8 +22,8 @@ Introduction to Cyber Security followed the CompTIA Security+ SY0-701 textbook: 
 
 The textbook provided each hands-on and case project: the numbered steps, the questions and the download links. The class provided a Windows 10 virtual machine. My part:
 
-- Ran the tools in the VM, or on my own computer when a project needed real hardware such as a wireless adapter
-- Answered each project's questions in my own words, with screenshots
+- Ran the tools in the VM, or on a physical computer when a project needed real hardware such as a wireless adapter
+- Wrote original answers to each project's questions, with screenshots
 - Wrote the case projects: comparisons of fuzzers and password managers, a presentation on encryption options, and short papers on policy, cyber insurance and the field
 
 ## Strongest work {#strongest-work}
@@ -34,9 +34,9 @@ I ran Qualys SSL Labs against three sites and explained each grade:
 
 - **Dropbox's API server:** A+, with TLS 1.3 and 1.2, a trusted 2048-bit RSA certificate and scores of 100, 100, 90 and 90 for certificate, protocol, key exchange and cipher strength. The only marks against it were a few weak TLS 1.2 cipher suites. "It received an A+ because it supports TLS 1.3, It has a secure and trusted certificate."
 - **A site from SSL Labs' list of recent worst grades:** F, for insecure protocols, weak cipher suites and the POODLE vulnerability.
-- **My college's website:** A+, with TLS 1.3, HSTS and secure cipher suites.
+- **The college's website:** A+, with TLS 1.3, HSTS and secure cipher suites.
 
-For Dropbox I suggested dropping TLS 1.2 and putting `TLS_AES_256_GCM_SHA384` first in the suite order. In the browser test, Edge and Brave scored the same. My screenshots of Edge show TLS 1.2 and 1.3 only, no CurveBall, Logjam, FREAK or POODLE vulnerability, and a few weak cipher suites still offered.
+For Dropbox the write-up suggested dropping TLS 1.2 and putting `TLS_AES_256_GCM_SHA384` first in the suite order. In the browser test, Edge and Brave scored the same. The screenshots of Edge show TLS 1.2 and 1.3 only, no CurveBall, Logjam, FREAK or POODLE vulnerability, and a few weak cipher suites still offered.
 
 ### Hiding a file in an image (3-1) {#hiding-a-file-in-an-image}
 
@@ -46,28 +46,28 @@ In OpenPuff I hid a small zip file inside a JPEG, protected by three passwords, 
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="OpenPuff unhide result; scroll horizontally if needed">
     <img src="../../assets/evidence/csia-105/openpuff-unhide-2026-01-25.webp" width="880" height="415" alt="OpenPuff 4.01 Data Unhiding window with three masked passwords, a passing passwords check and one carrier, OpenPuff_Screenshot.jpg, with 304 bytes of hiding capacity. A Task Report window on top lists the hidden file: name Message.zip, size 144 bytes, and its CRC32." loading="lazy">
   </div>
-  <figcaption>From my 3-1 submission, January 25, 2026, cropped to the OpenPuff windows. The Bytes column is the carrier's hiding capacity, not its file size. <a href="../../assets/evidence/csia-105/openpuff-unhide-2026-01-25.webp">Open full size</a>.</figcaption>
+  <figcaption>From the 3-1 submission, January 25, 2026, cropped to the OpenPuff windows. The Bytes column is the carrier's hiding capacity, not its file size. <a href="../../assets/evidence/csia-105/openpuff-unhide-2026-01-25.webp">Open full size</a>.</figcaption>
 </figure>
 
 ### Controlling Wi-Fi from the command line (10-4)
 
-This project needed a real wireless adapter, so I ran it in an administrator PowerShell window on my own computer. The textbook gave the `netsh wlan` commands; I ran them and answered what each showed:
+This project needed a real wireless adapter, so I ran it in an administrator PowerShell window on my own computer. The textbook gave the `netsh wlan` commands, and the answers cover what each showed:
 
 - `show drivers` reported an 802.11ax adapter that supports both WPA2-Personal and WPA3-Personal.
 - After `add filter permission=block` for a nearby network, it disappeared from `show networks`. With `set blockednetworks display=show` it came back in the list with an X in the system tray, and `delete filter` removed the block.
 - `show wlanreport` built an HTML report of connection sessions. "This information can be helpful by giving you connection events and how long a client stayed connected to a specific network."
 
-The screenshots show my own and nearby networks, so I haven't reproduced them here.
+The screenshots show real network names, including nearby ones, so this page leaves them out.
 
 ### Finding deleted data in slack space (13-3)
 
-With Directory Snoop's NTFS module I browsed the drive's master file table and read a document's raw text, then searched slack space for the word "country" and got three hits in deleted entries. I explained that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.
+Directory Snoop's NTFS module showed the drive's master file table and a document's raw text; a slack-space search for the word "country" then found three hits in deleted entries. The write-up explains that the tool can find the data because the deleted entries are still referenced on disk, which is what makes recovery useful in forensics.
 
 ## Labs {#labs}
 
 ### Cryptography and certificates
 
-| Lab | What it asked | What I did |
+| Lab | What it asked | Work done |
 |---|---|---|
 | 3-1 Using OpenPuff Steganography | Hide a file inside an image and recover it | Hid a zip file in a JPEG behind three passwords, recovered it and compared the file sizes (see above) |
 | 3-8 Software Data Encryption | Present encryption options to a fictional firm | Built a 10-slide deck on encryption software, full-disk encryption, self-encrypting drives, HSMs and TPMs |
@@ -77,29 +77,29 @@ With Directory Snoop's NTFS module I browsed the drive's master file table and r
 
 ### Endpoints and mobile
 
-| Lab | What it asked | What I did |
+| Lab | What it asked | Work done |
 |---|---|---|
 | 5-1 Microsoft Safety Scanner | Run a quick malware scan | Ran the scan, which found no threats |
 | 5-3 Configuring Microsoft Windows Security | Compare Defender protection presets | Compared what the Default, High and Max presets change |
-| 5-7 Using a Software Keylogger | See what a keylogger captures | Ran a keylogger trial offline in the VM and explained how an attacker would use its log of my typing and browsing |
+| 5-7 Using a Software Keylogger | See what a keylogger captures | Ran a keylogger trial offline in the VM and explained how an attacker would use its log of the session's typing and browsing |
 | 6-1 Creating and Using QR Codes | Show how QR codes can be abused | Made and decoded QR codes and described Wi-Fi, payment and file-download abuse |
 | 6-3 Installing NoxPlayer Android Emulator | Run an Android emulator | Installed the emulator and changed its resolution |
 | 6-4 Fuzzers | Compare three fuzzers | Compared Burp Suite, OWASP ZAP and Wfuzz in a table and recommended ZAP |
 
 ### Identity and wireless
 
-| Lab | What it asked | What I did |
+| Lab | What it asked | Work done |
 |---|---|---|
 | Virtual machine setup | Set up the class's Windows VM | Set up the Windows 10 VM in VirtualBox |
 | 7-1 Trending Cyber | Take a position on digital-legacy contacts | Wrote a policy position covering identity checks and how the feature could be abused |
 | 7-9 Password Managers | Compare four password managers | Compared Google Password Manager, LastPass, KeePass and Bitwarden on nine points and ranked them |
 | 8-3 MAC Spoofing | Change a network adapter's MAC address | Opened a MAC address changer on the VM's adapter and explained the OUI and how attackers use spoofing |
 | 10-1 Using a Wireless Monitor Tool | Inspect nearby Wi-Fi networks | Answered questions on hidden SSIDs, channel overlap, WPS and security settings |
-| 10-4 Using Microsoft Windows Netsh Commands | Query and control Wi-Fi from the command line | Read my adapter's capabilities, blocked and unblocked a network and generated a wireless report (see above) |
+| 10-4 Using Microsoft Windows Netsh Commands | Query and control Wi-Fi from the command line | Read the adapter's capabilities, blocked and unblocked a network and generated a wireless report (see above) |
 
 ### Vulnerabilities, forensics and policy
 
-| Lab | What it asked | What I did |
+| Lab | What it asked | Work done |
 |---|---|---|
 | 12-1 Exploring CVE | Search the CVE list | Searched cve.org for "passwords" (2,847 results) and answered the questions |
 | 12-2 Exploring the NVD | Compare CVE with NVD and explore NVD's data | Explained how CVE and NVD differ, read the score distribution and searched by keyword |
@@ -108,7 +108,7 @@ With Directory Snoop's NTFS module I browsed the drive's master file table and r
 | 15-2 Journaling | Set up sync and real-time backup | Set up sync and real-time protection in iDrive and answered the questions |
 | Additional readings | Summarize ethics principles and change control | Summarized eight ethics principles and six benefits of change control |
 | 15-11 Cybersecurity Insurance for Users | Weigh personal cyber insurance | Listed four pros and four cons and made a recommendation |
-| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what surprised me and where I want to go in the field |
+| 15-13 Overview of Information Security | Reflect on the field | Wrote about the CIA triad and AAA, what was surprising and career goals in the field |
 
 ## Skills {#skills}
 
@@ -126,7 +126,7 @@ With Directory Snoop's NTFS module I browsed the drive's master file table and r
 - 14-12, a presentation on AI in a security operations center, is a title slide only, so it isn't listed.
 - The 15-1 backup ran with no files selected, and 8-3 shows the MAC changer open on the adapter rather than a changed address.
 - The 3-1 and 13-3 files keep only some of the steps.
-- The SSL Labs server grades are in my written answers; my screenshots cover only the browser test.
+- The SSL Labs server grades are in the written answers; the screenshots cover only the browser test.
 
 ## Sources {#sources}
 

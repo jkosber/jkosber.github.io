@@ -515,7 +515,7 @@ async (page) => {
   }
 
   // Case studies and class pages: a header band with the title, description and a strip of facts.
-  // Case studies show the Result beside the title and My role at the top of the body; class pages
+  // Case studies show the Result beside the title and the Role panel at the top of the body; class pages
   // put the role and result pair under the band. The contents sit sticky beside the body on wide
   // screens; on phones the header, the summary and the closed contents come before the body.
   const headPages = {
@@ -550,7 +550,7 @@ async (page) => {
           shotTop: shot ? Math.round(shot.getBoundingClientRect().top) : null,
           leadShot: Boolean(find('.lead-shot')),
           shotHead: Boolean(find('.page-head--shot')),
-          role: role ? { title: role.textContent.includes('My role'), tools: role.querySelectorAll('ul.tools li').length } : null,
+          role: role ? { title: (role.querySelector('.panel-title') || { textContent: '' }).textContent.trim(), tools: role.querySelectorAll('ul.tools li').length } : null,
           pairResult: Boolean(find('.summary-pair .panel--result')),
           art: art ? { alt: art.getAttribute('alt'), loaded: art.naturalWidth > 0 } : null,
           contents: contents && body ? { open: contents.open, beside: contents.getBoundingClientRect().left >= body.getBoundingClientRect().right, position: getComputedStyle(contents).position } : null,
@@ -570,7 +570,7 @@ async (page) => {
           else if (wide.resultBottom > 900) fail(`${where}: .head-result ends at ${wide.resultBottom}px, expected 900 or less`);
           if (!wide.role) fail(`${where}: no .body .role-panel`);
           else {
-            if (!wide.role.title) fail(`${where}: the role panel does not say "My role"`);
+            if (wide.role.title !== 'Role') fail(`${where}: the role panel title is "${wide.role.title}", expected "Role"`);
             if (!wide.role.tools) fail(`${where}: the role panel has no ul.tools items`);
           }
         }
@@ -635,10 +635,10 @@ async (page) => {
   // with its one-line summary.
   const LADD_BULLETS = [
     'Handled 20+ tickets a week: workstations, printers, peripherals, network problems and the clinical software, through Level RMM or onsite',
-    'Wrote up each ticket in ClickUp: symptoms, what I tried, the fix and any follow-up',
+    'Wrote up each ticket in ClickUp: symptoms, steps tried, the fix and any follow-up',
     'Set up 30+ new workstations, from hardware setup, software installs and network configuration to domain join',
     "Retired 50+ workstations that couldn't run Windows 11, so every office stayed on a supported OS: wiped, degaussed or crushed the drives under HIPAA-aligned procedures and kept a chain-of-custody record",
-    'Ran HDMI to 7 operatory rooms to replace VGA, building the keystone outlets myself',
+    'Ran HDMI to 7 operatory rooms to replace VGA and built the keystone outlets',
     'Pulled, terminated and tested an Ethernet run between switches in two offices, extending an existing fiber uplink',
     'Fixed a dead wall jack by toning it back to the patch panel and repunching the keystone',
     'Set up accounts and roles in the clinical software and installed it on workstations',
@@ -883,7 +883,7 @@ async (page) => {
   };
 
   // Enlarged text: 200% at 390 px never widens the page, and words never break mid-word in the
-  // header strip, the My role panel, Result panels, the coursework table or stacked tables (code excepted).
+  // header strip, the Role panel, Result panels, the coursework table or stacked tables (code excepted).
   await page.setViewportSize({ width: 390, height: 844 });
   result.checks.text200 = 0;
   for (const route of routes) {
@@ -1135,7 +1135,7 @@ async (page) => {
   }
   await noJs.close();
 
-  // Print: every Result and My role panel switches to white with dark text.
+  // Print: every Result and Role panel switches to white with dark text.
   await page.emulateMedia({ media: 'print' });
   result.print = { checked: 0 };
   for (const route of routes.filter((r) => r.startsWith('/technical-labs/') && r !== '/technical-labs/')) {

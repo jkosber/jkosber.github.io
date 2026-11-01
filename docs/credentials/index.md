@@ -6,9 +6,13 @@ kind: Background
 
 # About
 
-I work in IT support, with an informatics degree and a cybersecurity certificate behind it. I've supported dental offices and retail stores, helping staff and working on the equipment they rely on.
+<!-- voice: personal -->
 
-Outside work I run a [Proxmox homelab](../technical-labs/proxmox-virtualization.md) where I try configurations, track down failures and keep Linux services running. My [projects](../technical-labs/index.md) are things I've built on my own, and my [coursework](../coursework/index.md) covers the labs from my classes.
+I'm an IT support technician with an informatics degree and a cybersecurity certificate. I've supported dental offices and retail stores, helping staff and working on the equipment they rely on.
+
+Outside work I run a [Proxmox homelab](../technical-labs/proxmox-virtualization.md): a place to try configurations, track down failures and keep Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from completed classes.
+
+<!-- /voice -->
 
 ## Certifications
 
@@ -42,13 +46,13 @@ B.S., Indiana University. 2022.
 
 ## Cisco Networking Academy
 
-I completed the **Introduction to Networks** and **Networking Basics** courses ([Networking Basics on Credly](https://www.credly.com/badges/7ebfed9b-9618-47c9-b220-be2c9bc54856/public_url)). These are course-completion credentials, separate from the CCNA certification.
+Completed the **Introduction to Networks** and **Networking Basics** courses ([Networking Basics on Credly](https://www.credly.com/badges/7ebfed9b-9618-47c9-b220-be2c9bc54856/public_url)). These are course-completion credentials, separate from the CCNA certification.
 
 The [NETI 109 class page](../coursework/neti-109.md) covers the related Packet Tracer labs.
 
 ## Skills
 
-| Area | Tools and skills | Where I used them |
+| Area | Tools and skills | Where they were used |
 |---|---|---|
 | IT support | Help desk tickets, Level RMM, ClickUp, workstation deployment and domain join, clinical software accounts, cable toner and punchdown tool | [Ladd Dental Group](../experience/index.md) |
 | Networking | Cisco Meraki Dashboard, static-IP printer setup, Ethernet cabling, subnetting and VLSM, Cisco Packet Tracer, Wireshark | [Vaco by Highspring, at Verizon](../experience/index.md), [NETI 109](../coursework/neti-109.md), [CSIA 210](../coursework/csia-210.md) |
