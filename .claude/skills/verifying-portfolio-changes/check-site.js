@@ -943,6 +943,89 @@ async (page) => {
     if (titles.split.length) fail(`titleWrapDefaultText ${route} @320: title words broken mid-word at default text: ${[...new Set(titles.split)].join(', ')}`);
   }
 
+  // Section headings, buttons and the homepage panels keep every word whole at 200% text at 390 and 320 px,
+  // and at 1440 px the contents rail never grows wider than the body beside it. Like splitWords, but a line
+  // break may follow a hyphen: a typed one, a soft hyphen, or one hyphens: auto draws. A drawn hyphen is a box
+  // of its own that the letters on both sides of the break report, so the last letter before the break spans
+  // more of its line than the letter alone measures. A break with no hyphen is the defect; each one is
+  // reported with a slash where the line breaks, after the hyphen when there is one.
+  const unhyphenatedSplits = (selector) => page.evaluate((blockSelector) => {
+    const blocks = document.querySelectorAll(blockSelector);
+    const seen = new Set();
+    const split = [];
+    const pen = document.createElement('canvas').getContext('2d');
+    const rectsOf = (node, start, end) => {
+      const range = document.createRange();
+      range.setStart(node, start);
+      range.setEnd(node, end);
+      return [...range.getClientRects()].filter((rect) => rect.width > 0);
+    };
+    for (const block of blocks) {
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (seen.has(node) || node.parentElement.closest('code')) continue;
+        seen.add(node);
+        const style = getComputedStyle(node.parentElement);
+        pen.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        pen.letterSpacing = style.letterSpacing;
+        for (const match of node.data.matchAll(/[^\s-]+/g)) {
+          const end = match.index + match[0].length;
+          if (new Set(rectsOf(node, match.index, end).map((rect) => Math.round(rect.top))).size < 2) continue;
+          let rendered = '';
+          let last = null;
+          let broken = false;
+          for (let offset = match.index; offset < end; offset += 1) {
+            const rects = rectsOf(node, offset, offset + 1);
+            if (rects.length) {
+              // The letter's own box comes last; a drawn hyphen's box can come before it.
+              const line = Math.round(rects[rects.length - 1].top);
+              if (last && line !== last.line) {
+                const before = [...last.rects, ...rects].filter((rect) => Math.round(rect.top) === last.line);
+                const span = Math.max(...before.map((rect) => rect.right)) - Math.min(...before.map((rect) => rect.left));
+                const hyphen = /[­‐–—]/.test(last.char) || span - pen.measureText(last.char).width > parseFloat(style.fontSize) * 0.15;
+                if (!hyphen) broken = true;
+                rendered += hyphen ? '-/' : '/';
+              }
+              last = { char: node.data[offset], rects, line };
+            }
+            rendered += node.data[offset];
+          }
+          if (broken) split.push(rendered);
+        }
+      }
+    }
+    return { blocks: blocks.length, split };
+  }, selector);
+  result.checks.headingWrap200 = { 390: 0, 320: 0 };
+  for (const [width, height] of [[390, 844], [320, 700]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      await page.evaluate(async () => {
+        document.documentElement.style.fontSize = '200%';
+        await document.fonts.ready;
+        await new Promise((done) => setTimeout(done, 150));
+      });
+      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card');
+      result.checks.headingWrap200[width] += words.blocks;
+      if (words.split.length) fail(`headingWrap200 ${route} @${width}: words broken mid-word with no hyphen at 200% text: ${[...new Set(words.split)].join(', ')}`);
+    }
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  result.checks.railAt200 = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    const columns = await page.evaluate(async () => {
+      document.documentElement.style.fontSize = '200%';
+      await new Promise((done) => setTimeout(done, 150));
+      const article = document.querySelector('.article:has(> .contents)');
+      return article ? getComputedStyle(article).gridTemplateColumns.split(' ').map(parseFloat) : null;
+    });
+    if (!columns) continue;
+    result.checks.railAt200 += 1;
+    if (columns.length !== 2 || columns[1] > columns[0]) fail(`railAt200 ${route} @1440: the article grid is ${columns.map((size) => `${size}px`).join(' ')} at 200% text; the contents rail must sit beside the body and be no wider`);
+  }
+
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/');
