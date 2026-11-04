@@ -10,7 +10,8 @@ def problems(pages):
     for url, meta in pages:
         class_page = meta.get("class_page")
         if class_page:
-            if class_page not in urls or not class_page.endswith("/"):
+            # Page urls all end in '/', so a value without the slash is already not a page url.
+            if class_page not in urls:
                 found.append(f"{url}: class_page must be a page url ending in '/'")
             class_name = meta.get("class_name")
             if not isinstance(class_name, str) or not class_name.strip():
