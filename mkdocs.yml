@@ -11,6 +11,7 @@ theme:
 # Small custom layout with ordinary links; no search bundle is needed.
 plugins: []
 hooks:
+  - hooks/frontmatter_checks.py
   - hooks/asset_versions.py
   - hooks/tool_icons.py
   - hooks/reading_accessibility.py
