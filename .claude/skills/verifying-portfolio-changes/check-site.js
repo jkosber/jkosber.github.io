@@ -227,6 +227,52 @@ async (page) => {
     for (const problem of regionProblems(regions)) fail(`scrollRegions /coursework/neti-109/ @320 at 200% text with every module open: ${problem}`);
   }
 
+  // Scroll cues follow the layout like the regions do: with JavaScript on, a table's hint below it
+  // (650 px and narrower) and its right-edge shade (760 px and narrower) show only while the table
+  // scrolls sideways, and a table that fits shows neither. A region with no hint after it (the lab
+  // tables, whose hint the class page hook removes) is checked for its shade alone. A region inside
+  // a closed module is left out. The no-JS block covers the build-time cues.
+  result.checks.scrollCues = {};
+  for (const width of [600, 640, 700, 760]) {
+    await page.setViewportSize({ width, height: 900 });
+    const counts = { scrolling: 0, fitting: 0, wideFitting: 0, closed: 0, hints: 0, shades: 0 };
+    for (const route of ['/technical-labs/proxmox-virtualization/', '/technical-labs/soc-threat-detection/', '/credentials/', '/coursework/neti-109/']) {
+      await page.goto(BASE + route);
+      await page.waitForSelector('#site-menu[data-ready]', { state: 'attached' });
+      const regions = await page.evaluate(async () => {
+        await document.fonts.ready;
+        await new Promise((done) => { requestAnimationFrame(() => requestAnimationFrame(done)); setTimeout(done, 250); });
+        return [...document.querySelectorAll('.table-scroll')].map((region, index) => {
+          const next = region.nextElementSibling;
+          const hint = next && next.matches('.table-hint') ? next : null;
+          return {
+            name: `table-scroll ${index + 1}`,
+            closed: Boolean(region.closest('details:not([open])')),
+            wide: Boolean(region.querySelector('tr > :nth-child(3)')),
+            scrolls: region.scrollWidth > region.clientWidth,
+            hint: hint ? getComputedStyle(hint).display !== 'none' : null,
+            shade: getComputedStyle(region).backgroundImage !== 'none',
+          };
+        });
+      });
+      for (const region of regions) {
+        if (region.closed) { counts.closed += 1; continue; }
+        counts[region.scrolls ? 'scrolling' : 'fitting'] += 1;
+        if (region.wide && !region.scrolls) counts.wideFitting += 1;
+        if (region.hint) counts.hints += 1;
+        if (region.shade) counts.shades += 1;
+        const where = `scrollCues ${route} @${width}: ${region.name}`;
+        if (!region.scrolls && region.hint) fail(`${where} fits but shows the scroll hint`);
+        if (!region.scrolls && region.shade) fail(`${where} fits but paints the edge shade`);
+        if (region.scrolls && width <= 650 && region.hint === false) fail(`${where} scrolls sideways but its scroll hint is hidden`);
+        if (region.scrolls && width <= 760 && !region.shade) fail(`${where} scrolls sideways but paints no edge shade`);
+      }
+    }
+    result.checks.scrollCues[width] = counts;
+  }
+  if (!result.checks.scrollCues[600].scrolling) fail('scrollCues: no table scrolls at 600, so the scrolling cues go unchecked');
+  if (!result.checks.scrollCues[640].wideFitting) fail('scrollCues: no table of three or more columns fits at 640, so the fitting cues go unchecked');
+
   // Mobile menu: opens, then Escape closes it.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(BASE + '/');
