@@ -32,3 +32,11 @@ def on_env(env, *, config, files):
     if found:
         raise PluginError("\n".join(found))
     return env
+
+
+# The template renders the role ids, so MkDocs's anchor check (Markdown only) can't see them.
+def on_page_context(context, *, page, config, nav):
+    for role in page.meta.get("roles") or []:
+        if isinstance(role, dict) and role.get("id"):
+            page.present_anchor_ids.add(role["id"])
+    return context
