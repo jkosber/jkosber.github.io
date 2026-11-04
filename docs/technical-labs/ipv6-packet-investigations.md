@@ -36,7 +36,7 @@ In the first trace, the question was which reply gave the Windows 10 host its ad
 
 <figure class="evidence-figure">
   <div class="evidence-scroll" role="region" tabindex="0" aria-label="DHCPv6 address fields in frame 9306; scroll horizontally if needed">
-    <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="465" height="140" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
+    <img src="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png" width="310" height="93" alt="Wireshark IA Address option 5: IPv6 address 2001:db8:1ab:1001::108, preferred lifetime 120 seconds and valid lifetime 180 seconds." loading="lazy">
   </div>
   <figcaption>Frame 9306's IA Address option in the May 12, 2026 submission, cropped to the address and its lifetimes. <a href="../../assets/evidence/networking/dhcpv6-address-lifetimes-2026-05-12.png">Open full size</a>.</figcaption>
 </figure>

@@ -342,6 +342,8 @@ p { max-width: 35em; }
 .head-result { max-width: none; margin: 0; background: var(--surface); }
 .head-art { width: 100%; max-width: 22rem; height: auto; justify-self: end; }
 .lead-shot { margin-top: calc(var(--s7) * -1); }
+/* Centred and no wider than the narrowest lead capture (SSH Workbench, 1020 px), so none draws larger than its file. */
+.lead-shot .shot { max-width: 1020px; margin-inline: auto; }
 .lead-shot .shot img { border: 0; box-shadow: var(--shadow-lift); }
 /* Class pages: the Role panel beside the Result, overlapping the band's lower edge. */
 .summary-pair { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: calc((var(--s5) - var(--s2)) * -1); }
