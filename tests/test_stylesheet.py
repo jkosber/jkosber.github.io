@@ -103,6 +103,23 @@ class StylesheetTests(unittest.TestCase):
     def test_no_transition_on_all(self):
         self.assertNotRegex(self.css, r"transition[^;]*\ball\b")
 
+    def test_only_motion_properties_animate(self):
+        """Transitions and keyframes animate only transform, translate, opacity and color properties."""
+        css = strip_comments(self.css)
+        allowed = re.compile(r"^(?:transform|translate|opacity|color|[a-z-]+-color|none)$")
+        transitioned = [
+            item.split()[0]
+            for value in re.findall(r"(?<![\w-])transition\s*:\s*([^;}]+)", css)
+            for item in value.replace("!important", "").split(",")
+            if item.strip()
+        ]
+        animated = []
+        for match in re.finditer(r"@keyframes\s+[\w-]+\s*\{", css):
+            body = css[match.end(): block_end(css, match.end() - 1) - 1]
+            animated.extend(re.findall(r"([a-z-]+)\s*:", body))
+        offenders = sorted({name for name in transitioned + animated if not allowed.match(name)})
+        self.assertEqual(offenders, [])
+
     def test_important_only_with_reason(self):
         unexplained = [line.strip() for line in self.css.splitlines() if "!important" in line and "anti-slop-allow:" not in line]
         self.assertEqual(unexplained, [])
