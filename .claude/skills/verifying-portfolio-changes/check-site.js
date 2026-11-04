@@ -931,6 +931,18 @@ async (page) => {
     await titleWrap(route, 320);
   }
 
+  // At 320 px with default text, every page title, the homepage name among them, also keeps each word
+  // whole: a long word can fill the column at the default size while the 200% passes above stay clean.
+  await page.setViewportSize({ width: 320, height: 800 });
+  result.checks.titleWrapDefaultText = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    await page.evaluate(async () => { await document.fonts.ready; });
+    const titles = await splitWords('h1');
+    result.checks.titleWrapDefaultText += titles.blocks;
+    if (titles.split.length) fail(`titleWrapDefaultText ${route} @320: title words broken mid-word at default text: ${[...new Set(titles.split)].join(', ')}`);
+  }
+
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/');
