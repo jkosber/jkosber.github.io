@@ -1026,6 +1026,35 @@ async (page) => {
     if (columns.length !== 2 || columns[1] > columns[0]) fail(`railAt200 ${route} @1440: the article grid is ${columns.map((size) => `${size}px`).join(' ')} at 200% text; the contents rail must sit beside the body and be no wider`);
   }
 
+  // Target size: the name in the header, the On this page summary and every footer link are at least
+  // 44 px each way at default text, on a phone and on a desktop. Inline links in body text are not
+  // part of this. A summary or link that is not shown at that width is left out.
+  result.checks.targetSizes = { 390: 0, 1440: 0 };
+  for (const [width, height] of [[390, 844], [1440, 900]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      const targets = await page.evaluate(async () => {
+        await document.fonts.ready;
+        const footerName = (link) => (link.classList.length
+          ? `.site-footer a.${[...link.classList].join('.')}`
+          : `.site-footer .${[...link.parentElement.classList].join('.')} a "${link.textContent.trim()}"`);
+        return [
+          ...[...document.querySelectorAll('.site-header a.brand')].map((element) => ['.site-header a.brand', element]),
+          ...[...document.querySelectorAll('details.contents summary')].map((element) => ['details.contents summary', element]),
+          ...[...document.querySelectorAll('.site-footer a')].map((element) => [footerName(element), element]),
+        ].map(([selector, element]) => {
+          const box = element.getBoundingClientRect();
+          return { selector, width: box.width, height: box.height, shown: box.width > 0 && box.height > 0 && (!element.checkVisibility || element.checkVisibility()) };
+        }).filter((target) => target.shown);
+      });
+      result.checks.targetSizes[width] += targets.length;
+      for (const target of targets) {
+        if (target.width < 44 || target.height < 44) fail(`targetSizes ${route} @${width}: ${target.selector} is ${target.width.toFixed(1)}x${target.height.toFixed(1)}px, expected at least 44x44`);
+      }
+    }
+  }
+
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/');
