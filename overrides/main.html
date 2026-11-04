@@ -74,7 +74,7 @@
         {# Index pages and Experience: the title and intro in a band, then the list below it. #}
         <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
-          {% for section in nav if section.title == 'Projects' %}
+          {% for section in nav if section.children and section.children[0].url == 'technical-labs/' %}
           <ul class="project-rows" role="list">
             {% for project in section.children if project.url != page.url and not project.meta.detail %}{{ project_row(project, 2) }}{% endfor %}
           </ul>
@@ -84,7 +84,7 @@
       {% elif page and page.meta.layout == 'coursework' %}
         <section class="page-head band" style="--title-chars: {{ title_chars(page_title) }}"><div class="wrap page-heading">{{ page.content }}</div></section>
         <div class="wrap page-pad">
-          {% for section in nav if section.title == 'Coursework' %}
+          {% for section in nav if section.children and section.children[0].url == 'coursework/' %}
           <div class="prose coursework-index">
             <div class="table-scroll" role="region" tabindex="0" aria-label="Classes">
               <table role="table">
