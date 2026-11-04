@@ -1,5 +1,12 @@
 # Portfolio change record
 
+## November 4, 2026 — button transition matches the motion rule
+
+- `.button` no longer lists `box-shadow` in its transition (`portfolio.css:630`). No rule changes a button's shadow, so nothing on the page looks or moves differently. This closes the open item in the entry below.
+- Tests. `test_only_motion_properties_animate` in `tests/test_stylesheet.py` fails when a transition or keyframe animates anything other than `transform`, `translate`, `opacity` or a color.
+
+Validation: the new test landed first and failed against the old stylesheet (`['box-shadow'] != []`), then passed after the fix. 55 tests and the strict build passed; the CSS `?v=` value changed from `a9f5e600d977` to `3728eb26d664`, so returning visitors get the new file; `run-check.js chromium` exited 0 with `problems: []` on all 19 routes. WebKit, screenshots (no visual change) and Lighthouse were not run.
+
 ## November 4, 2026 — maintenance notes cut to repo-specific rules
 
 - `CLAUDE.md` is down from 19,410 to 10,245 characters. Removed what the code, the verifying skill or the instructions it extends already state: the file-by-file layout, the macro list, the token table, component markup, breakpoints, motion timings, the title and heading caps and the skills table. Every content, voice, privacy, design and publishing rule stays.
