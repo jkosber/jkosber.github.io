@@ -31,7 +31,7 @@ On Windows the interpreter is `.venv\Scripts\python`.
 | `.claude/` | Claude Code project settings and skills |
 | `CLAUDE.md` | Maintenance rules: content, privacy, design system, verification |
 
-Project rows, the homepage feature panels, class tiles and the Coursework index are built from page frontmatter and the `mkdocs.yml` nav order. [CLAUDE.md](CLAUDE.md) documents the fields.
+Project rows, the homepage feature panels, class tiles and the Coursework index are built from page frontmatter and the `mkdocs.yml` nav order. [CLAUDE.md](CLAUDE.md) documents the fields that need explaining.
 
 ## How the site behaves
 
