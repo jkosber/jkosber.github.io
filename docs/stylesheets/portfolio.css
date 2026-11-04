@@ -221,8 +221,14 @@ p { max-width: 35em; }
   .facts > div { grid-template-columns: minmax(0, 1fr); gap: .125rem; }
   .home-projects, .home-coursework, .home-experience { padding-bottom: var(--s5); }
   .home-coursework, .home-experience { padding-top: var(--s5); }
-  .feature { padding: 0 1.25rem 1.5rem; }
-  .minor { padding: 1.5rem 1.25rem; }
+  /* Side padding shrinks as text grows, 20 px at default text and 12 px at 200%, so long words keep room. */
+  .feature { padding: 0 min(1.25rem, 28px - .5rem) 1.5rem; }
+  .minor { padding: 1.5rem min(1.25rem, 28px - .5rem); }
+  /* Headings are capped to their column like page titles: 10 letters, "Contractor" and "Coursework", times
+     --title-glyph. Only enlarged text reaches the cap. */
+  .feature, .minor, .role-card, .section-head { container-type: inline-size; }
+  .section-head h2 { font-size: min(clamp(1.625rem, 2.6vw, var(--t-h2)), 100cqi / (10 * var(--title-glyph))); }
+  .feature h3, .minor h3, .role-card h3 { font-size: min(var(--t-h3), 100cqi / (10 * var(--title-glyph))); }
   .minor-side { flex-direction: column; align-items: flex-start; }
   .minor-art { width: 7.5rem; }
   .tiles { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
@@ -230,7 +236,7 @@ p { max-width: 35em; }
   .tile-art { grid-row: 1 / 4; width: 6rem; margin: 0; }
   .tile-code, .tile-name, .tile-meta { padding-inline: 0; }
   .tile-name { font-size: 1.125rem; }
-  .role-card { grid-template-columns: minmax(0, 1fr); padding: 1.5rem 1.25rem; }
+  .role-card { grid-template-columns: minmax(0, 1fr); padding: 1.5rem min(1.25rem, 28px - .5rem); }
   .role-card .role-art { width: 8.75rem; }
 }
 /* With very large text a compact tile leaves the name no room beside the art, so the art goes on top. */
@@ -262,8 +268,9 @@ p { max-width: 35em; }
   .project-row p { margin-top: .25rem; }
 }
 @media (max-width: 760px) {
-  .project-row { padding: 1.5rem min(1.25rem, 5vw); }
-  .project-row-title { font-size: 1.375rem; }
+  /* The title is capped to the row like a page title, by 10 letters ("Workbench" is 9). */
+  .project-row { padding: 1.5rem min(1.25rem, 5vw); container-type: inline-size; }
+  .project-row-title { font-size: min(1.375rem, 100cqi / (10 * var(--title-glyph))); }
 }
 
 /* Experience: a card per role, the art beside the text; the art goes on top on phones. */
@@ -280,8 +287,10 @@ p { max-width: 35em; }
 .role-points li { margin: 0; padding-left: .25rem; }
 .role-points li + li { margin-top: .625rem; }
 @media (max-width: 760px) {
-  .role { grid-template-columns: minmax(0, 1fr); gap: var(--s3); padding: 1.5rem min(1.25rem, 5vw); }
+  /* The role title is capped to the card like a page title, by 10 letters ("Contractor"). */
+  .role { grid-template-columns: minmax(0, 1fr); gap: var(--s3); padding: 1.5rem min(1.25rem, 5vw); container-type: inline-size; }
   .role > .role-art { width: 10rem; }
+  .role-body h2 { font-size: min(var(--t-h3), 100cqi / (10 * var(--title-glyph))); }
 }
 
 /* Coursework index: one row per class in the table panel; the code sits before the course name. */
@@ -337,7 +346,8 @@ p { max-width: 35em; }
 /* Class pages: the Role panel beside the Result, overlapping the band's lower edge. */
 .summary-pair { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: calc((var(--s5) - var(--s2)) * -1); }
 .panel .tools { margin-top: var(--s2); }
-.article { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; padding-block: var(--s5) var(--s6); }
+/* The rail is 15rem, but never over 30% of the row, so with enlarged text it stays narrower than the body. */
+.article { display: grid; grid-template-columns: minmax(0, 1fr) min(15rem, 30%); gap: var(--s5); align-items: start; padding-block: var(--s5) var(--s6); }
 .article > .body { grid-column: 1; grid-row: 1; }
 .article > .contents { grid-column: 2; grid-row: 1; }
 .article--wide { grid-template-columns: minmax(0, 1fr); }
@@ -489,7 +499,10 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
 .coursework-index > .table-scroll { margin: 0; }
 @media (max-width: 760px) {
   .body > p:first-of-type { font-size: 1.1875rem; }
-  .body > h2 { margin-top: var(--s5); }
+  /* Headings are capped to the body like page titles, by 15 letters ("Troubleshooting", "Recommendations"). */
+  .body { container-type: inline-size; }
+  .body > h2 { margin-top: var(--s5); font-size: min(clamp(1.625rem, 2.6vw, var(--t-h2)), 100cqi / (15 * var(--title-glyph))); }
+  .body > h3 { font-size: min(1.4rem, 100cqi / (15 * var(--title-glyph))); }
 }
 @media screen and (max-width: 760px) {
   :is(.body, .coursework-index) :is(th, td) { padding: .625rem .75rem; }
@@ -531,11 +544,16 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 .did-label { display: none; }
 /* Side padding stops growing with enlarged text, so long words keep room on a phone. */
 @media (max-width: 760px) {
-  .work { padding: 1.5rem min(1.25rem, 5vw); }
+  /* Headings are capped to their panel like page titles, by the longest word each kind holds: 15 letters
+     ("Troubleshooting", "AdventureWorks" is 14), 16 for brief items and lab modules ("misconfiguration",
+     "Vulnerabilities,"). */
+  .work { padding: 1.5rem min(1.25rem, 5vw); container-type: inline-size; }
   .work--brief { padding: 0; }
+  .work > h3 { font-size: min(1.5rem, 100cqi / (15 * var(--title-glyph))); }
+  .work--brief > h3 { font-size: min(var(--t-lead), 100cqi / (16 * var(--title-glyph))); }
   .work-pair { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
-  .lab-module > summary { padding-inline: min(1.25rem, 5vw); }
-  .lab-module > summary h3 { font-size: var(--t-body); }
+  .lab-module > summary { padding-inline: min(1.25rem, 5vw); container-type: inline-size; }
+  .lab-module > summary h3 { font-size: min(var(--t-body), 100cqi / (16 * var(--title-glyph))); }
 }
 @media screen and (max-width: 760px) {
   /* A wide table bleeds to the panel's edges, with the same scroll shade as the body's tables. */
@@ -561,6 +579,10 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 .education-entry { margin: var(--s3) 0; }
 .education-entry + .education-entry { padding-top: var(--s3); border-top: 1px solid var(--line); }
 .education-entry p { max-width: 35em; margin: .5rem 0 0; }
+@media (max-width: 760px) {
+  /* Capped to the body like a page title, by 11 letters ("Information"). */
+  .education-entry h3 { font-size: min(var(--t-lead), 100cqi / (11 * var(--title-glyph))); }
+}
 .back-to-top { position: fixed; z-index: 15; right: 1.5rem; bottom: 1.25rem; display: inline-flex; align-items: center; gap: .6rem; min-height: 46px; padding: .7rem 1rem; border-radius: var(--r-s); color: var(--heading); background: var(--surface); border: 1px solid var(--line-strong); box-shadow: var(--shadow-float); font-size: .8rem; text-decoration: none; }
 .back-to-top:hover { background: var(--raised); }
 .back-to-top.back-to-top--in-footer { position: static; margin-left: auto; box-shadow: none; }
