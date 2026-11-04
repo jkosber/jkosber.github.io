@@ -1,5 +1,14 @@
 # Portfolio change record
 
+## November 4, 2026 — maintenance notes cut to repo-specific rules
+
+- `CLAUDE.md` is down from 19,410 to 10,245 characters. Removed what the code, the verifying skill or the instructions it extends already state: the file-by-file layout, the macro list, the token table, component markup, breakpoints, motion timings, the title and heading caps and the skills table. Every content, voice, privacy, design and publishing rule stays.
+- Corrected and added: the unread `roles[].icon` key is named beside `kind`; `hooks/frontmatter_checks.py`, the rule that `tools` belongs only on a project with a `screenshot`, the mutmut command and Material's MkDocs 2.0 build notice are documented; editing the `mkdocs.yml` nav while adding a project is allowed, and other `mkdocs.yml` changes stay protected; the gradient rule names the table scroll shade as the only gradient; each branch merged to `main` now gets a dated entry here.
+- `README.md` says `CLAUDE.md` documents the fields that need explaining.
+- Open: `.button` still transitions `box-shadow` (`portfolio.css:630`), which the motion rule does not allow; a separate change will fix the CSS.
+
+Validation: no site file changed. Every command in `CLAUDE.md` was run or, where it deploys or rewrites `.venv`, listed: 54 tests and the strict build passed, `uv pip sync --dry-run` reported no changes, `uv pip compile` reproduced `requirements.txt` byte for byte, the preview answered 200, and `run-check.js chromium` exited 0 with `problems: []` on all 19 routes at `53b0d82`. Every path, token value, macro, redirect and excluded asset the old file named was checked against the repo. A read-only review compared each kept rule with the old text and found one dropped clause and five weakened ones, all restored before this change. WebKit and the private-term scan were not run.
+
 ## November 4, 2026 — audit fixes: build checks, 200% text, targets and scroll cues
 
 - Build-time checks. A new hook, `hooks/frontmatter_checks.py`, fails the strict build when a case study's `class_page` is not a page URL ending in `/` or its `class_name` is missing, and when an `art` or `screenshot` block has no `src` or a role has no `image`; before, those gaps rendered an empty "In depth" cell, a link with no text or `<img src=".">` while the build stayed green. The same hook registers each role id as an anchor, so Markdown links such as the About page's employer links can point at `#ladd-dental` and `#verizon-conversions` and the strict build accepts them.
