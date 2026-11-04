@@ -15,6 +15,15 @@ def problems(pages):
             class_name = meta.get("class_name")
             if not isinstance(class_name, str) or not class_name.strip():
                 found.append(f"{url}: class_name must be a non-empty string")
+        # MkDocs's url filter turns a missing path into ".", so these would ship <img src=".">.
+        for key in ("art", "screenshot"):
+            if isinstance(meta.get(key), dict) and not meta[key].get("src"):
+                found.append(f"{url}: {key} must have a src")
+        roles = meta.get("roles")
+        if isinstance(roles, list):
+            for index, role in enumerate(roles):
+                if not isinstance(role, dict) or not role.get("image"):
+                    found.append(f"{url}: roles[{index}] must have an image")
     return found
 
 
