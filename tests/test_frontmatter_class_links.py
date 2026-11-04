@@ -38,6 +38,14 @@ class FrontmatterClassLinkTests(unittest.TestCase):
             "class_page: coursework/svad-111\n",
         )
 
+    def test_class_page_naming_no_page_fails_the_build(self):
+        self.assert_build_fails(
+            "technical-labs/aws-linux-infrastructure/: class_page must be a page url ending in '/'",
+            "technical-labs/aws-linux-infrastructure.md",
+            "class_page: coursework/svad-111/\n",
+            "class_page: coursework/svad-112/\n",
+        )
+
     def test_missing_class_name_fails_the_build(self):
         self.assert_build_fails(
             "technical-labs/snort-firewall-lab/: class_name must be a non-empty string",
