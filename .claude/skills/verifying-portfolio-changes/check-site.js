@@ -231,7 +231,8 @@ async (page) => {
   // (650 px and narrower) and its right-edge shade (760 px and narrower) show only while the table
   // scrolls sideways, and a table that fits shows neither. A region with no hint after it (the lab
   // tables, whose hint the class page hook removes) is checked for its shade alone. A region inside
-  // a closed module is left out. The no-JS block covers the build-time cues.
+  // a closed module is left out. Without JavaScript the build-time cues stay; the no-JS block checks
+  // the wrappers' region attributes, not the cues.
   result.checks.scrollCues = {};
   for (const width of [600, 640, 700, 760]) {
     await page.setViewportSize({ width, height: 900 });
