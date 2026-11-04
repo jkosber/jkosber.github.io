@@ -176,6 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ['role', 'tabindex', 'aria-label'].map((name) => [name, region.getAttribute(name)]).filter(([, value]) => value !== null)]));
     const updateRegion = (region) => {
       const scrolls = region.scrollWidth > region.clientWidth;
+      // The stylesheet drops a table's scroll hint and edge shade once this reads "false"; until the
+      // script measures, or without it, they follow the build-time breakpoints.
+      region.dataset.scrolls = String(scrolls);
       // A focused region keeps its tab stop until focus leaves, so focus never drops to the page.
       if (!scrolls && region === document.activeElement) return;
       for (const [name, value] of built.get(region)) {

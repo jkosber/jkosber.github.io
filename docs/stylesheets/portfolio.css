@@ -428,9 +428,10 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
 .evidence-figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 5px; }
 .evidence-scroll { max-width: 100%; overflow-x: auto; scrollbar-color: var(--accent) var(--surface); }
 @media screen and (max-width: 650px) {
-  /* Only tables with three or more columns need a minimum width and the scroll hint. */
+  /* Only tables with three or more columns need a minimum width and the scroll hint; the hint goes
+     once the script finds the table fits. */
   .table-scroll table:has(tr > :nth-child(3)) { min-width: 38rem; }
-  .prose .table-scroll:has(tr > :nth-child(3)) + .table-hint { display: block; margin: -1rem 0 1.75rem; color: var(--muted); font-size: .8rem; }
+  .prose .table-scroll:has(tr > :nth-child(3)):not([data-scrolls="false"]) + .table-hint { display: block; margin: -1rem 0 1.75rem; color: var(--muted); font-size: .8rem; }
 }
 @media screen and (max-width: 359px) {
   /* On the narrowest phones code may wrap so two-column tables still fit. */
@@ -511,6 +512,8 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
   :is(.body, .coursework-index) :is(th, td) { padding: .625rem .75rem; }
   /* Wide tables bleed to the screen edge; the shade at the right edge says there is more to scroll. */
   .body > .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(var(--gutter) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
+  /* Once the script finds the table fits, the shade goes and the bleed stays. */
+  .body > .table-scroll[data-scrolls="false"] { background-image: none; }
 }
 /* Class pages: each Strongest work item is a panel; two short items in a row sit side by side without one. */
 .work { margin-top: var(--s2); padding: 2rem; background: var(--surface); border-radius: var(--r-l); }
@@ -561,6 +564,7 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 @media screen and (max-width: 760px) {
   /* A wide table bleeds to the panel's edges, with the same scroll shade as the body's tables. */
   .work .table-scroll:not([data-columns="2"]) { max-width: none; margin-inline: calc(min(1.25rem, 5vw) * -1); border-radius: 0; background: linear-gradient(to left, var(--edge-shade), transparent 1.5rem) right / 1.5rem 100% no-repeat, var(--inset); }
+  .work .table-scroll[data-scrolls="false"] { background-image: none; }
   /* Each lab stacks: the lab, what it asked, then what I did under a visible label. The hook's
      roles keep the table semantics that display: block drops. */
   .lab-module .lab-table { padding: 0 min(1.25rem, 5vw) .5rem; }
