@@ -1,0 +1,9 @@
+# Mutation testing of the MkDocs hooks, run by hand on Linux:
+#   uvx --from mutmut --with-requirements requirements.txt mutmut run
+# mutmut is not a site dependency and .venv stays as requirements.txt pins it.
+# It copies hooks/ and tests/ into mutants/ (ignored) and runs the tests there.
+[tool.mutmut]
+source_paths = ["hooks/"]
+pytest_add_cli_args_test_selection = ["tests/"]
+# Everything the tests read from the repo root besides hooks/ and tests/.
+also_copy = ["docs/", "mkdocs.yml", "overrides/"]
