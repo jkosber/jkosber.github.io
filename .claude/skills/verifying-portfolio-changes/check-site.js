@@ -1055,6 +1055,46 @@ async (page) => {
     }
   }
 
+  // Screenshots never draw larger than their file: a figure image that is shown is at most 1 px wider
+  // than its natural width, and an evidence figure's width and height attributes never ask for more
+  // than the file's size. Attributes do not change with the window, so they are checked once, at 1440.
+  result.checks.imageScale = { 1440: 0, 390: 0, attributes: 0 };
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      const images = await page.evaluate(async () => {
+        const found = [...document.querySelectorAll('.evidence-figure img, .shot img, figure img')];
+        for (const image of found) {
+          image.loading = 'eager';
+          if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
+        }
+        return found.filter((image) => image.naturalWidth > 0).map((image) => {
+          const box = image.getBoundingClientRect();
+          const sized = image.closest('.evidence-figure') && image.hasAttribute('width') && image.hasAttribute('height');
+          return {
+            file: (image.getAttribute('src') || '').split('/').pop(),
+            natural: [image.naturalWidth, image.naturalHeight],
+            rendered: [box.width, box.height],
+            attributes: sized ? [Number(image.getAttribute('width')), Number(image.getAttribute('height'))] : null,
+          };
+        });
+      });
+      for (const image of images) {
+        const natural = `${image.natural[0]}x${image.natural[1]}`;
+        if (image.rendered[0] > 0) {
+          result.checks.imageScale[width] += 1;
+          if (image.rendered[0] > image.natural[0] + 1) fail(`imageScale ${route} @${width}: ${image.file} draws at ${image.rendered[0].toFixed(1)}x${image.rendered[1].toFixed(1)}px, larger than its ${natural}px file`);
+        }
+        if (width === 1440 && image.attributes) {
+          result.checks.imageScale.attributes += 1;
+          const [w, h] = image.attributes;
+          if (w > image.natural[0] || h > image.natural[1]) fail(`imageScale ${route}: ${image.file} has width="${w}" height="${h}", larger than its ${natural}px file`);
+        }
+      }
+    }
+  }
+
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BASE + '/technical-labs/');
