@@ -103,7 +103,7 @@ p { max-width: 35em; }
 .site-header { position: relative; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s1) var(--s3); min-height: 4.75rem; padding-block: .75rem; padding-inline: max(var(--gutter), calc((100% - 1200px) / 2 + var(--gutter))); background: var(--band); }
 .js .site-header { position: sticky; top: 0; }
 .identity { display: flex; align-items: center; gap: .25rem; min-width: 0; }
-.brand { display: inline-flex; align-items: center; gap: .75rem; min-width: 0; margin-right: var(--s1); color: var(--heading); font-weight: 700; text-decoration: none; }
+.brand { display: inline-flex; align-items: center; gap: .75rem; min-width: 0; min-height: 44px; margin-right: var(--s1); color: var(--heading); font-weight: 700; text-decoration: none; }
 .brand span { overflow-wrap: anywhere; }
 .brand img { flex-shrink: 0; width: 34px; height: 34px; }
 /* GitHub and LinkedIn sit beside the name and stay outside the phone menu. */
@@ -358,7 +358,8 @@ details.contents a:hover { color: var(--heading); }
 details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
 @media (min-width: 1101px) {
   details.contents { position: sticky; top: calc(var(--header-height, 0px) + var(--s4)); }
-  details.contents summary { margin-bottom: .75rem; list-style: none; }
+  /* 44 px tall; with its margin it keeps to the 3rem the nav's max-height leaves for it. */
+  details.contents summary { display: flex; align-items: center; min-height: 44px; margin-bottom: .25rem; list-style: none; }
   details.contents summary::-webkit-details-marker { display: none; }
   /* A long list scrolls inside the rail, so its links take an inset focus ring that is never clipped. */
   details.contents nav { max-height: calc(100dvh - var(--header-height, 0px) - var(--s4) * 2 - 3rem); overflow-y: auto; }
@@ -599,7 +600,7 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
 .footer-name { display: inline-flex; align-items: center; min-height: 44px; color: var(--heading); font-weight: 700; text-decoration: none; }
 .footer-name:hover { text-decoration: underline; }
 .footer-built { margin: 0; }
-.footer-built a { color: var(--muted); }
+.footer-built a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); }
 /* The 404 page sits between the header and footer bands: the code above the title, the way home below it. */
 .error-code { margin: 0 0 var(--s1); color: var(--muted); font-weight: 700; font-size: var(--t-small); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
 .error-action { margin: var(--s4) 0 0; }
