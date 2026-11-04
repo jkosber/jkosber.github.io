@@ -315,9 +315,10 @@ p { max-width: 35em; }
 .crumbs [aria-current] { color: var(--heading); }
 .head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s4); }
 /* Each title is capped to its column by its own longest word, so no word splits with enlarged text: the
-   template sets --title-chars to that word's length, and --title-glyph allows for the widest letters. The
-   cap never goes below 72px - 2.25rem, the 36 px floor at default text and 0 at 200%: titles with the same
-   word length differ in width, so without it the cap would also shrink titles that fit at default text.
+   template sets --title-chars to that word's length, and --title-glyph allows for the widest letters. From
+   340 px up the cap never goes below 72px - 2.25rem, the 36 px floor at default text and 0 at 200%: titles
+   with the same word length differ in width, so without it the cap would also shrink titles that fit at
+   default text.
    --title-size resolves where it is used, so cqi measures the column of the title, or of its description. */
 .head-text, .page-heading, .error-page { container-type: inline-size; }
 .page-head, .error-page { --title-size: min(clamp(2.25rem, 4.4vw, 3.5rem), max(100cqi / (var(--title-chars, 14) * var(--title-glyph)), 72px - 2.25rem)); }
@@ -380,6 +381,11 @@ details.contents a[aria-current] { color: var(--heading); font-weight: 650; }
   /* Fixed side padding: rem padding grows with enlarged text and leaves long words no room.
      15 px, the size secondary text already uses, keeps a long Result word whole at 200% text on phones about 367 px and wider. */
   .result { padding: .9rem 12px; font-size: .9375rem; }
+}
+@media (max-width: 339px) {
+  /* Below 340 px a long title word can outgrow its column at the 36 px floor ("AdventureWorks" is 293 px in
+     280), so only the column cap applies. At 200% text the floor is already 0, so nothing changes there. */
+  .page-head, .error-page { --title-size: min(2.25rem, 100cqi / (var(--title-chars, 14) * var(--title-glyph))); }
 }
 
 .prose { min-width: 0; font-size: 1.0625rem; }
