@@ -3,7 +3,6 @@ title: AdventureWorks on AWS
 description: A deployment of the course's PHP app and SQL Server database on two EC2 servers, tested by searching the catalog and saving a review through it.
 kind: Completed coursework
 status: "Completed May 2026"
-tools: [AWS EC2, Ubuntu, Apache, SQL Server]
 detail: true
 class_page: coursework/svad-111/
 class_name: SVAD 111 Linux and Virtualization Technologies

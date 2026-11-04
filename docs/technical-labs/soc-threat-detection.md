@@ -3,7 +3,6 @@ title: Pushdo malware investigation in Security Onion
 description: A Pushdo malware infection traced in Security Onion from the alerts to one Windows host and three downloaded files, then written up as an after-action report.
 kind: Completed coursework
 status: "Completed March 2026"
-tools: [Security Onion, Wireshark, NetworkMiner, VirusTotal]
 detail: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops

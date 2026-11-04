@@ -99,7 +99,7 @@ The datacenter firewall is on, with seven accept rules for lab traffic, DNS and 
 
 ## Health check {#recorded-validation}
 
-On September 22 I ran a read-only check of the host and services. It's the baseline for later changes:
+The September 22 read-only check of the host and services is the baseline for later changes:
 
 | Check | Result |
 |---|---|

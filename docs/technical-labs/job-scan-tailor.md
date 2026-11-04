@@ -3,7 +3,6 @@ title: Job scan and resume tailor
 description: An agent-guided workflow that compares job postings with a source resume and builds selected DOCX/PDF resumes, a ranking report and a local review page.
 kind: Personal software project
 status: Complete
-tools: [Python, python-docx, LibreOffice, Playwright]
 summary:
   role: "Specified the workflow for a personal job search; an AI agent compares postings with the source resume, and Python scripts build and check the documents."
   built_with: ["Python", "python-docx", "headless LibreOffice for PDF conversion", "pypdf", "an AI agent", "browser automation"]

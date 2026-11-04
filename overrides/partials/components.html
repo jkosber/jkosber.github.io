@@ -112,7 +112,7 @@
 
 {# Roles live in the Experience page's frontmatter: the full entries there, a card per role on the homepage. #}
 {% macro experience_entries() -%}
-{% for experience in nav if experience.title == 'Experience' %}
+{% for experience in nav if experience.url == 'experience/' %}
 <div class="role-list">
 {% for role in experience.meta.roles %}
   <article class="role" id="{{ role.id }}">

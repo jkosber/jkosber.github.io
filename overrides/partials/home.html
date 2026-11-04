@@ -10,7 +10,7 @@
     {% endif %}
   </div>
 </section>
-{% for section in nav if section.title == 'Projects' %}
+{% for section in nav if section.children and section.children[0].url == 'technical-labs/' %}
 {% set listed = section.children[1:] | rejectattr('meta.detail') | list %}
 <section class="home-projects wrap" aria-labelledby="projects">
   <div class="section-head"><h2 id="projects">Projects</h2><a href="{{ section.children[0].url | url }}">All projects</a></div>
@@ -18,7 +18,7 @@
   {% for project in listed if not project.meta.screenshot %}{{ minor_row(project) }}{% endfor %}
 </section>
 {% endfor %}
-{% for section in nav if section.title == 'Coursework' %}
+{% for section in nav if section.children and section.children[0].url == 'coursework/' %}
 <section class="home-coursework band" aria-labelledby="coursework">
   <div class="wrap">
     <div class="section-head"><h2 id="coursework">Coursework</h2><a href="{{ section.children[0].url | url }}">All coursework</a></div>
@@ -29,7 +29,7 @@
   </div>
 </section>
 {% endfor %}
-{% for experience in nav if experience.title == 'Experience' %}
+{% for experience in nav if experience.url == 'experience/' %}
 <section class="home-experience wrap" aria-labelledby="experience">
   <div class="section-head"><h2 id="experience">Experience</h2><a href="{{ experience.url | url }}">Full experience</a></div>
   <div class="role-cards">

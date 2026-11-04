@@ -54,8 +54,8 @@ The [NETI 109 class page](../coursework/neti-109.md) covers the related Packet T
 
 | Area | Tools and skills | Where they were used |
 |---|---|---|
-| IT support | Help desk tickets, Level RMM, ClickUp, workstation deployment and domain join, clinical software accounts, cable toner and punchdown tool | [Ladd Dental Group](../experience/index.md) |
-| Networking | Cisco Meraki Dashboard, static-IP printer setup, Ethernet cabling, subnetting and VLSM, Cisco Packet Tracer, Wireshark | [Vaco by Highspring, at Verizon](../experience/index.md), [NETI 109](../coursework/neti-109.md), [CSIA 210](../coursework/csia-210.md) |
+| IT support | Help desk tickets, Level RMM, ClickUp, workstation deployment and domain join, clinical software accounts, cable toner and punchdown tool | [Ladd Dental Group](../experience/index.md#ladd-dental) |
+| Networking | Cisco Meraki Dashboard, static-IP printer setup, Ethernet cabling, subnetting and VLSM, Cisco Packet Tracer, Wireshark | [Vaco by Highspring, at Verizon](../experience/index.md#verizon-conversions), [NETI 109](../coursework/neti-109.md), [CSIA 210](../coursework/csia-210.md) |
 | Systems | Proxmox VE, Ubuntu Server, Debian, Docker, Portainer, VirtualBox, AWS EC2, Apache, SQL Server | [Proxmox homelab](../technical-labs/proxmox-virtualization.md), [SVAD 111](../coursework/svad-111.md), [AdventureWorks on AWS](../technical-labs/aws-linux-infrastructure.md) |
 | Monitoring | Beszel, Uptime Kuma, Homepage | [Proxmox homelab](../technical-labs/proxmox-virtualization.md#monitoring-and-alerts) |
 | Security | Security Onion, Sguil, Kibana, NetworkMiner, VirusTotal, Snort, `iptables`, Qualys SSL Labs | [CSIA 115](../coursework/csia-115.md), [CSIA 105](../coursework/csia-105.md), CompTIA Security+ |

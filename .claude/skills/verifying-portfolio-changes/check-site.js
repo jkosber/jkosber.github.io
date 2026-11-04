@@ -227,6 +227,53 @@ async (page) => {
     for (const problem of regionProblems(regions)) fail(`scrollRegions /coursework/neti-109/ @320 at 200% text with every module open: ${problem}`);
   }
 
+  // Scroll cues follow the layout like the regions do: with JavaScript on, a table's hint below it
+  // (650 px and narrower) and its right-edge shade (760 px and narrower) show only while the table
+  // scrolls sideways, and a table that fits shows neither. A region with no hint after it (the lab
+  // tables, whose hint the class page hook removes) is checked for its shade alone. A region inside
+  // a closed module is left out. Without JavaScript the build-time cues stay; the no-JS block checks
+  // the wrappers' region attributes, not the cues.
+  result.checks.scrollCues = {};
+  for (const width of [600, 640, 700, 760]) {
+    await page.setViewportSize({ width, height: 900 });
+    const counts = { scrolling: 0, fitting: 0, wideFitting: 0, closed: 0, hints: 0, shades: 0 };
+    for (const route of ['/technical-labs/proxmox-virtualization/', '/technical-labs/soc-threat-detection/', '/credentials/', '/coursework/neti-109/']) {
+      await page.goto(BASE + route);
+      await page.waitForSelector('#site-menu[data-ready]', { state: 'attached' });
+      const regions = await page.evaluate(async () => {
+        await document.fonts.ready;
+        await new Promise((done) => { requestAnimationFrame(() => requestAnimationFrame(done)); setTimeout(done, 250); });
+        return [...document.querySelectorAll('.table-scroll')].map((region, index) => {
+          const next = region.nextElementSibling;
+          const hint = next && next.matches('.table-hint') ? next : null;
+          return {
+            name: `table-scroll ${index + 1}`,
+            closed: Boolean(region.closest('details:not([open])')),
+            wide: Boolean(region.querySelector('tr > :nth-child(3)')),
+            scrolls: region.scrollWidth > region.clientWidth,
+            hint: hint ? getComputedStyle(hint).display !== 'none' : null,
+            shade: getComputedStyle(region).backgroundImage !== 'none',
+          };
+        });
+      });
+      for (const region of regions) {
+        if (region.closed) { counts.closed += 1; continue; }
+        counts[region.scrolls ? 'scrolling' : 'fitting'] += 1;
+        if (region.wide && !region.scrolls) counts.wideFitting += 1;
+        if (region.hint) counts.hints += 1;
+        if (region.shade) counts.shades += 1;
+        const where = `scrollCues ${route} @${width}: ${region.name}`;
+        if (!region.scrolls && region.hint) fail(`${where} fits but shows the scroll hint`);
+        if (!region.scrolls && region.shade) fail(`${where} fits but paints the edge shade`);
+        if (region.scrolls && width <= 650 && region.hint === false) fail(`${where} scrolls sideways but its scroll hint is hidden`);
+        if (region.scrolls && width <= 760 && !region.shade) fail(`${where} scrolls sideways but paints no edge shade`);
+      }
+    }
+    result.checks.scrollCues[width] = counts;
+  }
+  if (!result.checks.scrollCues[600].scrolling) fail('scrollCues: no table scrolls at 600, so the scrolling cues go unchecked');
+  if (!result.checks.scrollCues[640].wideFitting) fail('scrollCues: no table of three or more columns fits at 640, so the fitting cues go unchecked');
+
   // Mobile menu: opens, then Escape closes it.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(BASE + '/');
@@ -929,6 +976,170 @@ async (page) => {
     result.checks.text200narrow += 1;
     if (overflow > 0) fail(`text200 ${route} @320: ${overflow}px horizontal overflow`);
     await titleWrap(route, 320);
+  }
+
+  // At 320 px with default text, every page title, the homepage name among them, also keeps each word
+  // whole: a long word can fill the column at the default size while the 200% passes above stay clean.
+  await page.setViewportSize({ width: 320, height: 800 });
+  result.checks.titleWrapDefaultText = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    await page.evaluate(async () => { await document.fonts.ready; });
+    const titles = await splitWords('h1');
+    result.checks.titleWrapDefaultText += titles.blocks;
+    if (titles.split.length) fail(`titleWrapDefaultText ${route} @320: title words broken mid-word at default text: ${[...new Set(titles.split)].join(', ')}`);
+  }
+
+  // Section headings, buttons and the homepage panels keep every word whole at 200% text at 390 and 320 px,
+  // and at 1440 px the contents rail never grows wider than the body beside it. Like splitWords, but a line
+  // break may follow a hyphen: a typed one, a soft hyphen, or one hyphens: auto draws. A drawn hyphen is a box
+  // of its own that the letters on both sides of the break report, so the last letter before the break spans
+  // more of its line than the letter alone measures. A break with no hyphen is the defect; each one is
+  // reported with a slash where the line breaks, after the hyphen when there is one.
+  const unhyphenatedSplits = (selector) => page.evaluate((blockSelector) => {
+    const blocks = document.querySelectorAll(blockSelector);
+    const seen = new Set();
+    const split = [];
+    const pen = document.createElement('canvas').getContext('2d');
+    const rectsOf = (node, start, end) => {
+      const range = document.createRange();
+      range.setStart(node, start);
+      range.setEnd(node, end);
+      return [...range.getClientRects()].filter((rect) => rect.width > 0);
+    };
+    for (const block of blocks) {
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (seen.has(node) || node.parentElement.closest('code')) continue;
+        seen.add(node);
+        const style = getComputedStyle(node.parentElement);
+        pen.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        pen.letterSpacing = style.letterSpacing;
+        for (const match of node.data.matchAll(/[^\s-]+/g)) {
+          const end = match.index + match[0].length;
+          if (new Set(rectsOf(node, match.index, end).map((rect) => Math.round(rect.top))).size < 2) continue;
+          let rendered = '';
+          let last = null;
+          let broken = false;
+          for (let offset = match.index; offset < end; offset += 1) {
+            const rects = rectsOf(node, offset, offset + 1);
+            if (rects.length) {
+              // The letter's own box comes last; a drawn hyphen's box can come before it.
+              const line = Math.round(rects[rects.length - 1].top);
+              if (last && line !== last.line) {
+                const before = [...last.rects, ...rects].filter((rect) => Math.round(rect.top) === last.line);
+                const span = Math.max(...before.map((rect) => rect.right)) - Math.min(...before.map((rect) => rect.left));
+                const hyphen = /[­‐–—]/.test(last.char) || span - pen.measureText(last.char).width > parseFloat(style.fontSize) * 0.15;
+                if (!hyphen) broken = true;
+                rendered += hyphen ? '-/' : '/';
+              }
+              last = { char: node.data[offset], rects, line };
+            }
+            rendered += node.data[offset];
+          }
+          if (broken) split.push(rendered);
+        }
+      }
+    }
+    return { blocks: blocks.length, split };
+  }, selector);
+  result.checks.headingWrap200 = { 390: 0, 320: 0 };
+  for (const [width, height] of [[390, 844], [320, 700]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      await page.evaluate(async () => {
+        document.documentElement.style.fontSize = '200%';
+        await document.fonts.ready;
+        await new Promise((done) => setTimeout(done, 150));
+      });
+      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card');
+      result.checks.headingWrap200[width] += words.blocks;
+      if (words.split.length) fail(`headingWrap200 ${route} @${width}: words broken mid-word with no hyphen at 200% text: ${[...new Set(words.split)].join(', ')}`);
+    }
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  result.checks.railAt200 = 0;
+  for (const route of routes) {
+    await page.goto(BASE + route);
+    const columns = await page.evaluate(async () => {
+      document.documentElement.style.fontSize = '200%';
+      await new Promise((done) => setTimeout(done, 150));
+      const article = document.querySelector('.article:has(> .contents)');
+      return article ? getComputedStyle(article).gridTemplateColumns.split(' ').map(parseFloat) : null;
+    });
+    if (!columns) continue;
+    result.checks.railAt200 += 1;
+    if (columns.length !== 2 || columns[1] > columns[0]) fail(`railAt200 ${route} @1440: the article grid is ${columns.map((size) => `${size}px`).join(' ')} at 200% text; the contents rail must sit beside the body and be no wider`);
+  }
+
+  // Target size: the name in the header, the On this page summary and every footer link are at least
+  // 44 px each way at default text, on a phone and on a desktop. Inline links in body text are not
+  // part of this. A summary or link that is not shown at that width is left out.
+  result.checks.targetSizes = { 390: 0, 1440: 0 };
+  for (const [width, height] of [[390, 844], [1440, 900]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      const targets = await page.evaluate(async () => {
+        await document.fonts.ready;
+        const footerName = (link) => (link.classList.length
+          ? `.site-footer a.${[...link.classList].join('.')}`
+          : `.site-footer .${[...link.parentElement.classList].join('.')} a "${link.textContent.trim()}"`);
+        return [
+          ...[...document.querySelectorAll('.site-header a.brand')].map((element) => ['.site-header a.brand', element]),
+          ...[...document.querySelectorAll('details.contents summary')].map((element) => ['details.contents summary', element]),
+          ...[...document.querySelectorAll('.site-footer a')].map((element) => [footerName(element), element]),
+        ].map(([selector, element]) => {
+          const box = element.getBoundingClientRect();
+          return { selector, width: box.width, height: box.height, shown: box.width > 0 && box.height > 0 && (!element.checkVisibility || element.checkVisibility()) };
+        }).filter((target) => target.shown);
+      });
+      result.checks.targetSizes[width] += targets.length;
+      for (const target of targets) {
+        if (target.width < 44 || target.height < 44) fail(`targetSizes ${route} @${width}: ${target.selector} is ${target.width.toFixed(1)}x${target.height.toFixed(1)}px, expected at least 44x44`);
+      }
+    }
+  }
+
+  // Screenshots never draw larger than their file: a figure image that is shown is at most 1 px wider
+  // than its natural width, and an evidence figure's width and height attributes never ask for more
+  // than the file's size. Attributes do not change with the window, so they are checked once, at 1440.
+  result.checks.imageScale = { 1440: 0, 390: 0, attributes: 0 };
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(BASE + route);
+      const images = await page.evaluate(async () => {
+        const found = [...document.querySelectorAll('.evidence-figure img, .shot img, figure img')];
+        for (const image of found) {
+          image.loading = 'eager';
+          if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
+        }
+        return found.filter((image) => image.naturalWidth > 0).map((image) => {
+          const box = image.getBoundingClientRect();
+          const sized = image.closest('.evidence-figure') && image.hasAttribute('width') && image.hasAttribute('height');
+          return {
+            file: (image.getAttribute('src') || '').split('/').pop(),
+            natural: [image.naturalWidth, image.naturalHeight],
+            rendered: [box.width, box.height],
+            attributes: sized ? [Number(image.getAttribute('width')), Number(image.getAttribute('height'))] : null,
+          };
+        });
+      });
+      for (const image of images) {
+        const natural = `${image.natural[0]}x${image.natural[1]}`;
+        if (image.rendered[0] > 0) {
+          result.checks.imageScale[width] += 1;
+          if (image.rendered[0] > image.natural[0] + 1) fail(`imageScale ${route} @${width}: ${image.file} draws at ${image.rendered[0].toFixed(1)}x${image.rendered[1].toFixed(1)}px, larger than its ${natural}px file`);
+        }
+        if (width === 1440 && image.attributes) {
+          result.checks.imageScale.attributes += 1;
+          const [w, h] = image.attributes;
+          if (w > image.natural[0] || h > image.natural[1]) fail(`imageScale ${route}: ${image.file} has width="${w}" height="${h}", larger than its ${natural}px file`);
+        }
+      }
+    }
   }
 
   // Hover: whole-row links lift 2 px under a mouse, even after their scroll fade-up has run.
