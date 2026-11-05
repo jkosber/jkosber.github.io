@@ -627,7 +627,7 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
     @keyframes reveal { from { opacity: 0; transform: translateY(12px); } }
   }
   .lift, .main-nav a { transition: translate .15s ease-out, transform .15s ease-out, color .15s ease-out, background-color .15s ease-out; }
-  .button { transition: background-color .15s ease-out, box-shadow .15s ease-out, transform .1s ease-out; }
+  .button { transition: background-color .15s ease-out, transform .1s ease-out; }
   .button:active { transform: scale(.97); }
   /* The lightbox fades in and grows from 96%; its backdrop fades with it. */
   .lightbox[open] { animation: zoom-in .2s cubic-bezier(.2,.7,.2,1); }
