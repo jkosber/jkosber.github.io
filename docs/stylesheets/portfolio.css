@@ -234,6 +234,9 @@ p { max-width: 35em; }
   .feature, .minor, .role-card, .section-head { container-type: inline-size; }
   .section-head h2 { font-size: min(clamp(1.625rem, 2.6vw, var(--t-h2)), 100cqi / (10 * var(--title-glyph))); }
   .feature h3, .minor h3, .role-card h3 { font-size: min(var(--t-h3), 100cqi / (10 * var(--title-glyph))); }
+  /* Their descriptions are capped too, by 13 characters ("workstations,") at about half an em each in
+     Manrope; only 200% text on a 320 px phone with a classic scrollbar reaches the cap (F-029). */
+  .feature .desc, .minor .desc, .role-card .role-summary { font-size: min(1em, 100cqi / 6.5); }
   .minor-side { flex-direction: column; align-items: flex-start; }
   .minor-art { width: 7.5rem; }
   .classes { --class-columns: 2; }
@@ -681,7 +684,9 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
   .main-nav { display: flex; flex-wrap: wrap; gap: .25rem; }
   .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .125rem); justify-content: flex-start; }
   .credential-grid { grid-template-columns: minmax(0, 1fr); }
-  .credential { padding: 1.25rem min(1.25rem, 5vw); }
+  .credential { padding: 1.25rem min(1.25rem, 5vw); container-type: inline-size; }
+  /* A credential name is capped to its card like a title: 9 letters, "Security+", times --title-glyph (F-029). */
+  .credential h3 { font-size: min(var(--t-lead), 100cqi / (9 * var(--title-glyph))); }
   .back-to-top { right: .8rem; bottom: .8rem; padding: .7rem; }
   .back-to-top span { display: none; }
 }
