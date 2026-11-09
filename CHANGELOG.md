@@ -1,5 +1,15 @@
 # Portfolio change record
 
+## November 9, 2026 — audit fixes: assessment count, Result label, employer and course names
+
+- Coursework. The last CSIA 115 module now says "1 assessment" instead of "1 lab". `hooks/class_sections.py` counts assessments in a module whose table's first column is headed "Assessment", and that table now has that header. Any other header, blank included, still counts labs. The row names the course in the singular: "CyberOps Associate Skills Assessment".
+- Homepage. The Result label on the project panels and the job-scan row now matches the page heads: "Result" on its own line in small amber type, no period, instead of a bold "Result." at the start of the sentence. The stylesheet drops the `.result strong` selectors, which nothing uses now.
+- The homepage's latest-role fact reads "Vaco by Highspring, at Verizon", as the Experience and About pages do.
+- `CLAUDE.md` names "How I worked", the SSH Workbench heading since `2f103d2`, as the one section that credits AI coding agents.
+- Open: the NETI 109 line that no lab ran on real equipment and the CSIA 115 line that every lab ran in VirtualBox contradict their sources. The replacement wording is waiting for Jadon's approval.
+
+Validation: the three new tests (two in `tests/test_class_sections.py`, one in `tests/test_hooks_compose_class_page.py`) landed first and failed against the hook they target (`['One 1 lab', 'Final 1 lab', 'Finals 2 labs'] != ['One 1 lab', 'Final 1 assessment', 'Finals 2 assessments']`, `[..., '10 labs', '1 lab'] != [..., '10 labs', '1 assessment']`, and `['One 2 s'] != ['One 2 labs']` for a blank header), then passed after each fix. 58 tests and the strict build passed. The build has the same 100 files as `main`. Only the homepage and CSIA 115 HTML changed, apart from the stylesheet's `?v=` value on every page, which went from `3728eb26d664` to `64139851c017` so returning visitors get the new file. `run-check.js chromium` exited 0 with `problems: []` on all 19 routes at `77b728f`. It passed again at `a39d75c`, against a preview on port 8766 with a scratch copy of the script that changed only the port, because another worktree's preview held 8765. The last hook commit left every built file byte for byte the same. The CSIA 115 module counts were `[10, 5, 11, 11, 10, 1]`, and `labelSpacing` checked 99 labels, now including the three homepage Result labels. Screenshots were read for a homepage feature panel and the job-scan row at 390 and 1440 px, the CSIA 115 assessment module at both widths, and the Result boxes on the homepage, SSH Workbench and CSIA 115 at 390 px with 200% text, which showed no sideways overflow. WebKit, the private-term scan and Lighthouse were not run. Screen readers, physical devices and Safari on iOS were not assessed.
+
 ## November 4, 2026 — button transition matches the motion rule
 
 - `.button` no longer lists `box-shadow` in its transition (`portfolio.css:630`). No rule changes a button's shadow, so nothing on the page looks or moves differently. This closes the open item in the entry below.
