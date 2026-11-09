@@ -208,6 +208,9 @@ p { max-width: 35em; }
 }
 @media (max-width: 960px) {
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s2); }
+  /* In one column the role line is capped to it like a title: 14 letters, "Infrastructure", times
+     --title-glyph. Only enlarged text on narrow phones reaches the cap. */
+  .hero .role-line { font-size: min(var(--t-h3), 100cqi / (14 * var(--title-glyph))); }
   .facts { grid-template-columns: minmax(0, 1fr); }
   .facts > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--s2); padding: 1.125rem var(--s3); }
   .facts > div + div { border-left: 0; border-top: 1px solid var(--line); }

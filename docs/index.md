@@ -1,10 +1,10 @@
 ---
 title: Jadon Kosberg
-description: IT support experience in healthcare and retail, with personal projects and coursework in networking, infrastructure, cybersecurity, and software.
+description: Network and infrastructure support with CompTIA Security+ and A+, a documented Proxmox homelab, and IT support experience in healthcare and retail.
 layout: home
 facts:
-  - {label: Latest role, text: "IT Support Contractor", detail: "Vaco by Highspring, at Verizon, July to October 2026", href: "experience/#verizon-conversions"}
   - {label: Certifications, text: "CompTIA Security+ and A+", detail: "May 2026", href: "credentials/#certifications"}
+  - {label: Latest role, text: "IT Support Contractor", detail: "Vaco by Highspring, at Verizon, July to October 2026", href: "experience/#verizon-conversions"}
   - {label: Education, text: "B.S. in Informatics, Indiana University", detail: "Cyber Security certificate, Ivy Tech, May 2026", href: "credentials/#education"}
 ---
 
@@ -12,11 +12,11 @@ facts:
 
 <div class="hero-grid" markdown>
 
-IT support technician focused on infrastructure, networking and security.
+Infrastructure and network support, CompTIA A+ and Security+ certified.
 { .role-line .enter .enter-2 }
 
 <!-- voice: personal -->
-I supported 100+ staff across 12 dental offices and helped Verizon stores through technology conversions. Outside work I run a Proxmox homelab and built SSH Workbench, a terminal app that checks and connects to the homelab server and personal computers over SSH. I'm looking for infrastructure, networking and security roles.
+I run a documented Proxmox homelab with monitoring and alerting, and I built SSH Workbench, a terminal app for checking and connecting to machines over SSH. At work I supported 100+ staff across 12 dental offices and converted Verizon stores to new store technology as a contractor. I'm looking for network and infrastructure support roles, and security is the interest after that.
 { .intro .enter .enter-2 }
 <!-- /voice -->
 

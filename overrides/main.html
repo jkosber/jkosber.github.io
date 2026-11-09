@@ -3,7 +3,7 @@
 {% set page_title = (page.meta.title or page.title) if page else 'Page not found' %}
 {% set full_title = page_title ~ ' | ' ~ config.site_name if not page or not page.is_homepage else config.site_name %}
 {% set page_description = (page.meta.description or config.site_description) if page else 'This page could not be found. Browse projects and professional experience from Jadon Kosberg.' %}
-{% set social_image_alt = 'Jadon Kosberg, IT support technician focused on infrastructure, networking and security, beside a screenshot of the homelab dashboard. jnkos.com.' %}
+{% set social_image_alt = 'Jadon Kosberg, infrastructure and network support technician, CompTIA A+ and Security+ certified, beside a screenshot of the homelab dashboard. jnkos.com.' %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,7 +38,7 @@
   {% endif %}
   {% if page and page.is_homepage %}
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Person", "name": "Jadon Kosberg", "url": {{ config.site_url | tojson }}, "email": "mailto:Jadon@jnkos.com", "jobTitle": "IT Support Technician", "knowsAbout": ["IT support", "Networking", "Linux", "Virtualization", "Proxmox VE", "Cybersecurity", "Python"], "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Indiana University"}, {"@type": "CollegeOrUniversity", "name": "Ivy Tech Community College"}], "sameAs": ["https://www.linkedin.com/in/jadon-kosberg", "https://github.com/jkosber"]}
+  {"@context": "https://schema.org", "@type": "Person", "name": "Jadon Kosberg", "url": {{ config.site_url | tojson }}, "email": "mailto:Jadon@jnkos.com", "jobTitle": "Infrastructure and Network Support Technician", "knowsAbout": ["IT support", "Networking", "Linux", "Virtualization", "Proxmox VE", "Cybersecurity", "Python"], "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Indiana University"}, {"@type": "CollegeOrUniversity", "name": "Ivy Tech Community College"}], "sameAs": ["https://www.linkedin.com/in/jadon-kosberg", "https://github.com/jkosber"]}
   </script>
   {% endif %}
 </head>
