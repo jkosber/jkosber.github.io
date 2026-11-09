@@ -43,7 +43,7 @@ A strict build proves links and anchors resolve. It does not prove a page render
    - every old address in `REDIRECTS` landing on its new page and section;
    - `titleWrap`: every page title, the homepage name among them, keeps each word whole at 200% text at 320 and 390 px, and no description under a title is larger than the title;
    - `titleWrapDefaultText`: every page title keeps each word whole at 320 px at default text;
-   - `headingWrap200` and `railAt200`: on every route at 390 and 320 px, headings, buttons and homepage panels keep words whole at 200% text, and at 1440 px the contents rail stays no wider than the body column;
+   - `headingWrap200` and `railAt200`: on every route at 390 and 320 px, headings, buttons, homepage panels, the hero role line and the homepage's coursework case-study and class rows keep words whole at 200% text, and at 1440 px the contents rail stays no wider than the body column;
    - `targetSizes`: on every route at 390 and 1440 px, the header name, the contents summary and every footer link measure at least 44 px each way;
    - `imageScale`: on every route at 1440 and 390 px, no figure or lead screenshot draws larger than its file, and no `width`/`height` attribute exceeds the file;
    - `scrollCues`: at 600, 640, 700 and 760 px on the Proxmox, Pushdo, About and NETI 109 pages, a table's "Scroll horizontally" hint and right-edge shade show only while it scrolls, and a table that fits shows neither;

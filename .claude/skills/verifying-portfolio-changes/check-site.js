@@ -1030,7 +1030,8 @@ async (page) => {
     if (titles.split.length) fail(`titleWrapDefaultText ${route} @320: title words broken mid-word at default text: ${[...new Set(titles.split)].join(', ')}`);
   }
 
-  // Section headings, buttons and the homepage panels keep every word whole at 200% text at 390 and 320 px,
+  // Section headings, buttons, the homepage panels, the hero role line and the homepage's coursework case-study
+  // and class rows keep every word whole at 200% text at 390 and 320 px,
   // and at 1440 px the contents rail never grows wider than the body beside it. Like splitWords, but a line
   // break may follow a hyphen: a typed one, a soft hyphen, or one hyphens: auto draws. A drawn hyphen is a box
   // of its own that the letters on both sides of the break report, so the last letter before the break spans
@@ -1093,7 +1094,7 @@ async (page) => {
         await document.fonts.ready;
         await new Promise((done) => setTimeout(done, 150));
       });
-      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card');
+      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card, .role-line, .classes, .studies');
       result.checks.headingWrap200[width] += words.blocks;
       if (words.split.length) fail(`headingWrap200 ${route} @${width}: words broken mid-word with no hyphen at 200% text: ${[...new Set(words.split)].join(', ')}`);
     }
