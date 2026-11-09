@@ -51,7 +51,7 @@ The site is public and recruiters read it. These hold for every edit:
 - Case studies and class pages keep their summary in frontmatter; don't repeat it in the body.
 - A class page says what the course provided and what Jadon did, puts strongest work first, then lists every lab with work of his in tables (one closed module per `###` heading), then skills, limits and sources linking files on `main`. Leave blank or empty files out and say so in Limits.
 - Report vocabulary (evidence, recorded, supplied, historical, established): three or fewer per page.
-- AI coding agents are credited only in SSH Workbench's "How it was developed"; a product that runs an agent, like the job-scan tool, can say so.
+- AI coding agents are credited only in SSH Workbench's "How I worked"; a product that runs an agent, like the job-scan tool, can say so.
 - Never publish personal location, phone numbers, private host names, IP addresses, paths, credentials or resumes. Use documentation ranges (`192.0.2.0/24`) and `example.com` in examples. `mkdocs.yml` excludes five raw assets as a guard; keep them out.
 - Exception: anything the public [JHomelab](https://github.com/jkosber/JHomelab) repository publishes may appear as it appears there, including its host name, local addresses with the last octet shown as `X` and its screenshots. Full addresses stay out.
 - Don't use the word "artifacts" in visible copy.
