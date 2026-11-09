@@ -21,7 +21,7 @@ Python commands run the venv's interpreter (`.venv\Scripts\python` on Windows); 
 
 | Path | Note |
 |---|---|
-| `hooks/` | Authors write plain Markdown: `class_sections.py` builds the Strongest work panels and closed lab modules, `reading_accessibility.py` the scroll regions around tables and code. `frontmatter_checks.py` fails the build on a bad `class_page` or `class_name`, an `art` or `screenshot` without `src`, or a role without `image` |
+| `hooks/` | Authors write plain Markdown: `class_sections.py` builds the Strongest work panels and closed lab modules (a module's count takes its noun from the table's first column header: "Assessment" counts assessments, anything else counts labs), `reading_accessibility.py` the scroll regions around tables and code. `frontmatter_checks.py` fails the build on a bad `class_page` or `class_name`, an `art` or `screenshot` without `src`, or a role without `image` |
 | `docs/experience/index.md` | Both roles, in `roles` frontmatter; the homepage reads the same data |
 | `tests/` | `test_copy_voice.py` (report vocabulary, "artifact"), `test_stylesheet.py` (pinned tokens; no raw hex outside `:root`, print and forced colors; `!important` only with an `anti-slop-allow:` reason) |
 
