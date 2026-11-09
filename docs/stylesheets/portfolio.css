@@ -274,11 +274,13 @@ p { max-width: 35em; }
 /* Homepage case studies: project rows with the class name above a smaller title. The row stacks when the
    list is 54rem wide or less (960 px windows and narrower at default text, every window at 200%), and the
    title is capped to the row by 14 letters, "AdventureWorks" and "investigations"; only enlarged text
-   reaches the cap. */
+   reaches the cap. The description is capped too, by "advertisements," at about 7.5 em in Manrope plus a
+   little room; only 200% text in a window narrower than about 400 px reaches it. */
 .studies { container-type: inline-size; }
 .study-row { container-type: inline-size; grid-template-areas: "label desc" "title desc"; }
 .study-class { grid-area: label; color: var(--muted); font-size: var(--t-small); font-weight: 600; }
 .study-row .project-row-title { font-size: min(var(--t-lead), 100cqi / (14 * var(--title-glyph))); }
+.study-row p { font-size: min(1em, 100cqi / 7.75); }
 @container (width <= 54rem) {
   .study-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "label" "title" "desc"; grid-template-rows: none; gap: var(--s1); }
 }
