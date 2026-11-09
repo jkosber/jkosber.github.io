@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { launchOptions } = require('./run-check.js');
+const { launchOptions, engines } = require('./run-check.js');
 
 test('chromium uses PLAYWRIGHT_CHROMIUM_PATH as executablePath', () => {
   assert.deepEqual(launchOptions('chromium', { PLAYWRIGHT_CHROMIUM_PATH: '/usr/bin/chromium' }), { executablePath: '/usr/bin/chromium' });
@@ -11,4 +11,7 @@ test('chromium without the variable launches the default build', () => {
 });
 test('webkit ignores PLAYWRIGHT_CHROMIUM_PATH', () => {
   assert.deepEqual(launchOptions('webkit', { PLAYWRIGHT_CHROMIUM_PATH: '/usr/bin/chromium' }), {});
+});
+test('webkit is no longer an engine', () => {
+  assert.deepEqual(engines(), ['chromium']);
 });
