@@ -1,5 +1,5 @@
 // Runs check-site.js outside the Playwright MCP tool, in Chromium.
-// Usage: node run-check.js <chromium>
+// Usage: node run-check.js chromium
 // PLAYWRIGHT_MODULE points at a Node Playwright install; without it, `playwright`
 // is resolved the usual way.
 // PLAYWRIGHT_CHROMIUM_PATH names a Chromium executable to launch instead of
