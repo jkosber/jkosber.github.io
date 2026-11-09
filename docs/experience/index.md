@@ -10,7 +10,7 @@ roles:
     image: assets/roles/retail-conversions.svg
     icon: network
     summary: "Converted about 10 Verizon stores on three conversion projects covering roughly 130 locations: printers, network checks in Cisco Meraki and remote work with field technicians."
-    intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Prepared each store's devices for go-live, onsite and remotely with field technicians, then supported the store after it reopened."
+    intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Prepared each store's devices for go-live, onsite and remotely with field technicians."
     bullets:
       - "Converted about 10 of roughly 130 Verizon stores across three technology conversion projects: printers, PCs, firewalls, switches, phones and point-of-sale devices"
       - Installed and configured printers with static IP addresses and checked that they reached the network
