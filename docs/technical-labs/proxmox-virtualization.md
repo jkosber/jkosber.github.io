@@ -7,7 +7,7 @@ tools: [Proxmox VE 9, Ubuntu Server, Debian LXC, Docker]
 summary:
   role: "Built and maintained the lab: hypervisor install, storage, guest machines, virtual networking, firewall rules, the Docker service host, and the patching and monitoring that keep it current."
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
-  result: "Built ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot. Patched every host in October after a certificate authority compromise and set up monitoring that sends alerts to Discord."
+  result: "Patched every host in October 2026 after a certificate authority compromise and set up Beszel and Uptime Kuma monitoring with Discord alerts. Built ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
 updated: "October 23, 2026"
 screenshot:
