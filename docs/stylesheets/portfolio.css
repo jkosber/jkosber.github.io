@@ -120,17 +120,19 @@ p { max-width: 35em; }
 .page-pad { padding-block: var(--s5) var(--s6); }
 /* Homepage hero: the name, then the role line beside the intro, in a band.
    The facts panel hangs over the band's lower edge. */
-.hero { padding-top: var(--s5); }
+.hero { padding-top: var(--s4); }
 /* flow-root keeps the facts' negative margin inside the band, so the panel hangs over its lower edge. */
 .hero > .wrap { display: flow-root; container-type: inline-size; }
 /* One continuous size for the name at every width; it never breaks inside a word. Like a page title,
    the name is capped to its column by its longest word, "Kosberg"; only very large text on a phone reaches the cap. */
 .hero h1 { margin: 0; font-size: min(clamp(var(--t-h1), 5.4vw, var(--t-name)), 100cqi / (var(--title-chars, 14) * var(--title-glyph))); font-weight: 600; line-height: 1; letter-spacing: -.045em; overflow-wrap: normal; hyphens: manual; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s3); }
+/* The role line and the intro start together just under the name; the wider intro column keeps the intro
+   short enough that the first project's screenshot shows on a laptop's first screen. */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--s5); align-items: start; margin-top: var(--s2); }
 .hero-grid > p { margin: 0; }
 .hero .role-line { max-width: 22ch; color: var(--heading); font: 500 var(--t-h3)/1.3 var(--display); letter-spacing: -.02em; }
 .hero .intro { max-width: 36em; color: var(--muted); }
-.facts { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s4) 0 calc(var(--overhang) * -1); background: var(--surface); border-radius: var(--r-l); }
+.facts { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s3) 0 calc(var(--overhang) * -1); background: var(--surface); border-radius: var(--r-l); }
 .facts > div { padding: var(--s3) 1.75rem; }
 .facts > div + div { border-left: 1px solid var(--line); }
 .facts dt { color: var(--muted); font-size: var(--t-small); }
@@ -139,7 +141,7 @@ p { max-width: 35em; }
 .facts .detail { display: block; margin-top: .125rem; color: var(--muted); font-size: .9375rem; }
 
 /* Projects: feature panels whose screenshot rises above the panel edge, then the job-scan row. */
-.home-projects { padding-top: calc(var(--overhang) + var(--s5)); padding-bottom: var(--s6); }
+.home-projects { padding-top: calc(var(--overhang) + var(--s4)); padding-bottom: var(--s6); }
 .feature { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s5); align-items: start; margin-top: calc(var(--overhang) + var(--s4)); padding: var(--s4); background: var(--surface); border-radius: var(--r-l); }
 .section-head + .feature { margin-top: calc(var(--overhang) + var(--s2)); }
 /* The screenshot comes first in the source; wide panels put the copy on the left unless flipped. */
@@ -221,7 +223,6 @@ p { max-width: 35em; }
   .role-cards { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
-  .hero { padding-top: var(--s4); }
   .facts > div { grid-template-columns: minmax(0, 1fr); gap: .125rem; }
   .home-projects, .home-coursework, .home-experience { padding-bottom: var(--s5); }
   .home-coursework, .home-experience { padding-top: var(--s5); }
