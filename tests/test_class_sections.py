@@ -165,6 +165,15 @@ class ClassSectionsTests(unittest.TestCase):
         summaries = SummaryText(ClassSections(source).render()).summaries
         self.assertEqual([" ".join(text.split()) for text in summaries], ["One 2 labs"])
 
+    def test_an_unknown_first_header_still_counts_labs(self):
+        # A header outside the known set keeps "lab" rather than pluralizing the header ("activitys").
+        source = '<h2 id="labs">Labs</h2>\n' + module("m1", "One", [
+            ("1.1 First activity", "Asked", "Did"),
+            ("1.2 Second activity", "Asked", "Did"),
+        ], 1, first="Activity")
+        summaries = SummaryText(ClassSections(source).render()).summaries
+        self.assertEqual([" ".join(text.split()) for text in summaries], ["One 2 labs"])
+
     def test_the_lab_count_reads_as_a_separate_word(self):
         # The count sits apart from the heading only through CSS; without whitespace in the markup
         # a screen reader can run them together ("One2 labs").
