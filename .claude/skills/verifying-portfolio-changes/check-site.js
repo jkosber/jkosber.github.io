@@ -349,7 +349,7 @@ async (page) => {
   // three featured case studies, one compact row of class links without illustrations and a card per role.
   // The hero scene is gone (approved Oct 23).
   const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
-  const FACT_TITLES = ['CompTIA Security+ and A+', 'IT Support Contractor', 'B.S. in Informatics, Indiana University'];
+  const FACT_TITLES = ['CompTIA A+ and Security+', 'IT Support Contractor', 'B.S. in Informatics, Indiana University'];
   // Each featured case study and its class label, in nav order (the Snort lab is not featured).
   const STUDIES = [
     ['/technical-labs/aws-linux-infrastructure/', 'SVAD 111 Linux and Virtualization Technologies'],
