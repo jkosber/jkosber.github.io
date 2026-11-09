@@ -4,6 +4,8 @@ from html.parser import HTMLParser
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 TABLE_PARTS = {"table", "thead", "tbody", "tfoot", "tr", "th", "td"}
 ROLES = {"table": "table", "thead": "rowgroup", "tbody": "rowgroup", "tfoot": "rowgroup", "tr": "row", "td": "cell"}
+# A lab module's count, singular and plural, by its table's first column header.
+COUNT_NOUNS = {"Lab": ("lab", "labs"), "Assessment": ("assessment", "assessments")}
 
 
 class Blocks(HTMLParser):
@@ -136,12 +138,13 @@ class ClassSections:
         for heading, content in items(blocks):
             tables = [table for block in content for table in block["tables"]]
             count = sum(table["rows"] for table in tables)
-            # The first column's header names the rows ("Lab", "Assessment"), so a module holding
-            # a skills assessment doesn't count it as a lab.
-            noun = escape(tables[0]["headers"][0].lower()) if tables and tables[0]["headers"] else "lab"
-            # A module without lab rows shows no count rather than "0 labs". The space keeps the
+            # A table headed "Assessment" counts assessments, so a module holding a skills
+            # assessment doesn't call it a lab; any other first column header counts labs.
+            first = tables[0]["headers"][0] if tables and tables[0]["headers"] else "Lab"
+            one, many = COUNT_NOUNS.get(first, COUNT_NOUNS["Lab"])
+            # A module without rows shows no count rather than "0 labs". The space keeps the
             # count a separate word for screen readers; the summary's flex layout ignores it.
-            label = f' <span class="lab-count">{count} {noun}{"" if count == 1 else "s"}</span>' if count else ""
+            label = f' <span class="lab-count">{count} {one if count == 1 else many}</span>' if count else ""
             self.edit(heading["end"], heading["end"], f"{label}</summary>")
             self.wrap((heading, content), '<details class="lab-module"><summary>', "</details>")
             for block in content:
