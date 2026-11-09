@@ -1,6 +1,6 @@
 ---
 title: About
-description: Infrastructure and network support technician with CompTIA Security+ and A+, IT support experience in healthcare and retail, and an informatics degree.
+description: Infrastructure and network support technician with CompTIA A+ and Security+, IT support experience in healthcare and retail, and an informatics degree.
 kind: Background
 ---
 
