@@ -7,7 +7,7 @@ tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "Defined what Workbench does, planned each release as small tested tasks and tested it on personal machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
-  result: "Built a keyboard-driven app that keeps each machine, its connection and its dashboards in one list, connects through the system OpenSSH client, checks reachability without logging in and sets up key login. Version 0.3.4 passes 1,141 automated tests on Windows and Ubuntu."
+  result: "Shipped version 0.3.4, which passes 1,141 automated tests on Windows and Ubuntu, with connections handed to the system OpenSSH client, status checks that never log in and no credential ever handled by the app."
   source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
 updated: "October 31, 2026"
 screenshot:
