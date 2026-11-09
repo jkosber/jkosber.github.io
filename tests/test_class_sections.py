@@ -75,12 +75,12 @@ def has_class(node, name):
     return node is not None and name in node[1].get("class", "").split()
 
 
-def module(heading_id, title, rows, number):
+def module(heading_id, title, rows, number, first="Lab"):
     body = "".join(f"<tr>\n<td>{lab}</td>\n<td>{asked}</td>\n<td>{did}</td>\n</tr>\n" for lab, asked, did in rows)
     return (
         f'<h3 id="{heading_id}">{title}</h3>\n'
         f'<div class="table-scroll" role="region" tabindex="0" aria-label="Table {number}: {title}"><table>\n'
-        "<thead>\n<tr>\n<th>Lab</th>\n<th>What it asked</th>\n<th>What I did</th>\n</tr>\n</thead>\n"
+        f"<thead>\n<tr>\n<th>{first}</th>\n<th>What it asked</th>\n<th>What I did</th>\n</tr>\n</thead>\n"
         f"<tbody>\n{body}</tbody>\n</table></div>{HINT}\n"
     )
 
@@ -141,6 +141,20 @@ class ClassSectionsTests(unittest.TestCase):
         self.assertIn('<details class="lab-module"><summary><h3 id="m0">Zero</h3></summary>', result)
         self.assertIn('<summary><h3 id="m1">One</h3> <span class="lab-count">1 lab</span></summary>', result)
         self.assertNotIn("0 labs", result)
+
+    def test_the_count_names_its_rows_by_the_first_column_header(self):
+        # A module holding a skills assessment counts assessments, not labs.
+        source = '<h2 id="labs">Labs</h2>\n' + module("m1", "One", [
+            ("1.1 First lab", "Asked", "Did"),
+        ], 1) + module("m2", "Final", [
+            ("Skills Assessment", "Asked", "Did"),
+        ], 2, first="Assessment") + module("m3", "Finals", [
+            ("Midterm", "Asked", "Did"),
+            ("Final", "Asked", "Did"),
+        ], 3, first="Assessment")
+        summaries = SummaryText(ClassSections(source).render()).summaries
+        self.assertEqual([" ".join(text.split()) for text in summaries],
+                         ["One 1 lab", "Final 1 assessment", "Finals 2 assessments"])
 
     def test_the_lab_count_reads_as_a_separate_word(self):
         # The count sits apart from the heading only through CSS; without whitespace in the markup
