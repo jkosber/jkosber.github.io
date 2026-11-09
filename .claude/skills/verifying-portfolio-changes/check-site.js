@@ -1393,7 +1393,7 @@ async (page) => {
           if (device.layoutWidth !== profile.viewport.width) fail(`${where}: layout viewport is ${device.layoutWidth}px, expected ${profile.viewport.width} (viewport meta not honoured)`);
           if (Math.abs(device.dpr - profile.deviceScaleFactor) > 0.01) fail(`${where}: devicePixelRatio ${device.dpr}, expected ${profile.deviceScaleFactor} (device emulation is off)`);
           if (device.scale !== 1) fail(`${where}: page starts zoomed to ${device.scale}`);
-          const regions = await regionState(phone, false);
+          const regions = await regionState(phone, true);
           addCounts(counts.regions, regionCounts(regions));
           for (const problem of regionProblems(regions)) fail(`${where}: ${problem}`);
         }
