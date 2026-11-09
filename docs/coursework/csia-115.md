@@ -137,7 +137,7 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 
 | Assessment | What it asked | Work done |
 |---|---|---|
-| CyberOps Associates Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see above) |
+| CyberOps Associate Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see above) |
 
 ## Skills {#skills}
 
