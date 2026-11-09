@@ -69,14 +69,21 @@
 </article>
 {%- endmacro %}
 
-{# One class on the homepage: the whole card links to its page. #}
+{# A featured coursework case study on the homepage: its class above the title, whose link covers the row. #}
+{% macro study_row(study) -%}
+<li class="project-row study-row lift reveal">
+  <span class="study-class">{{ study.meta.class_name }}</span>
+  <h3 class="project-row-title"><a href="{{ study.url | url }}">{{ study.meta.title or study.title }}</a></h3>
+  <p>{{ study.meta.description }}</p>
+</li>
+{%- endmacro %}
+
+{# One class in the homepage's compact class row: code, course and term; the whole card links to its page. #}
 {% macro class_tile(class_page) -%}
-{% set art = class_page.meta.art %}
 <li><a class="tile lift" href="{{ class_page.url | url }}">
-  {% if art %}<img class="tile-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
   <span class="tile-code">{{ class_page.meta.code }}</span>
   <span class="tile-name">{{ class_page.meta.course }}</span>
-  <span class="tile-meta">{{ class_page.meta.term }}{% if class_page.meta.get('items') %}, {{ class_page.meta.get('items') }}{% endif %}</span>
+  <span class="tile-meta">{{ class_page.meta.term }}</span>
 </a></li>
 {%- endmacro %}
 

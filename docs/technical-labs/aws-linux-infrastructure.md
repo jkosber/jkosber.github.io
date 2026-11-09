@@ -4,6 +4,7 @@ description: A deployment of the course's PHP app and SQL Server database on two
 kind: Completed coursework
 status: "Completed May 2026"
 detail: true
+featured: true
 class_page: coursework/svad-111/
 class_name: SVAD 111 Linux and Virtualization Technologies
 summary:
