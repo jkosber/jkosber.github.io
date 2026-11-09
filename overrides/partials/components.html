@@ -40,7 +40,7 @@
   <div class="feature-copy">
     <h3><a href="{{ project.url | url }}">{{ title }}</a></h3>
     <p class="desc">{{ project.meta.description }}</p>
-    {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+    {% if summary.result %}<p class="result"><span class="result-label">Result</span> {{ summary.result }}</p>{% endif %}
     {% if tools %}<ul class="tools" role="list" aria-label="Built with">{% for name in tools %}<li>{{ tool_icon(name) }}{{ name }}</li>{% endfor %}</ul>{% endif %}
     <a class="button" href="{{ project.url | url }}">Read the case study<span class="sr"> about {{ title }}</span></a>
   </div>
@@ -61,7 +61,7 @@
   <div class="minor-side">
     {% if art %}<img class="minor-art" src="{{ art.src | url }}" width="{{ art.width }}" height="{{ art.height }}" alt="" loading="lazy">{% endif %}
     {% if notes %}<div>
-      {% if summary.result %}<p class="result"><strong>Result.</strong> {{ summary.result }}</p>{% endif %}
+      {% if summary.result %}<p class="result"><span class="result-label">Result</span> {{ summary.result }}</p>{% endif %}
       {% if project.meta.status %}<p class="minor-status">{{ project.meta.status }}</p>{% endif %}
     </div>{% endif %}
   </div>

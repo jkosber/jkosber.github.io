@@ -111,6 +111,11 @@ class ComposedClassPageTests(unittest.TestCase):
         self.assertEqual(page.did_labels, 36)
         self.assertEqual(page.hints_in_modules, 0)
 
+    def test_csia_115_counts_its_skills_assessment_apart_from_its_labs(self):
+        # The page lists 47 labs and a skills assessment; the last module holds the assessment.
+        page = Page(build("csia-115"))
+        self.assertEqual(page.counts, ["10 labs", "5 labs", "11 labs", "11 labs", "10 labs", "1 assessment"])
+
 
 if __name__ == "__main__":
     unittest.main()
