@@ -4,6 +4,7 @@ description: A CSIA 210 final capstone that matched Windows hosts' IPv6 behavior
 kind: Completed coursework
 status: "Completed May 2026"
 detail: true
+featured: true
 class_page: coursework/csia-210/
 class_name: CSIA 210 Network Protocol Analysis
 summary:

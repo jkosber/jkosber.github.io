@@ -32,8 +32,9 @@ Python commands run the venv's interpreter (`.venv\Scripts\python` on Windows); 
 | `summary` | `role`, `built_with`, `result`, optional `source: {label, url}`: `result` in the page head, `role` and `built_with` in the Role panel, `source` in the strip |
 | `screenshot` | `src`, `width`, `height`, `alt`, `caption` (with its date): the lead capture on a case study and beside the project on the homepage |
 | `tools` | Up to four short names for the homepage feature panel's tool list, only on a project with a `screenshot`; without it the first four `built_with` entries show |
-| `art` | `src`, `width`, `height`: an isometric illustration for class pages (header and tile) and the job-scan minor row |
+| `art` | `src`, `width`, `height`: an isometric illustration for class page headers and the job-scan minor row |
 | `detail: true`, `class_page`, `class_name` | Coursework case study: listed under its class on the Coursework index, not on Projects; the class sets the breadcrumb |
+| `featured: true` | Coursework case study shown on the homepage's Coursework case studies row; three pages carry it; `STUDIES` in `check-site.js` lists them |
 | `voice: personal` | A first-person page, such as a future post: first person on the whole page, frontmatter included (third person stays forbidden). For one passage on a page without `summary`, use the `<!-- voice: personal -->` ... `<!-- /voice -->` markers |
 
 Nothing reads `kind` or `roles[].icon`.

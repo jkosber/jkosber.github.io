@@ -108,7 +108,7 @@ async (page) => {
       return range.toString();
     };
     const labels = [
-      ...document.querySelectorAll('.result-label, .panel-title, dl.strip dt, dl.facts dt, details.lab-module > summary > h3'),
+      ...document.querySelectorAll('.result-label, .panel-title, dl.strip dt, dl.facts dt, details.lab-module > summary > h3, .study-class'),
       ...[...document.querySelectorAll('dl.facts .detail')].map((detail) => detail.previousSibling).filter(Boolean),
     ];
     const glued = labels.map((node) => [node.textContent, following(node)])
@@ -344,11 +344,18 @@ async (page) => {
     if (index.leftovers) fail(`projectsIndex @${width}: ${index.leftovers} filter, toolbar or card element(s) remain`);
   }
 
-  // Homepage: a hero band with the name and three facts, the two lead projects as feature panels
-  // with real captures, the job-scan row, a tile per class and a card per role.
+  // Homepage: a hero band with the name and three facts (certifications first), the two lead projects
+  // as feature panels with real captures, the job-scan row, a "Coursework case studies" list of the
+  // three featured case studies, one compact row of class links without illustrations and a card per role.
   // The hero scene is gone (approved Oct 23).
   const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
-  const FACT_TITLES = ['IT Support Contractor', 'CompTIA Security+ and A+', 'B.S. in Informatics, Indiana University'];
+  const FACT_TITLES = ['CompTIA A+ and Security+', 'IT Support Contractor', 'B.S. in Informatics, Indiana University'];
+  // Each featured case study and its class label, in nav order (the Snort lab is not featured).
+  const STUDIES = [
+    ['/technical-labs/aws-linux-infrastructure/', 'SVAD 111 Linux and Virtualization Technologies'],
+    ['/technical-labs/soc-threat-detection/', 'CSIA 115 Cyber Ops'],
+    ['/technical-labs/ipv6-packet-investigations/', 'CSIA 210 Network Protocol Analysis'],
+  ];
   result.checks.home = {};
   for (const [width, height] of [[1440, 900], [390, 844]]) {
     await page.setViewportSize({ width, height });
@@ -358,12 +365,14 @@ async (page) => {
       const text = (element) => (element ? element.textContent.replace(/\s+/g, ' ').trim() : '');
       const features = [...main.querySelectorAll('.feature')];
       const firstImage = features[0] && features[0].querySelector('img');
-      const tileArt = [];
-      for (const image of main.querySelectorAll('.tiles .tile-art')) {
-        image.scrollIntoView({ behavior: 'instant' });
-        if (!image.complete) await new Promise((done) => { image.addEventListener('load', done, { once: true }); image.addEventListener('error', done, { once: true }); });
-        tileArt.push({ src: image.getAttribute('src'), alt: image.getAttribute('alt'), loaded: image.naturalWidth > 0 });
-      }
+      // Text after the class label up to the end of its item: it must start with whitespace.
+      const afterLabel = (label) => {
+        const range = document.createRange();
+        range.setStartAfter(label);
+        range.setEndAfter(label.parentNode.lastChild);
+        return range.toString();
+      };
+      const studyLists = main.querySelectorAll('ul[aria-label="Coursework case studies"]');
       return {
         name: text(main.querySelector('h1')),
         facts: [...main.querySelectorAll('.facts > div')].map((cell) => ({ title: text(cell.querySelector('a')), detail: text(cell.querySelector('.detail')) })),
@@ -379,9 +388,19 @@ async (page) => {
         firstImage: firstImage ? { src: firstImage.getAttribute('src'), width: firstImage.getAttribute('width'), height: firstImage.getAttribute('height') } : null,
         liftedFeatures: main.querySelectorAll('.feature.lift').length,
         minor: text(main.querySelector('.minor h3')),
-        tiles: main.querySelectorAll('.tiles > li').length,
-        codes: [...main.querySelectorAll('.tile-code')].map(text),
-        tileArt,
+        classLinks: main.querySelectorAll('ul.classes > li > a[href]').length,
+        codes: [...main.querySelectorAll('ul.classes .tile-code')].map(text),
+        classImages: main.querySelectorAll('ul.classes img').length,
+        studyLists: studyLists.length,
+        studies: studyLists.length ? [...studyLists[0].children].map((item) => {
+          const label = item.querySelector('.study-class');
+          const link = item.querySelector('h3 a[href]');
+          return {
+            href: link ? new URL(link.href).pathname : null,
+            label: label ? text(label) : null,
+            spaced: label ? /^\s/.test(afterLabel(label)) : false,
+          };
+        }) : [],
         roles: [...main.querySelectorAll('.home-experience .role-card')].map((card) => {
           const image = card.querySelector('img');
           return image ? { src: image.getAttribute('src'), alt: image.getAttribute('alt') } : null;
@@ -390,7 +409,7 @@ async (page) => {
         reveals: main.querySelectorAll('.reveal').length,
       };
     });
-    result.checks.home[width] = { features: home.features.map((feature) => feature.title), tiles: home.tiles, roles: home.roles.length, reveals: home.reveals };
+    result.checks.home[width] = { features: home.features.map((feature) => feature.title), studies: home.studies.length, classes: home.classLinks, roles: home.roles.length, reveals: home.reveals };
     const where = `home @${width}`;
     if (home.name !== 'Jadon Kosberg') fail(`${where}: h1 is "${home.name}"`);
     if (home.facts.length !== 3) fail(`${where}: ${home.facts.length} facts, expected 3`);
@@ -409,13 +428,18 @@ async (page) => {
     }
     if (home.liftedFeatures) fail(`${where}: ${home.liftedFeatures} feature panel(s) carry .lift`);
     if (home.minor !== 'Job scan and resume tailor') fail(`${where}: .minor h3 is "${home.minor}"`);
-    if (home.tiles !== 6) fail(`${where}: ${home.tiles} class tiles, expected 6`);
-    if (home.codes.join('|') !== expectedClasses.join('|')) fail(`${where}: tile codes ${home.codes.join(', ')}`);
-    if (home.tileArt.length !== home.tiles) fail(`${where}: ${home.tileArt.length} tile images for ${home.tiles} tiles`);
-    for (const art of home.tileArt) {
-      if (art.alt !== '') fail(`${where}: tile art ${art.src} alt is "${art.alt}", expected ""`);
-      if (!art.loaded) fail(`${where}: tile art ${art.src} did not load`);
-    }
+    if (home.studyLists !== 1) fail(`${where}: ${home.studyLists} lists named "Coursework case studies", expected 1`);
+    if (home.studies.length !== 3) fail(`${where}: ${home.studies.length} items in "Coursework case studies", expected 3`);
+    if (home.studies.map((study) => study.href).join('|') !== STUDIES.map(([href]) => href).join('|')) fail(`${where}: case studies link to ${home.studies.map((study) => study.href).join(', ')}`);
+    home.studies.forEach((study, index) => {
+      const expected = STUDIES[index] ? STUDIES[index][1] : null;
+      if (!study.label) fail(`${where}: case study ${index + 1} has no .study-class label`);
+      else if (study.label !== expected) fail(`${where}: case study ${index + 1} label is "${study.label}", expected "${expected}"`);
+      else if (!study.spaced) fail(`${where}: case study ${index + 1} label "${study.label}" runs into the title with no whitespace`);
+    });
+    if (home.classLinks !== 6) fail(`${where}: ${home.classLinks} class links in ul.classes, expected 6`);
+    if (home.codes.join('|') !== expectedClasses.join('|')) fail(`${where}: class codes ${home.codes.join(', ')}`);
+    if (home.classImages) fail(`${where}: ${home.classImages} image(s) in the class row, expected none`);
     if (home.roles.length !== 2) fail(`${where}: ${home.roles.length} role cards, expected 2`);
     home.roles.forEach((image, index) => {
       if (!image || !image.src.includes('assets/roles/') || image.alt !== '') fail(`${where}: role card ${index + 1} image ${JSON.stringify(image)}`);
@@ -433,6 +457,22 @@ async (page) => {
     result.checks.firstShot[`${width}x${height}`] = top;
     if (top === null || top > 740) fail(`firstShot ${width}x${height}: the first feature screenshot starts at ${top}px, expected 740 or less`);
   }
+
+  // A laptop's first screen holds the whole hero and the top of the lead project's screenshot.
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto(BASE + '/');
+  const firstScreen = await page.evaluate(async () => {
+    await document.fonts.ready;
+    const image = document.querySelector('.feature .shot img');
+    const facts = document.querySelector('.facts');
+    return {
+      shot: image ? Math.round(image.getBoundingClientRect().top) : null,
+      facts: facts ? Math.round(facts.getBoundingClientRect().bottom) : null,
+    };
+  });
+  result.checks.firstScreen = firstScreen;
+  if (firstScreen.shot === null || firstScreen.shot > 660) fail(`firstScreen / @1366x768: the first feature screenshot starts at ${firstScreen.shot}px, expected 660 or less`);
+  if (firstScreen.facts === null || firstScreen.facts > 768) fail(`firstScreen / @1366x768: the facts strip ends at ${firstScreen.facts}px, expected 768 or less`);
 
   // Nothing covers a feature's button where the screenshot overhangs the panel on tablets.
   result.checks.coveredButtons = 0;
@@ -990,7 +1030,8 @@ async (page) => {
     if (titles.split.length) fail(`titleWrapDefaultText ${route} @320: title words broken mid-word at default text: ${[...new Set(titles.split)].join(', ')}`);
   }
 
-  // Section headings, buttons and the homepage panels keep every word whole at 200% text at 390 and 320 px,
+  // Section headings, buttons, the homepage panels, the hero role line and the homepage's coursework case-study
+  // and class rows keep every word whole at 200% text at 390 and 320 px,
   // and at 1440 px the contents rail never grows wider than the body beside it. Like splitWords, but a line
   // break may follow a hyphen: a typed one, a soft hyphen, or one hyphens: auto draws. A drawn hyphen is a box
   // of its own that the letters on both sides of the break report, so the last letter before the break spans
@@ -1053,7 +1094,7 @@ async (page) => {
         await document.fonts.ready;
         await new Promise((done) => setTimeout(done, 150));
       });
-      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card');
+      const words = await unhyphenatedSplits('h2, h3, .button, .feature, .minor, .role-card, .role-line, .classes, .studies');
       result.checks.headingWrap200[width] += words.blocks;
       if (words.split.length) fail(`headingWrap200 ${route} @${width}: words broken mid-word with no hyphen at 200% text: ${[...new Set(words.split)].join(', ')}`);
     }

@@ -1,6 +1,6 @@
 ---
 title: About
-description: IT support technician with healthcare and retail experience, CompTIA Security+ and A+, and an informatics degree.
+description: Infrastructure and network support technician with CompTIA A+ and Security+, IT support experience in healthcare and retail, and an informatics degree.
 kind: Background
 ---
 
@@ -8,7 +8,7 @@ kind: Background
 
 <!-- voice: personal -->
 
-I'm an IT support technician with an informatics degree and a Cyber Security certificate. I've supported dental offices and retail stores, handling help desk tickets, workstation setups, printers and network checks.
+I'm a CompTIA A+ and Security+ certified technician with an informatics degree and a Cyber Security certificate, working toward network and infrastructure roles. I've supported dental offices and retail stores, handling help desk tickets, workstation setups, printers and network checks.
 
 Outside work I run a [Proxmox homelab](../technical-labs/proxmox-virtualization.md): a place to try configurations, track down failures and keep Linux services up. The [projects](../technical-labs/index.md) are solo builds, and the [coursework](../coursework/index.md) pages cover the labs from completed classes.
 

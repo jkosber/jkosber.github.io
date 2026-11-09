@@ -120,17 +120,19 @@ p { max-width: 35em; }
 .page-pad { padding-block: var(--s5) var(--s6); }
 /* Homepage hero: the name, then the role line beside the intro, in a band.
    The facts panel hangs over the band's lower edge. */
-.hero { padding-top: var(--s5); }
+.hero { padding-top: var(--s4); }
 /* flow-root keeps the facts' negative margin inside the band, so the panel hangs over its lower edge. */
 .hero > .wrap { display: flow-root; container-type: inline-size; }
 /* One continuous size for the name at every width; it never breaks inside a word. Like a page title,
    the name is capped to its column by its longest word, "Kosberg"; only very large text on a phone reaches the cap. */
 .hero h1 { margin: 0; font-size: min(clamp(var(--t-h1), 5.4vw, var(--t-name)), 100cqi / (var(--title-chars, 14) * var(--title-glyph))); font-weight: 600; line-height: 1; letter-spacing: -.045em; overflow-wrap: normal; hyphens: manual; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s5); align-items: end; margin-top: var(--s3); }
+/* The role line and the intro start together just under the name; the wider intro column keeps the intro
+   short enough that the first project's screenshot shows on a laptop's first screen. */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--s5); align-items: start; margin-top: var(--s2); }
 .hero-grid > p { margin: 0; }
 .hero .role-line { max-width: 22ch; color: var(--heading); font: 500 var(--t-h3)/1.3 var(--display); letter-spacing: -.02em; }
 .hero .intro { max-width: 36em; color: var(--muted); }
-.facts { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s4) 0 calc(var(--overhang) * -1); background: var(--surface); border-radius: var(--r-l); }
+.facts { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s3) 0 calc(var(--overhang) * -1); background: var(--surface); border-radius: var(--r-l); }
 .facts > div { padding: var(--s3) 1.75rem; }
 .facts > div + div { border-left: 1px solid var(--line); }
 .facts dt { color: var(--muted); font-size: var(--t-small); }
@@ -139,7 +141,7 @@ p { max-width: 35em; }
 .facts .detail { display: block; margin-top: .125rem; color: var(--muted); font-size: .9375rem; }
 
 /* Projects: feature panels whose screenshot rises above the panel edge, then the job-scan row. */
-.home-projects { padding-top: calc(var(--overhang) + var(--s5)); padding-bottom: var(--s6); }
+.home-projects { padding-top: calc(var(--overhang) + var(--s4)); padding-bottom: var(--s6); }
 .feature { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s5); align-items: start; margin-top: calc(var(--overhang) + var(--s4)); padding: var(--s4); background: var(--surface); border-radius: var(--r-l); }
 .section-head + .feature { margin-top: calc(var(--overhang) + var(--s2)); }
 /* The screenshot comes first in the source; wide panels put the copy on the left unless flipped. */
@@ -174,19 +176,21 @@ p { max-width: 35em; }
 .lightbox::backdrop { background: var(--backdrop); }
 .lightbox-close { min-height: 44px; padding: 0 var(--s2); color: var(--heading); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-s); font: 600 .9375rem var(--body); cursor: pointer; }
 
-/* Coursework: a band of whole-card links, one per class. */
+/* Coursework: the featured case studies as rows (set like the Projects index rows, below), then one
+   compact row of whole-card links, one per class. */
 .home-coursework { padding-block: var(--s6); }
 .section-dek { max-width: 34em; margin: calc(var(--s4) * -1 + var(--s2)) 0 var(--s4); color: var(--muted); }
-.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s2); margin: 0; padding: 0; list-style: none; container-type: inline-size; }
-.tiles > li { margin: 0; }
-.tile { display: grid; align-content: start; gap: .25rem; height: 100%; padding: .75rem .75rem 1.25rem; background: var(--surface); border-radius: var(--r-l); color: var(--text); text-decoration: none; }
+/* Six classes across, three at 960 px and two at 760 px (--class-columns). A column is never narrower
+   than 8rem, so enlarged text drops to fewer columns and the course names keep their words whole. */
+.classes { --class-columns: 6; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, max(8rem, (100% - (var(--class-columns) - 1) * var(--s2)) / var(--class-columns) - .1px)), 1fr)); gap: var(--s2); margin: var(--s3) 0 0; padding: 0; list-style: none; }
+.classes > li { margin: 0; }
+/* Side padding stays 12 px as text grows, so long course names keep room. */
+.tile { display: grid; align-content: start; gap: .125rem; height: 100%; padding: var(--s2) min(.75rem, 20px - .25rem); background: var(--surface); border-radius: var(--r-l); color: var(--text); text-decoration: none; }
 .tile:hover { background: var(--raised); }
-.tile-art { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin-bottom: .75rem; background: var(--inset); border-radius: var(--r-m); }
-.tile-code, .tile-name, .tile-meta { padding-inline: .5rem; }
 .tile-code { color: var(--muted); font-weight: 700; font-size: var(--t-small); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
-.tile-name { color: var(--heading); font: 500 var(--t-lead)/1.3 var(--display); letter-spacing: -.02em; }
+.tile-name { color: var(--heading); font: 500 .9375rem/1.3 var(--display); letter-spacing: -.01em; }
 .tile:hover .tile-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
-.tile-meta { color: var(--muted); font-size: .9375rem; }
+.tile-meta { color: var(--muted); font-size: var(--t-small); }
 
 /* Experience: a card per role; the Experience page shows the full entries. */
 .home-experience { padding-block: var(--s6); }
@@ -208,15 +212,17 @@ p { max-width: 35em; }
 }
 @media (max-width: 960px) {
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s2); }
+  /* In one column the role line is capped to it like a title: 14 letters, "Infrastructure", times
+     --title-glyph. Only enlarged text on narrow phones reaches the cap. */
+  .hero .role-line { font-size: min(var(--t-h3), 100cqi / (14 * var(--title-glyph))); }
   .facts { grid-template-columns: minmax(0, 1fr); }
   .facts > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--s2); padding: 1.125rem var(--s3); }
   .facts > div + div { border-left: 0; border-top: 1px solid var(--line); }
   .facts dd { margin: 0; }
-  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .classes { --class-columns: 3; }
   .role-cards { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
-  .hero { padding-top: var(--s4); }
   .facts > div { grid-template-columns: minmax(0, 1fr); gap: .125rem; }
   .home-projects, .home-coursework, .home-experience { padding-bottom: var(--s5); }
   .home-coursework, .home-experience { padding-top: var(--s5); }
@@ -228,20 +234,18 @@ p { max-width: 35em; }
   .feature, .minor, .role-card, .section-head { container-type: inline-size; }
   .section-head h2 { font-size: min(clamp(1.625rem, 2.6vw, var(--t-h2)), 100cqi / (10 * var(--title-glyph))); }
   .feature h3, .minor h3, .role-card h3 { font-size: min(var(--t-h3), 100cqi / (10 * var(--title-glyph))); }
+  /* Their descriptions are capped too, by 13 characters ("workstations,") at about half an em each in
+     Manrope; only 200% text on a 320 px phone with a classic scrollbar reaches the cap (F-029). */
+  .feature .desc, .minor .desc, .role-card .role-summary { font-size: min(1em, 100cqi / 6.5); }
   .minor-side { flex-direction: column; align-items: flex-start; }
   .minor-art { width: 7.5rem; }
-  .tiles { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
-  .tile { grid-template-columns: 6rem minmax(0, 1fr); column-gap: var(--s2); align-items: center; padding: .75rem; }
-  .tile-art { grid-row: 1 / 4; width: 6rem; margin: 0; }
-  .tile-code, .tile-name, .tile-meta { padding-inline: 0; }
-  .tile-name { font-size: 1.125rem; }
+  .classes { --class-columns: 2; }
+  /* A class name is capped to its tile by "Technologies", about 6.75 em in Sora, plus a little room; only
+     200% text on a 320 px phone with a classic scrollbar reaches the cap. */
+  .tile { container-type: inline-size; }
+  .tile-name { font-size: min(.9375rem, 100cqi / 6.9); }
   .role-card { grid-template-columns: minmax(0, 1fr); padding: 1.5rem min(1.25rem, 28px - .5rem); }
   .role-card .role-art { width: 8.75rem; }
-}
-/* With very large text a compact tile leaves the name no room beside the art, so the art goes on top. */
-@container (width < 15rem) {
-  .tile { grid-template-columns: minmax(0, 1fr); }
-  .tile-art { grid-row: auto; }
 }
 
 /* Index pages and Experience: the title and intro sit in the band, set like a case study's description. */
@@ -270,6 +274,19 @@ p { max-width: 35em; }
   /* The title is capped to the row like a page title, by 10 letters ("Workbench" is 9). */
   .project-row { padding: 1.5rem min(1.25rem, 5vw); container-type: inline-size; }
   .project-row-title { font-size: min(1.375rem, 100cqi / (10 * var(--title-glyph))); }
+}
+/* Homepage case studies: project rows with the class name above a smaller title. The row stacks when the
+   list is 54rem wide or less (960 px windows and narrower at default text, every window at 200%), and the
+   title is capped to the row by 14 letters, "AdventureWorks" and "investigations"; only enlarged text
+   reaches the cap. The description is capped too, by "advertisements," at about 7.5 em in Manrope plus a
+   little room; only 200% text in a window narrower than about 400 px reaches it. */
+.studies { container-type: inline-size; }
+.study-row { container-type: inline-size; grid-template-areas: "label desc" "title desc"; }
+.study-class { grid-area: label; color: var(--muted); font-size: var(--t-small); font-weight: 600; }
+.study-row .project-row-title { font-size: min(var(--t-lead), 100cqi / (14 * var(--title-glyph))); }
+.study-row p { font-size: min(1em, 100cqi / 7.75); }
+@container (width <= 54rem) {
+  .study-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "label" "title" "desc"; grid-template-rows: none; gap: var(--s1); }
 }
 
 /* Experience: a card per role, the art beside the text; the art goes on top on phones. */
@@ -673,7 +690,9 @@ details.lab-module { margin-top: .75rem; background: var(--surface); border-radi
   .main-nav { display: flex; flex-wrap: wrap; gap: .25rem; }
   .main-nav a { flex: 1 1 max-content; min-width: calc(50% - .125rem); justify-content: flex-start; }
   .credential-grid { grid-template-columns: minmax(0, 1fr); }
-  .credential { padding: 1.25rem min(1.25rem, 5vw); }
+  .credential { padding: 1.25rem min(1.25rem, 5vw); container-type: inline-size; }
+  /* A credential name is capped to its card like a title: 9 letters, "Security+", times --title-glyph (F-029). */
+  .credential h3 { font-size: min(var(--t-lead), 100cqi / (9 * var(--title-glyph))); }
   .back-to-top { right: .8rem; bottom: .8rem; padding: .7rem; }
   .back-to-top span { display: none; }
 }

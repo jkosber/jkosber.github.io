@@ -4,6 +4,7 @@ description: A Pushdo malware infection traced in Security Onion from the alerts
 kind: Completed coursework
 status: "Completed March 2026"
 detail: true
+featured: true
 class_page: coursework/csia-115/
 class_name: CSIA 115 Cyber Ops
 summary:

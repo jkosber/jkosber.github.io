@@ -7,7 +7,7 @@ tools: [Python 3.14, Textual, OpenSSH, GitHub Actions]
 summary:
   role: "Defined what Workbench does, planned each release as small tested tasks and tested it on personal machines."
   built_with: ["Python 3.14", "Textual", "OpenSSH", "uv", "pytest", "Ruff", "GitHub Actions"]
-  result: "Shipped nine tagged releases from October 20 to 31, 2026, after work began October 9, ending with version 0.3.4, which passes 1,141 automated tests on Windows and Ubuntu."
+  result: "Shipped version 0.3.4, which hands connections to the system OpenSSH client, never logs in for status checks, never handles a credential, and passes 1,141 automated tests on Windows and Ubuntu."
   source: {label: "GitHub repository", url: "https://github.com/jkosber/ssh-workbench"}
 updated: "October 31, 2026"
 screenshot:
