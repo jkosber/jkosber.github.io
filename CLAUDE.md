@@ -91,7 +91,7 @@ Dark navy in four layers, blue structure, amber emphasis; flat fills, and the ta
 
 ## Verification and publishing
 
-- Before any commit that changes the site: the tests and a strict build. Before asking to publish: the `verifying-portfolio-changes` skill, in Chromium and in WebKit (`run-check.js` with `PLAYWRIGHT_MODULE` set).
+- Before any commit that changes the site: the tests and a strict build. Before asking to publish: the `verifying-portfolio-changes` skill (`node .claude/skills/verifying-portfolio-changes/run-check.js chromium` with `PLAYWRIGHT_MODULE` set).
 - Work on a branch. A push to `main` deploys through `.github/workflows/deploy.yml`, so push, merge or deploy only with Jadon's approval of that specific change.
 - Each branch merged to `main` adds a dated `CHANGELOG.md` entry with what was checked.
 - Review new or changed copy for filler and cliches with `anti-slop:slop-check`.
