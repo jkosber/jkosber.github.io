@@ -2,27 +2,29 @@
 
 ## November 9, 2026 — homepage positioning
 
-- One target track. The homepage role line reads "Infrastructure and network support, CompTIA A+ and Security+ certified." The intro leads with the homelab and SSH Workbench, then the two jobs, and ends on network and infrastructure support roles, with security named as the next interest. The page description, About's description and first sentence, the social image's alt text and the JSON-LD `jobTitle` ("Infrastructure and Network Support Technician") follow it. The Experience page keeps the job title "IT Support Contractor".
+- One target track. The homepage role line reads "Infrastructure and network support, CompTIA A+ and Security+ certified." The intro leads with the homelab and SSH Workbench, then the two jobs, and ends on network and infrastructure support roles, with security named as the next step. The page description, About's description and first sentence, the social image's alt text and the JSON-LD `jobTitle` ("Infrastructure and Network Support Technician") follow it. The Experience page keeps the job title "IT Support Contractor".
 - Credentials first. The homepage facts strip is ordered Certifications, Latest role, Education.
 - Coursework on the homepage:
   - Three case studies show as rows in a list named "Coursework case studies": AdventureWorks on AWS, the Pushdo investigation and the IPv6 packet investigations, each with its class code and name above the title. The new `featured: true` frontmatter selects them, and `CLAUDE.md` documents it.
   - One compact row follows with the six classes: code, course and term, with no illustrations or lab counts. It is six across, three at 960 px and two at 760 px, with fewer columns when text is enlarged.
   - The Snort lab page is unchanged and stays on the Coursework index.
-- Verizon role. The summary, intro and four bullets give the scale of the work: about 10 stores converted, on three conversion projects covering roughly 130 stores, and the device types in scope.
+- Verizon role. The summary and the first of four bullets give the scale of the work: about 10 stores converted, on three conversion projects covering roughly 130 stores, and the device types in scope. The intro describes the work without repeating those numbers.
 - First screen on a laptop:
-  - The role line and intro start 16 px under the name instead of 125 px.
+  - The role line and intro start 16 px under the name. On `main` the role line started about 100 px under it and the intro 24 px, rendered at 1366x768 and 1440x900.
   - The hero columns are 5fr/6fr, so the intro wraps to six lines.
   - The hero's top padding, the facts strip's top margin and the Projects section's top padding each drop one spacing step.
-  - At 1366x768 the first project screenshot starts at 651 px instead of 752, and the facts strip ends at 547 px.
+  - At 1366x768 the first project screenshot starts at 658 px instead of 733, and the facts strip ends at 557 px instead of 605, as `firstScreen` measures them: rendered, with the fade-up and the entrance animation applied.
 - Social preview card. `social-preview.png` carries the new role line. The layout, name, monogram, `jnkos.com` and dashboard capture are unchanged. It was rendered from an HTML card in headless Chromium with the site's Sora and Manrope fonts. The `og:image` URL has no version, so link previews update on each platform's own schedule.
 - F-029. At 200% text on a 320 px phone with a classic scrollbar, these words no longer break mid-word: "experimental" in the Proxmox panel, "workstations" in the Ladd Dental card, and "CompTIA" and "Security+" on About. The panel descriptions and credential names are now capped to their column, as headings already were. The hero role line gets the same cap for "Infrastructure". Default text and wider phones are unchanged.
+- Coursework rows at 200% text. The homepage case-study descriptions and class names are capped to their rows the same way, so "advertisements," in the IPv6 row and "Virtualization" and "Technologies" in the SVAD 111 tile no longer break mid-word at 320 px. Default text is unchanged.
+- Wording pass. The Proxmox Result leads with the October patching and the Beszel and Uptime Kuma monitoring, then the build. The SSH Workbench Result says what the app does instead of counting releases, and keeps the 1,141 tests. The homepage description, the Certifications fact and About's description read "CompTIA A+ and Security+", as the role line does. The intro ends "with security as the next step".
 - Checks. `check-site.js` now expects:
-  - the new facts order;
+  - the new facts order, with "CompTIA A+ and Security+";
   - the case-studies list: three items, with their links and class labels;
   - the class row: six links and no images;
   - a first-screen measurement at 1366x768 (`firstScreen`): screenshot at 660 px or less and the facts strip on screen.
 
-  `labelSpacing` also covers the case-study labels.
+  `labelSpacing` also covers the case-study labels, and `headingWrap200` the hero role line, the case-study rows and the class row.
 
 Validation:
 
@@ -33,9 +35,10 @@ Validation:
   - `firstScreen` 658 px with the scroll fade-up applied;
   - the facts strip ending at 557 px while the entrance animation runs.
 - Headed run. The headed Playwright run of the same checks failed before the F-029 fix with the four split words above, and afterwards returned `problems: []`.
-- The CSS `?v=` value changed from `64139851c017` to `50f9112cc1bb`.
+- Wording pass, tests first. The wider `headingWrap200` landed first and failed headless with one problem, "advertisements," split at 320 px; after the description cap the headless run passed and the headed run failed on "Virtualization" and "Technologies" in the SVAD 111 tile, which the class-name cap fixed. The certification pin landed next and failed with two problems, the facts strip at 1440 and 390 px. With the copy changed, 59 tests and the strict build passed, and `run-check.js chromium` and the headed run both returned `problems: []` on all 19 routes. The private-term scan and the slop scanner found nothing in the changed copy.
+- The CSS `?v=` value changed from `64139851c017` to `b69ce905630d`.
 - Private terms. The scan found no city, private host name or private address in `docs/` or `overrides/`. Its one "artifact" match is the retained `#sources-and-artifacts` anchor on the Proxmox page.
-- Screenshots were reviewed: the homepage at 390, 1366x768 and 1440 px, About at 1440 px, Experience at 390 px, and the new preview card.
+- Screenshots were reviewed: the homepage at 390, 1366x768 and 1440 px, About at 1440 px, Experience at 390 px, and the new preview card; after the wording pass, the homepage again, both Result panels on the homepage and in the case-study page heads at 1440 and 390 px, the Verizon role at 1440 and 390 px, and the coursework section at 320 px with 200% text and a classic scrollbar.
 - Known and unchanged by this branch: at 320 px with 200% text, the facts strip and the Experience bullets still break long words; at 961 px with 200% text, the "IT Intern" card heading overflows by 16 px.
 - Not checked: physical devices, screen readers, Safari and WebKit, and the live site after deploy.
 
