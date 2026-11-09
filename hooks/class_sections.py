@@ -4,6 +4,8 @@ from html.parser import HTMLParser
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 TABLE_PARTS = {"table", "thead", "tbody", "tfoot", "tr", "th", "td"}
 ROLES = {"table": "table", "thead": "rowgroup", "tbody": "rowgroup", "tfoot": "rowgroup", "tr": "row", "td": "cell"}
+# A lab module's count, singular and plural, by its table's first column header.
+COUNT_NOUNS = {"Lab": ("lab", "labs"), "Assessment": ("assessment", "assessments")}
 
 
 class Blocks(HTMLParser):
@@ -134,10 +136,16 @@ class ClassSections:
 
     def labs(self, blocks):
         for heading, content in items(blocks):
-            count = sum(table["rows"] for block in content for table in block["tables"])
-            # A module without lab rows shows no count rather than "0 labs". The space keeps the
+            tables = [table for block in content for table in block["tables"]]
+            count = sum(table["rows"] for table in tables)
+            # The first column header of the module's first table picks the word for the whole
+            # count: "Assessment" counts assessments, so a module holding a skills assessment
+            # doesn't call it a lab; any other header counts labs.
+            first = tables[0]["headers"][0] if tables and tables[0]["headers"] else None
+            one, many = COUNT_NOUNS.get(first, COUNT_NOUNS["Lab"])
+            # A module without rows shows no count rather than "0 labs". The space keeps the
             # count a separate word for screen readers; the summary's flex layout ignores it.
-            label = f' <span class="lab-count">{count} lab{"" if count == 1 else "s"}</span>' if count else ""
+            label = f' <span class="lab-count">{count} {one if count == 1 else many}</span>' if count else ""
             self.edit(heading["end"], heading["end"], f"{label}</summary>")
             self.wrap((heading, content), '<details class="lab-module"><summary>', "</details>")
             for block in content:

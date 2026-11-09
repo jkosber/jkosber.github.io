@@ -9,20 +9,20 @@ items: 47 labs and a skills assessment
 repo: https://github.com/jkosber/CyberOps-115
 art: {src: assets/thumbnails/security.svg, width: 240, height: 160}
 summary:
-  role: "Ran the Cisco labs in VirtualBox, worked each investigation from the alerts and captures, and wrote the answers and the final after-action report. The course provided the virtual machines, the captures and the alert data."
+  role: "Ran the VirtualBox and Packet Tracer labs, worked each investigation from the alerts and captures, and wrote the answers and the final after-action report. The course provided the virtual machines, the captures and the alert data."
   built_with: ["Security Onion", "Sguil and Kibana", "Wireshark", "NetworkMiner", "VirusTotal", "Linux and Windows tools"]
   result: "Completed 47 labs and a skills assessment, ending with Security Onion investigations of an exploit kit infection, a compromised Windows host, a root shell traced across three tools, and a Pushdo infection written up as an after-action report."
 ---
 
 # CSIA 115 Cyber Ops
 
-Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. I ran the labs in VirtualBox and turned in answers and screenshots for each one.
+Cyber Ops followed Cisco's CyberOps Associate course: how a security operations center works, the Windows and Linux internals an analyst reads, network traffic, attacks, cryptography and, at the end, investigating alerts in Security Onion. I turned in written answers and screenshots for every lab below.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
 The course provided the Cisco Networking Academy lab sheets, the CyberOps Workstation and Security Onion virtual machines, the Mininet and Packet Tracer topologies, and the captures and alert data for the investigations, several of them based on exercises from malware-traffic-analysis.net. My part:
 
-- Ran every lab in VirtualBox on a personal computer and wrote original answers to its questions
+- Ran the CyberOps Workstation and Security Onion labs in VirtualBox on a personal computer, ran the six network labs in Packet Tracer, and wrote original answers to every listed lab's questions
 - Worked the Security Onion investigations from alert to host to file with Sguil, Kibana, Wireshark, NetworkMiner and VirusTotal
 - Wrote the after-action report for the final skills assessment
 
@@ -135,9 +135,9 @@ The full write-up is on [Snort, firewall rules & HTTP recovery](../technical-lab
 
 ### Final skills assessment
 
-| Lab | What it asked | Work done |
+| Assessment | What it asked | Work done |
 |---|---|---|
-| CyberOps Associates Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see above) |
+| CyberOps Associate Skills Assessment | Investigate a Pushdo infection from Security Onion alerts and write an after-action report | Built the timeline, identified the host and the three downloaded files, and wrote the report (see above) |
 
 ## Skills {#skills}
 

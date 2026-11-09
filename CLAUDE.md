@@ -21,7 +21,7 @@ Python commands run the venv's interpreter (`.venv\Scripts\python` on Windows); 
 
 | Path | Note |
 |---|---|
-| `hooks/` | Authors write plain Markdown: `class_sections.py` builds the Strongest work panels and closed lab modules, `reading_accessibility.py` the scroll regions around tables and code. `frontmatter_checks.py` fails the build on a bad `class_page` or `class_name`, an `art` or `screenshot` without `src`, or a role without `image` |
+| `hooks/` | Authors write plain Markdown: `class_sections.py` builds the Strongest work panels and closed lab modules (a module's count takes its noun from the table's first column header: "Assessment" counts assessments, anything else counts labs), `reading_accessibility.py` the scroll regions around tables and code. `frontmatter_checks.py` fails the build on a bad `class_page` or `class_name`, an `art` or `screenshot` without `src`, or a role without `image` |
 | `docs/experience/index.md` | Both roles, in `roles` frontmatter; the homepage reads the same data |
 | `tests/` | `test_copy_voice.py` (report vocabulary, "artifact"), `test_stylesheet.py` (pinned tokens; no raw hex outside `:root`, print and forced colors; `!important` only with an `anti-slop-allow:` reason) |
 
@@ -51,7 +51,7 @@ The site is public and recruiters read it. These hold for every edit:
 - Case studies and class pages keep their summary in frontmatter; don't repeat it in the body.
 - A class page says what the course provided and what Jadon did, puts strongest work first, then lists every lab with work of his in tables (one closed module per `###` heading), then skills, limits and sources linking files on `main`. Leave blank or empty files out and say so in Limits.
 - Report vocabulary (evidence, recorded, supplied, historical, established): three or fewer per page.
-- AI coding agents are credited only in SSH Workbench's "How it was developed"; a product that runs an agent, like the job-scan tool, can say so.
+- AI coding agents are credited only in SSH Workbench's "How I worked"; a product that runs an agent, like the job-scan tool, can say so.
 - Never publish personal location, phone numbers, private host names, IP addresses, paths, credentials or resumes. Use documentation ranges (`192.0.2.0/24`) and `example.com` in examples. `mkdocs.yml` excludes five raw assets as a guard; keep them out.
 - Exception: anything the public [JHomelab](https://github.com/jkosber/JHomelab) repository publishes may appear as it appears there, including its host name, local addresses with the last octet shown as `X` and its screenshots. Full addresses stay out.
 - Don't use the word "artifacts" in visible copy.
