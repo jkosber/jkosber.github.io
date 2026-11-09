@@ -18,7 +18,7 @@ async (page) => {
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(`${page.url()}: ${error.message}`));
 
-  const settle = () => page.evaluate(async () => {
+  const settle = (target = page) => target.evaluate(async () => {
     await document.fonts.ready;
     for (const img of document.images) {
       img.loading = 'eager';
@@ -1345,6 +1345,113 @@ async (page) => {
     if (!printedLabs.visible) fail('no-JS print: the first lab module\'s table is hidden');
   }
   await noJs.close();
+
+  // Phones: every route again in device-emulated contexts. The window resizes above ignore the
+  // viewport meta, never fire touch and render at 1x; a phone profile does all three. Profiles copy
+  // Playwright 1.59.1's `devices`: Android phones in Chromium. The first route's measurements are
+  // recorded per profile; every route is checked against the profile.
+  const PHONES = {
+    chromium: {
+      'Pixel 7': { viewport: { width: 412, height: 839 }, screen: { width: 412, height: 915 }, deviceScaleFactor: 2.625, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.15 Mobile Safari/537.36' },
+      'Galaxy S24': { viewport: { width: 360, height: 780 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; SM-S921U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.15 Mobile Safari/537.36' },
+      'Pixel 7 landscape': { viewport: { width: 863, height: 360 }, screen: { width: 915, height: 412 }, deviceScaleFactor: 2.625, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.15 Mobile Safari/537.36' },
+    },
+  };
+  const engine = page.context().browser().browserType().name();
+  if (!PHONES[engine]) {
+    result.checks.mobileDevices = { engine, skipped: true };
+    fail(`mobileDevices: no phone profiles for engine ${engine}`);
+  } else {
+    result.checks.mobileDevices = { engine, profiles: {} };
+    for (const [name, profile] of Object.entries(PHONES[engine])) {
+      const counts = { routes: 0, taps: 0, layoutWidth: null, dpr: null, scale: null, coarse: null, regions: {} };
+      result.checks.mobileDevices.profiles[name] = counts;
+      const ctx = await page.context().browser().newContext({ ...profile });
+      try {
+        const phone = await ctx.newPage();
+        phone.on('pageerror', (error) => fail(`mobile ${name} ${phone.url()}: ${error.message}`));
+        for (const route of routes) {
+          const where = `mobile ${name} ${route}`;
+          const response = await phone.goto(BASE + route);
+          counts.routes += 1;
+          if (route === MISSING) {
+            if (response.status() !== 404) fail(`${where}: status ${response.status()}`);
+            continue;
+          }
+          if (response.status() !== 200) fail(`${where}: status ${response.status()}`);
+          const state = await settle(phone);
+          if (state.overflow > 0) fail(`${where}: ${state.overflow}px horizontal overflow`);
+          for (const src of state.broken) fail(`${where}: broken image ${src}`);
+          for (const word of state.splitWords) fail(`${where}: table word split: ${word}`);
+          const device = await phone.evaluate(() => ({
+            layoutWidth: document.documentElement.clientWidth,
+            dpr: window.devicePixelRatio,
+            scale: window.visualViewport ? window.visualViewport.scale : 1,
+            coarse: matchMedia('(pointer: coarse)').matches,
+          }));
+          if (counts.layoutWidth === null) Object.assign(counts, device);
+          if (device.layoutWidth !== profile.viewport.width) fail(`${where}: layout viewport is ${device.layoutWidth}px, expected ${profile.viewport.width} (viewport meta not honoured)`);
+          if (Math.abs(device.dpr - profile.deviceScaleFactor) > 0.01) fail(`${where}: devicePixelRatio ${device.dpr}, expected ${profile.deviceScaleFactor} (device emulation is off)`);
+          if (device.scale !== 1) fail(`${where}: page starts zoomed to ${device.scale}`);
+          const regions = await regionState(phone, true);
+          addCounts(counts.regions, regionCounts(regions));
+          for (const problem of regionProblems(regions)) fail(`${where}: ${problem}`);
+        }
+
+        // Taps go through the touchscreen, so a handler that ignores touch fails here. Playwright's
+        // tap can return before the page handles it, so each check waits up to 2 s for the state it
+        // expects; a tap that finds nothing to tap fails its check instead of the run.
+        const tap = (selector) => phone.tap(selector, { timeout: 5000 }).catch(() => {});
+        const until = (selector) => phone.waitForSelector(selector, { state: 'attached', timeout: 2000 }).catch(() => {});
+        const menuState = () => phone.evaluate(() => {
+          const toggle = document.querySelector('.menu-toggle');
+          return {
+            expanded: toggle && toggle.getAttribute('aria-expanded'),
+            links: [...document.querySelectorAll('.main-nav a')].filter((link) => link.offsetParent !== null).length,
+          };
+        });
+        await phone.goto(BASE + '/');
+        await tap('.menu-toggle');
+        await until('.menu-toggle[aria-expanded="true"]');
+        const opened = await menuState();
+        await tap('.menu-toggle');
+        await until('.menu-toggle[aria-expanded="false"]');
+        const closed = await menuState();
+        counts.taps += 1;
+        if (opened.expanded !== 'true' || opened.links !== 4) fail(`mobile ${name}: tapping the menu toggle does not open the menu`);
+        if (closed.expanded !== 'false') fail(`mobile ${name}: a second tap leaves the menu open`);
+
+        await phone.goto(BASE + '/coursework/neti-109/');
+        await tap('main details.lab-module > summary >> nth=0');
+        await until('main details.lab-module[open]');
+        const lab = await phone.evaluate(() => {
+          const first = document.querySelector('main details.lab-module');
+          const table = first && first.querySelector('.lab-table');
+          return { open: Boolean(first && first.open), sideways: table ? table.scrollWidth - table.clientWidth : null };
+        });
+        counts.taps += 1;
+        if (!lab.open) fail(`mobile ${name} /coursework/neti-109/: the first lab module does not open on a tap`);
+        if (lab.sideways === null) fail(`mobile ${name} /coursework/neti-109/: the first lab module has no .lab-table`);
+        else if (lab.sideways > 0) fail(`mobile ${name} /coursework/neti-109/: the first lab module scrolls ${lab.sideways}px sideways`);
+
+        // A landscape phone is wider than the lightbox's phone breakpoint, so its screenshot opens the dialog.
+        if (profile.viewport.width > profile.viewport.height) counts.skipped = 'landscape';
+        else {
+          await phone.goto(BASE + '/');
+          await tap('.feature a.zoom >> nth=0');
+          // waitForURL also waits for the load state of the page it lands on.
+          await phone.waitForURL(/\.webp$/, { timeout: 5000 }).catch(() => {});
+          const url = phone.url();
+          const dialog = url.endsWith('.webp') ? false : await phone.evaluate(() => Boolean(document.querySelector('dialog.lightbox[open]')));
+          counts.taps += 1;
+          if (dialog) fail(`mobile ${name}: tapping a screenshot opens the dialog instead of the image file`);
+          if (!url.endsWith('.webp')) fail(`mobile ${name}: tapping a screenshot stays on ${url}, expected the .webp file`);
+        }
+      } finally {
+        await ctx.close();
+      }
+    }
+  }
 
   // Print: every Result and Role panel switches to white with dark text.
   await page.emulateMedia({ media: 'print' });

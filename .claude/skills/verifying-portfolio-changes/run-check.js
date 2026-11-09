@@ -1,12 +1,18 @@
-// Runs check-site.js outside the Playwright MCP tool, in Chromium or WebKit.
-// Usage: node run-check.js <chromium|webkit>
+// Runs check-site.js outside the Playwright MCP tool, in Chromium.
+// Usage: node run-check.js chromium
 // PLAYWRIGHT_MODULE points at a Node Playwright install; without it, `playwright`
 // is resolved the usual way.
 // PLAYWRIGHT_CHROMIUM_PATH names a Chromium executable to launch instead of
-// Playwright's download; ignored for WebKit.
+// Playwright's download.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+
+const ENGINES = ['chromium'];
+
+function engines() {
+  return [...ENGINES];
+}
 
 function launchOptions(engine, env) {
   return engine === 'chromium' && env.PLAYWRIGHT_CHROMIUM_PATH ? { executablePath: env.PLAYWRIGHT_CHROMIUM_PATH } : {};
@@ -14,8 +20,8 @@ function launchOptions(engine, env) {
 
 function main() {
   const engine = process.argv[2];
-  if (!['chromium', 'webkit'].includes(engine)) {
-    console.error('usage: node run-check.js <chromium|webkit>');
+  if (!ENGINES.includes(engine)) {
+    console.error('usage: node run-check.js chromium');
     process.exit(2);
   }
   let playwright;
@@ -44,4 +50,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { launchOptions };
+module.exports = { launchOptions, engines };
