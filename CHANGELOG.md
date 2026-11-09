@@ -1,5 +1,44 @@
 # Portfolio change record
 
+## November 9, 2026 — homepage positioning
+
+- One target track. The homepage role line reads "Infrastructure and network support, CompTIA A+ and Security+ certified." The intro leads with the homelab and SSH Workbench, then the two jobs, and ends on network and infrastructure support roles, with security named as the next interest. The page description, About's description and first sentence, the social image's alt text and the JSON-LD `jobTitle` ("Infrastructure and Network Support Technician") follow it. The Experience page keeps the job title "IT Support Contractor".
+- Credentials first. The homepage facts strip is ordered Certifications, Latest role, Education.
+- Coursework on the homepage:
+  - Three case studies show as rows in a list named "Coursework case studies": AdventureWorks on AWS, the Pushdo investigation and the IPv6 packet investigations, each with its class code and name above the title. The new `featured: true` frontmatter selects them, and `CLAUDE.md` documents it.
+  - One compact row follows with the six classes: code, course and term, with no illustrations or lab counts. It is six across, three at 960 px and two at 760 px, with fewer columns when text is enlarged.
+  - The Snort lab page is unchanged and stays on the Coursework index.
+- Verizon role. The summary, intro and four bullets give the scale of the work: about 10 stores converted, on three conversion projects covering roughly 130 stores, and the device types in scope.
+- First screen on a laptop:
+  - The role line and intro start 16 px under the name instead of 125 px.
+  - The hero columns are 5fr/6fr, so the intro wraps to six lines.
+  - The hero's top padding, the facts strip's top margin and the Projects section's top padding each drop one spacing step.
+  - At 1366x768 the first project screenshot starts at 651 px instead of 752, and the facts strip ends at 547 px.
+- Social preview card. `social-preview.png` carries the new role line. The layout, name, monogram, `jnkos.com` and dashboard capture are unchanged. It was rendered from an HTML card in headless Chromium with the site's Sora and Manrope fonts. The `og:image` URL has no version, so link previews update on each platform's own schedule.
+- F-029. At 200% text on a 320 px phone with a classic scrollbar, these words no longer break mid-word: "experimental" in the Proxmox panel, "workstations" in the Ladd Dental card, and "CompTIA" and "Security+" on About. The panel descriptions and credential names are now capped to their column, as headings already were. The hero role line gets the same cap for "Infrastructure". Default text and wider phones are unchanged.
+- Checks. `check-site.js` now expects:
+  - the new facts order;
+  - the case-studies list: three items, with their links and class labels;
+  - the class row: six links and no images;
+  - a first-screen measurement at 1366x768 (`firstScreen`): screenshot at 660 px or less and the facts strip on screen.
+
+  `labelSpacing` also covers the case-study labels.
+
+Validation:
+
+- Tests first. The check changes landed first and failed against the unchanged homepage with 13 problems. All 13 came from the four new expectations: the facts order, the case-studies list and the class row at 390 and 1440 px, and `firstScreen` at 733 px.
+- After the changes, 59 tests and the strict build passed.
+- `run-check.js chromium` exited 0 with `problems: []` on all 19 routes:
+  - `firstShot` 651 px at 1440x900 and 1920x1080;
+  - `firstScreen` 658 px with the scroll fade-up applied;
+  - the facts strip ending at 557 px while the entrance animation runs.
+- Headed run. The headed Playwright run of the same checks failed before the F-029 fix with the four split words above, and afterwards returned `problems: []`.
+- The CSS `?v=` value changed from `64139851c017` to `50f9112cc1bb`.
+- Private terms. The scan found no city, private host name or private address in `docs/` or `overrides/`. Its one "artifact" match is the retained `#sources-and-artifacts` anchor on the Proxmox page.
+- Screenshots were reviewed: the homepage at 390, 1366x768 and 1440 px, About at 1440 px, Experience at 390 px, and the new preview card.
+- Known and unchanged by this branch: at 320 px with 200% text, the facts strip and the Experience bullets still break long words; at 961 px with 200% text, the "IT Intern" card heading overflows by 16 px.
+- Not checked: physical devices, screen readers, Safari and WebKit, and the live site after deploy.
+
 ## November 9, 2026 — phone profiles in the rendered checks
 
 - Phone checks. `check-site.js` gained a `mobileDevices` block that loads every route again under three phone profiles copied from Playwright 1.59.1's device list: Pixel 7, Galaxy S24 and Pixel 7 landscape, each with touch, its device pixel ratio and the viewport meta honoured. The window resizes the other checks use ignore the viewport meta, never fire touch and render at 1x. On each route the block checks the status, sideways overflow, broken images, page errors, table words split mid-word and the scroll regions, and fails when the layout viewport differs from the device width, the device pixel ratio differs from the profile's or the page starts zoomed. By tap, the menu opens and closes, the first NETI 109 lab module opens without a sideways scroll, and in portrait the first homepage screenshot opens the image file instead of the dialog. Phone scroll regions are read after two animation frames, as in every other check with JavaScript on.
