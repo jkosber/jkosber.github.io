@@ -9,14 +9,14 @@ items: 36 lab write-ups
 repo: https://github.com/jkosber/Networking-109
 art: {src: assets/thumbnails/network.svg, width: 240, height: 160}
 summary:
-  role: "Worked the Packet Tracer activities and labs and wrote up each one: addressing tables, subnet plans, and each device's fault and fix."
+  role: "Worked the Packet Tracer activities and labs and filled the write-ups with addressing tables, subnet plans, and each device's fault and fix."
   built_with: ["Cisco Packet Tracer", "Cisco IOS", "Wireshark"]
   result: "Wrote up 36 labs, from fixed-length subnetting to a full VLSM design, and traced client faults in two troubleshooting labs to addresses, gateways, a router interface and DNS. Also completed Cisco's Networking Basics and Introduction to Networks courses."
 ---
 
 # NETI 109 Networking I
 
-Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did the labs in Packet Tracer and turned in a write-up for each one.
+Networking I was the first course in Cisco's CCNA sequence: how devices address and find each other, how to set up switches and routers, and how to troubleshoot when a client can't reach something. I did most of the labs below in Packet Tracer and turned in a write-up for each; a few in-class labs and the final skills exam used real Cisco routers and switches.
 
 ## What the course provided and what I did {#what-the-course-provided}
 
@@ -112,7 +112,7 @@ Simulation mode showed a PC finding another PC's MAC address with Neighbor Disco
 | 10.1.4 Configure Initial Router Settings | Set up a router and look at flash | Identified the IOS image in flash and why `enable secret` overrides `enable password` |
 | 10.3.4 Connect a Router to a LAN | Configure interfaces and read the routing table | Counted connected and OSPF routes and explained what happens to unlisted destinations |
 | 10.3.5 Troubleshoot Default Gateway Issues | Find and fix four addressing faults | Found and fixed all four (see above) |
-| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer; the write-up only notes which version was used |
+| 10.4.3 Basic Device Configuration | Configure one of three topology versions | Did the work in Packet Tracer and, in class, on real Cisco routers and switches; the write-up only says the lab sheet did not match the activity's layout |
 | 11.5.5 Subnet an IPv4 Network | Split a /24 for 50 and 40 hosts and address the devices | Worked out four /26 subnets and filled the addressing table |
 | 11.6.6 Calculate IPv4 Subnets | Six subnet calculations | Got all 48 values right |
 | 11.7.5 Subnetting Scenario | Split a /24 into /27s for five networks | Filled the subnet and addressing tables |
@@ -146,7 +146,7 @@ Simulation mode showed a PC finding another PC's MAC address with Neighbor Disco
 ## Limits {#limits}
 
 - The device configurations live in the Packet Tracer files, which this page doesn't reproduce. Several activities are Packet Tracer files only, with no write-up.
-- I did all the device configuration in Packet Tracer, not on real equipment.
+- The in-class work on real Cisco routers and switches, including the final skills exam, has no write-up in the repository, so none of the labs above documents it.
 - A few answers have mistakes: the broadcast address above, a mask written as `244` instead of 224 in 11.7.5, and a "first usable" column filled with last usable addresses in 11.9.3.
 - The Wireshark and DNS answers came from a home network, so this page leaves out their addresses.
 
