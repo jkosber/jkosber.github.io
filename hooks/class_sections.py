@@ -134,10 +134,14 @@ class ClassSections:
 
     def labs(self, blocks):
         for heading, content in items(blocks):
-            count = sum(table["rows"] for block in content for table in block["tables"])
+            tables = [table for block in content for table in block["tables"]]
+            count = sum(table["rows"] for table in tables)
+            # The first column's header names the rows ("Lab", "Assessment"), so a module holding
+            # a skills assessment doesn't count it as a lab.
+            noun = escape(tables[0]["headers"][0].lower()) if tables and tables[0]["headers"] else "lab"
             # A module without lab rows shows no count rather than "0 labs". The space keeps the
             # count a separate word for screen readers; the summary's flex layout ignores it.
-            label = f' <span class="lab-count">{count} lab{"" if count == 1 else "s"}</span>' if count else ""
+            label = f' <span class="lab-count">{count} {noun}{"" if count == 1 else "s"}</span>' if count else ""
             self.edit(heading["end"], heading["end"], f"{label}</summary>")
             self.wrap((heading, content), '<details class="lab-module"><summary>', "</details>")
             for block in content:
