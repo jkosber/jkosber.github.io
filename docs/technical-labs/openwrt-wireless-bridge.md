@@ -128,7 +128,7 @@ The bridge's kernel log showed three Wi-Fi drops, at 13:27, 16:04 and 16:56, of 
 1. The home router sent an 802.11v steering request toward its other 5 GHz radio.
 2. The DIR-885L's radio firmware tried to move there on its own, because firmware roaming is on.
 3. The lock to the channel-44 radio lives in `wpa_supplicant`, not in the firmware. It didn't stop the move, but it made `wpa_supplicant` refuse the key handshake on the other radio.
-4. After four failed handshakes the home router dropped the bridge, which was back on the channel-44 radio a second later.
+4. After four failed handshakes the link dropped with reason code 2, and the bridge was back on the channel-44 radio a second later. The log can't show which side ended it.
 
 This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code alongside read-only checks on the bridge. The firmware acting on the steering request is an inference from the timing and a missing log line; nothing read it from the firmware itself.
 
