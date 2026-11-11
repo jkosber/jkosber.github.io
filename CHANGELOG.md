@@ -1,5 +1,17 @@
 # Portfolio change record
 
+## November 11, 2026 — OpenWrt wireless bridge page (draft, unpublished)
+
+TODO(soak): change this heading's date to the merge date, and drop "draft" once the TODO markers on both pages are resolved.
+
+- New project page, `technical-labs/openwrt-wireless-bridge.md`: the D-Link DIR-885L that replaced the range extender as the lab's Wi-Fi uplink on November 11. It covers the choice of `relayd`, the bench setup and upgrade, the 5 GHz radio firmware problem, the configuration, bench tests, the cutover measured against the extender, the band-steering drops during the soak, candidate lessons, limits and next changes. It has no screenshot or illustration, so it shows as a minor row on the homepage, before the job-scan row, and third on the Projects index, after SSH Workbench.
+- Visible `TODO(soak)`, `TODO(pin)` and `TODO(jadon)` markers stand for what is not known yet: the soak result, the fix for the steering drops, the extender's retirement, the publish date, the JHomelab write-up link and Jadon's own lessons.
+- Proxmox page: the architecture figure, its caption and the paragraph under it name the OpenWrt bridge in place of the range extender and link the new page; the alerts table gains a "Lab uplink" row for the two new Uptime Kuma monitors; the footer links the new page. The `updated` date is a `TODO(soak)` marker. The Cat6 roadmap item and the source links pinned to JHomelab `b5a5608` are unchanged.
+- Projects index description, About's Networking row (OpenWrt and `relayd`, with a link to the new page) and the `mkdocs.yml` Projects nav list the new page.
+- Checks. `check-site.js` now expects the bridge as the third Projects index row, the homepage minor rows "OpenWrt wireless bridge" then "Job scan and resume tailor", the bridge page among the case-study page heads, and no lead screenshot on it.
+
+Validation: the check changes landed first and failed against the unchanged site with 4 problems, all from the new expectations (the Projects index rows and the homepage minor rows, each at 1440 and 390 px). TODO(soak): replace with the validation of the final version before merging.
+
 ## November 9, 2026 — homepage positioning
 
 - One target track. The homepage role line reads "Infrastructure and network support, CompTIA A+ and Security+ certified." The intro leads with the homelab and SSH Workbench, then the two jobs, and ends on network and infrastructure support roles, with security named as the next step. The page description, About's description and first sentence, the social image's alt text and the JSON-LD `jobTitle` ("Infrastructure and Network Support Technician") follow it. The Experience page keeps the job title "IT Support Contractor".
