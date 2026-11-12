@@ -113,7 +113,7 @@ The same commands that measured the extender the night before measured the bridg
 | Lab to home network, 400 MB over SSH | Not measured | 305 to 369 Mbit/s |
 | Home network to lab, 400 MB over SSH | Not measured | 247 to 248 Mbit/s |
 
-Moving the Proxmox host's cable from the switch straight to the bridge's second port made no meaningful difference, so the Wi-Fi hop is the limit.
+Moving the Proxmox host's cable from the switch straight to the bridge's LAN port 2 made no meaningful difference, so the Wi-Fi hop is the limit.
 
 During validation the service VM stopped answering. The bridge wasn't the cause: the stall happened from inside the lab too, and a log query I had run on the VM as a check had started a read storm on its hard disk, which held a 1.5 GB journal. I restarted the VM once and then capped its journal at 200 MB.
 
@@ -121,33 +121,33 @@ The service VM took a fresh lease from the home router through the bridge at 01:
 
 ## Soak test and band-steering drops {#soak-test}
 
-The soak started at the 01:20 cutover and was planned for 24 hours. I ended it at the 19-hour mark, 20:20 on November 11, because the results had stayed stable all day. At the end:
+The soak started at the 01:20 cutover and was planned for 24 hours. I ended it at the 19-hour mark, 20:20 on November 11, because every check had held since the cutover. At the end:
 
 | Check | Result at 19 hours |
 |---|---|
-| Uptime Kuma | All nine monitors at 100% over the previous 24 hours, with no down beats |
+| Uptime Kuma | All nine monitors at 100% over its 24-hour window, 19 hours of it on the bridge, with no down beats |
 | Lines containing "deauth" in the bridge's log | 0 |
 | Bridge uptime | 19 hours 11 minutes, no reboot since the cutover |
 | Uplink | The home router's channel-44 radio at -56 dBm, 1,083 Mbit/s link rate, no failed transmits |
 | Bridge to home router, 10 pings | 10 of 10, average 1.908 ms |
 | Software | OpenWrt 25.12.6, `relayd` running, radio firmware 10.10.69.69042 still loaded |
 
-The soak didn't cover 20:20 to 01:20, the household's evening, when the house uses Wi-Fi most. The bridge keeps logging, and a count of the evening's drops is due early on November 12.
+The soak didn't cover 20:20 to 01:20, the household's evening, when the house uses Wi-Fi most. **TODO(soak): replace this sentence with the evening drop count.** The bridge keeps logging, and a count of the evening's drops is due early on November 12.
 
 During the soak I also simplified the cabling. At 19:22 I unplugged the 24-port lab switch from the bridge: the lab has too few wired devices to need it, and nothing was plugged into it. At 19:30 I moved the Proxmox host's cable from LAN port 2 to LAN port 1, a 3-second outage. All four LAN ports belong to one bridge interface in the configuration, so no setting changed. Afterwards the port ran at 1,000 Mbit/s full duplex, the three lab hosts and six services answered, and Uptime Kuma recorded no downtime.
 
-The range extender had stayed powered and unplugged as the rollback. After the soak passed I retired it.
+The range extender had stayed powered, with no cable to the lab, as the rollback. After the soak passed I retired it.
 
 The Wi-Fi link dropped three times in the whole soak, at 13:27, 16:04 and 16:56, for about 5, 5 and 7 seconds, and not again before 20:20. The bridge's normal log only holds about nine hours, but its kernel log reaches back to boot and holds exactly three of the driver's `Unknown Frame: category 0xa, action 0x8` lines, one per drop, so the count covers the whole soak. Uptime Kuma registered none of the three. Each followed the same sequence:
 
 1. The home router sent an 802.11v steering request toward its other 5 GHz radio.
-2. The DIR-885L's radio firmware moved there on its own, because firmware roaming is on. It associated with that radio and received handshake frames from it, although the bridge's scans never list that radio.
+2. The DIR-885L's radio moved there, most likely on its own, since firmware roaming is on (see below). It associated with that radio and received handshake frames from it, although the bridge's scans never list that radio.
 3. The lock to the channel-44 radio lives in `wpa_supplicant`, not in the firmware. It didn't stop the move, but it made `wpa_supplicant` refuse the key handshake on the other radio.
 4. After four failed handshakes the link dropped with reason code 2, and the bridge was back on the channel-44 radio a second later. The log can't show which side ended it.
 
 This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code alongside read-only checks on the bridge; a second pass through the source added the association and handshake frames in step 2. The firmware acting on the steering request is an inference from the timing and a missing log line; nothing read it from the firmware itself.
 
-The soak passed its written condition, a count of log lines containing "deauth", which stayed at 0 because none of the drop lines contains that word. The condition's intent, no disconnects, wasn't fully met: the three drops are disconnects, short enough that no monitor caught them.
+The soak passed its written condition, a count of log lines containing "deauth", which stayed at 0 because none of the drop lines contains that word. The condition's intent, no disconnects, wasn't met: the three drops are disconnects, short enough that no monitor caught them.
 
 I haven't chosen or tested a response to the drops yet. The options:
 

@@ -35,7 +35,9 @@ Two service guests run all the time, and the other guests start only when I'm wo
   <figcaption>The lab as of October 23, 2026, and its uplink as of November 11, with addresses left out.</figcaption>
 </figure>
 
-Since November 11, 2026, a D-Link DIR-885L running OpenWrt links the lab to the home router over 5 GHz Wi-Fi, in place of a 2.4 GHz range extender. The Proxmox host plugs straight into one of its wired ports, and every lab host kept its address. The [OpenWrt wireless bridge](openwrt-wireless-bridge.md) page covers the build. Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
+Since November 11, 2026, a D-Link DIR-885L running OpenWrt links the lab to the home router over 5 GHz Wi-Fi, in place of a 2.4 GHz range extender. The Proxmox host plugs straight into one of its wired ports, and every lab host kept its address. The [OpenWrt wireless bridge](openwrt-wireless-bridge.md) page covers the build.
+
+Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
 
 ## Host and storage
 
@@ -140,7 +142,7 @@ Before October I had Uptime Kuma installed but not set up, and nothing watched t
 | Heat | Beszel | The laptop runs above 85 °C for 5 minutes |
 | Service down | Uptime Kuma | Two failed checks in a row on Proxmox, GoodMem, Portainer, Beszel, RustDesk or this site |
 | Certificate | Uptime Kuma | This site's TLS certificate is close to expiring |
-| Lab uplink | Uptime Kuma | Pings to the home router through the Wi-Fi bridge fail, or the bridge's SSH port stops answering |
+| Lab uplink | Uptime Kuma | Pings to the home router through the Wi-Fi bridge fail, or the bridge's SSH port stops answering. Uptime Kuma runs inside the lab, so this alert reaches Discord only once the link is back |
 
 Beszel also lists pending package updates and flags the security ones. The first time it ran, it showed 87 waiting on CT 110.
 
