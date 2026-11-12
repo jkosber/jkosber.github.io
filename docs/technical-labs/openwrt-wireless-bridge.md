@@ -132,7 +132,7 @@ The soak started at the 01:20 cutover and was planned for 24 hours. I ended it a
 | Bridge to home router, 10 pings | 10 of 10, average 1.908 ms |
 | Software | OpenWrt 25.12.6, `relayd` running, radio firmware 10.10.69.69042 still loaded |
 
-The soak didn't cover 20:20 to 01:20, the household's evening, when the house uses Wi-Fi most. **TODO(soak): replace this sentence with the evening drop count.** The bridge keeps logging, and a count of the evening's drops is due early on November 12.
+The soak didn't cover the household's evening, when the house uses Wi-Fi most. I read the bridge's log for those hours afterwards, at 01:27 on November 12. From 20:20 to 01:27 it shows no disconnects and no steering requests from the home router. That count comes from the bridge's log after the soak ended and isn't part of the 19-hour soak. The log reached back to 16:20, so the window has no gap. The bridge had been up for 24 hours and 18 minutes by then, and its count of drops since boot was still three.
 
 During the soak I also simplified the cabling. At 19:22 I unplugged the 24-port lab switch from the bridge: the lab has too few wired devices to need it, and nothing was plugged into it. At 19:30 I moved the Proxmox host's cable from LAN port 2 to LAN port 1, a 3-second outage. All four LAN ports belong to one bridge interface in the configuration, so no setting changed. Afterwards the port ran at 1,000 Mbit/s full duplex, the three lab hosts and six services answered, and Uptime Kuma recorded no downtime.
 
@@ -158,7 +158,9 @@ I chose to test the second option below, and to accept the drops if firmware roa
 
 `wpa_supplicant`'s `disable_btm` option, which turns off its steering support, is ruled out: the firmware does the roam, and the `brcmfmac` driver passes only vendor-specific elements from `wpa_supplicant` into the association request.
 
-**TODO(soak): the count of evening drops from the bridge's log, and when `roamoff=1` was applied and what the bridge showed afterwards.**
+The evening after the soak brought no steering requests at all, so a quiet day after the change won't show whether it works. The test needs a steering request that passes without a drop.
+
+**TODO(soak): when `roamoff=1` was applied and what the bridge showed afterwards.**
 
 ## Lessons {#lessons}
 
@@ -169,7 +171,7 @@ I chose to test the second option below, and to accept the drops if firmware roa
 
 ## Limits
 
-- The soak ran 19 of a planned 24 hours and didn't cover the household's evening, when the house uses Wi-Fi most. **TODO(soak): add the evening drop count.**
+- The soak ran 19 of a planned 24 hours. The evening after it is covered only by the bridge's log, which shows no drops from 20:20 to 01:27. The drop rate rests on that one day: three in the bridge's first 24 hours.
 - The response to the band-steering drops, firmware roaming off on the bridge, is chosen but not tested.
 - I haven't checked the 2021 radio firmware against Asus's own download; its origin rests on matching hashes posted by other users.
 - The service VM took a fresh DHCP lease through the bridge, but no lease renewal has gone through it.
