@@ -35,7 +35,7 @@ Two service guests run all the time, and the other guests start only when I'm wo
   <figcaption>The lab as of October 23, 2026, and its uplink as of November 11, with addresses left out.</figcaption>
 </figure>
 
-Since November 11, 2026, a D-Link DIR-885L running OpenWrt links the lab to the home router over 5 GHz Wi-Fi, in place of a 2.4 GHz range extender. The lab switch and the Proxmox host plug into its wired ports, and every lab host kept its address. The [OpenWrt wireless bridge](openwrt-wireless-bridge.md) page covers the build. Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
+Since November 11, 2026, a D-Link DIR-885L running OpenWrt links the lab to the home router over 5 GHz Wi-Fi, in place of a 2.4 GHz range extender. The Proxmox host plugs straight into one of its wired ports, and every lab host kept its address. The [OpenWrt wireless bridge](openwrt-wireless-bridge.md) page covers the build. Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
 
 ## Host and storage
 

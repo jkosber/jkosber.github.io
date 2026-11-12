@@ -2,11 +2,11 @@
 title: OpenWrt wireless bridge
 description: "A spare D-Link DIR-885L running OpenWrt, joined to the home router's 5 GHz Wi-Fi as a client and relaying its wired ports to the homelab, in place of a 2.4 GHz range extender."
 kind: Personal homelab
-status: "TODO(soak): status after the 24-hour soak test"
+status: Ongoing
 summary:
   role: "Compared the bridging options, upgraded and locked down OpenWrt on a spare router, replaced its 5 GHz radio firmware, bench-tested the relay and moved the lab onto it."
   built_with: ["OpenWrt 25.12.6", "D-Link DIR-885L", "relayd", "brcmfmac Wi-Fi driver", "iperf3", "Uptime Kuma"]
-  result: "Moved the lab's uplink from a 2.4 GHz range extender to 5 GHz with every lab address unchanged and 27 seconds offline. Lab-to-home throughput went from about 47 Mbit/s to between 239 and 272 Mbit/s in the same test. TODO(soak): soak outcome."
+  result: "Moved the lab's uplink from a 2.4 GHz range extender to 5 GHz with every lab address unchanged and 27 seconds offline. Lab-to-home throughput went from about 47 Mbit/s to between 239 and 272 Mbit/s in the same test. Passed a 19-hour soak with all nine Uptime Kuma monitors at 100% and three Wi-Fi drops of 5 to 7 seconds that no monitor caught."
 updated: "TODO(soak): publish date"
 ---
 
@@ -16,13 +16,13 @@ There's no cable between the homelab and the home router yet, so one Wi-Fi link 
 
 Lab hosts kept their addresses, and the home router is still the only DHCP server and gateway. The bridge is the step before a Cat6 run to the lab, which stays on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
-**TODO(soak): this page is a draft.** A 24-hour soak test started at the 01:20 cutover on November 11 and ends early on November 12. Its outcome, the fix chosen for the [band-steering drops](#soak-test) and the date of the extender's retirement are not known yet.
+**TODO(soak): this page is a draft.** The [soak test](#soak-test) passed after 19 hours on November 11 but didn't cover the household's evening, when the house uses Wi-Fi most. The count of evening drops, the response chosen for the band-steering drops and the date of the extender's retirement are not known yet.
 
 ## How the bridge fits in {#how-the-bridge-fits-in}
 
 <figure class="architecture">
   <ol class="architecture-flow" role="list">
-    <li><strong>Lab side</strong><span>24-port lab switch on LAN port 1<br>Proxmox host on LAN port 2<br>Gigabit ports</span><small>Addresses unchanged</small></li>
+    <li><strong>Lab side</strong><span>Proxmox host on LAN port 1<br>LAN ports 2 to 4 empty<br>Gigabit ports</span><small>Addresses unchanged</small></li>
     <li><strong>DIR-885L</strong><span>OpenWrt 25.12.6<br>relayd between the wired ports and Wi-Fi<br>No access point, DHCP server off</span><small>5 GHz client</small></li>
     <li><strong>Home router</strong><span>TP-Link Archer AX90<br>Its channel-44 radio, 80 MHz<br>DHCP and gateway for both sides</span><small>Internet</small></li>
   </ol>
@@ -121,28 +121,42 @@ The service VM took a fresh lease from the home router through the bridge at 01:
 
 ## Soak test and band-steering drops {#soak-test}
 
-At 16:00, 14 hours 40 minutes into the soak, the bridge had not rebooted, the link was on channel 44 at -57 dBm, pings from the Proxmox host to the home router had no loss at 2.3 ms, and all nine Uptime Kuma monitors showed 100% uptime for the day.
+The soak started at the 01:20 cutover and was planned for 24 hours. I ended it at the 19-hour mark, 20:20 on November 11, because the results had stayed stable all day. At the end:
 
-The bridge's kernel log showed three Wi-Fi drops, at 13:27, 16:04 and 16:56, of about 5, 5 and 7 seconds. Uptime Kuma didn't register the first one. Each followed the same sequence:
+| Check | Result at 19 hours |
+|---|---|
+| Uptime Kuma | All nine monitors at 100% over the previous 24 hours, with no down beats |
+| Lines containing "deauth" in the bridge's log | 0 |
+| Bridge uptime | 19 hours 11 minutes, no reboot since the cutover |
+| Uplink | The home router's channel-44 radio at -56 dBm, 1,083 Mbit/s link rate, no failed transmits |
+| Bridge to home router, 10 pings | 10 of 10, average 1.908 ms |
+| Software | OpenWrt 25.12.6, `relayd` running, radio firmware 10.10.69.69042 still loaded |
+
+The soak didn't cover 20:20 to 01:20, the household's evening, when the house uses Wi-Fi most. The bridge keeps logging, and a count of the evening's drops is due early on November 12.
+
+During the soak I also simplified the cabling. At 19:22 I unplugged the 24-port lab switch from the bridge: the lab has too few wired devices to need it, and nothing was plugged into it. At 19:30 I moved the Proxmox host's cable from LAN port 2 to LAN port 1, a 3-second outage. All four LAN ports belong to one bridge interface in the configuration, so no setting changed. Afterwards the port ran at 1,000 Mbit/s full duplex, the three lab hosts and six services answered, and Uptime Kuma recorded no downtime.
+
+The Wi-Fi link dropped three times in the whole soak, at 13:27, 16:04 and 16:56, for about 5, 5 and 7 seconds, and not again before 20:20. The bridge's normal log only holds about nine hours, but its kernel log reaches back to boot and holds exactly three of the driver's `Unknown Frame: category 0xa, action 0x8` lines, one per drop, so the count covers the whole soak. Uptime Kuma registered none of the three. Each followed the same sequence:
 
 1. The home router sent an 802.11v steering request toward its other 5 GHz radio.
-2. The DIR-885L's radio firmware tried to move there on its own, because firmware roaming is on.
+2. The DIR-885L's radio firmware moved there on its own, because firmware roaming is on. It associated with that radio and received handshake frames from it, although the bridge's scans never list that radio.
 3. The lock to the channel-44 radio lives in `wpa_supplicant`, not in the firmware. It didn't stop the move, but it made `wpa_supplicant` refuse the key handshake on the other radio.
 4. After four failed handshakes the link dropped with reason code 2, and the bridge was back on the channel-44 radio a second later. The log can't show which side ended it.
 
-This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code alongside read-only checks on the bridge. The firmware acting on the steering request is an inference from the timing and a missing log line; nothing read it from the firmware itself.
+This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code alongside read-only checks on the bridge; a second pass through the source added the association and handshake frames in step 2. The firmware acting on the steering request is an inference from the timing and a missing log line; nothing read it from the firmware itself.
 
-The soak's pass condition, a count of log lines containing "deauth", still reads 0, because none of these lines contains that word. Its intent, no disconnects, is not met.
+The soak passed its written condition, a count of log lines containing "deauth", which stayed at 0 because none of the drop lines contains that word. The condition's intent, no disconnects, wasn't fully met: the three drops are disconnects, short enough that no monitor caught them.
 
-I haven't tested any of these fixes yet:
+I haven't chosen or tested a response to the drops yet. The options:
 
-- Turn firmware roaming off on the bridge with the `brcmfmac` module option `roamoff=1`, a reboot, and the module options file on the upgrade keep-list. The source analysis points to this fix first.
-- Turn Smart Connect off on the home router, which changes band selection for every device in the house.
 - Accept short drops.
+- Turn firmware roaming off on the bridge with the `brcmfmac` module option `roamoff=1`, a reboot, and the module options file on the upgrade keep-list. The first source analysis pointed to this fix, but it isn't confirmed to cover roams the home router asks for.
+- Turn Smart Connect off on the home router, which changes band selection for every device in the house.
+- Remove the bridge's lock to the channel-44 radio so the roam completes. This carries the most risk, because the other radio was never tested for data.
 
-Turning off steering support in `wpa_supplicant` wouldn't help, because the firmware moves by itself.
+`wpa_supplicant`'s `disable_btm` option, which turns off its steering support, is ruled out: the firmware does the roam, and the `brcmfmac` driver passes only vendor-specific elements from `wpa_supplicant` into the association request.
 
-**TODO(soak): the soak result (pass or fail, and any further drops), whether firmware roaming is switched off and how that change tested.**
+**TODO(soak): the count of evening drops from the bridge's log, and the response chosen for the steering drops.**
 
 ## Lessons {#lessons}
 
@@ -155,17 +169,17 @@ Turning off steering support in `wpa_supplicant` wouldn't help, because the firm
 
 ## Limits
 
-- The 24-hour soak test is not finished. **TODO(soak): replace this line with the result.**
-- I haven't tested a fix for the band-steering drops.
+- The soak ran 19 of a planned 24 hours and didn't cover the household's evening, when the house uses Wi-Fi most. **TODO(soak): add the evening drop count.**
+- I haven't chosen or tested a response to the band-steering drops.
 - I haven't checked the 2021 radio firmware against Asus's own download; its origin rests on matching hashes posted by other users.
 - The service VM took a fresh DHCP lease through the bridge, but no lease renewal has gone through it.
-- Nine key files in the saved configuration backup matched the live bridge, but I haven't restored it. OpenWrt's failsafe mode and a factory reset are untested on this unit.
+- Nine key files in the first configuration backup matched the live bridge. I took a fresh backup at 20:20, right after the soak, and haven't restored either one. OpenWrt's failsafe mode and a factory reset are untested on this unit.
 - Uptime Kuma runs on a VM inside the lab, so when the bridge is down its alerts arrive only after the link returns.
 - Bench figures come from next to the home router, and every figure comes from one day of tests.
 
 ## Next changes
 
-- **TODO(soak):** a fixed MAC address on the bridge's wired side, which gets a new random one at every boot, and a fresh configuration backup, both after the soak.
+- A fixed MAC address on the bridge's wired side, which gets a new random one at every boot, set at the bridge's next reboot.
 - **TODO(soak):** retire the range extender, which stays powered and unplugged as the rollback until then.
 - The Cat6 run that replaces the Wi-Fi hop, on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
