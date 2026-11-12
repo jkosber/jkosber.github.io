@@ -16,7 +16,7 @@ There's no cable between the homelab and the home router yet, so one Wi-Fi link 
 
 Lab hosts kept their addresses, and the home router is still the only DHCP server and gateway. The bridge is the step before a Cat6 run to the lab, which stays on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
-**TODO(soak): this page is a draft.** The [soak test](#soak-test) passed after 19 hours on November 11 but didn't cover the household's evening, when the house uses Wi-Fi most. The count of evening drops and the response chosen for the band-steering drops are not known yet.
+**TODO(soak): this page is a draft.** The [soak test](#soak-test) passed after 19 hours on November 11 but didn't cover the household's evening, when the house uses Wi-Fi most. The count of evening drops and the result of the fix chosen for the band-steering drops are not known yet.
 
 ## How the bridge fits in {#how-the-bridge-fits-in}
 
@@ -149,7 +149,7 @@ This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code al
 
 The soak passed its written condition, a count of log lines containing "deauth", which stayed at 0 because none of the drop lines contains that word. The condition's intent, no disconnects, wasn't met: the three drops are disconnects, short enough that no monitor caught them.
 
-I haven't chosen or tested a response to the drops yet. The options:
+I chose to test the second option below, and to accept the drops if firmware roaming off doesn't stop them: each one lasts a few seconds and no service noticed any of the three. Nothing is tested yet. The options:
 
 - Accept short drops.
 - Turn firmware roaming off on the bridge with the `brcmfmac` module option `roamoff=1`, a reboot, and the module options file on the upgrade keep-list. The first source analysis pointed to this fix, but it isn't confirmed to cover roams the home router asks for.
@@ -158,7 +158,7 @@ I haven't chosen or tested a response to the drops yet. The options:
 
 `wpa_supplicant`'s `disable_btm` option, which turns off its steering support, is ruled out: the firmware does the roam, and the `brcmfmac` driver passes only vendor-specific elements from `wpa_supplicant` into the association request.
 
-**TODO(soak): the count of evening drops from the bridge's log, and the response chosen for the steering drops.**
+**TODO(soak): the count of evening drops from the bridge's log, and when `roamoff=1` was applied and what the bridge showed afterwards.**
 
 ## Lessons {#lessons}
 
@@ -170,7 +170,7 @@ I haven't chosen or tested a response to the drops yet. The options:
 ## Limits
 
 - The soak ran 19 of a planned 24 hours and didn't cover the household's evening, when the house uses Wi-Fi most. **TODO(soak): add the evening drop count.**
-- I haven't chosen or tested a response to the band-steering drops.
+- The response to the band-steering drops, firmware roaming off on the bridge, is chosen but not tested.
 - I haven't checked the 2021 radio firmware against Asus's own download; its origin rests on matching hashes posted by other users.
 - The service VM took a fresh DHCP lease through the bridge, but no lease renewal has gone through it.
 - Nine key files in the first configuration backup matched the live bridge. I took a fresh backup at 20:20, right after the soak, and haven't restored either one. OpenWrt's failsafe mode and a factory reset are untested on this unit.
@@ -179,7 +179,8 @@ I haven't chosen or tested a response to the drops yet. The options:
 
 ## Next changes
 
-- A fixed MAC address on the bridge's wired side, which gets a new random one at every boot, set at the bridge's next reboot.
+- Firmware roaming off on the bridge (`roamoff=1`), as the test against the steering drops.
+- A fixed MAC address on the bridge's wired side, which gets a new random one at every boot, set in the same reboot.
 - The Cat6 run that replaces the Wi-Fi hop, on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
 ## Sources
