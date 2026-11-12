@@ -9,7 +9,7 @@ summary:
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
   result: "Patched every host in October 2026 after a certificate authority compromise and set up Beszel and Uptime Kuma monitoring with Discord alerts. Built ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
-updated: "TODO(soak): publish date"
+updated: "November 12, 2026"
 screenshot:
   src: assets/evidence/homelab/homepage-dashboard-2026-10-23.webp
   width: 1232
