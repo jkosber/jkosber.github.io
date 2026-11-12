@@ -16,7 +16,7 @@ There's no cable between the homelab and the home router yet, so one Wi-Fi link 
 
 Lab hosts kept their addresses, and the home router is still the only DHCP server and gateway. The bridge is the step before a Cat6 run to the lab, which stays on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
-**TODO(soak): this page is a draft.** The [soak test](#soak-test) passed after 19 hours on November 11 but didn't cover the household's evening, when the house uses Wi-Fi most. The count of evening drops, the response chosen for the band-steering drops and the date of the extender's retirement are not known yet.
+**TODO(soak): this page is a draft.** The [soak test](#soak-test) passed after 19 hours on November 11 but didn't cover the household's evening, when the house uses Wi-Fi most. The count of evening drops and the response chosen for the band-steering drops are not known yet.
 
 ## How the bridge fits in {#how-the-bridge-fits-in}
 
@@ -136,6 +136,8 @@ The soak didn't cover 20:20 to 01:20, the household's evening, when the house us
 
 During the soak I also simplified the cabling. At 19:22 I unplugged the 24-port lab switch from the bridge: the lab has too few wired devices to need it, and nothing was plugged into it. At 19:30 I moved the Proxmox host's cable from LAN port 2 to LAN port 1, a 3-second outage. All four LAN ports belong to one bridge interface in the configuration, so no setting changed. Afterwards the port ran at 1,000 Mbit/s full duplex, the three lab hosts and six services answered, and Uptime Kuma recorded no downtime.
 
+The range extender had stayed powered and unplugged as the rollback. After the soak passed I retired it.
+
 The Wi-Fi link dropped three times in the whole soak, at 13:27, 16:04 and 16:56, for about 5, 5 and 7 seconds, and not again before 20:20. The bridge's normal log only holds about nine hours, but its kernel log reaches back to boot and holds exactly three of the driver's `Unknown Frame: category 0xa, action 0x8` lines, one per drop, so the count covers the whole soak. Uptime Kuma registered none of the three. Each followed the same sequence:
 
 1. The home router sent an 802.11v steering request toward its other 5 GHz radio.
@@ -180,7 +182,6 @@ I haven't chosen or tested a response to the drops yet. The options:
 ## Next changes
 
 - A fixed MAC address on the bridge's wired side, which gets a new random one at every boot, set at the bridge's next reboot.
-- **TODO(soak):** retire the range extender, which stays powered and unplugged as the rollback until then.
 - The Cat6 run that replaces the Wi-Fi hop, on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
 ## Sources
