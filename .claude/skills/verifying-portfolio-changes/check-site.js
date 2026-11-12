@@ -338,14 +338,14 @@ async (page) => {
       height: document.documentElement.scrollHeight,
     }));
     result.checks.projectsIndex[width] = index.rows;
-    if (index.rows.join('|') !== 'Proxmox homelab|SSH Workbench|Job scan and resume tailor') fail(`projectsIndex @${width}: rows ${index.rows.join(', ')}`);
+    if (index.rows.join('|') !== 'Proxmox homelab|SSH Workbench|OpenWrt wireless bridge|Job scan and resume tailor') fail(`projectsIndex @${width}: rows ${index.rows.join(', ')}`);
     if (!index.courseworkLink) fail(`projectsIndex @${width}: the intro does not link to /coursework/`);
     if (width === 1440 && index.height > 1400) fail(`projectsIndex @1440: page is ${index.height}px tall`);
     if (index.leftovers) fail(`projectsIndex @${width}: ${index.leftovers} filter, toolbar or card element(s) remain`);
   }
 
   // Homepage: a hero band with the name and three facts (certifications first), the two lead projects
-  // as feature panels with real captures, the job-scan row, a "Coursework case studies" list of the
+  // as feature panels with real captures, the bridge and job-scan rows, a "Coursework case studies" list of the
   // three featured case studies, one compact row of class links without illustrations and a card per role.
   // The hero scene is gone (approved Oct 23).
   const expectedClasses = ['NETI 109', 'SVAD 111', 'CSIA 115', 'CSIA 210', 'CSIA 105', 'SDEV 120'];
@@ -387,7 +387,7 @@ async (page) => {
         }),
         firstImage: firstImage ? { src: firstImage.getAttribute('src'), width: firstImage.getAttribute('width'), height: firstImage.getAttribute('height') } : null,
         liftedFeatures: main.querySelectorAll('.feature.lift').length,
-        minor: text(main.querySelector('.minor h3')),
+        minors: [...main.querySelectorAll('.minor h3')].map(text),
         classLinks: main.querySelectorAll('ul.classes > li > a[href]').length,
         codes: [...main.querySelectorAll('ul.classes .tile-code')].map(text),
         classImages: main.querySelectorAll('ul.classes img').length,
@@ -427,7 +427,7 @@ async (page) => {
       }
     }
     if (home.liftedFeatures) fail(`${where}: ${home.liftedFeatures} feature panel(s) carry .lift`);
-    if (home.minor !== 'Job scan and resume tailor') fail(`${where}: .minor h3 is "${home.minor}"`);
+    if (home.minors.join('|') !== 'OpenWrt wireless bridge|Job scan and resume tailor') fail(`${where}: .minor h3 titles are ${home.minors.join(', ')}`);
     if (home.studyLists !== 1) fail(`${where}: ${home.studyLists} lists named "Coursework case studies", expected 1`);
     if (home.studies.length !== 3) fail(`${where}: ${home.studies.length} items in "Coursework case studies", expected 3`);
     if (home.studies.map((study) => study.href).join('|') !== STUDIES.map(([href]) => href).join('|')) fail(`${where}: case studies link to ${home.studies.map((study) => study.href).join(', ')}`);
@@ -606,7 +606,7 @@ async (page) => {
   // put the role and result pair under the band. The contents sit sticky beside the body on wide
   // screens; on phones the header, the summary and the closed contents come before the body.
   const headPages = {
-    case: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/job-scan-tailor/',
+    case: ['/technical-labs/proxmox-virtualization/', '/technical-labs/ssh-workbench/', '/technical-labs/openwrt-wireless-bridge/', '/technical-labs/job-scan-tailor/',
       '/technical-labs/aws-linux-infrastructure/', '/technical-labs/soc-threat-detection/', '/technical-labs/snort-firewall-lab/',
       '/technical-labs/ipv6-packet-investigations/'],
     class: ['/coursework/neti-109/', '/coursework/svad-111/', '/coursework/csia-115/', '/coursework/csia-210/', '/coursework/csia-105/', '/coursework/sdev-120/'],
@@ -665,7 +665,7 @@ async (page) => {
           if (wide.shotTop === null) fail(`${where}: no .lead-shot img`);
           else if (wide.shotTop > 620) fail(`${where}: the lead screenshot starts at ${wide.shotTop}px, expected 620 or less`);
         }
-        if (route === '/technical-labs/job-scan-tailor/' && (wide.leadShot || wide.shotHead)) fail(`${where}: a page without a screenshot has .lead-shot or .page-head--shot`);
+        if (['/technical-labs/openwrt-wireless-bridge/', '/technical-labs/job-scan-tailor/'].includes(route) && (wide.leadShot || wide.shotHead)) fail(`${where}: a page without a screenshot has .lead-shot or .page-head--shot`);
         if (kind === 'class') {
           if (!wide.pairResult) fail(`${where}: no .summary-pair .panel--result`);
           if (!wide.art) fail(`${where}: no .head-art`);

@@ -9,7 +9,7 @@ summary:
   built_with: ["Proxmox VE 9", "Ubuntu Server", "Debian LXC containers", "Docker (Homepage, Uptime Kuma, Beszel, Portainer, RustDesk Server)", "Proxmox SDN with dnsmasq", "a Caddy reverse-proxy pilot", "OPNsense in progress"]
   result: "Patched every host in October 2026 after a certificate authority compromise and set up Beszel and Uptime Kuma monitoring with Discord alerts. Built ten VMs and two containers on a 16 GB laptop, with two service guests that start on boot."
   source: {label: "JHomelab repository", url: "https://github.com/jkosber/JHomelab"}
-updated: "October 23, 2026"
+updated: "November 12, 2026"
 screenshot:
   src: assets/evidence/homelab/homepage-dashboard-2026-10-23.webp
   width: 1232
@@ -28,14 +28,16 @@ Two service guests run all the time, and the other guests start only when I'm wo
 
 <figure class="architecture">
   <ol class="architecture-flow" role="list">
-    <li><strong>Physical connection</strong><span>Home router<br>Wireless bridge<br>Flat access network</span><small>Wired backhaul and VLANs planned</small></li>
+    <li><strong>Physical connection</strong><span>Home router<br>OpenWrt bridge on 5 GHz Wi-Fi<br>Flat access network</span><small>Wired backhaul and VLANs planned</small></li>
     <li><strong>Proxmox host</strong><span>Alienware 15 R3<br>16 GB physical RAM<br>SSD, guest-storage HDD and an unused NVMe</span><small>Virtual machines and two LXC containers</small></li>
     <li><strong>Guest attachments</strong><span>vmbr0: Ubuntu service VM + Debian LXC<br>testnet: nine experimental VMs + Caddy pilot</span><small>Service migration to SDN planned</small></li>
   </ol>
-  <figcaption>The lab as of October 23, 2026, with addresses left out.</figcaption>
+  <figcaption>The lab as of October 23, 2026, and its uplink as of November 11, with addresses left out.</figcaption>
 </figure>
 
-A range extender with its SSID hidden bridges the lab to the home router. Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
+Since November 11, 2026, a D-Link DIR-885L running OpenWrt links the lab to the home router over 5 GHz Wi-Fi, in place of a 2.4 GHz range extender. The Proxmox host plugs straight into one of its wired ports, and every lab host kept its address. The [OpenWrt wireless bridge](openwrt-wireless-bridge.md) page covers the build.
+
+Proxmox runs directly on the laptop and handles storage, guests and virtual networking. The access network is flat for now.
 
 ## Host and storage
 
@@ -140,6 +142,7 @@ Before October I had Uptime Kuma installed but not set up, and nothing watched t
 | Heat | Beszel | The laptop runs above 85 °C for 5 minutes |
 | Service down | Uptime Kuma | Two failed checks in a row on Proxmox, GoodMem, Portainer, Beszel, RustDesk or this site |
 | Certificate | Uptime Kuma | This site's TLS certificate is close to expiring |
+| Lab uplink | Uptime Kuma | Pings to the home router through the Wi-Fi bridge fail, or the bridge's SSH port stops answering. Uptime Kuma runs inside the lab, so this alert reaches Discord only once the link is back |
 
 Beszel also lists pending package updates and flags the security ones. The first time it ran, it showed 87 waiting on CT 110.
 
@@ -184,4 +187,4 @@ Further out: a Cat6 run to replace the wireless bridge, a managed switch with 80
 
 The repository holds documentation and screenshots. Sanitized configuration exports, firewall rules and Compose files go in once they stop changing every week.
 
-[All projects](index.md) · [SSH Workbench](ssh-workbench.md) · [AdventureWorks on AWS](aws-linux-infrastructure.md)
+[All projects](index.md) · [OpenWrt wireless bridge](openwrt-wireless-bridge.md) · [SSH Workbench](ssh-workbench.md) · [AdventureWorks on AWS](aws-linux-infrastructure.md)

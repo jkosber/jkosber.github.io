@@ -46,6 +46,7 @@ nav:
       - Projects: technical-labs/index.md
       - Proxmox homelab: technical-labs/proxmox-virtualization.md
       - SSH Workbench: technical-labs/ssh-workbench.md
+      - OpenWrt wireless bridge: technical-labs/openwrt-wireless-bridge.md
       - Job scan and resume tailor: technical-labs/job-scan-tailor.md
   - Coursework:
       - Coursework: coursework/index.md
