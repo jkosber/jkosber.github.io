@@ -162,8 +162,6 @@ I haven't chosen or tested a response to the drops yet. The options:
 
 ## Lessons {#lessons}
 
-**TODO(jadon): confirm or rewrite these lessons.** Each candidate below comes from a finding on this page; none is settled yet.
-
 - The shipped radio firmware completed the WPA2 handshake while 39 of 44 transmits failed, so a successful association says little about the data path.
 - The lock to one radio lived in `wpa_supplicant`, and the radio firmware roamed anyway on a steering request.
 - The "deauth" count stayed at 0 through three Wi-Fi drops; a pass condition has to count the failure it exists to catch.
