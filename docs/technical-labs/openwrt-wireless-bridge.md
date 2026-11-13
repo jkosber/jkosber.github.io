@@ -7,7 +7,7 @@ summary:
   role: "Compared the bridging options, upgraded and locked down OpenWrt on a spare router, replaced its 5 GHz radio firmware, bench-tested the relay and moved the lab onto it."
   built_with: ["OpenWrt 25.12.6", "D-Link DIR-885L", "relayd", "brcmfmac Wi-Fi driver", "iperf3", "Uptime Kuma"]
   result: "Moved the lab's uplink from a 2.4 GHz range extender to 5 GHz with every lab address unchanged and 27 seconds offline. Lab-to-home throughput went from about 47 Mbit/s to between 239 and 272 Mbit/s in the same test. Passed a 19-hour soak with all nine Uptime Kuma monitors at 100% and three Wi-Fi drops of 5 to 7 seconds that no monitor caught."
-updated: "November 12, 2026"
+updated: "November 13, 2026"
 ---
 
 # OpenWrt wireless bridge
@@ -16,7 +16,7 @@ There's no cable between the homelab and the home router yet, so one Wi-Fi link 
 
 Lab hosts kept their addresses, and the home router is still the only DHCP server and gateway. The bridge is the step before a Cat6 run to the lab, which stays on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
-The [soak test](#soak-test) passed after 19 hours on November 11, with three Wi-Fi drops of a few seconds each. A driver setting against those drops went in on November 12, and whether it stops them isn't known yet.
+The [soak test](#soak-test) passed after 19 hours on November 11, with three Wi-Fi drops of a few seconds each. A driver setting against those drops went in on November 12 and didn't stop them, so I removed it on November 13 and accept the drops.
 
 ## How the bridge fits in {#how-the-bridge-fits-in}
 
@@ -149,10 +149,10 @@ This cause comes from reading the `wpa_supplicant` and `brcmfmac` source code al
 
 The soak passed its written condition, a count of log lines containing "deauth", which stayed at 0 because none of the drop lines contains that word. The condition's intent, no disconnects, wasn't met: the three drops are disconnects, short enough that no monitor caught them.
 
-I chose to test the second option below, and to accept the drops if firmware roaming off doesn't stop them: each one lasts a few seconds and no service noticed any of the three. The options:
+I chose to test the second option below, and to accept the drops if firmware roaming off didn't stop them: each one lasts a few seconds and no service noticed any of the three. The options:
 
 - Accept short drops.
-- Turn firmware roaming off on the bridge with the `brcmfmac` module option `roamoff=1`, a reboot, and the module options file on the upgrade keep-list. The first source analysis pointed to this fix, but it isn't confirmed to cover roams the home router asks for.
+- Turn firmware roaming off on the bridge with the `brcmfmac` module option `roamoff=1`, a reboot, and the module options file on the upgrade keep-list. The first source analysis pointed to this fix, but it wasn't confirmed to cover roams the home router asks for.
 - Turn Smart Connect off on the home router, which changes band selection for every device in the house.
 - Remove the bridge's lock to the channel-44 radio so the roam completes. This carries the most risk, because the other radio was never tested for data.
 
@@ -160,7 +160,11 @@ I chose to test the second option below, and to accept the drops if firmware roa
 
 I turned firmware roaming off on November 12 at 01:42, and gave the bridge's wired side a fixed MAC address in the same reboot. The lab was offline for 34 seconds. Afterwards the driver reported roaming off, the link was back on the channel-44 radio at -56 dBm with no failed transmits, the three lab hosts and six services answered, and Uptime Kuma recorded no downtime.
 
-Whether the setting stops the drops isn't known yet. The evening after the soak brought no steering requests at all, so a quiet day after the change won't show whether it works. The test needs a steering request that passes without a drop.
+The evening after the soak brought no steering requests at all, so a quiet day after the change wouldn't have shown whether it works. The test needed a steering request that passes without a drop.
+
+The setting failed that test. On November 13 at 17:16, about 40 hours after the reboot, the bridge's kernel log held ten steering requests: one on the morning of November 12 and nine on November 13. The bridge's normal log reached back to 07:08 and showed what followed the last three, at 10:03, 10:04 and 13:47. Each ran like the drops in the soak: the radio associated to the other 5 GHz radio, the link dropped, and the bridge was back on the channel-44 radio 4 to 7 seconds after the request. The driver reported roaming off the whole time, so the setting doesn't cover roams the home router asks for.
+
+I took `roamoff=1` out of the bridge's configuration the same day, without a reboot, so the running driver keeps it until the bridge next restarts. The drops stay, which is the outcome I had accepted before the test, and the fixed MAC address stays too.
 
 ## Lessons {#lessons}
 
@@ -172,7 +176,7 @@ Whether the setting stops the drops isn't known yet. The evening after the soak 
 ## Limits
 
 - The soak ran 19 of a planned 24 hours. The evening after it is covered only by the bridge's log, which shows no drops from 20:20 to 01:27. The drop rate rests on that one day: three in the bridge's first 24 hours.
-- Firmware roaming has been off on the bridge since November 12, as the response to the band-steering drops. No steering request had come in when I wrote this, so whether it stops them is unknown.
+- The band-steering drops continue: turning firmware roaming off didn't stop them, and no other fix is planned before the cable. Of the ten steering requests after the November 12 reboot, the log still showed the outcome of three, all drops; the lines for the first seven had rolled out of it.
 - I haven't checked the 2021 radio firmware against Asus's own download; its origin rests on matching hashes posted by other users.
 - The service VM took a fresh DHCP lease through the bridge, but no lease renewal has gone through it.
 - Nine key files in the first configuration backup matched the live bridge. I took a fresh backup at 20:20, right after the soak, and haven't restored either one. OpenWrt's failsafe mode and a factory reset are untested on this unit.
@@ -181,15 +185,14 @@ Whether the setting stops the drops isn't known yet. The evening after the soak 
 
 ## Next changes
 
-- Reading the bridge's log for the next steering request, which decides whether `roamoff=1` stays.
-- The Cat6 run that replaces the Wi-Fi hop, on the [homelab roadmap](proxmox-virtualization.md#next-changes).
+- The Cat6 run that replaces the Wi-Fi hop, and ends the steering drops with it, on the [homelab roadmap](proxmox-virtualization.md#next-changes).
 
 ## Sources
 
 This page draws on my project notes and the bridge's working plan, which stay private because they hold network details, and on these public sources:
 
-- [Bridge write-up in the JHomelab repository, November 12 revision](https://github.com/jkosber/JHomelab/blob/3cdd4bc9f0e8c5d1ee3590a98d704002d185e6e1/projects/2026-11-dir885l-wireless-bridge/README.md): hardware limits, radio firmware, configuration, bench tests, cutover, soak result and the band-steering drops
-- [Network topology, November 12 revision](https://github.com/jkosber/JHomelab/blob/3cdd4bc9f0e8c5d1ee3590a98d704002d185e6e1/docs/topology.md): how the lab connects to the home network through the bridge
+- [Bridge write-up in the JHomelab repository, November 13 revision](https://github.com/jkosber/JHomelab/blob/eb188f9d4b9f6280310fe8979a9f711b44f98f1f/projects/2026-11-dir885l-wireless-bridge/README.md): hardware limits, radio firmware, configuration, bench tests, cutover, soak result and the band-steering drops
+- [Network topology, November 13 revision](https://github.com/jkosber/JHomelab/blob/eb188f9d4b9f6280310fe8979a9f711b44f98f1f/docs/topology.md): how the lab connects to the home network through the bridge
 - [OpenWrt device page for the DIR-885L](https://openwrt.org/toh/d-link/dir-885l): supported hardware, install, recovery and the 5 GHz firmware issue
 - [OpenWrt's Wi-Fi extender guide with relayd](https://openwrt.org/docs/guide-user/network/wifi/relay_configuration): when to use `relayd` instead of WDS or 802.11s
 - [`brcmfmac` driver source](https://github.com/torvalds/linux/blob/master/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c): the interface types it refuses
