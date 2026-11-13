@@ -1,5 +1,12 @@
 # Portfolio change record
 
+## November 13, 2026 — OpenWrt bridge page: result of the roaming test
+
+- Bridge page, `technical-labs/openwrt-wireless-bridge.md`: the test of `roamoff=1` against the band-steering drops has its result. The setting didn't stop them (ten steering requests in about 40 hours after the November 12 reboot; the three still in the log each ended in a drop of 4 to 7 seconds), it was removed from the bridge's configuration on November 13, and the drops are accepted. Changed: the intro's status sentence, the end of the band-steering section, the roaming bullet in Limits, Next changes (the log-reading item is gone and the Cat6 item says it ends the drops), and the `updated` date.
+- Its two JHomelab source links are re-pinned from `3cdd4bc` to `eb188f9`, the revision that carries the same result.
+
+Validation: the 59 unit tests and a strict build passed, the browser check passed in Chromium on 20 routes with no problems, the anti-slop scan of the page found nothing, and the private-term scan found nothing new (its only hits are radio firmware version numbers and an anchor id). Both re-pinned links answer. No screenshots were taken: the change is body text only.
+
 ## November 12, 2026 — OpenWrt wireless bridge page
 
 - New project page, `technical-labs/openwrt-wireless-bridge.md`: the D-Link DIR-885L that replaced the range extender as the lab's Wi-Fi uplink on November 11. It covers the choice of `relayd`, the bench setup and upgrade, the 5 GHz radio firmware problem, the configuration, bench tests, the cutover measured against the extender, the 19-hour soak that passed on November 11 with its three band-steering drops and the cabling change made during it, lessons, limits and next changes. It has no screenshot or illustration, so it shows as a minor row on the homepage, before the job-scan row, and third on the Projects index, after SSH Workbench.
