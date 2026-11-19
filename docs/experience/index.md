@@ -9,13 +9,15 @@ roles:
     dates: July 2026 to October 2026
     image: assets/roles/retail-conversions.svg
     icon: network
-    summary: "Converted about 10 Verizon stores on three conversion projects covering roughly 130 locations: printers, network checks in Cisco Meraki and remote work with field technicians."
+    summary: "Converted about 10 Verizon stores overnight on three conversion projects covering roughly 130 locations: printers, network checks in Cisco Meraki and remote direction of onsite technicians."
     intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Prepared each store's devices for go-live, onsite and remotely with field technicians."
     bullets:
-      - "Converted about 10 of roughly 130 Verizon stores across three technology conversion projects: printers, PCs, firewalls, switches, phones and point-of-sale devices"
+      - "Converted about 10 of roughly 130 Verizon stores overnight across three technology conversion projects: printers, PCs, firewalls, switches, phones and point-of-sale devices"
+      - Ran two store conversions at the same time, and three at once on one conversion
       - Installed and configured printers with static IP addresses and checked that they reached the network
       - Connected devices to the firewall ports and checked each device's network access and port status in the Cisco Meraki Dashboard
-      - Worked with field technicians remotely to confirm port assignments, finish installations and troubleshoot connection problems, then supported the stores after they reopened
+      - Directed onsite technicians remotely through hardware installation, confirmed port assignments and troubleshot connection problems
+      - Tested payment systems and devices with store staff before each store reopened, then supported the stores afterward
   - id: ladd-dental
     title: IT Intern
     organization: Ladd Dental Group
