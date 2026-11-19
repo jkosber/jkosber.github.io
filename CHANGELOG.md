@@ -1,5 +1,11 @@
 # Portfolio change record
 
+## November 19, 2026 — Vaco role: concurrent stores moved into the technician bullet
+
+- Experience, the Vaco by Highspring contract at Verizon: the bullet "Ran two store conversions at the same time, and three at once on one conversion" is removed. It used "conversion" for one store and then for something larger, and the review of the earlier change had flagged it as hard to read. The fact moved into the bullet about the technicians, which now reads "Directed onsite technicians remotely through hardware installation at up to three stores at the same time, confirmed port assignments and troubleshot connection problems". The role has five bullets. "Up to three" rests on what Jadon confirmed: two stores at once as a rule, and three on one conversion.
+
+Validation: the 59 unit tests and a strict build of 23 pages passed, and the anti-slop scan found nothing on the page. The browser check was not run, by Jadon's choice for a change of this size: one bullet removed and one lengthened.
+
 ## November 19, 2026 — Vaco role facts and career direction
 
 - Experience, the Vaco by Highspring contract at Verizon: the role carries four facts Jadon confirmed on November 19. The conversions ran overnight; two stores ran at the same time, and three at once on one conversion; the onsite technicians were directed remotely through hardware installation; payment systems and devices were tested with store staff before each store reopened. The summary, which is also the homepage role card, says "overnight" and "remote direction of onsite technicians" in place of "remote work with field technicians", and the bullets go from four to six. The intro is unchanged.

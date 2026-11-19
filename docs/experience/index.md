@@ -13,10 +13,9 @@ roles:
     intro: "Supported technology conversions at Verizon retail stores as a contractor through Vaco by Highspring. Prepared each store's devices for go-live, onsite and remotely with field technicians."
     bullets:
       - "Converted about 10 of roughly 130 Verizon stores overnight across three technology conversion projects: printers, PCs, firewalls, switches, phones and point-of-sale devices"
-      - Ran two store conversions at the same time, and three at once on one conversion
       - Installed and configured printers with static IP addresses and checked that they reached the network
       - Connected devices to the firewall ports and checked each device's network access and port status in the Cisco Meraki Dashboard
-      - Directed onsite technicians remotely through hardware installation, confirmed port assignments and troubleshot connection problems
+      - Directed onsite technicians remotely through hardware installation at up to three stores at the same time, confirmed port assignments and troubleshot connection problems
       - Tested payment systems and devices with store staff before each store reopened, then supported the stores afterward
   - id: ladd-dental
     title: IT Intern
