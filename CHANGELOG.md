@@ -1,5 +1,13 @@
 # Portfolio change record
 
+## November 19, 2026 — Vaco role facts and career direction
+
+- Experience, the Vaco by Highspring contract at Verizon: the role carries four facts Jadon confirmed on November 19. The conversions ran overnight; two stores ran at the same time, and three at once on one conversion; the onsite technicians were directed remotely through hardware installation; payment systems and devices were tested with store staff before each store reopened. The summary, which is also the homepage role card, says "overnight" and "remote direction of onsite technicians" in place of "remote work with field technicians", and the bullets go from four to six. The intro is unchanged.
+- Career direction: network engineering, not security. The homepage intro ends "I'm looking for network and infrastructure support roles and working toward network engineering." in place of "with security as the next step." About's first sentence reads "I'm a CompTIA A+ and Security+ certified technician working toward network engineering, with an informatics degree and a Cyber Security certificate."
+- Unchanged after a search of every page, the templates and `mkdocs.yml`: the role line, both page descriptions, the social image's alt text and the JSON-LD `jobTitle` name network and infrastructure support and say nothing about a next step. "Cybersecurity" stays in the site description and the JSON-LD `knowsAbout` as a subject the site covers. The other pages that restate the Verizon role (the homepage intro and Latest role fact, About's Networking row) agree with the new bullets.
+
+Validation: on the final copy the 59 unit tests and a strict build of 23 pages passed, and the browser check passed in Chromium on 20 routes with no problems. The anti-slop scan found nothing on the three changed pages. A review pass of the same pages passed them and returned seven wording notes; Jadon took one, the order of About's first sentence, and kept the lines he had approved. The private-term scan found nothing new (its only hits are radio firmware version numbers and an anchor id, on pages this change does not touch). Screenshots of the homepage hero and role cards, the Vaco role and the top of About at 1440 and 390 px show no layout problem. Physical devices, screen readers and WebKit were not checked.
+
 ## November 19, 2026 — one command for the checks before a commit
 
 - New `.claude/skills/verify/` with `verify.sh`: the unit tests, a strict build into a temp folder (so `site/` stays untouched), `node --check` on `portfolio.js`, the `run-check.js` tests and the `CLAUDE.md` size cap, in about 4 seconds. `verify.sh --rendered` also starts the preview, runs `run-check.js chromium` and stops the preview, in about 77 seconds.
