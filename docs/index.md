@@ -16,7 +16,7 @@ Infrastructure and network support, CompTIA A+ and Security+ certified.
 { .role-line .enter .enter-2 }
 
 <!-- voice: personal -->
-I run a documented Proxmox homelab with monitoring and alerting, and I built SSH Workbench, a terminal app for checking and connecting to machines over SSH. At work I supported 100+ staff across 12 dental offices and converted Verizon stores to new store technology as a contractor. I'm looking for network and infrastructure support roles, with security as the next step.
+I run a documented Proxmox homelab with monitoring and alerting, and I built SSH Workbench, a terminal app for checking and connecting to machines over SSH. At work I supported 100+ staff across 12 dental offices and converted Verizon stores to new store technology as a contractor. I'm looking for network and infrastructure support roles and working toward network engineering.
 { .intro .enter .enter-2 }
 <!-- /voice -->
 
