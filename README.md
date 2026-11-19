@@ -14,7 +14,7 @@ uv pip sync --python .venv requirements.txt   # after cloning and whenever requi
 .venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict
 ```
 
-On Windows the interpreter is `.venv\Scripts\python`.
+`.claude/skills/verify/verify.sh` runs the tests, a strict build into a temp folder and the script checks in one command; `--rendered` adds the browser suite. On Windows the interpreter is `.venv\Scripts\python`.
 
 `site/` is generated and ignored. `requirements.in` lists the direct dependencies; regenerate the pins with `uv pip compile requirements.in --python-version 3.14 --universal --no-header --no-annotate --output-file requirements.txt`, then sync the venv and rerun the checks.
 

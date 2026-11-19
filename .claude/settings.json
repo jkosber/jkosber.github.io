@@ -9,7 +9,9 @@
       "Bash(uv pip sync *)",
       "Bash(.venv/bin/python -m mkdocs build *)",
       "Bash(.venv/bin/python -m mkdocs serve *)",
-      "Bash(.venv/bin/python -m unittest *)"
+      "Bash(.venv/bin/python -m unittest *)",
+      "Bash(.claude/skills/verify/verify.sh)",
+      "Bash(.claude/skills/verify/verify.sh --rendered)"
     ]
   }
 }

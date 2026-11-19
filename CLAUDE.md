@@ -9,13 +9,12 @@ Jadon Kosberg's public portfolio at [jnkos.com](https://jnkos.com/), written for
 | Task | Command |
 |---|---|
 | Environment | `uv venv --python 3.14` once, then `uv pip sync --python .venv requirements.txt` after cloning and whenever `requirements.txt` changes |
+| Checks before a commit | `.claude/skills/verify/verify.sh` (the tests and the strict build below, script syntax, the `run-check.js` tests and this file's size cap, about 4 s); `--rendered` adds the browser suite, about 77 s |
 | Tests | `.venv/bin/python -m unittest discover -s tests` |
 | Strict build (links and anchors must resolve) | `.venv/bin/python -m mkdocs build --strict` |
 | Preview | `.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict` |
-| Regenerate `requirements.txt` | `uv pip compile requirements.in --python-version 3.14 --universal --no-header --no-annotate --output-file requirements.txt` |
-| Mutation tests of `hooks/` (by hand, Linux) | `uvx --from mutmut --with-requirements requirements.txt mutmut run` (config in `pyproject.toml`) |
 
-Python commands run the venv's interpreter (`.venv\Scripts\python` on Windows); the system interpreter has no `pip` on some distributions. Material's boxed MkDocs 2.0 notice in build output is not a `WARNING` line and does not fail `--strict`.
+Python commands run the venv's interpreter; the system interpreter has no `pip` on some distributions. Material's boxed MkDocs 2.0 notice in build output is not a `WARNING` line and does not fail `--strict`. Regenerating `requirements.txt` is in the README; the mutation-test command for `hooks/` is the comment in `pyproject.toml`.
 
 ## Non-obvious structure
 
@@ -92,7 +91,9 @@ Dark navy in four layers, blue structure, amber emphasis; flat fills, and the ta
 
 ## Verification and publishing
 
-- Before any commit that changes the site: the tests and a strict build. Before asking to publish: the `verifying-portfolio-changes` skill (`node .claude/skills/verifying-portfolio-changes/run-check.js chromium` with `PLAYWRIGHT_MODULE` set).
+- Before each commit that changes the site: the `verify` skill. Pages under `docs/` are the published site, not documentation, so the commit instructions' exception for docs does not cover them: a copy-only commit gets `verify` too. On a failing-tests-first checkpoint its `FAIL` is expected: confirm that only the new tests fail, then commit.
+- Before asking to publish: the `verifying-portfolio-changes` skill, whose automated part is `verify.sh --rendered`.
 - Work on a branch. A push to `main` deploys through `.github/workflows/deploy.yml`, so push, merge or deploy only with Jadon's approval of that specific change.
+- After an approved merge, wait for the deploy run to finish and fetch the changed routes on jnkos.com before calling the change published.
 - Each branch merged to `main` adds a dated `CHANGELOG.md` entry with what was checked.
 - Review new or changed copy for filler and cliches with `anti-slop:slop-check`.

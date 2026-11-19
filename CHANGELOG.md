@@ -1,5 +1,14 @@
 # Portfolio change record
 
+## November 19, 2026 — one command for the checks before a commit
+
+- New `.claude/skills/verify/` with `verify.sh`: the unit tests, a strict build into a temp folder (so `site/` stays untouched), `node --check` on `portfolio.js`, the `run-check.js` tests and the `CLAUDE.md` size cap, in about 4 seconds. `verify.sh --rendered` also starts the preview, runs `run-check.js chromium` and stops the preview, in about 77 seconds.
+- `CLAUDE.md` names two tiers: the `verify` skill before each commit, copy-only commits included, and the `verifying-portfolio-changes` skill before asking to publish. One publishing rule is new: after an approved merge, wait for the deploy run and fetch the changed routes before calling a change published. The `uv pip compile` and mutation-test commands became pointers to the README and `pyproject.toml`.
+- The verifying skill's description covers pushing, merging and publishing; its fast checks and its automated browser run point at the script.
+- `README.md` and `.claude/settings.json` name the script.
+
+Validation: no site file changed. `verify.sh` passed (59 tests, a strict build of 23 pages, the script checks) and `verify.sh --rendered` passed in Chromium on 20 routes with no problems. Twelve fault cases in a scratch copy behaved as intended: a raw hex colour, a link to a missing page, a syntax error in `portfolio.js`, an oversized `CLAUDE.md`, a broken image, a busy port, a missing Playwright install and a browser that would not start each failed their line with exit 1; a missing `.venv` and an unknown argument exited 2; a clean copy passed. A read-only review found that a browser run that broke before reporting showed the wrong error and that the script named an install path; both were fixed before this change. In a scratch clone a headless session ran `verify` before a hook commit and a copy-only commit, and skipped it for a test-only commit (one trial each). Physical devices, screen readers and WebKit were not checked.
+
 ## November 13, 2026 — OpenWrt bridge page: result of the roaming test
 
 - Bridge page, `technical-labs/openwrt-wireless-bridge.md`: the test of `roamoff=1` against the band-steering drops has its result. The setting didn't stop them (ten steering requests in about 40 hours after the November 12 reboot; the three still in the log each ended in a drop of 4 to 7 seconds), it was removed from the bridge's configuration on November 13, and the drops are accepted. Changed: the intro's status sentence, the end of the band-steering section, the roaming bullet in Limits, Next changes (the log-reading item is gone and the Cat6 item says it ends the drops), and the `updated` date.

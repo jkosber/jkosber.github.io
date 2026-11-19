@@ -1,6 +1,6 @@
 ---
 name: verifying-portfolio-changes
-description: Use when a change to the jnkos.com portfolio (pages, frontmatter, templates, CSS, JavaScript, hooks, images, dependencies) is about to be committed, pushed or published, or when asked whether the site is ready to show or deploy.
+description: Use when a change to the jnkos.com portfolio (pages, frontmatter, templates, CSS, JavaScript, hooks, images, dependencies) is about to be pushed, merged or published, or when asked whether the site is ready to show or deploy. Before a commit, the verify skill is the check.
 ---
 
 # Verifying portfolio changes
@@ -13,12 +13,13 @@ A strict build proves links and anchors resolve. It does not prove a page render
 
 | Check | Command | Pass |
 |---|---|---|
-| Hook tests | `.venv/bin/python -m unittest discover -s tests` | `OK` |
-| Strict build | `.venv/bin/python -m mkdocs build --strict` (add `-d <temp folder>` when the check must not touch `site/`) | No `WARNING` or `ERROR` lines |
+| Fast checks | `.claude/skills/verify/verify.sh` (the unit tests, a strict build into a temp folder, script syntax) | Every line reads `OK` |
 | Diff review | `git status --short` and `git diff` | Only intended files; no debug leftovers, no `.env`, nothing from the parent workspace |
 | Private data | Grep `docs/`, `overrides/` and `.claude/` for `artifact`, `192\.168\.\d+\.\d+`, `\b10\.\d+\.\d+\.\d+`, `\b172\.(1[6-9]\|2\d\|3[01])\.\d+\.\d+`, `\bf[cd][0-9a-f]{2}:`, `Users[/\\]`, and for the private terms listed in the workspace `CLAUDE.md` (search without printing them) | No hits in visible copy or tracked files. `192.0.2.x`, `198.51.100.x`, `2001:db8::`, `example.com` and what the public JHomelab repo publishes (its host name, addresses ending in `.X`) are allowed |
 
 ## Rendered checks
+
+The automated part in one command: `.claude/skills/verify/verify.sh --rendered` starts the preview, runs `run-check.js chromium` and stops the preview; a pass reads `OK    rendered`. Steps 1 to 3 are the same checks through the Playwright MCP, whose headed browser also catches breaks that depend on scrollbar width: use them for a layout change. Steps 4 and 5, looking at the changed pages and images, apply either way.
 
 1. Check port 8765 is free, then start the preview in the background: `.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict`. The environment comes from the `CLAUDE.md` command table.
 2. Run `check-site.js` (next to this file) with the Playwright MCP tool `browser_run_code_unsafe`, passing its absolute path as `filename`. It reads the routes from `/sitemap.xml` and returns JSON covering:
