@@ -9,7 +9,7 @@ Jadon Kosberg's public portfolio at [jnkos.com](https://jnkos.com/), written for
 | Task | Command |
 |---|---|
 | Environment | `uv venv --python 3.14` once, then `uv pip sync --python .venv requirements.txt` after cloning and whenever `requirements.txt` changes |
-| Checks before a commit | `.claude/skills/verify/verify.sh` (the two rows below plus script syntax, about 5 s); `--rendered` adds the browser suite, about 75 s |
+| Checks before a commit | `.claude/skills/verify/verify.sh` (the tests and the strict build below, script syntax, the `run-check.js` tests and this file's size cap, about 4 s); `--rendered` adds the browser suite, about 77 s |
 | Tests | `.venv/bin/python -m unittest discover -s tests` |
 | Strict build (links and anchors must resolve) | `.venv/bin/python -m mkdocs build --strict` |
 | Preview | `.venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict` |
@@ -91,7 +91,7 @@ Dark navy in four layers, blue structure, amber emphasis; flat fills, and the ta
 
 ## Verification and publishing
 
-- Before each commit that changes the site: the `verify` skill (the tests, a strict build and script syntax). Pages under `docs/` are the site, not documentation, so a copy-only commit gets it too. A failing-tests-first checkpoint commit is the one exception.
+- Before each commit that changes the site: the `verify` skill. Pages under `docs/` are the published site, not documentation, so the commit instructions' exception for docs does not cover them: a copy-only commit gets `verify` too. On a failing-tests-first checkpoint its `FAIL` is expected: confirm that only the new tests fail, then commit.
 - Before asking to publish: the `verifying-portfolio-changes` skill, whose automated part is `verify.sh --rendered`.
 - Work on a branch. A push to `main` deploys through `.github/workflows/deploy.yml`, so push, merge or deploy only with Jadon's approval of that specific change.
 - After an approved merge, wait for the deploy run to finish and fetch the changed routes on jnkos.com before calling the change published.

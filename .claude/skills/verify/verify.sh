@@ -67,10 +67,7 @@ if [ "$rendered" -eq 1 ]; then
     .venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict >"$tmp/serve" 2>&1 &
     server=$!
     for _ in $(seq 1 60); do port_open && break; sleep 0.5; done
-    # A Node Playwright install and a system Chromium, when the environment names neither.
-    if [ -z "${PLAYWRIGHT_MODULE:-}" ] && [ -d "$HOME/.local/share/playwright-node/node_modules/playwright" ]; then
-      export PLAYWRIGHT_MODULE="$HOME/.local/share/playwright-node/node_modules/playwright"
-    fi
+    # The system Chromium, when the environment names none. PLAYWRIGHT_MODULE comes from the environment.
     if [ -z "${PLAYWRIGHT_CHROMIUM_PATH:-}" ] && [ -x /usr/bin/chromium ]; then
       export PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium
     fi
@@ -79,13 +76,12 @@ if [ "$rendered" -eq 1 ]; then
     else
       node .claude/skills/verifying-portfolio-changes/run-check.js chromium >"$tmp/check.json" 2>"$tmp/check.err"
       rc=$?
-      if [ "$rc" -eq 0 ]; then
-        ok rendered "$(.venv/bin/python -c 'import json,sys; d=json.load(open(sys.argv[1])); print(len(d["routes"]), "routes,", len(d["checks"]), "check groups, problems: 0")' "$tmp/check.json")"
-      elif [ "$rc" -eq 1 ]; then
-        .venv/bin/python -c 'import json,sys; [print(p) for p in json.load(open(sys.argv[1]))["problems"]]' "$tmp/check.json" >"$tmp/problems" 2>&1
-        bad rendered "$tmp/problems"
+      # One summary line, then one line per problem. No readable result means the run itself broke.
+      if .venv/bin/python -c 'import json,sys; d=json.load(open(sys.argv[1])); print(len(d["routes"]), "routes,", len(d["checks"]), "check groups, problems:", len(d["problems"])); [print(p) for p in d["problems"]]' "$tmp/check.json" >"$tmp/result" 2>/dev/null; then
+        if [ "$rc" -eq 0 ]; then ok rendered "$(head -n 1 "$tmp/result")"; else bad rendered "$tmp/result"; fi
       else
-        bad rendered "$tmp/check.err"
+        { echo "run-check.js exited $rc without a readable result:"; cat "$tmp/check.err"; } >"$tmp/broken"
+        bad rendered "$tmp/broken"
       fi
     fi
   fi

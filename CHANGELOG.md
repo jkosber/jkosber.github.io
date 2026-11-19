@@ -7,7 +7,7 @@
 - The verifying skill's description covers pushing, merging and publishing; its fast checks and its automated browser run point at the script.
 - `README.md` and `.claude/settings.json` name the script.
 
-Validation: no site file changed. `verify.sh` passed (59 tests, a strict build of 23 pages, the script checks) and `verify.sh --rendered` passed in Chromium on 20 routes with no problems. Ten fault cases in a scratch copy behaved as intended: a raw hex colour, a link to a missing page, a syntax error in `portfolio.js`, an oversized `CLAUDE.md`, a broken image and a busy port each failed their line with exit 1; a missing `.venv` and an unknown argument exited 2; a clean copy passed. Physical devices, screen readers and WebKit were not checked.
+Validation: no site file changed. `verify.sh` passed (59 tests, a strict build of 23 pages, the script checks) and `verify.sh --rendered` passed in Chromium on 20 routes with no problems. Twelve fault cases in a scratch copy behaved as intended: a raw hex colour, a link to a missing page, a syntax error in `portfolio.js`, an oversized `CLAUDE.md`, a broken image, a busy port, a missing Playwright install and a browser that would not start each failed their line with exit 1; a missing `.venv` and an unknown argument exited 2; a clean copy passed. Physical devices, screen readers and WebKit were not checked.
 
 ## November 13, 2026 — OpenWrt bridge page: result of the roaming test
 
