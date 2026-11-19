@@ -78,7 +78,7 @@ if [ "$rendered" -eq 1 ]; then
       rc=$?
       # One summary line, then one line per problem. No readable result means the run itself broke.
       if .venv/bin/python -c 'import json,sys; d=json.load(open(sys.argv[1])); print(len(d["routes"]), "routes,", len(d["checks"]), "check groups, problems:", len(d["problems"])); [print(p) for p in d["problems"]]' "$tmp/check.json" >"$tmp/result" 2>/dev/null; then
-        if [ "$rc" -eq 0 ]; then ok rendered "$(head -n 1 "$tmp/result")"; else bad rendered "$tmp/result"; fi
+        if [ "$rc" -eq 0 ]; then ok rendered "$(head -n 1 "$tmp/result")"; else cat "$tmp/check.err" >>"$tmp/result"; bad rendered "$tmp/result"; fi
       else
         { echo "run-check.js exited $rc without a readable result:"; cat "$tmp/check.err"; } >"$tmp/broken"
         bad rendered "$tmp/broken"

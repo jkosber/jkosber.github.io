@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run the jnkos.com repo's fast checks before every commit, including a commit that only changes Markdown under docs/ (those pages are the published site, not documentation), or when asked to check a change here - the unit tests, a strict build into a temp folder, script syntax and the check runner's tests. About 4 seconds, no browser; --rendered adds the browser suite. The full pre-publish pass is verifying-portfolio-changes.
+description: Run the jnkos.com repo's fast checks before every commit that changes the site, including a commit that only changes Markdown under docs/ (those pages are the published site, not documentation), or when asked to check a change here - the unit tests, a strict build into a temp folder, script syntax and the check runner's tests. About 4 seconds, no browser; --rendered adds the browser suite. The full pre-publish pass is verifying-portfolio-changes.
 ---
 
 # verify (jnkos.com)
