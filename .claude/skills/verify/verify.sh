@@ -67,9 +67,12 @@ if [ "$rendered" -eq 1 ]; then
     .venv/bin/python -m mkdocs serve --dev-addr 127.0.0.1:8765 --strict >"$tmp/serve" 2>&1 &
     server=$!
     for _ in $(seq 1 60); do port_open && break; sleep 0.5; done
-    # The system Chromium, when the environment names none. PLAYWRIGHT_MODULE comes from the environment.
-    if [ -z "${PLAYWRIGHT_CHROMIUM_PATH:-}" ] && [ -x /usr/bin/chromium ]; then
-      export PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium
+    # The system Chrome, or the system Chromium where Chrome is not installed, when the environment
+    # names no browser. PLAYWRIGHT_MODULE comes from the environment.
+    if [ -z "${PLAYWRIGHT_CHROMIUM_PATH:-}" ]; then
+      for browser in /usr/bin/google-chrome-stable /usr/bin/chromium; do
+        if [ -x "$browser" ]; then export PLAYWRIGHT_CHROMIUM_PATH=$browser; break; fi
+      done
     fi
     if ! port_open; then
       bad rendered "$tmp/serve"

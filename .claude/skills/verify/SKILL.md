@@ -20,7 +20,7 @@ It writes nothing in the repo: the build goes to a temp folder, so `site/` is un
 | `strict-build` | `mkdocs build --strict`: every link and anchor resolves and the frontmatter checks pass |
 | `scripts` | `node --check` on `docs/javascripts/portfolio.js`, and the `run-check.js` tests |
 | `claude-md` | `CLAUDE.md` is under the 30,000-character cap |
-| `rendered` (only with `--rendered`) | Starts the preview on port 8765, runs `run-check.js chromium` (every check in `check-site.js`) and stops the preview. Skipped when a line above failed. `PLAYWRIGHT_MODULE` names a Node Playwright install when `playwright` does not resolve on its own; `PLAYWRIGHT_CHROMIUM_PATH` names the browser, and `/usr/bin/chromium` is used when it is unset and exists. A run that breaks before it reports (no Playwright, a browser that will not start) fails the line with the runner's own error |
+| `rendered` (only with `--rendered`) | Starts the preview on port 8765, runs `run-check.js chromium` (every check in `check-site.js`) and stops the preview. Skipped when a line above failed. `PLAYWRIGHT_MODULE` names a Node Playwright install when `playwright` does not resolve on its own; `PLAYWRIGHT_CHROMIUM_PATH` names the browser; when it is unset the script uses `/usr/bin/google-chrome-stable`, or `/usr/bin/chromium` where Chrome is not installed. A run that breaks before it reports (no Playwright, a browser that will not start) fails the line with the runner's own error |
 
 | Exit | Meaning | Do |
 | --- | --- | --- |
