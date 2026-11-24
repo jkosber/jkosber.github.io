@@ -1,5 +1,12 @@
 # Portfolio change record
 
+## November 24, 2026 — rendered checks run in Chrome by default
+
+- `verify.sh --rendered` launches `/usr/bin/google-chrome-stable` when `PLAYWRIGHT_CHROMIUM_PATH` is unset, and `/usr/bin/chromium` where Chrome is not installed. Before, it used `/usr/bin/chromium` only. The reason is the browser's age: on the machine that runs these checks the distribution's Chromium package trails upstream by about a month (155 against 158 on November 24), and Chrome is current. A path in `PLAYWRIGHT_CHROMIUM_PATH` still wins.
+- The `verify` skill's table names both paths.
+
+Validation: no site file changed. With the variable unset, `verify.sh --rendered` passed: 59 tests, a strict build of 23 pages, the script checks, and the browser check on 20 routes and 47 check groups with no problems, with Chrome 158.0.8127.88 processes running during the check. Not checked: the fallback on a machine without Chrome, a headed run, physical devices, screen readers and WebKit.
+
 ## November 19, 2026 — Vaco role: concurrent stores moved into the technician bullet
 
 - Experience, the Vaco by Highspring contract at Verizon: the bullet "Ran two store conversions at the same time, and three at once on one conversion" is removed. It used "conversion" for one store and then for something larger, and the review of the earlier change had flagged it as hard to read. The fact moved into the bullet about the technicians, which now reads "Directed onsite technicians remotely through hardware installation at up to three stores at the same time, confirmed port assignments and troubleshot connection problems". The role has five bullets. "Up to three" rests on what Jadon confirmed: two stores at once as a rule, and three on one conversion.
